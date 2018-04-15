@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public abstract class Motor
+    public abstract class Motor : IComponent
     {
 
     }

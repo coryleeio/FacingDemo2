@@ -1,4 +1,5 @@
 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Text;
 
 namespace Gamepackage
 {
-    public class NoModel : Model
+    public class SpineAnimatedView : View
     {
-        public NoModel()
+        public SpineAnimatedView()
         {
 
         }

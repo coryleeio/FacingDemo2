@@ -25,7 +25,7 @@ namespace Gamepackage
 
         public Behaviour Behaviour;
 
-        public Model Model;
+        public View View;
 
         public Persona Persona;
 

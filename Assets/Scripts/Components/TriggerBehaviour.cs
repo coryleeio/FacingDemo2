@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public abstract class TriggerBehaviour
+    public abstract class TriggerBehaviour : IComponent
     {
 
     }

@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Gamepackage
 {
-    public abstract class Model
+    public class NoView : View
     {
-        public Model()
+        public NoView()
         {
 
         }

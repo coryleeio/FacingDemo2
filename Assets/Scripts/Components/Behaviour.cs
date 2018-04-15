@@ -1,6 +1,6 @@
 namespace Gamepackage
 {
-    public abstract class Behaviour
+    public abstract class Behaviour : IComponent
     {
         public Behaviour()
         {

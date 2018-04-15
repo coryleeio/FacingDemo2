@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Gamepackage
 {
-    public abstract class Inventory
+    public abstract class Inventory : IComponent
     {
         public Inventory()
         {

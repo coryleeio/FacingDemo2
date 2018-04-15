@@ -1,3 +1,6 @@
+using Mono.Data.Sqlite;
+using System.Data;
+using System.IO;
 using TinyIoC;
 using UnityEngine;
 
@@ -14,6 +17,7 @@ namespace Gamepackage
 
             container.Register<GamePlayState, GamePlayState>().AsSingleton();
             container.Register<MainMenuState, MainMenuState>().AsSingleton();
+            container.Register<LoadingResourcesState, LoadingResourcesState>().AsSingleton();
             container.Register<GameStateMachine, GameStateMachine>().AsSingleton();
 
             container.Register<ILogSystem, LogSystem>().AsSingleton();
@@ -27,6 +31,9 @@ namespace Gamepackage
             container.Register<ITriggerSystem, TriggerSystem>().AsSingleton();
             container.Register<ITurnSystem, TurnSystem>().AsSingleton();
             container.Register<IVisibilitySystem, VisibilitySystem>().AsSingleton();
+            container.Register<IModSystem, ModSystem>().AsSingleton();
+            container.Register<IPrototypeSystem, PrototypeSystem>().AsSingleton();
+            container.Register<IPrototypeFactory, PrototypeFactory>().AsSingleton();
             StateMachine = container.Resolve<GameStateMachine>();
         }
 
@@ -37,14 +44,19 @@ namespace Gamepackage
 
         void OnGUI()
         {
-            if (GUI.Button(new Rect(10, 10, 200, 50), "Change to gameplay"))
+            if (GUI.Button(new Rect(10, 10, 100, 50), "Start game"))
             {
-                StateMachine.ChangeState(StateMachine.GamePlayState);
+                StateMachine.ChangeState(StateMachine.LoadingResourcesState);
             }
 
-            if (GUI.Button(new Rect(10, 75, 200, 50), "Change to main"))
+            if (GUI.Button(new Rect(10, 75, 100, 50), "Exit game"))
             {
                 StateMachine.ChangeState(StateMachine.MainMenuState);
+            }
+
+            if (GUI.Button(new Rect(10, 140, 100, 50), "Next Level"))
+            {
+                StateMachine.ChangeState(StateMachine.GamePlayState);
             }
         }
     }
