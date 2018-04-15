@@ -12,18 +12,21 @@ namespace Gamepackage
         private IPrototypeSystem _prototypeSystem;
         private IModSystem _modSystem;
         private IPrototypeFactory _prototypeFactory;
+        private ITokenSystem _tokenSystem;
 
-        public LoadingResourcesState(LoadingScene loadingScene, ILogSystem logSystem, IPrototypeSystem prototypeSystem, IModSystem modSystem, IPrototypeFactory prototypeFactory)
+        public LoadingResourcesState(LoadingScene loadingScene, ILogSystem logSystem, IPrototypeSystem prototypeSystem, IModSystem modSystem, IPrototypeFactory prototypeFactory, ITokenSystem tokenSystem)
         {
             _loadingScene = loadingScene;
             _logSystem = logSystem;
             _prototypeSystem = prototypeSystem;
             _modSystem = modSystem;
             _prototypeFactory = prototypeFactory;
+            _tokenSystem = tokenSystem;
         }
 
         public void Enter(Root owner)
         {
+            _tokenSystem.Clear();
             _loadingScene.Load();
             owner.StartCoroutine(LoadPrototypes(owner));
         }
