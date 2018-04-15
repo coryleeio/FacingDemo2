@@ -17,7 +17,6 @@ namespace Gamepackage
             GameObject obj = new GameObject();
             obj.name = "Camera";
             obj.AddComponent<Camera>();
-            _prototypeFactory.BuildToken("Poncy");
         }
     }
 }

@@ -5,18 +5,19 @@ namespace Gamepackage
         private MainMenuScene _mainMenuScene;
         private ILogSystem _logSystem;
         private ITokenSystem _tokenSystem;
+        private IGameStateSystem _gameStateSystem;
 
-        public MainMenuState(MainMenuScene mainMenuScene, ILogSystem logSystem, ITokenSystem tokenSystem)
+        public MainMenuState(MainMenuScene mainMenuScene, ILogSystem logSystem, IGameStateSystem gameStateSystem)
         {
             _mainMenuScene = mainMenuScene;
             _logSystem = logSystem;
-            _tokenSystem = tokenSystem;
+            _gameStateSystem = gameStateSystem;
         }
 
         public void Enter(Root owner)
         {
+            _gameStateSystem.NewGame();
             _mainMenuScene.Load();
-            _tokenSystem.Clear();
         }
 
         public void Exit(Root owner)

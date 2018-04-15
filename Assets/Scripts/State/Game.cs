@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Gamepackage
 {
     public class Game
@@ -7,6 +9,6 @@ namespace Gamepackage
 
         }
 
-        public Level[] Level;
+        public List<Level> Levels = new List<Level>(50);
     }
 }
