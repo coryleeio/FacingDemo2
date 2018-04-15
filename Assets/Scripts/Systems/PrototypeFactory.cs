@@ -23,10 +23,11 @@ namespace Gamepackage
             }
         }
 
-        public Token Build(TokenPrototype prototype)
+        public Token BuildToken(TokenPrototype prototype)
         {
             var token = new Token
             {
+                PrototypeUniqueIdentifier = prototype.UniqueIdentifier,
                 Behaviour = Activator.CreateInstance(componentTypeMap[prototype.BehaviourClassName]) as Behaviour,
                 Equipment = Activator.CreateInstance(componentTypeMap[prototype.EquipmentClassName]) as Equipment,
                 Inventory = Activator.CreateInstance(componentTypeMap[prototype.InventoryClassName]) as Inventory,
@@ -38,10 +39,25 @@ namespace Gamepackage
             return token;
         }
 
-        public Token Build(string uniqueIdentifier)
+        public Token BuildToken(string uniqueIdentifier)
         {
             var prototype = _prototypeSystem.GetPrototypeByUniqueIdentifier<TokenPrototype>(uniqueIdentifier);
-            return Build(prototype);
+            return BuildToken(prototype);
+        }
+
+        public Item BuildItem(ItemPrototype prototype)
+        {
+            var item = new Item
+            {
+                PrototypeUniqueIdentifier = prototype.UniqueIdentifier,
+            };
+            return item;
+        }
+
+        public Item BuildItem(string uniqueIdentifier)
+        {
+            var prototype = _prototypeSystem.GetPrototypeByUniqueIdentifier<ItemPrototype>(uniqueIdentifier);
+            return BuildItem(prototype);
         }
     }
 }

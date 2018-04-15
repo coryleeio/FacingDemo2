@@ -33,9 +33,9 @@ namespace Gamepackage
             {
                 dbConnection.Open();
                 _modSystem.LoadAll(dbConnection);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForEndOfFrame();
                 _prototypeSystem.LoadAllPrototypes(dbConnection);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForEndOfFrame();
                 dbConnection.Close();
             }
             owner.StateMachine.ChangeState(owner.StateMachine.GamePlayState);

@@ -1,5 +1,6 @@
 ﻿using Mono.Data.Sqlite;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -21,41 +22,46 @@ namespace Gamepackage
 
         public void LoadAllPrototypes(IDbConnection dbConnection)
         {
+            _prototypesByUniqueIdentifier.Clear();
+            LoadItemPrototypes(dbConnection);
             LoadTokenPrototypes(dbConnection);
+        }
+
+        private void LoadItemPrototypes(IDbConnection dbconn)
+        {
+            IDbCommand dbcmd = dbconn.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from item_prototypes;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ItemPrototype prototype = new ItemPrototype()
+                {
+                    UniqueIdentifier = reader.GetString(0),
+                };
+                SavePrototype(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void SavePrototype(IPrototype prototype)
+        {
+            if (_prototypesByUniqueIdentifier.ContainsKey(prototype.UniqueIdentifier))
+            {
+                throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
+            }
+            _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
         }
 
         private void LoadTokenPrototypes(IDbConnection dbconn)
         {
-            _prototypesByUniqueIdentifier.Clear();
             IDbCommand dbcmd = dbconn.CreateCommand();
             IDataReader reader;
 
-            dbcmd.CommandText = @"
-                    SELECT    
-                                unique_identifier_id, 
-                                behaviour_prototypes.class_name AS behaviour_class_name, 
-                                equipment_prototypes.class_name AS equipment_class_name,
-                                inventory_prototypes.class_name as inventory_class_name,
-                                motor_prototypes.class_name as motor_class_name,
-                                persona_prototypes.class_name as persona_class_name,
-                                trigger_behaviour_prototypes.class_name as trigger_behaviour_class_name,
-                                view_prototypes.class_name as view_class_name
-                    FROM      token_prototypes 
-                    LEFT JOIN behaviour_prototypes, 
-                                equipment_prototypes, 
-                                inventory_prototypes,
-                                motor_prototypes,
-                                persona_prototypes,
-                                trigger_behaviour_prototypes,
-                                view_prototypes
-                    WHERE     behaviour_prototypes.id = token_prototypes.behaviour_prototype_id 
-                    AND       equipment_prototypes.id = token_prototypes.equipment_prototype_id
-                    AND       inventory_prototypes.id = token_prototypes.inventory_prototype_id
-                    AND       motor_prototypes.id = token_prototypes.motor_prototype_id
-                    AND       persona_prototypes.id = token_prototypes.persona_prototype_id
-                    AND       trigger_behaviour_prototypes.id = token_prototypes.trigger_behaviour_prototype_id
-                    AND       view_prototypes.id = token_prototypes.view_prototype_id
-            ;";
+            dbcmd.CommandText = @"SELECT * from token_prototypes;";
 
             reader = dbcmd.ExecuteReader();
             while (reader.Read())
@@ -71,11 +77,7 @@ namespace Gamepackage
                     TriggerBehaviourClassName = reader.GetString(6),
                     ViewClassName = reader.GetString(7)
                 };
-                if(_prototypesByUniqueIdentifier.ContainsKey(prototype.UniqueIdentifier))
-                {
-                    throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
-                }
-                _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
+                SavePrototype(prototype);
             }
             reader.Close();
             dbcmd.Dispose();

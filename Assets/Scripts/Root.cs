@@ -34,6 +34,7 @@ namespace Gamepackage
             container.Register<IModSystem, ModSystem>().AsSingleton();
             container.Register<IPrototypeSystem, PrototypeSystem>().AsSingleton();
             container.Register<IPrototypeFactory, PrototypeFactory>().AsSingleton();
+            container.Register<ITokenSystem, TokenSystem>().AsSingleton();
             StateMachine = container.Resolve<GameStateMachine>();
         }
 

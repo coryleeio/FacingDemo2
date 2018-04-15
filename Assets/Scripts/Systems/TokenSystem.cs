@@ -2,18 +2,15 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public class TokenSystem
+    public class TokenSystem : ITokenSystem
     {
-
         public TokenSystem()
         {
 
         }
 
-        public Dictionary<int, Token> TokenMap = new Dictionary<int, Token>();
-
-        public int NextId = 0;
-
+        private Dictionary<int, Token> TokenMap = new Dictionary<int, Token>();
+        private int NextId = 0;
 
         public void Register(Token token)
         {
@@ -23,7 +20,7 @@ namespace Gamepackage
 
         private void RegisterWithoutIncrement(Token token)
         {
-            TokenMap.Add(token.id, token);
+            TokenMap.Add(token.Id, token);
         }
 
         public void Clear()
@@ -36,21 +33,21 @@ namespace Gamepackage
             return TokenMap[id];
         }
 
-        public void Deregister(Token entity)
+        public void Deregister(Token token)
         {
-            if(TokenMap.ContainsKey(entity.id))
+            if(TokenMap.ContainsKey(token.Id))
             {
-                TokenMap.Remove(entity.id);
+                TokenMap.Remove(token.Id);
             }
         }
 
-        public void Remember(Token entity)
+        public void Remember(Token token)
         {
-            if (entity.id > NextId)
+            if (token.Id > NextId)
             {
-                NextId = entity.id + 1;
+                NextId = token.Id + 1;
             }
-            RegisterWithoutIncrement(entity);
+            RegisterWithoutIncrement(token);
         }
     }
 }

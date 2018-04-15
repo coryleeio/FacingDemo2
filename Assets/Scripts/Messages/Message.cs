@@ -10,6 +10,8 @@ namespace Gamepackage
 
         public double Delay;
 
+        public double TimeSent;
+
         public int Sender;
 
         public int Receiver;

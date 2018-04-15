@@ -2,6 +2,5 @@
 {
     public interface IPrototype : IHaveAUniqueIdentifier
     {
-        
     }
 }

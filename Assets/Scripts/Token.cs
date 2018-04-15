@@ -6,16 +6,16 @@ using System.Text;
 
 namespace Gamepackage
 {
-    public class Token : IHandleMessage
+    public class Token : IHandleMessage, IWasBuiltFromAPrototype, IHaveAnId
     {
         public Token()
         {
 
         }
 
-        public int id;
+        public int Id { get; set; }
 
-        public List<string> Tags;
+        public List<string> Tags = new List<string>();
 
         public Motor Motor;
 
@@ -30,6 +30,8 @@ namespace Gamepackage
         public Persona Persona;
 
         public TriggerBehaviour TriggerBehaviour;
+
+        public string PrototypeUniqueIdentifier { get; set; }
 
         public void HandleMessage(Message messageToHandle)
         {
