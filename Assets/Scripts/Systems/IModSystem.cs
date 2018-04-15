@@ -5,6 +5,9 @@ namespace Gamepackage
 {
     public interface IModSystem
     {
-        void LoadAll(IDbConnection dbConnection);
+        void PopulateModList();
+        void LoadAssemblies();
+        void LoadAssetBundles();
+        void LoadSqlFiles(IDbConnection dbConnection);
     }
 }

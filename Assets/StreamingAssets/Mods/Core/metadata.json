@@ -1,0 +1,10 @@
+{
+	"Name": "Main Campaign",
+	"Creator": "Cory Lee",
+	"Contact Info": "http://corylee.io",
+	"Description": "Main campaign",
+	"Load Order": 0,
+	"AssetBundles": [],
+	"Assemblies": [],
+	"SqlFiles": ["Core.sql"]
+}

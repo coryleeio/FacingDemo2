@@ -11,13 +11,15 @@ namespace Gamepackage
         private ILogSystem _logSystem;
         private IPrototypeSystem _prototypeSystem;
         private IModSystem _modSystem;
+        private IPrototypeFactory _prototypeFactory;
 
-        public LoadingResourcesState(LoadingScene loadingScene, ILogSystem logSystem, IPrototypeSystem prototypeSystem, IModSystem modSystem)
+        public LoadingResourcesState(LoadingScene loadingScene, ILogSystem logSystem, IPrototypeSystem prototypeSystem, IModSystem modSystem, IPrototypeFactory prototypeFactory)
         {
             _loadingScene = loadingScene;
             _logSystem = logSystem;
             _prototypeSystem = prototypeSystem;
             _modSystem = modSystem;
+            _prototypeFactory = prototypeFactory;
         }
 
         public void Enter(Root owner)
@@ -32,10 +34,24 @@ namespace Gamepackage
             using (var dbConnection = new SqliteConnection(conn) as IDbConnection)
             {
                 dbConnection.Open();
-                _modSystem.LoadAll(dbConnection);
+                _modSystem.PopulateModList();
                 yield return new WaitForEndOfFrame();
+
+                _modSystem.LoadAssemblies();
+                yield return new WaitForEndOfFrame();
+
+                _prototypeFactory.LoadTypes();
+                yield return new WaitForEndOfFrame();
+
+                _modSystem.LoadAssetBundles();
+                yield return new WaitForEndOfFrame();
+
+                _modSystem.LoadSqlFiles(dbConnection);
+                yield return new WaitForEndOfFrame();
+
                 _prototypeSystem.LoadAllPrototypes(dbConnection);
                 yield return new WaitForEndOfFrame();
+
                 dbConnection.Close();
             }
             owner.StateMachine.ChangeState(owner.StateMachine.GamePlayState);

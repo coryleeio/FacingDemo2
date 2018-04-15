@@ -1,11 +1,13 @@
 ﻿namespace Gamepackage
 {
-    interface IPrototypeFactory
+    public interface IPrototypeFactory
     {
         Token BuildToken(TokenPrototype prototype);
         Token BuildToken(string uniqueIdentifier);
 
         Item BuildItem(ItemPrototype prototype);
         Item BuildItem(string uniqueIdentifier);
+
+        void LoadTypes();
     }
 }

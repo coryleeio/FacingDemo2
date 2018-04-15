@@ -1,6 +1,6 @@
 namespace Gamepackage
 {
-    public abstract class Persona : IComponent
+    public abstract class Persona : Component
     {
         public Persona()
         {
