@@ -32,6 +32,7 @@ namespace Gamepackage
         {
             var token = new Token();
             token.PrototypeUniqueIdentifier = prototype.UniqueIdentifier;
+            token.Shape = new Shape(prototype.ShapeType, prototype.Width, prototype.Height);
             token.Behaviour = Activator.CreateInstance(componentTypeMap[prototype.BehaviourClassName]) as Behaviour;
             token.Equipment = Activator.CreateInstance(componentTypeMap[prototype.EquipmentClassName]) as Equipment;
             token.Inventory = Activator.CreateInstance(componentTypeMap[prototype.InventoryClassName]) as Inventory;

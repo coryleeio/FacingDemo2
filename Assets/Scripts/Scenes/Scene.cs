@@ -14,7 +14,10 @@ namespace Gamepackage
 
         public void Unload()
         {
-            SceneManager.UnloadSceneAsync(SceneCreated.name);
+            if(SceneCreated.buildIndex != -1)
+            {
+                SceneManager.UnloadSceneAsync(SceneCreated.name);
+            }
         }
 
         protected void LoadInternal()

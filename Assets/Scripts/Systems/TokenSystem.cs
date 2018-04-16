@@ -14,6 +14,7 @@ namespace Gamepackage
 
         public void Register(Token token)
         {
+            token.Id = NextId;
             RegisterWithoutIncrement(token);
             NextId++;
         }
@@ -25,6 +26,7 @@ namespace Gamepackage
 
         public void Clear()
         {
+            NextId = 0;
             TokenMap.Clear();
         }
 

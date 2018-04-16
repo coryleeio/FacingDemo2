@@ -1,8 +1,7 @@
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Gamepackage
 {
@@ -14,6 +13,17 @@ namespace Gamepackage
         }
 
         public int Id { get; set; }
+
+        [JsonIgnore]
+        public Point Position
+        {
+            set
+            {
+                Shape.Position = value;
+            }
+        }
+
+        public Shape Shape;
 
         public List<string> Tags = new List<string>();
 
@@ -35,7 +45,13 @@ namespace Gamepackage
 
         public void HandleMessage(Message messageToHandle)
         {
-            throw new NotImplementedException();
+            Motor.HandleMessage(messageToHandle);
+            Inventory.HandleMessage(messageToHandle);
+            Equipment.HandleMessage(messageToHandle);
+            Behaviour.HandleMessage(messageToHandle);
+            View.HandleMessage(messageToHandle);
+            Persona.HandleMessage(messageToHandle);
+            TriggerBehaviour.HandleMessage(messageToHandle);
         }
     }
 }

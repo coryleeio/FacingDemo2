@@ -14,6 +14,7 @@ namespace Gamepackage
         private Dictionary<string, AssetBundle> LoadedBundles = new Dictionary<string, AssetBundle>();
         private Dictionary<string, Assembly> LoadedAssemblies = new Dictionary<string, Assembly>();
         private ILogSystem _logSystem;
+        private bool Populated = false;
 
         public ModSystem(ILogSystem logSystem)
         {
@@ -22,33 +23,35 @@ namespace Gamepackage
 
         public void PopulateModList()
         {
-            _logSystem.Log("Locating all mods in the mods directory: " + ModsDirectory);
-            var modDirectories = Directory.GetDirectories(ModsDirectory, "*", SearchOption.TopDirectoryOnly);
-            foreach (var modDirectory in modDirectories)
+            if (!Populated)
             {
-                var modFolderName = modDirectory.Substring(ModsDirectory.Length + 1);
-                Mod mod = CreateFromFolder(modFolderName);
-                if (mod != null)
+                _logSystem.Log("Locating all mods in the mods directory: " + ModsDirectory);
+                var modDirectories = Directory.GetDirectories(ModsDirectory, "*", SearchOption.TopDirectoryOnly);
+                foreach (var modDirectory in modDirectories)
                 {
-                    _logSystem.Log("Found mod in folder: " + modFolderName);
-                    ModList.Add(mod);
+                    var modFolderName = modDirectory.Substring(ModsDirectory.Length + 1);
+                    Mod mod = CreateFromFolder(modFolderName);
+                    if (mod != null)
+                    {
+                        _logSystem.Log("Found mod in folder: " + modFolderName);
+                        ModList.Add(mod);
+                    }
                 }
+                ModList.Sort(delegate (Mod c1, Mod c2) { return c1.LoadOrder.CompareTo(c2.LoadOrder); });
+                Populated = true;
             }
-            ModList.Sort(delegate (Mod c1, Mod c2) { return c1.LoadOrder.CompareTo(c2.LoadOrder); });
         }
 
         public void LoadSqlFiles(IDbConnection dbConnection)
         {
             foreach (var mod in ModList)
             {
-                if (!mod.HasLoadedSqlFiles)
+                _logSystem.Log("Loading SQL for " + mod.FolderShortName);
+                foreach (var sqlFile in mod.SqlFiles)
                 {
-                    foreach (var sqlFile in mod.SqlFiles)
-                    {
-                        var fullPath = GetLongFilepath(ModsDirectory, mod.FolderShortName, sqlFile);
-                        LoadSQL(fullPath, dbConnection);
-                    }
-                    mod.HasLoadedSqlFiles = true;
+                    var fullPath = GetLongFilepath(ModsDirectory, mod.FolderShortName, sqlFile);
+                    _logSystem.Log("Executing SQL: " + fullPath);
+                    LoadSQL(fullPath, dbConnection);
                 }
             }
         }
@@ -59,9 +62,11 @@ namespace Gamepackage
             {
                 if (!mod.HasLoadedAssemblies)
                 {
+                    _logSystem.Log("Loading Assemblies for " + mod.FolderShortName);
                     foreach (var assembly in mod.Assemblies)
                     {
                         var fullPath = GetLongFilepath(ModsDirectory, mod.FolderShortName, assembly);
+                        _logSystem.Log("Loading Assemblies: " + fullPath);
                         LoadAssembly(fullPath);
                     }
                     mod.HasLoadedAssemblies = true;
@@ -75,9 +80,11 @@ namespace Gamepackage
             {
                 if (!mod.HasLoadedAssemblies)
                 {
+                    _logSystem.Log("Loading AssetBundles for " + mod.FolderShortName);
                     foreach (var bundle in mod.AssetBundles)
                     {
                         var fullPath = GetLongFilepath(ModsDirectory, mod.FolderShortName, bundle);
+                        _logSystem.Log("Loading Asset Bundle: " + fullPath);
                         LoadAssetBundle(fullPath);
                     }
                     mod.HasLoadedAssetBundles = true;

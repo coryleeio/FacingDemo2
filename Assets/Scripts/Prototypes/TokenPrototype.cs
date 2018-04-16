@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Gamepackage
+﻿namespace Gamepackage
 {
     public class TokenPrototype : IPrototype
     {
         public string UniqueIdentifier { get; set; }
+        public ShapeType ShapeType { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public string BehaviourClassName { get; set; }
         public string EquipmentClassName { get; set; }
         public string InventoryClassName { get; set; }

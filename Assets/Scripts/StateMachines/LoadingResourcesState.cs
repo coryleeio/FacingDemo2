@@ -13,6 +13,7 @@ namespace Gamepackage
         private IModSystem _modSystem;
         private IPrototypeFactory _prototypeFactory;
         private IGameStateSystem _gameStateSystem;
+        private IDungeonGenerator _dungeonGenerator;
 
         public LoadingResourcesState(
             LoadingScene loadingScene, 
@@ -20,7 +21,8 @@ namespace Gamepackage
             IPrototypeSystem prototypeSystem, 
             IModSystem modSystem, 
             IPrototypeFactory prototypeFactory,
-            IGameStateSystem gameStateSystem
+            IGameStateSystem gameStateSystem,
+            IDungeonGenerator dungeonGenerator
         )
         {
             _loadingScene = loadingScene;
@@ -29,6 +31,7 @@ namespace Gamepackage
             _modSystem = modSystem;
             _prototypeFactory = prototypeFactory;
             _gameStateSystem = gameStateSystem;
+            _dungeonGenerator = dungeonGenerator;
         }
 
         public void Enter(Root owner)
@@ -62,6 +65,8 @@ namespace Gamepackage
                 _prototypeSystem.LoadAllPrototypes(dbConnection);
                 yield return new WaitForEndOfFrame();
 
+                _dungeonGenerator.GenerateDungeon();
+
                 dbConnection.Close();
             }
             owner.StateMachine.ChangeState(owner.StateMachine.GamePlayState);
@@ -79,7 +84,6 @@ namespace Gamepackage
 
         public void Process(Root owner)
         {
-            _logSystem.Log("LoadingResourcesState");
         }
     }
 }

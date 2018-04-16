@@ -1,5 +1,3 @@
-
-
 namespace Gamepackage
 {
     public interface IStateMachineState<OwnerType> : IHandleMessage

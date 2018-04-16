@@ -4,7 +4,6 @@ namespace Gamepackage
     {
         private MainMenuScene _mainMenuScene;
         private ILogSystem _logSystem;
-        private ITokenSystem _tokenSystem;
         private IGameStateSystem _gameStateSystem;
 
         public MainMenuState(MainMenuScene mainMenuScene, ILogSystem logSystem, IGameStateSystem gameStateSystem)
@@ -32,7 +31,6 @@ namespace Gamepackage
 
         public void Process(Root owner)
         {
-            _logSystem.Log("MainMenuState");
         }
     }
 }

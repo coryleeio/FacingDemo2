@@ -1,12 +1,5 @@
-﻿using Mono.Data.Sqlite;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 
 namespace Gamepackage
 {
@@ -17,7 +10,7 @@ namespace Gamepackage
 
         public PrototypeSystem(ILogSystem logSystem)
         {
-
+            _logSystem = logSystem;
         }
 
         public void LoadAllPrototypes(IDbConnection dbConnection)
@@ -53,6 +46,7 @@ namespace Gamepackage
             {
                 throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
             }
+            _logSystem.Log("Found prototype: " + prototype.UniqueIdentifier);
             _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
         }
 
@@ -69,13 +63,16 @@ namespace Gamepackage
                 TokenPrototype prototype = new TokenPrototype()
                 {
                     UniqueIdentifier = reader.GetString(0),
-                    BehaviourClassName = reader.GetString(1),
-                    EquipmentClassName = reader.GetString(2),
-                    InventoryClassName = reader.GetString(3),
-                    MotorClassName = reader.GetString(4),
-                    PersonaClassName = reader.GetString(5),
-                    TriggerBehaviourClassName = reader.GetString(6),
-                    ViewClassName = reader.GetString(7)
+                    Width = reader.GetInt32(1),
+                    Height = reader.GetInt32(2),
+                    ShapeType = (ShapeType) reader.GetInt32(3),
+                    BehaviourClassName = reader.GetString(4),
+                    EquipmentClassName = reader.GetString(5),
+                    InventoryClassName = reader.GetString(6),
+                    MotorClassName = reader.GetString(7),
+                    PersonaClassName = reader.GetString(8),
+                    TriggerBehaviourClassName = reader.GetString(9),
+                    ViewClassName = reader.GetString(10)
                 };
                 SavePrototype(prototype);
             }

@@ -17,8 +17,11 @@ INSERT INTO `trigger_behaviour_prototypes` (id,class_name) VALUES (2,'NoTriggerB
 DROP TABLE IF EXISTS `prototypes`;
 CREATE TABLE IF NOT EXISTS `prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`type`	TEXT,
 	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
+	`type`	TEXT,
+	`width`	INTEGER,
+	`height`	INTEGER,
+	`shape`	INTEGER,
 	`behaviour_prototype_id`	INTEGER,
 	`equipment_prototype_id`	INTEGER,
 	`inventory_prototype_id`	INTEGER,
@@ -29,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `prototypes` (
 	`item_view_prototype_id`	INTEGER,
 	`item_properties_prototype_id`	INTEGER
 );
-INSERT INTO `prototypes` (id,type,unique_identifier_id,behaviour_prototype_id,equipment_prototype_id,inventory_prototype_id,motor_prototype_id,persona_prototype_id,trigger_behaviour_prototype_id,view_prototype_id,item_view_prototype_id,item_properties_prototype_id) VALUES (1,'token','Poncy',1,2,1,4,2,2,2,NULL,NULL);
+INSERT INTO `prototypes` (id,unique_identifier_id,type,width,height,shape,behaviour_prototype_id,equipment_prototype_id,inventory_prototype_id,motor_prototype_id,persona_prototype_id,trigger_behaviour_prototype_id,view_prototype_id,item_view_prototype_id,item_properties_prototype_id) VALUES (1,'Poncy','token',1,1,0,1,2,1,4,2,2,2,NULL,NULL);
 DROP TABLE IF EXISTS `persona_prototypes`;
 CREATE TABLE IF NOT EXISTS `persona_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -80,6 +83,9 @@ INSERT INTO `behaviour_prototypes` (id,class_name) VALUES (4,'AIBrute');
 DROP VIEW IF EXISTS `token_prototypes`;
 CREATE VIEW token_prototypes AS 
 SELECT    unique_identifier_id, 
+          width,
+		  height,
+		  shape,
           behaviour_prototypes.class_name         AS behaviour_class_name, 
           equipment_prototypes.class_name         AS equipment_class_name, 
           inventory_prototypes.class_name         AS inventory_class_name, 

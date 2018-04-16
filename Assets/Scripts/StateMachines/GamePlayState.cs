@@ -27,7 +27,6 @@ namespace Gamepackage
 
         public void Process(Root owner)
         {
-            _logSystem.Log("GamePlayState");
         }
     }
 }

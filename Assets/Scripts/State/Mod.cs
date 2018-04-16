@@ -21,8 +21,6 @@ namespace Gamepackage
         public bool HasLoadedAssetBundles = false;
         [JsonIgnore]
         public bool HasLoadedAssemblies = false;
-        [JsonIgnore]
-        public bool HasLoadedSqlFiles = false;
 
         [JsonIgnore]
         public string FolderShortName;
