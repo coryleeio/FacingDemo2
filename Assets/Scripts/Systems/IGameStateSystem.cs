@@ -1,4 +1,15 @@
-public interface IGameStateSystem
+namespace Gamepackage
 {
-    void NewGame();
+    public interface IGameStateSystem
+    {
+        void NewGame();
+        void SaveGame();
+        void LoadGame();
+        void Clear();
+
+        Game Game
+        {
+            get;
+        }
+    }
 }

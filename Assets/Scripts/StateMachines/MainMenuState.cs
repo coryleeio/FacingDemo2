@@ -15,7 +15,7 @@ namespace Gamepackage
 
         public void Enter(Root owner)
         {
-            _gameStateSystem.NewGame();
+            _gameStateSystem.Clear();
             _mainMenuScene.Load();
         }
 

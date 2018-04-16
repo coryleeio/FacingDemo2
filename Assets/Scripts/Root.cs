@@ -9,6 +9,8 @@ namespace Gamepackage
     public class Root : MonoBehaviour
     {
         public GameStateMachine StateMachine;
+        private IGameStateSystem _gameStateSystem;
+        private ITokenSystem _tokenSystem;
         void Start()
         {
             DontDestroyOnLoad(this);
@@ -36,6 +38,8 @@ namespace Gamepackage
             container.Register<IPrototypeFactory, PrototypeFactory>().AsSingleton();
             container.Register<ITokenSystem, TokenSystem>().AsSingleton();
             container.Register<IDungeonGenerator, DungeonGenerator>().AsSingleton();
+            _gameStateSystem = container.Resolve<IGameStateSystem>();
+            _tokenSystem = container.Resolve<ITokenSystem>();
             StateMachine = container.Resolve<GameStateMachine>();
         }
 
@@ -59,6 +63,17 @@ namespace Gamepackage
             if (GUI.Button(new Rect(10, 140, 100, 50), "Next Level"))
             {
                 StateMachine.ChangeState(StateMachine.GamePlayState);
+            }
+
+            if (GUI.Button(new Rect(10, 215, 100, 50), "Save"))
+            {
+                _gameStateSystem.SaveGame();
+            }
+
+            if (GUI.Button(new Rect(10, 290, 100, 50), "Load"))
+            {
+                _gameStateSystem.LoadGame();
+                _tokenSystem.GetTokenById(0);
             }
         }
     }

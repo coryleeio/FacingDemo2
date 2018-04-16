@@ -35,8 +35,7 @@ namespace Gamepackage
         }
 
         public void Enter(Root owner)
-        {
-            _gameStateSystem.NewGame();
+        {   
             _loadingScene.Load();
             owner.StartCoroutine(LoadPrototypes(owner));
         }
@@ -65,7 +64,11 @@ namespace Gamepackage
                 _prototypeSystem.LoadAllPrototypes(dbConnection);
                 yield return new WaitForEndOfFrame();
 
-                _dungeonGenerator.GenerateDungeon();
+                if (_gameStateSystem.Game == null)
+                {
+                    _gameStateSystem.NewGame();
+                    _dungeonGenerator.GenerateDungeon();
+                }
 
                 dbConnection.Close();
             }
