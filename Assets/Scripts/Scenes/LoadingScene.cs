@@ -13,13 +13,14 @@ namespace Gamepackage
         protected override void BuildScene()
         {
             GameObject obj = new GameObject();
+            obj.tag = "MainCamera";
             obj.name = "Camera";
-            obj.AddComponent<Camera>();
-
-            var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            plane.transform.position = new Vector3(0, 0, 10);
-            plane.transform.localScale = new Vector3(50, 50, 50);
-            plane.transform.localEulerAngles = new Vector3(-90, 0, 0);
+            var camera = obj.AddComponent<Camera>();
+            obj.transform.position = new Vector3(0, 0, -30);
+            camera.orthographicSize = 1.5f;
+            camera.orthographic = true;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.black;
         }
     }
 }

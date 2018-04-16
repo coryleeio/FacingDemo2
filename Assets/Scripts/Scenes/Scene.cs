@@ -26,6 +26,7 @@ namespace Gamepackage
             SceneManager.MoveGameObjectToScene(UnityEngine.GameObject.Find("Root"), SceneCreated);
             SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
             SceneManager.SetActiveScene(SceneCreated);
+
             var root = SceneManager.GetSceneByName("root");
             if (root.isLoaded)
             {

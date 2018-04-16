@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Gamepackage
@@ -5,7 +6,7 @@ namespace Gamepackage
     public class Game
     {
         public int FurthestLevelReached { get; set; }
-        public int CurrentLevel { get; set; }
+        public int CurrentLevelIndex { get; set; }
         public int MonstersKilled { get; set; }
         public int Time { get; set; }
 
@@ -15,5 +16,15 @@ namespace Gamepackage
         }
 
         public Dungeon Dungeon;
+
+        [JsonIgnore]
+        public Level CurrentLevel
+        {
+            get
+            {
+                return Dungeon.Levels[CurrentLevelIndex];
+            }
+        }
+
     }
 }

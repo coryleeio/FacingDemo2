@@ -10,6 +10,7 @@ namespace Gamepackage
     {
         public GameStateMachine StateMachine;
         private IGameStateSystem _gameStateSystem;
+        private IVisibilitySystem _visibilitySystem;
         private ITokenSystem _tokenSystem;
         void Start()
         {
@@ -40,6 +41,7 @@ namespace Gamepackage
             container.Register<IDungeonGenerator, DungeonGenerator>().AsSingleton();
             _gameStateSystem = container.Resolve<IGameStateSystem>();
             _tokenSystem = container.Resolve<ITokenSystem>();
+            _visibilitySystem = container.Resolve<IVisibilitySystem>();
             StateMachine = container.Resolve<GameStateMachine>();
         }
 
@@ -73,7 +75,19 @@ namespace Gamepackage
             if (GUI.Button(new Rect(10, 290, 100, 50), "Load"))
             {
                 _gameStateSystem.LoadGame();
-                _tokenSystem.GetTokenById(0);
+            }
+
+            if (GUI.Button(new Rect(10, 350, 100, 50), "Reveal"))
+            {
+                var newVis = new bool[40, 40];
+                for(var x = 0; x < 40; x++)
+                {
+                    for(var y = 0; y < 40; y++)
+                    {
+                        newVis[x,y] = true;
+                    }
+                }
+                _visibilitySystem.UpdateVisibility(newVis);
             }
         }
     }

@@ -4,15 +4,18 @@ namespace Gamepackage
     {
         private GameScene _gamePlayScene;
         private ILogSystem _logSystem;
-        public GamePlayState(GameScene gamePlayScene, ILogSystem logSystem)
+        private IVisibilitySystem _visibilitySystem;
+        public GamePlayState(GameScene gamePlayScene, ILogSystem logSystem, IVisibilitySystem visibilitySystem)
         {
             _gamePlayScene = gamePlayScene;
             _logSystem = logSystem;
+            _visibilitySystem = visibilitySystem;
         }
 
         public void Enter(Root owner)
         {
             _gamePlayScene.Load();
+            _visibilitySystem.Init();
         }
 
         public void Exit(Root owner)

@@ -22,7 +22,7 @@ namespace Gamepackage
             Game = new Game
             {
                 FurthestLevelReached = 1,
-                CurrentLevel = 1,
+                CurrentLevelIndex = 0,
                 MonstersKilled = 0,
                 Time = 0
             };
