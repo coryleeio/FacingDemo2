@@ -26,7 +26,28 @@ namespace Gamepackage
 
         private int _width;
         private int _height;
-        private List<Point> points = new List<Point>(0);
+
+        private List<Point> _points = new List<Point>(0);
+        public List<Point> Points
+        {
+            set
+            {
+                _points = value;
+            }
+            get
+            {
+                return _points;
+            }
+        }
+
+        private List<Point> _offsets = new List<Point>(0);
+        public List<Point> Offsets
+        {
+            get
+            {
+                return _offsets;
+            }
+        }
 
         private ShapeType _shapeType;
         public ShapeType ShapeType
@@ -86,9 +107,9 @@ namespace Gamepackage
         {
             if(BoundingRectangle.Intersects(shape.BoundingRectangle))
             {
-                foreach(var point in points)
+                foreach(var point in Points)
                 {
-                    foreach(var otherPoint in shape.points)
+                    foreach(var otherPoint in shape.Points)
                     {
                         if (point == otherPoint)
                         {
@@ -108,7 +129,7 @@ namespace Gamepackage
         {
             if(BoundingRectangle.Contains(p))
             {
-                foreach(var point in points)
+                foreach(var point in Points)
                 {
                     if(point == p)
                     {
@@ -127,40 +148,45 @@ namespace Gamepackage
 
         public void Recalculate()
         {
-            points.Clear();
+            Points.Clear();
+            Offsets.Clear();
             if (_shapeType == ShapeType.Rect)
             {
                 BoundingRectangle.Position = Position;
                 BoundingRectangle.Width = Width;
                 BoundingRectangle.Height = Height;
-                points.AddRange(MathUtil.PointsInRect(BoundingRectangle));
+                Points.AddRange(MathUtil.PointsInRect(BoundingRectangle));
+                Offsets.AddRange(MathUtil.ConvertMapSpaceToLocalMapSpace(Position, Points));
             }
+
             else if (_shapeType == ShapeType.Plus || _shapeType == ShapeType.HollowPlus)
             {
                 var startingPosition = new Point(Position.X, Position.Y);
                 if (_shapeType == ShapeType.Plus)
                 {
-                    points.Add(startingPosition);
+                    Points.Add(startingPosition);
                 }
-                var currentN = MathUtil.GetPointByOffset(startingPosition, MathUtil.NorthOffset);
-                var currentS = MathUtil.GetPointByOffset(startingPosition, MathUtil.SouthOffset);
-                var currentE = MathUtil.GetPointByOffset(startingPosition, MathUtil.EastOffset);
-                var currentW = MathUtil.GetPointByOffset(startingPosition, MathUtil.WestOffset);
+                var currentN = new Point(startingPosition.X, startingPosition.Y);
+                var currentS = new Point(startingPosition.X, startingPosition.Y);
+                var currentE = new Point(startingPosition.X, startingPosition.Y);
+                var currentW = new Point(startingPosition.X, startingPosition.Y);
 
-                for(var w = 0; w < Width; w++)
+                for (var w = 0; w < Width; w++)
                 {
-                    points.Add(currentE);
-                    points.Add(currentW);
-                    currentE = MathUtil.GetPointByOffset(currentE, MathUtil.EastOffset);
-                    currentW = MathUtil.GetPointByOffset(currentW, MathUtil.WestOffset);
+                    currentE = MathUtil.GetPointByOffset(currentE, MathUtil.NorthEastOffset);
+                    currentW = MathUtil.GetPointByOffset(currentW, MathUtil.NorthWestOffset);
+                    Points.Add(currentE);
+                    Points.Add(currentW);
                 }
                 for (var h = 0; h < Height; h++)
                 {
-                    points.Add(currentN);
-                    points.Add(currentS);
-                    currentN = MathUtil.GetPointByOffset(currentN, MathUtil.NorthOffset);
-                    currentS = MathUtil.GetPointByOffset(currentS, MathUtil.SouthOffset);
+                    currentN = MathUtil.GetPointByOffset(currentN, MathUtil.SouthEastOffset);
+                    currentS = MathUtil.GetPointByOffset(currentS, MathUtil.SouthWestOffset);
+                    Points.Add(currentN);
+                    Points.Add(currentS);
                 }
+                Offsets.AddRange(MathUtil.ConvertMapSpaceToLocalMapSpace(Position, Points));
+                BoundingRectangle = MathUtil.BoundingRectangleForPoints(Points);
             }
             else
             {

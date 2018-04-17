@@ -255,6 +255,11 @@ namespace Gamepackage
 
             UpdateVisibility(_updatedVisibilityGrid);
         }
+
+        public void Clear()
+        {
+            FogOfWarGameObject = null;
+        }
     }
 
 }

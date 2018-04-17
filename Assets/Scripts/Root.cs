@@ -39,6 +39,7 @@ namespace Gamepackage
             container.Register<IPrototypeFactory, PrototypeFactory>().AsSingleton();
             container.Register<ITokenSystem, TokenSystem>().AsSingleton();
             container.Register<IDungeonGenerator, DungeonGenerator>().AsSingleton();
+            container.Register<IOverlaySystem, OverlaySystem>().AsSingleton();
             _gameStateSystem = container.Resolve<IGameStateSystem>();
             _tokenSystem = container.Resolve<ITokenSystem>();
             _visibilitySystem = container.Resolve<IVisibilitySystem>();

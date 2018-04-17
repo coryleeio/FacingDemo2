@@ -28,6 +28,112 @@ namespace Gamepackage
         public static Point[] DiagonalOffsets = new Point[] { NorthOffset, EastOffset, SouthOffset, WestOffset };
         public static Point[] SurroundingOffsets = new Point[] { SouthEastOffset, NorthWestOffset, SouthWestOffset, NorthEastOffset, NorthOffset, EastOffset, SouthOffset, WestOffset, };
 
+        public static List<Point> RotatePointsInDirection(Point center, List<Point> pointsToRotate, Direction dir)
+        {
+            var returnValue = new List<Point>(pointsToRotate.Count);
+            foreach(var point in pointsToRotate)
+            {
+                returnValue.Add(RotatePointInDirection(center, point, dir));
+            }
+            return returnValue;
+        }
+
+        public static Point RotatePointInDirection(Point center, Point pointToRotate, Direction dir)
+        {
+            var radians = 0.0f;
+            if(dir == Direction.SouthEast)
+            {
+                radians = 0;
+            }
+            else if (dir == Direction.SouthWest)
+            {
+                radians = 1.570f;
+            }
+            else if(dir == Direction.NorthWest)
+            {
+                radians = Mathf.PI;
+            }
+            else if(dir == Direction.NorthEast)
+            {
+                radians = 4.712f;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            var pointInLocalSpace = ConvertMapSpaceToLocalMapSpace(center, pointToRotate);
+            var qx = pointInLocalSpace.X * Math.Cos(radians) - pointInLocalSpace.Y * Math.Sin(radians);
+            var qy = pointInLocalSpace.X * Math.Sin(radians) + pointInLocalSpace.Y * Math.Cos(radians);
+            var rotatedPoint = new Point(Mathf.RoundToInt((float)qx), Mathf.RoundToInt((float) qy));
+            return ConvertLocalMapSpaceToMapSpace(center, rotatedPoint);
+        }
+
+        public static Rectangle BoundingRectangleForPoints(List<Point> points)
+        {
+            var lowestX = points[0].X;
+            var lowestY = points[0].Y;
+            var highestX = points[0].X;
+            var highestY = points[0].Y;
+
+            foreach(var point in points)
+            {
+                if(point.X < lowestX)
+                {
+                    lowestX = point.X;
+                }
+                if(point.X > highestX)
+                {
+                    highestX = point.X;
+                }
+                if(point.Y < lowestY)
+                {
+                    lowestY = point.Y;
+                }
+                if(point.Y > highestY)
+                {
+                    highestY = point.Y;
+                }
+
+            }
+            return new Rectangle()
+            {
+                Position = new Point(lowestX, lowestY),
+                Width = highestX - lowestX,
+                Height = highestY - lowestY
+            };
+        }
+
+        public static List<Point> ConvertLocalMapSpaceToMapSpace(Point Position, List<Point> Points)
+        {
+            var returnPoints = new List<Point>(Points.Count);
+            foreach (var point in Points)
+            {
+                returnPoints.Add(ConvertLocalMapSpaceToMapSpace(Position, point));
+            }
+            return returnPoints;
+        }
+
+        public static Point ConvertLocalMapSpaceToMapSpace(Point Position, Point other)
+        {
+            return new Point(other.X + Position.X, other.Y + Position.Y);
+        }
+
+        public static List<Point> ConvertMapSpaceToLocalMapSpace(Point Position, List<Point> Points)
+        {
+            var returnPoints = new List<Point>(Points.Count);
+            foreach (var point in Points)
+            {
+                returnPoints.Add(ConvertMapSpaceToLocalMapSpace(Position, point));
+            }
+            return returnPoints;
+        }
+
+        public static Point ConvertMapSpaceToLocalMapSpace(Point Position, Point other)
+        {
+            return new Point(other.X - Position.X, other.Y - Position.Y);
+        }
+
         public static int RelativeCoordinateOffset(int source, int target)
         {
             if (source == target)
