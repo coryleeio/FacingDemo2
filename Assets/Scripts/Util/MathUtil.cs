@@ -41,21 +41,38 @@ namespace Gamepackage
         public static Point RotatePointInDirection(Point center, Point pointToRotate, Direction dir)
         {
             var radians = 0.0f;
-            if(dir == Direction.SouthEast)
+            // You could specify this in radians in the first place to avoid this calculation
+            if (dir == Direction.SouthEast)
             {
-                radians = 0;
+                radians = Mathf.Deg2Rad * 0;
             }
             else if (dir == Direction.SouthWest)
             {
-                radians = 1.570f;
+                radians = Mathf.Deg2Rad * 90;
             }
-            else if(dir == Direction.NorthWest)
+            else if (dir == Direction.NorthWest)
             {
-                radians = Mathf.PI;
+                radians = Mathf.PI; // 180
             }
-            else if(dir == Direction.NorthEast)
+            else if (dir == Direction.NorthEast)
             {
-                radians = 4.712f;
+                radians = Mathf.Deg2Rad * 270;
+            }
+            else if (dir == Direction.South)
+            {
+                radians = Mathf.Deg2Rad * 45;
+            }
+            else if (dir == Direction.West)
+            {
+                radians = Mathf.Deg2Rad * 135;
+            }
+            else if (dir == Direction.North)
+            {
+                radians = Mathf.Deg2Rad * 225;
+            }
+            else if(dir == Direction.East)
+            {
+                radians = Mathf.Deg2Rad * 315;
             }
             else
             {

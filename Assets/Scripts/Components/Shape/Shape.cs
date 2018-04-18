@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -15,7 +16,7 @@ namespace Gamepackage
         public Shape()
         { }
 
-        public Shape(ShapeType shapeType, int width, int height)
+        public Shape(ShapeType shapeType, int width, int height, Direction Rotation = Direction.SouthEast)
         {
             _position = new Point(0, 0);
             _shapeType = shapeType;
@@ -59,6 +60,20 @@ namespace Gamepackage
             set
             {
                 _shapeType = value;
+                Recalculate();
+            }
+        }
+
+        private Direction _direction;
+        public Direction Direction
+        {
+            get
+            {
+                return _direction;
+            }
+            set
+            {
+                _direction = value;
                 Recalculate();
             }
         }
@@ -157,6 +172,7 @@ namespace Gamepackage
                 BoundingRectangle.Height = Height;
                 Points.AddRange(MathUtil.PointsInRect(BoundingRectangle));
                 Offsets.AddRange(MathUtil.ConvertMapSpaceToLocalMapSpace(Position, Points));
+                ApplyRotation(Points);
             }
 
             else if (_shapeType == ShapeType.Plus || _shapeType == ShapeType.HollowPlus)
@@ -192,6 +208,12 @@ namespace Gamepackage
             {
                 throw new NotImplementedException();
             }
+        }
+
+        private void ApplyRotation(List<Point> points)
+        {
+            // this could be done in place to not create garbage
+            Points = MathUtil.RotatePointsInDirection(Position, points, Direction);
         }
     }
 }

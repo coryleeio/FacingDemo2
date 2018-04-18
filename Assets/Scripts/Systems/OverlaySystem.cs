@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
@@ -7,9 +8,11 @@ namespace Gamepackage
     {
         public string Name;
         public Shape Shape;
-        public bool FollowMouse = false;
+        public bool PositionFollowsMouse = false;
+        public bool RotationFollowsMouse = false;
         public Color DefaultColor = new Color(0, 213, 255);
         public Point LastDrawnPosition;
+        public Direction LastDrawnRotation;
         public List<SpriteRenderer> TilesInUse = new List<SpriteRenderer>(0);
         public GameObject Folder;
     }
@@ -40,12 +43,17 @@ namespace Gamepackage
 
         public void Process()
         {
-            var mousePosition = MathUtil.GetMousePositionOnMap(Camera.main);
+            var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
             foreach (var overlay in Overlays)
             {
-                if (overlay.FollowMouse)
+                if (overlay.PositionFollowsMouse)
                 {
-                    overlay.Shape.Position = mousePosition;
+                    overlay.Shape.Position = mouseMapPosition;
+                    Draw(overlay);
+                }
+                if(overlay.RotationFollowsMouse)
+                {
+                    overlay.Shape.Direction = MathUtil.RelativeDirection(overlay.Shape.Position, mouseMapPosition);
                     Draw(overlay);
                 }
             }
@@ -71,28 +79,24 @@ namespace Gamepackage
             {
                 Overlays.Remove(overlay);
                 overlay.LastDrawnPosition = null;
+                overlay.LastDrawnRotation = Direction.SouthEast;
             }
         }
 
         private void Draw(Overlay overlay)
         {
-            if(overlay.LastDrawnPosition != overlay.Shape.Position)
+            foreach (var tileInUse in overlay.TilesInUse)
             {
-                foreach (var tileInUse in overlay.TilesInUse)
-                {
-                    ReturnToPool(tileInUse);
-                }
-                overlay.TilesInUse.Clear();
-                foreach(var point in overlay.Shape.Points)
-                {
-                    var tile = GetTileFromPoolAndActivate(overlay);
-                    tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
-                    tile.color = overlay.DefaultColor;
-                    
-                }
-                UnityEngine.Assertions.Assert.IsTrue(overlay.Shape.Points.Count == overlay.TilesInUse.Count);
-                overlay.LastDrawnPosition = overlay.Shape.Position;
+                ReturnToPool(tileInUse);
             }
+            overlay.TilesInUse.Clear();
+            foreach(var point in overlay.Shape.Points)
+            {
+                var tile = GetTileFromPoolAndActivate(overlay);
+                tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
+                tile.color = overlay.DefaultColor;
+            }
+            overlay.LastDrawnPosition = overlay.Shape.Position;
         }
 
         private static GameObject MakeFolder(string name)
