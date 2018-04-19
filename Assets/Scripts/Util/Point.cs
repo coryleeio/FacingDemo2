@@ -64,9 +64,18 @@ namespace Gamepackage
             return Mathf.Pow(p2.X - p1.X, 2) + Mathf.Pow(p2.Y - p1.Y, 2);
         }
 
-        public static bool PointsAreOrthogonal(Point a, Point b)
+        public static bool IsOrthogonal(Point a, Point b)
         {
-            return (a.X == b.X || a.Y == b.Y);
+            return (Mathf.Abs(a.X) == Mathf.Abs(b.X) || Mathf.Abs(a.Y) == Mathf.Abs(b.Y));
+        }
+
+        public static bool IsDiagonalTo(Point a, Point b)
+        {
+            if((a.X - b.X) == 0)
+            {
+                return false;
+            }
+            return Mathf.Abs( (a.Y - b.Y) / (a.X - b.X) ) == 1;
         }
 
         public static bool OffsetBy(Point p1, Point p2, Point[] offsets)
@@ -81,19 +90,19 @@ namespace Gamepackage
             return false;
         }
 
-        public static bool IsAdjacent(Point p1, Point p2)
+        public static bool IsAdjacentTo(Point p1, Point p2)
         {
             return OffsetBy(p1, p2, MathUtil.SurroundingOffsets);
         }
 
-        public static bool IsDiagonallyAdjacent(Point p1, Point p2)
+        public static bool IsDiagonallyAdjacentTo(Point p1, Point p2)
         {
-            return OffsetBy(p1, p2, MathUtil.DiagonalOffsets);
+            return IsAdjacentTo(p1, p2) && IsDiagonalTo(p1, p2);
         }
 
-        public static bool IsOrthogonallyAdjacent(Point p1, Point p2)
+        public static bool IsOrthogonallyAdjacentTo(Point p1, Point p2)
         {
-            return OffsetBy(p1, p2, MathUtil.OrthogonalOffsets);
+            return IsAdjacentTo(p1, p2) && IsOrthogonal(p1, p2);
         }
 
         public bool OffsetBy(Point p2, Point[] offsets)
@@ -101,9 +110,13 @@ namespace Gamepackage
             return OffsetBy(this, p2, offsets);
         }
 
-        public bool OrthgonalTo(Point p2)
+        public bool IsOrthogonalTo(Point p2)
         {
-            return PointsAreOrthogonal(this, p2);
+            return IsOrthogonal(this, p2);
+        }
+        public bool IsDiagonalTo(Point p2)
+        {
+            return IsDiagonalTo(this, p2);
         }
     }
 }

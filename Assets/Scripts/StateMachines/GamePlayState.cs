@@ -27,8 +27,7 @@ namespace Gamepackage
                 Name = "MouseHover",
                 Shape = new Shape(ShapeType.Rect, 5, 1),
                 DefaultColor = new Color(0, 213, 255),
-                PositionFollowsMouse = false,
-                RotationFollowsMouse = true,
+                OverlayBehaviour = OverlayBehaviour.StationaryRotationFollowsCursorOrthogonalsOnly
             });
         }
 

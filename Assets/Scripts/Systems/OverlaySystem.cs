@@ -1,15 +1,23 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
+
+    public enum OverlayBehaviour
+    {
+        StationaryNoRotation,
+        StationaryRotationFollowsCursor,
+        StationaryRotationFollowsCursorOrthogonalsOnly,
+        StationaryRotationFollowsCursorDiagonalsOnly,
+        PositionFollowsCursor,
+    }
+
     public class Overlay
     {
         public string Name;
         public Shape Shape;
-        public bool PositionFollowsMouse = false;
-        public bool RotationFollowsMouse = false;
+        public OverlayBehaviour OverlayBehaviour;
         public Color DefaultColor = new Color(0, 213, 255);
         public Point LastDrawnPosition;
         public Direction LastDrawnRotation;
@@ -33,7 +41,7 @@ namespace Gamepackage
 
         public void Init()
         {
-            if(OverlayTilePrefab == null)
+            if (OverlayTilePrefab == null)
             {
                 OverlayTilePrefab = Resources.Load<GameObject>("Overlay/OverlayTile");
             }
@@ -46,17 +54,44 @@ namespace Gamepackage
             var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
             foreach (var overlay in Overlays)
             {
-                if (overlay.PositionFollowsMouse)
+                if (overlay.OverlayBehaviour == OverlayBehaviour.PositionFollowsCursor)
                 {
                     overlay.Shape.Position = mouseMapPosition;
                     Draw(overlay);
                 }
-                if(overlay.RotationFollowsMouse)
+                else if (overlay.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursor)
                 {
-                    overlay.Shape.Direction = MathUtil.RelativeDirection(overlay.Shape.Position, mouseMapPosition);
-                    Draw(overlay);
+                    ChangeDirectionAndDrawOverlay(mouseMapPosition, overlay);
+                }
+                else if (overlay.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursorOrthogonalsOnly)
+                {
+                    if (overlay.Shape.Position.IsOrthogonalTo(mouseMapPosition))
+                    {
+                        ChangeDirectionAndDrawOverlay(mouseMapPosition, overlay);
+                    }
+                }
+                else if (overlay.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursorDiagonalsOnly)
+                {
+                    if (overlay.Shape.Position.IsDiagonalTo(mouseMapPosition))
+                    {
+                        ChangeDirectionAndDrawOverlay(mouseMapPosition, overlay);
+                    }
+                }
+                else if (overlay.OverlayBehaviour == OverlayBehaviour.StationaryNoRotation)
+                {
+                    // do nothing
+                }
+                else
+                {
+                    throw new System.Exception("Not implemented");
                 }
             }
+        }
+
+        private void ChangeDirectionAndDrawOverlay(Point mouseMapPosition, Overlay overlay)
+        {
+            overlay.Shape.Direction = MathUtil.RelativeDirection(overlay.Shape.Position, mouseMapPosition);
+            Draw(overlay);
         }
 
         public void Activate(Overlay overlay)
@@ -75,7 +110,7 @@ namespace Gamepackage
 
         public void Deactivate(Overlay overlay)
         {
-            if(Overlays.Contains(overlay))
+            if (Overlays.Contains(overlay))
             {
                 Overlays.Remove(overlay);
                 overlay.LastDrawnPosition = null;
@@ -90,7 +125,7 @@ namespace Gamepackage
                 ReturnToPool(tileInUse);
             }
             overlay.TilesInUse.Clear();
-            foreach(var point in overlay.Shape.Points)
+            foreach (var point in overlay.Shape.Points)
             {
                 var tile = GetTileFromPoolAndActivate(overlay);
                 tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
