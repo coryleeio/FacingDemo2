@@ -15,12 +15,18 @@ namespace Gamepackage
 
     public class Overlay
     {
+        public List<OverlayConfig> Configs = new List<OverlayConfig>();
+    }
+
+    public class OverlayConfig
+    {
         public string Name;
         public Shape Shape;
         public OverlayBehaviour OverlayBehaviour;
         public Color DefaultColor = new Color(0, 213, 255);
         public Point LastDrawnPosition;
         public Direction LastDrawnRotation;
+        public int SortOrder = 0;
         public List<SpriteRenderer> TilesInUse = new List<SpriteRenderer>(0);
         public GameObject Folder;
     }
@@ -54,41 +60,44 @@ namespace Gamepackage
             var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
             foreach (var overlay in Overlays)
             {
-                if (overlay.OverlayBehaviour == OverlayBehaviour.PositionFollowsCursor)
+                foreach (var config in overlay.Configs)
                 {
-                    overlay.Shape.Position = mouseMapPosition;
-                    Draw(overlay);
-                }
-                else if (overlay.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursor)
-                {
-                    ChangeDirectionAndDrawOverlay(mouseMapPosition, overlay);
-                }
-                else if (overlay.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursorOrthogonalsOnly)
-                {
-                    if (overlay.Shape.Position.IsOrthogonalTo(mouseMapPosition))
+                    if (config.OverlayBehaviour == OverlayBehaviour.PositionFollowsCursor)
                     {
-                        ChangeDirectionAndDrawOverlay(mouseMapPosition, overlay);
+                        config.Shape.Position = mouseMapPosition;
+                        Draw(config);
                     }
-                }
-                else if (overlay.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursorDiagonalsOnly)
-                {
-                    if (overlay.Shape.Position.IsDiagonalTo(mouseMapPosition))
+                    else if (config.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursor)
                     {
-                        ChangeDirectionAndDrawOverlay(mouseMapPosition, overlay);
+                        ChangeDirectionAndDrawOverlay(mouseMapPosition, config);
                     }
-                }
-                else if (overlay.OverlayBehaviour == OverlayBehaviour.StationaryNoRotation)
-                {
-                    // do nothing
-                }
-                else
-                {
-                    throw new System.Exception("Not implemented");
+                    else if (config.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursorOrthogonalsOnly)
+                    {
+                        if (config.Shape.Position.IsOrthogonalTo(mouseMapPosition))
+                        {
+                            ChangeDirectionAndDrawOverlay(mouseMapPosition, config);
+                        }
+                    }
+                    else if (config.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursorDiagonalsOnly)
+                    {
+                        if (config.Shape.Position.IsDiagonalTo(mouseMapPosition))
+                        {
+                            ChangeDirectionAndDrawOverlay(mouseMapPosition, config);
+                        }
+                    }
+                    else if (config.OverlayBehaviour == OverlayBehaviour.StationaryNoRotation)
+                    {
+                        // do nothing
+                    }
+                    else
+                    {
+                        throw new System.Exception("Not implemented");
+                    }
                 }
             }
         }
 
-        private void ChangeDirectionAndDrawOverlay(Point mouseMapPosition, Overlay overlay)
+        private void ChangeDirectionAndDrawOverlay(Point mouseMapPosition, OverlayConfig overlay)
         {
             overlay.Shape.Direction = MathUtil.RelativeDirection(overlay.Shape.Position, mouseMapPosition);
             Draw(overlay);
@@ -99,12 +108,15 @@ namespace Gamepackage
             if (!Overlays.Contains(overlay))
             {
                 Overlays.Add(overlay);
-                if (overlay.Folder == null)
+                foreach (var config in overlay.Configs)
                 {
-                    overlay.Folder = MakeFolder(overlay.Name == null ? "Tiles" : string.Format("{0} Tiles", overlay.Name));
-                    overlay.Folder.transform.SetParent(OverlayFolder.transform);
+                    if (config.Folder == null)
+                    {
+                        config.Folder = MakeFolder(config.Name == null ? "Tiles" : string.Format("{0} Tiles", config.Name));
+                        config.Folder.transform.SetParent(OverlayFolder.transform);
+                    }
+                    Draw(config);
                 }
-                Draw(overlay);
             }
         }
 
@@ -112,13 +124,16 @@ namespace Gamepackage
         {
             if (Overlays.Contains(overlay))
             {
+                foreach (var config in overlay.Configs)
+                {
+                    config.LastDrawnPosition = null;
+                    config.LastDrawnRotation = Direction.SouthEast;
+                }
                 Overlays.Remove(overlay);
-                overlay.LastDrawnPosition = null;
-                overlay.LastDrawnRotation = Direction.SouthEast;
             }
         }
 
-        private void Draw(Overlay overlay)
+        private void Draw(OverlayConfig overlay)
         {
             foreach (var tileInUse in overlay.TilesInUse)
             {
@@ -128,6 +143,7 @@ namespace Gamepackage
             foreach (var point in overlay.Shape.Points)
             {
                 var tile = GetTileFromPoolAndActivate(overlay);
+                tile.sortingOrder = overlay.SortOrder;
                 tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
                 tile.color = overlay.DefaultColor;
             }
@@ -144,7 +160,7 @@ namespace Gamepackage
             return go;
         }
 
-        private SpriteRenderer GetTileFromPoolAndActivate(Overlay overlay)
+        private SpriteRenderer GetTileFromPoolAndActivate(OverlayConfig overlay)
         {
             if (_overlayTilePool.Count == 0)
             {
@@ -159,6 +175,7 @@ namespace Gamepackage
 
         private void ReturnToPool(SpriteRenderer spriteRenderer)
         {
+            spriteRenderer.sortingOrder = 0;
             spriteRenderer.gameObject.SetActive(false);
             spriteRenderer.gameObject.transform.parent = OverlayFolder.transform;
             spriteRenderer.transform.position = Vector3.zero;

@@ -22,13 +22,38 @@ namespace Gamepackage
             _gamePlayScene.Load();
             _visibilitySystem.Init();
             _overlaySystem.Init();
-            _overlaySystem.Activate(new Overlay
+
+            var newOverlay = new Overlay()
             {
-                Name = "MouseHover",
-                Shape = new Shape(ShapeType.Rect, 5, 1),
-                DefaultColor = new Color(0, 213, 255),
-                OverlayBehaviour = OverlayBehaviour.StationaryRotationFollowsCursorOrthogonalsOnly
-            });
+                Configs = new System.Collections.Generic.List<OverlayConfig>()
+                {
+                    new OverlayConfig
+                    {
+                        Name = "MouseHover",
+                        Shape = new Shape(ShapeType.Rect, 5, 1),
+                        DefaultColor = new Color(0, 213, 255),
+                        OverlayBehaviour = OverlayBehaviour.StationaryRotationFollowsCursorOrthogonalsOnly,
+                        SortOrder = 1,
+                    },
+                    new OverlayConfig
+                    {
+                        Name = "MouseHover",
+                        Shape = new Shape(ShapeType.HollowPlus, 2, 2),
+                        DefaultColor = new Color(255, 0, 0),
+                        OverlayBehaviour = OverlayBehaviour.StationaryNoRotation,
+                        SortOrder = 2
+                    },
+                    new OverlayConfig
+                    {
+                        Name = "MouseHover",
+                        Shape = new Shape(ShapeType.Rect, 1, 1),
+                        DefaultColor = new Color(155, 0, 155),
+                        OverlayBehaviour = OverlayBehaviour.StationaryNoRotation,
+                        SortOrder = 3
+                    }
+                }
+            };
+            _overlaySystem.Activate(newOverlay);
         }
 
         public void Exit(Root owner)
