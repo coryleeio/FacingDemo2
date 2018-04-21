@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-
     public enum OverlayBehaviour
     {
         StationaryNoRotation,
@@ -20,6 +19,12 @@ namespace Gamepackage
         ConstraintedToShapeOfPreviousConfig,
     }
 
+    public enum SpriteType
+    {
+        Square,
+        Circle,
+    }
+
     public class Overlay
     {
         public List<OverlayConfig> Configs = new List<OverlayConfig>();
@@ -32,6 +37,7 @@ namespace Gamepackage
         public Shape Shape;
         public OverlayBehaviour OverlayBehaviour;
         public OverlayConstraints OverlayConstraint = OverlayConstraints.AllTiles;
+        public SpriteType SpriteType = SpriteType.Square;
         public Color DefaultColor = new Color(0, 213, 255);
         public int RelativeSortOrder = 0;
         public List<SpriteRenderer> TilesInUse = new List<SpriteRenderer>(0);
@@ -40,11 +46,11 @@ namespace Gamepackage
 
     public class OverlaySystem : IOverlaySystem
     {
-        private GameObject OverlayTilePrefab;
-        private Queue<SpriteRenderer> _overlayTilePool = new Queue<SpriteRenderer>();
-        private int _overlayTilePoolSize = 20;
-        private GameObject OverlayFolder;
-        private List<Overlay> Overlays = new List<Overlay>(0);
+        private Sprite _squareSprite;
+        private Sprite _circleSprite;
+        private GameObjectPool<SpriteRenderer> _pool;
+        private GameObject _overlayFolder;
+        private List<Overlay> _overlays = new List<Overlay>(0);
         private IGameStateSystem _gameStateSystem;
 
         public OverlaySystem(GameStateSystem gameStateSystem)
@@ -54,19 +60,40 @@ namespace Gamepackage
 
         public void Init()
         {
-            if (OverlayTilePrefab == null)
+            if(_squareSprite == null)
             {
-                OverlayTilePrefab = Resources.Load<GameObject>("Overlay/OverlayTile");
+                _squareSprite = Resources.Load<Sprite>("Overlay/Square");
             }
-            OverlayFolder = MakeFolder("Overlays");
-            PopulatePool();
+            if (_circleSprite == null)
+            {
+                _circleSprite = Resources.Load<Sprite>("Overlay/Circle");
+            }
+            _overlayFolder = GameObjectUtils.MakeFolder("Overlays");
+            _pool = new GameObjectPool<SpriteRenderer>("Overlay/OverlayPrefab", _overlayFolder);
+            _pool.Init();
         }
 
         public void Process()
         {
-            foreach (var overlay in Overlays)
+            foreach (var overlay in _overlays)
             {
                 Draw(overlay);
+            }
+        }
+
+        private Sprite GetSpriteForType(SpriteType spriteType)
+        {
+            if(spriteType == SpriteType.Square)
+            {
+                return _squareSprite;
+            }
+            else if(spriteType == SpriteType.Circle)
+            {
+                return _circleSprite;
+            }
+            else
+            {
+                throw new Exception("Not implemented");
             }
         }
 
@@ -92,15 +119,15 @@ namespace Gamepackage
 
         public void Activate(Overlay overlay)
         {
-            if (!Overlays.Contains(overlay))
+            if (!_overlays.Contains(overlay))
             {
-                Overlays.Add(overlay);
+                _overlays.Add(overlay);
                 foreach (var config in overlay.Configs)
                 {
                     if (config.Folder == null)
                     {
-                        config.Folder = MakeFolder(config.Name == null ? "Tiles" : string.Format("{0} Tiles", config.Name));
-                        config.Folder.transform.SetParent(OverlayFolder.transform);
+                        config.Folder = GameObjectUtils.MakeFolder(config.Name == null ? "Tiles" : string.Format("{0} Tiles", config.Name));
+                        config.Folder.transform.SetParent(_overlayFolder.transform);
                     }
                 }
                 Draw(overlay);
@@ -109,9 +136,9 @@ namespace Gamepackage
 
         public void Deactivate(Overlay overlay)
         {
-            if (Overlays.Contains(overlay))
+            if (_overlays.Contains(overlay))
             {
-                Overlays.Remove(overlay);
+                _overlays.Remove(overlay);
             }
         }
 
@@ -165,63 +192,34 @@ namespace Gamepackage
             }
         }
 
-        private static GameObject MakeFolder(string name)
-        {
-            var go = new GameObject();
-            go.name = name;
-            go.transform.position = new Vector3(0, 0, 0);
-            go.transform.localScale = new Vector3(1, 1, 1);
-            go.transform.localEulerAngles = new Vector3(0, 0, 0);
-            return go;
-        }
-
         private SpriteRenderer GetTileFromPoolAndActivate(OverlayConfig overlay)
         {
-            if (_overlayTilePool.Count == 0)
-            {
-                AddNewEntryToPool();
-            }
-            var result = _overlayTilePool.Dequeue();
+            var result = _pool.CheckOut();
             result.transform.parent = overlay.Folder.transform;
             overlay.TilesInUse.Add(result);
-            result.gameObject.SetActive(true);
+            var sprite = GetSpriteForType(overlay.SpriteType);
+            if (result.sprite != sprite)
+            {
+                result.sprite = sprite;
+            }
             return result;
         }
 
         private void ReturnToPool(SpriteRenderer spriteRenderer)
         {
+            _pool.CheckIn(spriteRenderer);
             spriteRenderer.sortingOrder = 0;
-            spriteRenderer.gameObject.SetActive(false);
-            spriteRenderer.gameObject.transform.parent = OverlayFolder.transform;
-            spriteRenderer.transform.position = Vector3.zero;
-            _overlayTilePool.Enqueue(spriteRenderer);
-        }
-
-        private void PopulatePool()
-        {
-            for (int i = 0; i < _overlayTilePoolSize; i++)
-            {
-                AddNewEntryToPool();
-            }
-        }
-
-        private void AddNewEntryToPool()
-        {
-            var go = GameObject.Instantiate(OverlayTilePrefab);
-            var spriteRenderer = go.GetComponent<SpriteRenderer>();
-            ReturnToPool(spriteRenderer);
         }
 
         public void Clear()
         {
-            var overlaysToRemove = new List<Overlay>(Overlays.Count);
-            overlaysToRemove.AddRange(Overlays);
+            var overlaysToRemove = new List<Overlay>(_overlays.Count);
+            overlaysToRemove.AddRange(_overlays);
             foreach (var overlay in overlaysToRemove)
             {
                 Deactivate(overlay);
             }
-            Overlays.Clear();
-            _overlayTilePool.Clear();
+            _overlays.Clear();
         }
     }
 }

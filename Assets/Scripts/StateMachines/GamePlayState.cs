@@ -42,7 +42,8 @@ namespace Gamepackage
                         DefaultColor = new Color(112, 112, 0),
                         OverlayBehaviour = OverlayBehaviour.PositionFollowsCursor,
                         OverlayConstraint = OverlayConstraints.ConstraintedToShapeOfPreviousConfig,
-                        RelativeSortOrder = 2
+                        RelativeSortOrder = 2,
+                        SpriteType = SpriteType.Circle
                     }
                 }
             };
