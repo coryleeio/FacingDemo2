@@ -80,9 +80,9 @@ namespace Gamepackage
             }
 
             var pointInLocalSpace = ConvertMapSpaceToLocalMapSpace(center, pointToRotate);
-            var qx = pointInLocalSpace.X * Math.Cos(radians) - pointInLocalSpace.Y * Math.Sin(radians);
-            var qy = pointInLocalSpace.X * Math.Sin(radians) + pointInLocalSpace.Y * Math.Cos(radians);
-            var rotatedPoint = new Point(Mathf.RoundToInt((float)qx), Mathf.RoundToInt((float) qy));
+            var qx = (float)(pointInLocalSpace.X * Math.Cos(radians) - pointInLocalSpace.Y * Math.Sin(radians));
+            var qy = (float)(pointInLocalSpace.X * Math.Sin(radians) + pointInLocalSpace.Y * Math.Cos(radians));
+            var rotatedPoint = new Point(Mathf.RoundToInt(qx), Mathf.RoundToInt(qy));
             return ConvertLocalMapSpaceToMapSpace(center, rotatedPoint);
         }
 

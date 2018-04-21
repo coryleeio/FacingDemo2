@@ -38,9 +38,9 @@ namespace Gamepackage
                     new OverlayConfig
                     {
                         Name = "MouseHover",
-                        Shape = new Shape(ShapeType.Rect, 1, 1),
+                        Shape = new Shape(ShapeType.Rect, 4, 1),
                         DefaultColor = new Color(112, 112, 0),
-                        OverlayBehaviour = OverlayBehaviour.PositionFollowsCursor,
+                        OverlayBehaviour = OverlayBehaviour.StationaryRotationFollowsCursor,
                         OverlayConstraint = OverlayConstraints.ConstraintedToShapeOfPreviousConfig,
                         RelativeSortOrder = 2,
                         SpriteType = SpriteType.Circle

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4942059519039334}
   - component: {fileID: 212835270041510990}
   m_Layer: 0
-  m_Name: OverlayTile
+  m_Name: OverlayPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
