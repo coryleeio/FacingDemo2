@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Gamepackage
 {
+    [Serializable]
     public class Point
     {
         public int X;

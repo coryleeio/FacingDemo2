@@ -5,14 +5,13 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
+    [Serializable]
     public class Token : IHandleMessage, IWasBuiltFromAPrototype, IHaveAnId
     {
         public Token()
         {
 
         }
-
-        public int Id { get; set; }
 
         [JsonIgnore]
         public Point Position
@@ -22,6 +21,8 @@ namespace Gamepackage
                 Shape.Position = value;
             }
         }
+
+        public int Id { get; set; }
 
         public Shape Shape;
 

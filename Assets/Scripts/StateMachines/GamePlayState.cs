@@ -8,13 +8,15 @@ namespace Gamepackage
         private ILogSystem _logSystem;
         private IVisibilitySystem _visibilitySystem;
         private IOverlaySystem _overlaySystem;
+        private IPrototypeFactory _prototypeFactory;
 
-        public GamePlayState(GameScene gamePlayScene, ILogSystem logSystem, IVisibilitySystem visibilitySystem, IOverlaySystem overlaySystem)
+        public GamePlayState(GameScene gamePlayScene, ILogSystem logSystem, IVisibilitySystem visibilitySystem, IOverlaySystem overlaySystem, IPrototypeFactory prototypeFactory)
         {
             _gamePlayScene = gamePlayScene;
             _logSystem = logSystem;
             _visibilitySystem = visibilitySystem;
             _overlaySystem = overlaySystem;
+            _prototypeFactory = prototypeFactory;
         }
 
         public void Enter(Root owner)
@@ -48,6 +50,8 @@ namespace Gamepackage
                 }
             };
             _overlaySystem.Activate(newOverlay);
+
+            _prototypeFactory.BuildToken("Poncy");
         }
 
         public void Exit(Root owner)

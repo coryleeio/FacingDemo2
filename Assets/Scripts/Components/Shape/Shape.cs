@@ -11,6 +11,7 @@ namespace Gamepackage
         HollowPlus // 2
     }
 
+    [Serializable]
     public class Shape
     {
         public Shape()
