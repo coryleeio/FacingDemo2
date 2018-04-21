@@ -22,7 +22,6 @@ namespace Gamepackage
             container.Register<MainMenuState, MainMenuState>().AsSingleton();
             container.Register<LoadingResourcesState, LoadingResourcesState>().AsSingleton();
             container.Register<GameStateMachine, GameStateMachine>().AsSingleton();
-
             container.Register<ILogSystem, LogSystem>().AsSingleton();
             container.Register<ICombatSystem, CombatSystem>().AsSingleton();
             container.Register<IDialogueSystem, DialogueSystem>().AsSingleton();

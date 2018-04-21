@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -8,14 +9,21 @@ namespace Gamepackage
     {
         StationaryNoRotation,
         StationaryRotationFollowsCursor,
-        StationaryRotationFollowsCursorOrthogonalsOnly,
-        StationaryRotationFollowsCursorDiagonalsOnly,
         PositionFollowsCursor,
+    }
+
+    public enum OverlayConstraints
+    {
+        AllTiles,
+        Orthogonals,
+        Diagonals,
+        ConstraintedToShapeOfPreviousConfig,
     }
 
     public class Overlay
     {
         public List<OverlayConfig> Configs = new List<OverlayConfig>();
+        public int SortOrder = 0;
     }
 
     public class OverlayConfig
@@ -23,10 +31,9 @@ namespace Gamepackage
         public string Name;
         public Shape Shape;
         public OverlayBehaviour OverlayBehaviour;
+        public OverlayConstraints OverlayConstraint = OverlayConstraints.AllTiles;
         public Color DefaultColor = new Color(0, 213, 255);
-        public Point LastDrawnPosition;
-        public Direction LastDrawnRotation;
-        public int SortOrder = 0;
+        public int RelativeSortOrder = 0;
         public List<SpriteRenderer> TilesInUse = new List<SpriteRenderer>(0);
         public GameObject Folder;
     }
@@ -57,50 +64,30 @@ namespace Gamepackage
 
         public void Process()
         {
-            var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
             foreach (var overlay in Overlays)
             {
-                foreach (var config in overlay.Configs)
-                {
-                    if (config.OverlayBehaviour == OverlayBehaviour.PositionFollowsCursor)
-                    {
-                        config.Shape.Position = mouseMapPosition;
-                        Draw(config);
-                    }
-                    else if (config.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursor)
-                    {
-                        ChangeDirectionAndDrawOverlay(mouseMapPosition, config);
-                    }
-                    else if (config.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursorOrthogonalsOnly)
-                    {
-                        if (config.Shape.Position.IsOrthogonalTo(mouseMapPosition))
-                        {
-                            ChangeDirectionAndDrawOverlay(mouseMapPosition, config);
-                        }
-                    }
-                    else if (config.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursorDiagonalsOnly)
-                    {
-                        if (config.Shape.Position.IsDiagonalTo(mouseMapPosition))
-                        {
-                            ChangeDirectionAndDrawOverlay(mouseMapPosition, config);
-                        }
-                    }
-                    else if (config.OverlayBehaviour == OverlayBehaviour.StationaryNoRotation)
-                    {
-                        // do nothing
-                    }
-                    else
-                    {
-                        throw new System.Exception("Not implemented");
-                    }
-                }
+                Draw(overlay);
             }
         }
 
-        private void ChangeDirectionAndDrawOverlay(Point mouseMapPosition, OverlayConfig overlay)
+        private static void UpdateDirectionToFollowCursorIfNeeded(Point mouseMapPosition, OverlayConfig config)
         {
-            overlay.Shape.Direction = MathUtil.RelativeDirection(overlay.Shape.Position, mouseMapPosition);
-            Draw(overlay);
+            if (config.OverlayBehaviour == OverlayBehaviour.PositionFollowsCursor)
+            {
+                config.Shape.Position = mouseMapPosition;
+            }
+            else if (config.OverlayBehaviour == OverlayBehaviour.StationaryRotationFollowsCursor)
+            {
+                config.Shape.Direction = MathUtil.RelativeDirection(config.Shape.Position, mouseMapPosition);
+            }
+            else if (config.OverlayBehaviour == OverlayBehaviour.StationaryNoRotation)
+            {
+                // do nothing
+            }
+            else
+            {
+                throw new System.Exception("Not implemented");
+            }
         }
 
         public void Activate(Overlay overlay)
@@ -115,8 +102,8 @@ namespace Gamepackage
                         config.Folder = MakeFolder(config.Name == null ? "Tiles" : string.Format("{0} Tiles", config.Name));
                         config.Folder.transform.SetParent(OverlayFolder.transform);
                     }
-                    Draw(config);
                 }
+                Draw(overlay);
             }
         }
 
@@ -124,30 +111,58 @@ namespace Gamepackage
         {
             if (Overlays.Contains(overlay))
             {
-                foreach (var config in overlay.Configs)
-                {
-                    config.LastDrawnPosition = null;
-                    config.LastDrawnRotation = Direction.SouthEast;
-                }
                 Overlays.Remove(overlay);
             }
         }
 
-        private void Draw(OverlayConfig overlay)
+        private void Draw(Overlay overlay)
         {
-            foreach (var tileInUse in overlay.TilesInUse)
+            var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
+            OverlayConfig previous = null;
+            foreach (var config in overlay.Configs)
             {
-                ReturnToPool(tileInUse);
+                UpdateDirectionToFollowCursorIfNeeded(mouseMapPosition, config);
+                foreach (var tileInUse in config.TilesInUse)
+                {
+                    ReturnToPool(tileInUse);
+                }
+                config.TilesInUse.Clear();
+                if(ShouldDraw(config, previous, mouseMapPosition))
+                {
+                    foreach (var point in config.Shape.Points)
+                    {
+                        var tile = GetTileFromPoolAndActivate(config);
+                        tile.sortingOrder = overlay.SortOrder + config.RelativeSortOrder;
+                        tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
+                        tile.color = config.DefaultColor;
+                    }
+                }
+                previous = config;
             }
-            overlay.TilesInUse.Clear();
-            foreach (var point in overlay.Shape.Points)
+        }
+
+        private bool ShouldDraw(OverlayConfig config, OverlayConfig previousConfig, Point mouseMapPosition)
+        {
+            if(config.OverlayConstraint == OverlayConstraints.AllTiles)
             {
-                var tile = GetTileFromPoolAndActivate(overlay);
-                tile.sortingOrder = overlay.SortOrder;
-                tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
-                tile.color = overlay.DefaultColor;
+                return true;
             }
-            overlay.LastDrawnPosition = overlay.Shape.Position;
+            else if(config.OverlayConstraint == OverlayConstraints.Diagonals)
+            {
+                return config.Shape.Position.IsDiagonalTo(mouseMapPosition);
+            }
+            else if(config.OverlayConstraint == OverlayConstraints.Orthogonals)
+            {
+                return config.Shape.Position.IsOrthogonalTo(mouseMapPosition);
+            }
+            else if(config.OverlayConstraint == OverlayConstraints.ConstraintedToShapeOfPreviousConfig)
+            {
+                return config.Shape.Intersects(previousConfig.Shape);
+            }
+            else
+            {
+                throw new Exception("Not implemented");
+            }
         }
 
         private static GameObject MakeFolder(string name)
