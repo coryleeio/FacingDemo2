@@ -30,7 +30,11 @@ namespace Gamepackage
                 level.Tokens = new List<Token>();
                 levels.Add(level);
             }
-            _prototypeFactory.BuildToken("Poncy", 0, new Point(0, 0));
+
+            var placementLevel = levels[0];
+            var token = _prototypeFactory.BuildToken("Poncy");
+            token.Position = new Point(0, 0);
+            placementLevel.Tokens.Add(token);
         }
     }
 }

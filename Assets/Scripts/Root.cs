@@ -12,6 +12,7 @@ namespace Gamepackage
         private IGameStateSystem _gameStateSystem;
         private IVisibilitySystem _visibilitySystem;
         private ITokenSystem _tokenSystem;
+
         void Start()
         {
             DontDestroyOnLoad(this);
