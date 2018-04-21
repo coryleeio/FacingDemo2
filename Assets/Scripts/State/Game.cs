@@ -9,6 +9,7 @@ namespace Gamepackage
         public int CurrentLevelIndex { get; set; }
         public int MonstersKilled { get; set; }
         public int Time { get; set; }
+        public IdManager IdManager { get; set; }
 
         public Game()
         {

@@ -5,10 +5,12 @@ namespace Gamepackage
     public class DungeonGenerator : IDungeonGenerator
     {
         IGameStateSystem _gameStateSystem;
+        IPrototypeFactory _prototypeFactory;
 
-        public DungeonGenerator(IGameStateSystem gameStateSystem)
+        public DungeonGenerator(IGameStateSystem gameStateSystem, IPrototypeFactory prototypeFactory)
         {
             _gameStateSystem = gameStateSystem;
+            _prototypeFactory = prototypeFactory;
         }
 
         public void GenerateDungeon()
@@ -25,8 +27,10 @@ namespace Gamepackage
                     Width = size,
                     Height = size
                 };
+                level.Tokens = new List<Token>();
                 levels.Add(level);
             }
+            _prototypeFactory.BuildToken("Poncy", 0, new Point(0, 0));
         }
     }
 }

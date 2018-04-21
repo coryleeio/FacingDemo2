@@ -7,12 +7,10 @@ namespace Gamepackage
     public class GameStateSystem : IGameStateSystem
     {
         public Game Game { get; private set; }
-        private ITokenSystem _tokenSystem { get; set; }
         private ILogSystem _logSystem { get; set; }
 
-        public GameStateSystem(ITokenSystem tokenSystem, ILogSystem logSystem)
+        public GameStateSystem(ILogSystem logSystem)
         {
-            _tokenSystem = tokenSystem;
             _logSystem = logSystem;
         }
 
@@ -24,7 +22,8 @@ namespace Gamepackage
                 FurthestLevelReached = 1,
                 CurrentLevelIndex = 0,
                 MonstersKilled = 0,
-                Time = 0
+                Time = 0,
+                IdManager = new IdManager()
             };
             Game.Dungeon = new Dungeon();
         }
@@ -33,7 +32,6 @@ namespace Gamepackage
         public void Clear()
         {
             _logSystem.Log("Clearing game state");
-            _tokenSystem.Clear();
             Game = null;
         }
 

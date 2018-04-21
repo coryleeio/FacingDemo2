@@ -4,29 +4,25 @@ namespace Gamepackage
 {
     public class TokenSystem : ITokenSystem
     {
-        public TokenSystem()
+        IGameStateSystem _gameStateSystem;
+        public TokenSystem(IGameStateSystem gameStateSystem)
         {
-
+            _gameStateSystem = gameStateSystem;
         }
 
         private Dictionary<int, Token> TokenMap = new Dictionary<int, Token>();
-        private int NextId = 0;
 
         public void Register(Token token)
         {
-            token.Id = NextId;
-            RegisterWithoutIncrement(token);
-            NextId++;
-        }
-
-        private void RegisterWithoutIncrement(Token token)
-        {
+            if(token.Id == 0)
+            {
+                token.Id = _gameStateSystem.Game.IdManager.NextId;
+            }
             TokenMap.Add(token.Id, token);
         }
 
         public void Clear()
         {
-            NextId = 0;
             TokenMap.Clear();
         }
 
@@ -41,15 +37,6 @@ namespace Gamepackage
             {
                 TokenMap.Remove(token.Id);
             }
-        }
-
-        public void Remember(Token token)
-        {
-            if (token.Id > NextId)
-            {
-                NextId = token.Id + 1;
-            }
-            RegisterWithoutIncrement(token);
         }
     }
 }

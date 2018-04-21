@@ -10,7 +10,7 @@ namespace Gamepackage
 
         }
 
-        public virtual void Initialize()
+        public virtual void BuildView()
         {
             gameObject = new GameObject();
             gameObject.name = Owner.PrototypeUniqueIdentifier.ToString();

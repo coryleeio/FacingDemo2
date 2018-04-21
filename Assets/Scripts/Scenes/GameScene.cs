@@ -6,10 +6,12 @@ namespace Gamepackage
     {
         private ILogSystem _logger;
         private IPrototypeFactory _prototypeFactory;
-        public GameScene(ILogSystem logger, IPrototypeFactory prototypeFactory)
+        private IGameStateSystem _gameStateSystem;
+        public GameScene(ILogSystem logger, IPrototypeFactory prototypeFactory, IGameStateSystem gameStateSystem)
         {
             _logger = logger;
             _prototypeFactory = prototypeFactory;
+            _gameStateSystem = gameStateSystem;
         }
 
         protected override void BuildScene()
@@ -23,6 +25,11 @@ namespace Gamepackage
             camera.orthographic = true;
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
+
+            foreach(var token in _gameStateSystem.Game.CurrentLevel.Tokens)
+            {
+                token.View.BuildView();
+            }
         }
     }
 }

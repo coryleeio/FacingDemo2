@@ -6,6 +6,5 @@
         void Clear();
         Token GetTokenById(int id);
         void Deregister(Token entity);
-        void Remember(Token entity);
     }
 }

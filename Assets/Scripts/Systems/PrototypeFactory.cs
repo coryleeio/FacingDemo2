@@ -10,9 +10,11 @@ namespace Gamepackage
         private IPrototypeSystem _prototypeSystem;
         private TinyIoCContainer _container;
         private ITokenSystem _tokenSystem;
+        private IGameStateSystem _gameStateSystem;
 
-        public PrototypeFactory(IPrototypeSystem prototypeSystem, TinyIoCContainer container, ITokenSystem tokenSystem)
+        public PrototypeFactory(IPrototypeSystem prototypeSystem, TinyIoCContainer container, ITokenSystem tokenSystem, IGameStateSystem gameStateSystem)
         {
+            _gameStateSystem = gameStateSystem;
             _prototypeSystem = prototypeSystem;
             _container = container;
             _tokenSystem = tokenSystem;
@@ -28,7 +30,7 @@ namespace Gamepackage
             }
         }
 
-        public Token BuildToken(TokenPrototype prototype)
+        public Token BuildToken(TokenPrototype prototype, int levelIndex, Point position)
         {
             var token = new Token();
             token.PrototypeUniqueIdentifier = prototype.UniqueIdentifier;
@@ -60,13 +62,16 @@ namespace Gamepackage
             _container.BuildUp(token.View);
 
             _tokenSystem.Register(token);
+
+            var level = _gameStateSystem.Game.Dungeon.Levels[levelIndex];
+            level.Tokens.Add(token);
             return token;
         }
 
-        public Token BuildToken(string uniqueIdentifier)
+        public Token BuildToken(string uniqueIdentifier, int level, Point position)
         {
             var prototype = _prototypeSystem.GetPrototypeByUniqueIdentifier<TokenPrototype>(uniqueIdentifier);
-            return BuildToken(prototype);
+            return BuildToken(prototype, level, position);
         }
 
         public Item BuildItem(ItemPrototype prototype)
