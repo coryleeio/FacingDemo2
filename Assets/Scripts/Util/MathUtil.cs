@@ -328,7 +328,6 @@ namespace Gamepackage
                         throw new NotImplementedException("Not implemented");
                 }
 
-
                 foreach (var relevantTile in relevantTiles)
                 {
                     if (predicate(relevantTile))

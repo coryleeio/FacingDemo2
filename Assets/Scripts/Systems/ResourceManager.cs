@@ -34,13 +34,13 @@ namespace Gamepackage
                 {
                     UniqueIdentifier = reader.GetString(0),
                 };
-                SavePrototype(prototype);
+                CacheResource(prototype);
             }
             reader.Close();
             dbcmd.Dispose();
         }
 
-        private void SavePrototype(IResource prototype)
+        private void CacheResource(IResource prototype)
         {
             if (_prototypesByUniqueIdentifier.ContainsKey(prototype.UniqueIdentifier))
             {
@@ -74,7 +74,7 @@ namespace Gamepackage
                     TriggerBehaviourClassName = reader.GetString(9),
                     ViewClassName = reader.GetString(10)
                 };
-                SavePrototype(prototype);
+                CacheResource(prototype);
             }
             reader.Close();
             dbcmd.Dispose();
