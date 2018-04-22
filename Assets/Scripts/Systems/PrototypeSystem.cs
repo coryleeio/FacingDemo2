@@ -25,7 +25,7 @@ namespace Gamepackage
             IDbCommand dbcmd = dbconn.CreateCommand();
             IDataReader reader;
 
-            dbcmd.CommandText = @"SELECT * from item_prototypes;";
+            dbcmd.CommandText = @"SELECT * from item_prototypes_view;";
 
             reader = dbcmd.ExecuteReader();
             while (reader.Read())
@@ -55,7 +55,7 @@ namespace Gamepackage
             IDbCommand dbcmd = dbconn.CreateCommand();
             IDataReader reader;
 
-            dbcmd.CommandText = @"SELECT * from token_prototypes;";
+            dbcmd.CommandText = @"SELECT * from token_prototypes_view;";
 
             reader = dbcmd.ExecuteReader();
             while (reader.Read())
