@@ -35,7 +35,7 @@ namespace Gamepackage
             container.Register<ITurnSystem, TurnSystem>().AsSingleton();
             container.Register<IVisibilitySystem, VisibilitySystem>().AsSingleton();
             container.Register<IModSystem, ModSystem>().AsSingleton();
-            container.Register<IPrototypeSystem, PrototypeSystem>().AsSingleton();
+            container.Register<IResourceManager, ResourceManager>().AsSingleton();
             container.Register<IPrototypeFactory, PrototypeFactory>().AsSingleton();
             container.Register<ITokenSystem, TokenSystem>().AsSingleton();
             container.Register<IDungeonGenerator, DungeonGenerator>().AsSingleton();

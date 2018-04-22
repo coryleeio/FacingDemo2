@@ -3,12 +3,12 @@ using System.Data;
 
 namespace Gamepackage
 {
-    public class PrototypeSystem : IPrototypeSystem
+    public class ResourceManager : IResourceManager
     {
-        private Dictionary<string, IPrototype> _prototypesByUniqueIdentifier = new Dictionary<string, IPrototype>();
+        private Dictionary<string, IResource> _prototypesByUniqueIdentifier = new Dictionary<string, IResource>();
         private ILogSystem _logSystem;
 
-        public PrototypeSystem(ILogSystem logSystem)
+        public ResourceManager(ILogSystem logSystem)
         {
             _logSystem = logSystem;
         }
@@ -40,7 +40,7 @@ namespace Gamepackage
             dbcmd.Dispose();
         }
 
-        private void SavePrototype(IPrototype prototype)
+        private void SavePrototype(IResource prototype)
         {
             if (_prototypesByUniqueIdentifier.ContainsKey(prototype.UniqueIdentifier))
             {
@@ -80,7 +80,7 @@ namespace Gamepackage
             dbcmd.Dispose();
         }
 
-        public TPrototype GetPrototypeByUniqueIdentifier<TPrototype>(string uniqueIdentifier) where TPrototype : IPrototype
+        public TPrototype GetPrototypeByUniqueIdentifier<TPrototype>(string uniqueIdentifier) where TPrototype : IResource
         {
             if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueIdentifier))
             {

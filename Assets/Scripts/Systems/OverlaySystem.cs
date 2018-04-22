@@ -93,7 +93,7 @@ namespace Gamepackage
             }
             else
             {
-                throw new Exception("Not implemented");
+                throw new NotImplementedException("Not implemented");
             }
         }
 
@@ -113,7 +113,7 @@ namespace Gamepackage
             }
             else
             {
-                throw new System.Exception("Not implemented");
+                throw new NotImplementedException("Not implemented");
             }
         }
 
@@ -188,7 +188,7 @@ namespace Gamepackage
             }
             else
             {
-                throw new Exception("Not implemented");
+                throw new NotImplementedException("Not implemented");
             }
         }
 

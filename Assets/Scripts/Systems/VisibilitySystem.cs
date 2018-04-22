@@ -214,7 +214,7 @@ namespace Gamepackage
             {
                 return VisibleColor;
             }
-            throw new InvalidProgramException("Not implemented");
+            throw new NotImplementedException("Not implemented");
         }
 
         public void UpdateVisibility()

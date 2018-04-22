@@ -7,11 +7,11 @@ namespace Gamepackage
     public class PrototypeFactory : IPrototypeFactory
     {
         private Dictionary<string, Type> componentTypeMap = new Dictionary<string, Type>();
-        private IPrototypeSystem _prototypeSystem;
+        private IResourceManager _prototypeSystem;
         private TinyIoCContainer _container;
         private ITokenSystem _tokenSystem;
 
-        public PrototypeFactory(IPrototypeSystem prototypeSystem, TinyIoCContainer container, ITokenSystem tokenSystem)
+        public PrototypeFactory(IResourceManager prototypeSystem, TinyIoCContainer container, ITokenSystem tokenSystem)
         {
             _prototypeSystem = prototypeSystem;
             _container = container;

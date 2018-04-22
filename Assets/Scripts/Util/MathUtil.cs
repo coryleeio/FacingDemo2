@@ -325,7 +325,7 @@ namespace Gamepackage
                         relevantTiles = SurroundingPoints(p);
                         break;
                     default:
-                        throw new Exception("Not implemented");
+                        throw new NotImplementedException("Not implemented");
                 }
 
 

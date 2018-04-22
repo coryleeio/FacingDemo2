@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public class ItemPrototype : IPrototype
+    public class ItemPrototype : IResource
     {
         public string UniqueIdentifier { get; set; }
     }

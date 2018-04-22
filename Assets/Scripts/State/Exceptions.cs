@@ -31,4 +31,10 @@ namespace Gamepackage
         public DuplicatePrototypeIdException() : base() { }
         public DuplicatePrototypeIdException(string message) : base(message) { }
     }
+
+    public class NotImplementedException : GamePackageException
+    {
+        public NotImplementedException() : base() { }
+        public NotImplementedException(string message) : base(message) { }
+    }
 }

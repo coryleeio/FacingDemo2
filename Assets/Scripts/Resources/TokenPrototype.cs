@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public class TokenPrototype : IPrototype
+    public class TokenPrototype : IResource
     {
         public string UniqueIdentifier { get; set; }
         public ShapeType ShapeType { get; set; }

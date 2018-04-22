@@ -9,7 +9,7 @@ namespace Gamepackage
     {
         private LoadingScene _loadingScene;
         private ILogSystem _logSystem;
-        private IPrototypeSystem _prototypeSystem;
+        private IResourceManager _prototypeSystem;
         private IModSystem _modSystem;
         private IPrototypeFactory _prototypeFactory;
         private IGameStateSystem _gameStateSystem;
@@ -18,7 +18,7 @@ namespace Gamepackage
         public LoadingResourcesState(
             LoadingScene loadingScene, 
             ILogSystem logSystem, 
-            IPrototypeSystem prototypeSystem, 
+            IResourceManager prototypeSystem, 
             IModSystem modSystem, 
             IPrototypeFactory prototypeFactory,
             IGameStateSystem gameStateSystem,
