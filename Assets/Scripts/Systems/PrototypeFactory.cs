@@ -11,12 +11,19 @@ namespace Gamepackage
         private IResourceManager _resourceManager;
         private TinyIoCContainer _container;
         private ITokenSystem _tokenSystem;
+        private ISpriteSortingSystem _spriteSortingSystem;
+        private Material DefaultSpriteMaterial;
 
-        public PrototypeFactory(IResourceManager resourceManager, TinyIoCContainer container, ITokenSystem tokenSystem)
+        public PrototypeFactory(IResourceManager resourceManager, TinyIoCContainer container, ITokenSystem tokenSystem, ISpriteSortingSystem spriteSortingSystem)
         {
             _resourceManager = resourceManager;
             _container = container;
             _tokenSystem = tokenSystem;
+            _spriteSortingSystem = spriteSortingSystem;
+            if(DefaultSpriteMaterial == null)
+            {
+                DefaultSpriteMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
+            }
         }
 
         public void LoadTypes()
@@ -110,56 +117,56 @@ namespace Gamepackage
                             var northWestPointTileType = GetTileInfoForOffset(level, point, MathUtil.NorthWestOffset);
 
                             if (
-                               northEastPointTileType == TileType.Wall &&
-                               southEastPointTileType == TileType.Wall &&
-                               southWestPointTileType == TileType.Wall &&
-                               northWestPointTileType == TileType.Wall
+                                northEastPointTileType == TileType.Wall &&
+                                southEastPointTileType == TileType.Wall &&
+                                southWestPointTileType == TileType.Wall &&
+                                northWestPointTileType == TileType.Wall
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.TeeSprite, point);
                             }
                             else if (
-                                    northEastPointTileType == TileType.Wall &&
-                                    southEastPointTileType == TileType.Wall &&
-                                    southWestPointTileType == TileType.Wall &&
-                                    (northWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Empty)
+                                 northEastPointTileType == TileType.Wall &&
+                                 southEastPointTileType == TileType.Wall &&
+                                 southWestPointTileType == TileType.Wall &&
+                                 (northWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Empty)
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.SouthEastTeeSprite, point);
                             }
                             else if (
-                                    northEastPointTileType == TileType.Wall &&
-                                    southEastPointTileType == TileType.Wall &&
-                                    (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
-                                    northWestPointTileType == TileType.Wall
+                                 northEastPointTileType == TileType.Wall &&
+                                 southEastPointTileType == TileType.Wall &&
+                                 (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
+                                 northWestPointTileType == TileType.Wall
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.NorthEastTeeSprite, point);
                             }
                             else if (
-                                    (northEastPointTileType == TileType.Floor || northEastPointTileType == TileType.Empty) &&
-                                    southEastPointTileType == TileType.Wall &&
-                                    southWestPointTileType == TileType.Wall &&
-                                    northWestPointTileType == TileType.Wall
+                                 (northEastPointTileType == TileType.Floor || northEastPointTileType == TileType.Empty) &&
+                                 southEastPointTileType == TileType.Wall &&
+                                 southWestPointTileType == TileType.Wall &&
+                                 northWestPointTileType == TileType.Wall
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.SouthWestTeeSprite, point);
                             }
                             else if (
-                                northEastPointTileType == TileType.Wall &&
-                                southEastPointTileType == TileType.Wall &&
-                                (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
-                                northWestPointTileType == TileType.Wall
+                                 northEastPointTileType == TileType.Wall &&
+                                 southEastPointTileType == TileType.Wall &&
+                                 (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
+                                 northWestPointTileType == TileType.Wall
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.NorthWestTeeSprite, point);
                             }
 
                             else if (
-                                northEastPointTileType == TileType.Wall &&
-                                southEastPointTileType == TileType.Floor &&
-                                southWestPointTileType == TileType.Wall &&
-                                northWestPointTileType == TileType.Empty
+                                 northEastPointTileType == TileType.Wall &&
+                                 southEastPointTileType == TileType.Floor &&
+                                 southWestPointTileType == TileType.Wall &&
+                                 northWestPointTileType == TileType.Empty
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.NorthWestWallSprite, point);
@@ -179,20 +186,20 @@ namespace Gamepackage
                             // if we cant determine which wall should be used opt for the SE and SW ones, as they
                             // might be shorter to prevent vision from being obscured.
                             else if (
-                                northEastPointTileType == TileType.Wall &&
-                                (southEastPointTileType == TileType.Floor || southEastPointTileType == TileType.Empty) &&
-                                southWestPointTileType == TileType.Wall &&
-                                (northWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Empty)
+                                 northEastPointTileType == TileType.Wall &&
+                                 (southEastPointTileType == TileType.Floor || southEastPointTileType == TileType.Empty) &&
+                                 southWestPointTileType == TileType.Wall &&
+                                 (northWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Empty)
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.SouthEastWallSprite, point);
                             }
 
                             else if (
-                                (northEastPointTileType == TileType.Floor || northEastPointTileType == TileType.Empty) &&
-                                southEastPointTileType == TileType.Wall &&
-                                (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
-                                northWestPointTileType == TileType.Wall
+                                 (northEastPointTileType == TileType.Floor || northEastPointTileType == TileType.Empty) &&
+                                 southEastPointTileType == TileType.Wall &&
+                                 (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
+                                 northWestPointTileType == TileType.Wall
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.SouthWestWallSprite, point);
@@ -249,14 +256,16 @@ namespace Gamepackage
             return level.TilesetGrid[offsetPoint.X, offsetPoint.Y].TileType;
         }
 
-        private static SpriteRenderer BuildTileSpriteRenderer(GameObject folder, Sprite sprite, Point position)
+        private SpriteRenderer BuildTileSpriteRenderer(GameObject folder, Sprite sprite, Point position)
         {
             GameObject o = new GameObject();
             o.name = "Tile";
             var renderer = o.AddComponent<SpriteRenderer>();
+            renderer.material = DefaultSpriteMaterial;
             o.transform.SetParent(folder.transform);
             renderer.sprite = sprite;
             o.transform.localPosition = MathUtil.MapToWorld(position);
+            _spriteSortingSystem.RegisterTile(renderer, position);
             return renderer;
         }
 

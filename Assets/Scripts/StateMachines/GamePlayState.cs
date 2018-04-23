@@ -8,17 +8,20 @@ namespace Gamepackage
         private ILogSystem _logSystem;
         private IVisibilitySystem _visibilitySystem;
         private IOverlaySystem _overlaySystem;
+        private ISpriteSortingSystem _spriteSortingSystem;
 
-        public GamePlayState(GameScene gamePlayScene, ILogSystem logSystem, IVisibilitySystem visibilitySystem, IOverlaySystem overlaySystem)
+        public GamePlayState(GameScene gamePlayScene, ILogSystem logSystem, IVisibilitySystem visibilitySystem, IOverlaySystem overlaySystem, ISpriteSortingSystem spriteSortingSystem)
         {
             _gamePlayScene = gamePlayScene;
             _logSystem = logSystem;
             _visibilitySystem = visibilitySystem;
             _overlaySystem = overlaySystem;
+            _spriteSortingSystem = spriteSortingSystem;
         }
 
         public void Enter(Root owner)
         {
+            _spriteSortingSystem.Init();
             _gamePlayScene.Load();
             _visibilitySystem.Init();
             _overlaySystem.Init();
@@ -65,6 +68,7 @@ namespace Gamepackage
         public void Process(Root owner)
         {
             _overlaySystem.Process();
+            _spriteSortingSystem.Sort();
         }
     }
 }
