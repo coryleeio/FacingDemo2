@@ -43,11 +43,11 @@ namespace Gamepackage
                         OverlayBehaviour = OverlayBehaviour.StationaryRotationFollowsCursor,
                         OverlayConstraint = OverlayConstraints.ConstraintedToShapeOfPreviousConfig,
                         RelativeSortOrder = 2,
-                        SpriteType = SpriteType.Circle
+                        SpriteType = OverlaySpriteType.Circle
                     }
                 }
             };
-            _overlaySystem.Activate(newOverlay);
+            //_overlaySystem.Activate(newOverlay);
         }
 
         public void Exit(Root owner)

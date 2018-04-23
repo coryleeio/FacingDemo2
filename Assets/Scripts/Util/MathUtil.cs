@@ -229,6 +229,11 @@ namespace Gamepackage
             return elements[ChooseRandomIntInRange(0, elements.Count)];
         }
 
+        public static Vector3 MapToWorld(Point p)
+        {
+            return MapToWorld(p.X, p.Y);
+        }
+
         public static Vector3 MapToWorld(int x, int y)
         {
             return MapToWorld(x * 1.0f, y * 1.0f);

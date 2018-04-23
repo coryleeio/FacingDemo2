@@ -31,6 +31,26 @@ CREATE TABLE IF NOT EXISTS `token_prototypes` (
 	`token_view_prototype_id`	INTEGER NOT NULL
 );
 INSERT INTO `token_prototypes` (id,unique_identifier_id,type,width,height,shape,behaviour_prototype_id,equipment_prototype_id,inventory_prototype_id,motor_prototype_id,persona_prototype_id,trigger_behaviour_prototype_id,token_view_prototype_id) VALUES (1,'Poncy','token',1,1,0,1,2,1,4,2,2,1);
+DROP TABLE IF EXISTS `tilesets`;
+CREATE TABLE IF NOT EXISTS `tilesets` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
+	`floor_sprite`	TEXT,
+	`tee_sprite`	TEXT,
+	`north_corner_sprite`	TEXT,
+	`east_corner_sprite`	TEXT,
+	`south_corner_sprite`	TEXT,
+	`west_corner_sprite`	TEXT,
+	`north_east_wall_sprite`	TEXT,
+	`south_east_wall_sprite`	TEXT,
+	`south_west_wall_sprite`	TEXT,
+	`north_west_wall_sprite`	TEXT,
+	`north_east_tee_sprite`	TEXT,
+	`south_east_tee_sprite`	TEXT,
+	`south_west_tee_sprite`	TEXT,
+	`north_west_tee_sprite`	TEXT
+);
+INSERT INTO `tilesets` (id,unique_identifier_id,floor_sprite,tee_sprite,north_corner_sprite,east_corner_sprite,south_corner_sprite,west_corner_sprite,north_east_wall_sprite,south_east_wall_sprite,south_west_wall_sprite,north_west_wall_sprite,north_east_tee_sprite,south_east_tee_sprite,south_west_tee_sprite,north_west_tee_sprite) VALUES (1,'Stone','StoneFloor','StoneTee','StoneCornerNorth','StoneCornerEast','StoneCornerSouth','StoneCornerWest','StoneNorthEastWall','StoneSouthEastWall','StoneSouthWestWall','StoneNorthWestWall','StoneNorthEastTee','StoneSouthEastTee','StoneSouthWestTee','StoneNorthWestTee');
 DROP TABLE IF EXISTS `persona_prototypes`;
 CREATE TABLE IF NOT EXISTS `persona_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,

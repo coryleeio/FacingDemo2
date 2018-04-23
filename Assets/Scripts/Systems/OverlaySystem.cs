@@ -19,7 +19,7 @@ namespace Gamepackage
         ConstraintedToShapeOfPreviousConfig,
     }
 
-    public enum SpriteType
+    public enum OverlaySpriteType
     {
         Square,
         Circle,
@@ -37,7 +37,7 @@ namespace Gamepackage
         public Shape Shape;
         public OverlayBehaviour OverlayBehaviour;
         public OverlayConstraints OverlayConstraint = OverlayConstraints.AllTiles;
-        public SpriteType SpriteType = SpriteType.Square;
+        public OverlaySpriteType SpriteType = OverlaySpriteType.Square;
         public Color DefaultColor = new Color(0, 213, 255);
         public int RelativeSortOrder = 0;
         public List<SpriteRenderer> TilesInUse = new List<SpriteRenderer>(0);
@@ -81,13 +81,13 @@ namespace Gamepackage
             }
         }
 
-        private Sprite GetSpriteForType(SpriteType spriteType)
+        private Sprite GetSpriteForType(OverlaySpriteType spriteType)
         {
-            if(spriteType == SpriteType.Square)
+            if(spriteType == OverlaySpriteType.Square)
             {
                 return _squareSprite;
             }
-            else if(spriteType == SpriteType.Circle)
+            else if(spriteType == OverlaySpriteType.Circle)
             {
                 return _circleSprite;
             }

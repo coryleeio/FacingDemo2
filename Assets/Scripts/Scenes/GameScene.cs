@@ -26,7 +26,8 @@ namespace Gamepackage
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
 
-            foreach(var token in _gameStateSystem.Game.CurrentLevel.Tokens)
+            _prototypeFactory.BuildGrid(_gameStateSystem.Game.CurrentLevel);
+            foreach (var token in _gameStateSystem.Game.CurrentLevel.Tokens)
             {
                 token.View.BuildView();
             }
