@@ -6,8 +6,8 @@ namespace Gamepackage
 {
     public enum TableResolutionStrategy
     {
-        Options, // Guarantee exactly one thing from the list
-        Chance, // Iterate each Tuple, roll NumberOfRolls times based on it's proportion of the total weight in the table, return 0-N results.
+        OneOf, // Guarantee exactly one thing from the list
+        AnyOf, // Iterate each Tuple, roll NumberOfRolls times based on it's proportion of the total weight in the table, return 0-N results.
     }
 
     
@@ -36,7 +36,7 @@ namespace Gamepackage
             }
 
             var aggregate = new List<TProb>();
-            if (Resolution == TableResolutionStrategy.Chance)
+            if (Resolution == TableResolutionStrategy.AnyOf)
             {
                 foreach (var tuple in Values)
                 {
@@ -50,7 +50,7 @@ namespace Gamepackage
                 }
                 return aggregate;
             }
-            else if (Resolution == TableResolutionStrategy.Options)
+            else if (Resolution == TableResolutionStrategy.OneOf)
             {
                 var probabilitySum = 0.0f;
                 var randomValue = Random.Range(0.0f, 1.0f);
