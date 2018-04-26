@@ -4,13 +4,15 @@ using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
+    // Weights are interpreted to be out of 100 in all cases
     public enum TableResolutionStrategy
     {
-        OneOf, // Guarantee exactly one thing from the list
-        AnyOf, // Iterate each Tuple, roll NumberOfRolls times based on it's proportion of the total weight in the table, return 0-N results.
+        OneOf, // Guarantee exactly one thing from the list roll weight/100 1 time for each item.  
+               // The sum of the weights must == 100
+
+        AnyOf, // Iterate each Tuple, roll weight/100 NumberOfRolls times and return 0-N results.
     }
 
-    
     public class ProbabilityTable<TProb>
     {
         public List<ProbabilityTableTuple<TProb>> Values;
@@ -29,11 +31,6 @@ namespace Gamepackage
             {
                 return new List<TProb>();
             }
-            var totalWeight = 0;
-            foreach (var tuple in Values)
-            {
-                totalWeight += tuple.Weight;
-            }
 
             var aggregate = new List<TProb>();
             if (Resolution == TableResolutionStrategy.AnyOf)
@@ -42,7 +39,7 @@ namespace Gamepackage
                 {
                     for (var numberOfRolls = 0; numberOfRolls < tuple.NumberOfRolls; numberOfRolls++)
                     {
-                        if (Random.Range(0.0f, 1.0f) <= (tuple.Weight / totalWeight))
+                        if (Random.Range(0.0f, 1.0f) <= (tuple.Weight / 100))
                         {
                             aggregate.Add(tuple.Value);
                         }
@@ -57,7 +54,7 @@ namespace Gamepackage
                 foreach (var tuple in Values)
                 {
                     Assert.IsTrue(tuple.NumberOfRolls == 1);
-                    probabilitySum += (tuple.Weight / totalWeight);
+                    probabilitySum += (tuple.Weight / 100);
                     if (randomValue <= probabilitySum)
                     {
                         aggregate.Add(tuple.Value);
@@ -65,12 +62,9 @@ namespace Gamepackage
                         return aggregate;
                     }
                 }
-
-                Debug.LogWarning("Choice table defaulted to returning a random object");
-                // Floating point rounding might cause us to have returned nothing here.  
-                // In that case just return a random thing.
-                aggregate.Add(MathUtil.ChooseRandomElement<ProbabilityTableTuple<TProb>>(Values).Value);
-                return aggregate;
+                throw new InvariantBrokenException("Sum of probabilities must not have been correct.  " +
+                    "Table should not be able to return 0 results after rolling all tuples." + 
+                    "You should add logic to check as table build time that the sum of the tuples == 100");
             }
             else
             {

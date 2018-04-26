@@ -51,6 +51,19 @@ CREATE TABLE IF NOT EXISTS `tilesets` (
 	`north_west_tee_sprite`	TEXT
 );
 INSERT INTO `tilesets` (id,unique_identifier_id,floor_sprite,tee_sprite,north_corner_sprite,east_corner_sprite,south_corner_sprite,west_corner_sprite,north_east_wall_sprite,south_east_wall_sprite,south_west_wall_sprite,north_west_wall_sprite,north_east_tee_sprite,south_east_tee_sprite,south_west_tee_sprite,north_west_tee_sprite) VALUES (1,'Stone','StoneFloor','StoneTee','StoneCornerNorth','StoneCornerEast','StoneCornerSouth','StoneCornerWest','StoneNorthEastWall','StoneSouthEastWall','StoneSouthWestWall','StoneNorthWestWall','StoneNorthEastTee','StoneSouthEastTee','StoneSouthWestTee','StoneNorthWestTee');
+DROP TABLE IF EXISTS `spawn_tables`;
+CREATE TABLE IF NOT EXISTS `spawn_tables` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	INTEGER UNIQUE,
+	`resolution`	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS `spawn_table_entries`;
+CREATE TABLE IF NOT EXISTS `spawn_table_entries` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`spawn_table_id`	INTEGER NOT NULL,
+	`token_prototype_id`	INTEGER NOT NULL,
+	`weight`	INTEGER NOT NULL
+);
 DROP TABLE IF EXISTS `room_prototypes`;
 CREATE TABLE IF NOT EXISTS `room_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -63,24 +76,6 @@ CREATE TABLE IF NOT EXISTS `room_prototypes` (
 	`fill_tileset_id`	INTEGER NOT NULL
 );
 INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id) VALUES (1,'SimpleStoneRoom','StandardRoomGenerator',5,5,9,9,1);
-DROP TABLE IF EXISTS `probability_tables`;
-CREATE TABLE IF NOT EXISTS `probability_tables` (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`unique_identifier_id`	INTEGER UNIQUE,
-	`type`	TEXT NOT NULL,
-	`resolution`	TEXT NOT NULL
-);
-INSERT INTO `probability_tables` (id,unique_identifier_id,type,resolution) VALUES (1,'ROGUE_WEAPONS','equipment','OneOf');
-INSERT INTO `probability_tables` (id,unique_identifier_id,type,resolution) VALUES (2,'PONCY_SPAWN','spawn','OneOf');
-DROP TABLE IF EXISTS `probability_table_entries`;
-CREATE TABLE IF NOT EXISTS `probability_table_entries` (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`probability_table_id`	INTEGER NOT NULL,
-	`prototype_id`	INTEGER NOT NULL,
-	`weight`	INTEGER NOT NULL
-);
-INSERT INTO `probability_table_entries` (id,probability_table_id,prototype_id,weight) VALUES (1,1,1,1);
-INSERT INTO `probability_table_entries` (id,probability_table_id,prototype_id,weight) VALUES (2,2,1,1);
 DROP TABLE IF EXISTS `persona_prototypes`;
 CREATE TABLE IF NOT EXISTS `persona_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -115,11 +110,24 @@ CREATE TABLE IF NOT EXISTS `item_properties_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE
 );
 INSERT INTO `item_properties_prototypes` (id) VALUES (1);
-DROP TABLE IF EXISTS `inventory_to_inventory_tables`;
-CREATE TABLE IF NOT EXISTS `inventory_to_inventory_tables` (
+DROP TABLE IF EXISTS `inventory_tables`;
+CREATE TABLE IF NOT EXISTS `inventory_tables` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	INTEGER UNIQUE,
+	`resolution`	TEXT NOT NULL
+);
+DROP TABLE IF EXISTS `inventory_table_entries`;
+CREATE TABLE IF NOT EXISTS `inventory_table_entries` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`inventory_table_id`	INTEGER NOT NULL,
+	`item_prototype_id`	INTEGER NOT NULL,
+	`weight`	INTEGER NOT NULL
+);
+DROP TABLE IF EXISTS `inventory_prototypes_to_inventory_tables`;
+CREATE TABLE IF NOT EXISTS `inventory_prototypes_to_inventory_tables` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`inventory_prototype_id`	INTEGER NOT NULL,
-	`inventory_prototype_table_id`	INTEGER NOT NULL
+	`inventory_table_id`	INTEGER NOT NULL
 );
 DROP TABLE IF EXISTS `inventory_prototypes`;
 CREATE TABLE IF NOT EXISTS `inventory_prototypes` (
@@ -129,13 +137,28 @@ CREATE TABLE IF NOT EXISTS `inventory_prototypes` (
 );
 INSERT INTO `inventory_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'STARTING_MAGE_INVENTORY','HasInventory');
 INSERT INTO `inventory_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'NO_INVENTORY','HasNoInventory');
-DROP TABLE IF EXISTS `equipment_to_equipment_tables`;
-CREATE TABLE IF NOT EXISTS `equipment_to_equipment_tables` (
+DROP TABLE IF EXISTS `equipment_tables`;
+CREATE TABLE IF NOT EXISTS `equipment_tables` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	INTEGER UNIQUE,
+	`resolution`	TEXT NOT NULL
+);
+INSERT INTO `equipment_tables` (id,unique_identifier_id,resolution) VALUES (1,'ROGUE_WEAPONS_EQUIPMENT','OneOf');
+DROP TABLE IF EXISTS `equipment_table_entries`;
+CREATE TABLE IF NOT EXISTS `equipment_table_entries` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`equipment_table_id`	INTEGER NOT NULL,
+	`item_prototype_id`	INTEGER NOT NULL,
+	`weight`	INTEGER NOT NULL
+);
+INSERT INTO `equipment_table_entries` (id,equipment_table_id,item_prototype_id,weight) VALUES (1,1,1,100);
+DROP TABLE IF EXISTS `equipment_prototypes_to_equipment_tables`;
+CREATE TABLE IF NOT EXISTS `equipment_prototypes_to_equipment_tables` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`equipment_prototype_id`	INTEGER NOT NULL,
-	`equipment_prototype_table_id`	INTEGER NOT NULL
+	`equipment_table_id`	INTEGER NOT NULL
 );
-INSERT INTO `equipment_to_equipment_tables` (id,equipment_prototype_id,equipment_prototype_table_id) VALUES (1,2,1);
+INSERT INTO `equipment_prototypes_to_equipment_tables` (id,equipment_prototype_id,equipment_table_id) VALUES (1,2,1);
 DROP TABLE IF EXISTS `equipment_prototypes`;
 CREATE TABLE IF NOT EXISTS `equipment_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -154,35 +177,62 @@ INSERT INTO `behaviour_prototypes` (id,class_name) VALUES (2,'NoBehaviour');
 INSERT INTO `behaviour_prototypes` (id,class_name) VALUES (3,'AISlime');
 INSERT INTO `behaviour_prototypes` (id,class_name) VALUES (4,'AIBrute');
 DROP VIEW IF EXISTS `token_prototypes_view`;
-CREATE VIEW token_prototypes_view AS SELECT token_prototypes.unique_identifier_id, width, height, shape, behaviour_prototypes.class_name AS behaviour_class_name, equipment_prototypes.class_name AS equipment_class_name, inventory_prototypes.class_name AS inventory_class_name, motor_prototypes.class_name AS motor_class_name, persona_prototypes.class_name AS persona_class_name, trigger_behaviour_prototypes.class_name AS trigger_behaviour_class_name, token_view_prototypes.class_name AS view_class_name FROM token_prototypes LEFT JOIN behaviour_prototypes, equipment_prototypes, inventory_prototypes, motor_prototypes, persona_prototypes, trigger_behaviour_prototypes, token_view_prototypes WHERE behaviour_prototypes.id = token_prototypes.behaviour_prototype_id AND equipment_prototypes.id = token_prototypes.equipment_prototype_id AND inventory_prototypes.id = token_prototypes.inventory_prototype_id AND motor_prototypes.id = token_prototypes.motor_prototype_id AND persona_prototypes.id = token_prototypes.persona_prototype_id AND trigger_behaviour_prototypes.id = token_prototypes.trigger_behaviour_prototype_id AND token_view_prototypes.id = token_prototypes.token_view_prototype_id;
+CREATE VIEW token_prototypes_view AS 
+SELECT    token_prototypes.unique_identifier_id, 
+          width, 
+          height, 
+          shape, 
+          behaviour_prototypes.class_name         AS behaviour_class_name, 
+          equipment_prototypes.class_name         AS equipment_class_name, 
+          inventory_prototypes.class_name         AS inventory_class_name, 
+          motor_prototypes.class_name             AS motor_class_name, 
+          persona_prototypes.class_name           AS persona_class_name, 
+          trigger_behaviour_prototypes.class_name AS trigger_behaviour_class_name, 
+          token_view_prototypes.class_name        AS view_class_name 
+FROM      token_prototypes 
+LEFT JOIN behaviour_prototypes, 
+          equipment_prototypes, 
+          inventory_prototypes, 
+          motor_prototypes, 
+          persona_prototypes, 
+          trigger_behaviour_prototypes, 
+          token_view_prototypes 
+WHERE     behaviour_prototypes.id = token_prototypes.behaviour_prototype_id 
+AND       equipment_prototypes.id = token_prototypes.equipment_prototype_id 
+AND       inventory_prototypes.id = token_prototypes.inventory_prototype_id 
+AND       motor_prototypes.id = token_prototypes.motor_prototype_id 
+AND       persona_prototypes.id = token_prototypes.persona_prototype_id 
+AND       trigger_behaviour_prototypes.id = token_prototypes.trigger_behaviour_prototype_id 
+AND       token_view_prototypes.id = token_prototypes.token_view_prototype_id;
 DROP VIEW IF EXISTS `spawn_table_entries_view`;
-CREATE VIEW spawn_table_entries_view AS SELECT pt.unique_identifier_id,pt.resolution,pte.weight as weight, tp.unique_identifier_id as token_prototype_unique_identifier FROM probability_tables as pt LEFT JOIN probability_table_entries as pte, token_prototypes as tp WHERE pte.probability_table_id = pt.id AND tp.id = pte.prototype_id AND pt.type = 'spawn';
+CREATE VIEW spawn_table_entries_view AS SELECT st.id as spawn_table_id, st.unique_identifier_id,st.resolution,ste.weight as weight, tp.id as token_prototype_id, tp.unique_identifier_id as token_prototype_unique_identifier FROM spawn_tables as st LEFT JOIN spawn_table_entries as ste, token_prototypes as tp WHERE ste.spawn_table_id = st.id AND tp.id = ste.token_prototype_id;
 DROP VIEW IF EXISTS `room_prototypes_view`;
-CREATE VIEW room_prototypes_view as select room_prototypes.unique_identifier_id, generator, minimum_height, minimum_width, maximum_width, maximum_height, tile.unique_identifier_id as tileset_unique_identifier from room_prototypes left join tilesets as tile where fill_tileset_id = tile.id;
-DROP VIEW IF EXISTS `loot_table_entries_view`;
-CREATE VIEW loot_table_entries_view AS SELECT pt.unique_identifier_id,pt.resolution,pte.weight as weight, ip.unique_identifier_id as item_prototype_unique_identifier FROM probability_tables as pt LEFT JOIN probability_table_entries as pte, item_prototypes as ip WHERE pte.probability_table_id = pt.id AND ip.id = pte.prototype_id AND pt.type = 'loot';
+CREATE VIEW room_prototypes_view AS 
+SELECT    room_prototypes.id     AS room_prototype_id, 
+          room_prototypes.unique_identifier_id, 
+          generator, 
+          minimum_height, 
+          minimum_width, 
+          maximum_width, 
+          maximum_height, 
+          tile.unique_identifier_id AS tileset_unique_identifier 
+FROM      room_prototypes 
+LEFT JOIN tilesets AS tile 
+where     fill_tileset_id = tile.id;
 DROP VIEW IF EXISTS `item_prototypes_view`;
-CREATE VIEW item_prototypes_view AS SELECT unique_identifier_id FROM item_prototypes LEFT JOIN item_properties_prototypes, item_view_prototypes WHERE item_properties_prototypes.id = item_prototypes.item_properties_prototype_id AND item_view_prototypes.id = item_prototypes.item_view_prototype_id;
-DROP VIEW IF EXISTS `inventory_to_inventory_table_view`;
-CREATE VIEW inventory_to_inventory_table_view       AS 
-SELECT    inventory_prototypes.unique_identifier_id AS inventory_unique_identifier, 
-          probability_tables.unique_identifier_id   AS probability_table_unique_identifier 
-FROM      inventory_to_inventory_tables 
-LEFT JOIN probability_tables, 
-          inventory_prototypes 
-WHERE     inventory_to_inventory_tables.inventory_prototype_table_id = probability_tables.id 
-AND       probability_tables.type = 'inventory' 
-AND       inventory_to_inventory_tables.inventory_prototype_id = inventory_prototypes.id;
-DROP VIEW IF EXISTS `equipment_to_equipment_table_view`;
-CREATE VIEW equipment_to_equipment_table_view       AS 
-SELECT    equipment_prototypes.unique_identifier_id AS equipment_unique_identifier, 
-          probability_tables.unique_identifier_id   AS probability_table_unique_identifier 
-FROM      equipment_to_equipment_tables 
-LEFT JOIN probability_tables, 
-          equipment_prototypes 
-WHERE     equipment_to_equipment_tables.equipment_prototype_table_id = probability_tables.id 
-AND       probability_tables.type = 'equipment' 
-AND       equipment_to_equipment_tables.equipment_prototype_id = equipment_prototypes.id;
+CREATE VIEW item_prototypes_view AS 
+SELECT    unique_identifier_id 
+FROM      item_prototypes 
+LEFT JOIN item_properties_prototypes, 
+          item_view_prototypes 
+WHERE     item_properties_prototypes.id = item_prototypes.item_properties_prototype_id 
+AND       item_view_prototypes.id = item_prototypes.item_view_prototype_id;
+DROP VIEW IF EXISTS `inventory_table_entries_view`;
+CREATE VIEW inventory_table_entries_view AS SELECT it.id as inventory_table_id, it.unique_identifier_id,it.resolution,ite.weight as weight, ip.id as item_prototype_id, ip.unique_identifier_id as item_prototype_unique_identifier FROM inventory_tables as it LEFT JOIN inventory_table_entries as ite, item_prototypes as ip WHERE ite.inventory_table_id = it.id AND ip.id = ite.item_prototype_id;
+DROP VIEW IF EXISTS `inventory_prototype_inventory_tables_view`;
+CREATE VIEW inventory_prototype_inventory_tables_view AS SELECT inventory_prototypes.id as inventory_prototype_id, inventory_prototypes.unique_identifier_id AS inventory_unique_identifier, inventory_tables.id as inventory_table_id,inventory_tables.resolution as resolution, inventory_tables.unique_identifier_id AS inventory_table_unique_identifier FROM inventory_prototypes_to_inventory_tables LEFT JOIN inventory_tables, inventory_table_entries, inventory_prototypes WHERE inventory_prototypes_to_inventory_tables.inventory_table_id = inventory_tables.id AND inventory_prototypes_to_inventory_tables.inventory_prototype_id = inventory_prototypes.id;
 DROP VIEW IF EXISTS `equipment_table_entries_view`;
-CREATE VIEW equipment_table_entries_view AS SELECT pt.unique_identifier_id,pt.resolution,pte.weight as weight, ip.unique_identifier_id as item_prototype_unique_identifier FROM probability_tables as pt LEFT JOIN probability_table_entries as pte, item_prototypes as ip WHERE pte.probability_table_id = pt.id AND ip.id = pte.prototype_id AND pt.type = 'equipment';
+CREATE VIEW equipment_table_entries_view AS SELECT et.id as equipment_table_id, et.unique_identifier_id,et.resolution,ete.weight as weight, ip.id as item_prototype_id, ip.unique_identifier_id as item_prototype_unique_identifier FROM equipment_tables as et LEFT JOIN equipment_table_entries as ete, item_prototypes as ip WHERE ete.equipment_table_id = et.id AND ip.id = ete.item_prototype_id;
+DROP VIEW IF EXISTS `equipment_prototype_equipment_tables_view`;
+CREATE VIEW equipment_prototype_equipment_tables_view AS SELECT equipment_prototypes.id as equipment_prototype_id, equipment_prototypes.unique_identifier_id AS equipment_unique_identifier, equipment_tables.id as equipment_table_id,equipment_tables.resolution as resolution, equipment_tables.unique_identifier_id AS equipment_table_unique_identifier FROM equipment_prototypes_to_equipment_tables LEFT JOIN equipment_tables, equipment_table_entries, equipment_prototypes WHERE equipment_prototypes_to_equipment_tables.equipment_table_id = equipment_tables.id AND equipment_prototypes_to_equipment_tables.equipment_prototype_id = equipment_prototypes.id;
 COMMIT;

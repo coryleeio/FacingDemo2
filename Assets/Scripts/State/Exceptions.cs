@@ -37,4 +37,10 @@ namespace Gamepackage
         public NotImplementedException() : base() { }
         public NotImplementedException(string message) : base(message) { }
     }
+
+    public class InvariantBrokenException : GamePackageException
+    {
+        public InvariantBrokenException() : base() { }
+        public InvariantBrokenException(string message) : base(message) { }
+    }
 }
