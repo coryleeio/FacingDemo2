@@ -62,7 +62,8 @@ CREATE TABLE IF NOT EXISTS `spawn_table_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`spawn_table_id`	INTEGER NOT NULL,
 	`token_prototype_id`	INTEGER NOT NULL,
-	`weight`	INTEGER NOT NULL
+	`weight`	INTEGER NOT NULL,
+	`number_of_rolls`	INTEGER NOT NULL
 );
 DROP TABLE IF EXISTS `room_prototypes`;
 CREATE TABLE IF NOT EXISTS `room_prototypes` (
@@ -121,7 +122,8 @@ CREATE TABLE IF NOT EXISTS `inventory_table_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`inventory_table_id`	INTEGER NOT NULL,
 	`item_prototype_id`	INTEGER NOT NULL,
-	`weight`	INTEGER NOT NULL
+	`weight`	INTEGER NOT NULL,
+	`number_of_rolls`	INTEGER NOT NULL
 );
 DROP TABLE IF EXISTS `inventory_prototypes_to_inventory_tables`;
 CREATE TABLE IF NOT EXISTS `inventory_prototypes_to_inventory_tables` (
@@ -149,9 +151,10 @@ CREATE TABLE IF NOT EXISTS `equipment_table_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`equipment_table_id`	INTEGER NOT NULL,
 	`item_prototype_id`	INTEGER NOT NULL,
-	`weight`	INTEGER NOT NULL
+	`weight`	INTEGER NOT NULL,
+	`number_of_rolls`	INTEGER NOT NULL
 );
-INSERT INTO `equipment_table_entries` (id,equipment_table_id,item_prototype_id,weight) VALUES (1,1,1,100);
+INSERT INTO `equipment_table_entries` (id,equipment_table_id,item_prototype_id,weight,number_of_rolls) VALUES (1,1,1,100,1);
 DROP TABLE IF EXISTS `equipment_prototypes_to_equipment_tables`;
 CREATE TABLE IF NOT EXISTS `equipment_prototypes_to_equipment_tables` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -205,7 +208,7 @@ AND       persona_prototypes.id = token_prototypes.persona_prototype_id
 AND       trigger_behaviour_prototypes.id = token_prototypes.trigger_behaviour_prototype_id 
 AND       token_view_prototypes.id = token_prototypes.token_view_prototype_id;
 DROP VIEW IF EXISTS `spawn_table_entries_view`;
-CREATE VIEW spawn_table_entries_view AS SELECT st.id as spawn_table_id, st.unique_identifier_id,st.resolution,ste.weight as weight, tp.id as token_prototype_id, tp.unique_identifier_id as token_prototype_unique_identifier FROM spawn_tables as st LEFT JOIN spawn_table_entries as ste, token_prototypes as tp WHERE ste.spawn_table_id = st.id AND tp.id = ste.token_prototype_id;
+CREATE VIEW spawn_table_entries_view AS SELECT st.id as spawn_table_id, st.unique_identifier_id,st.resolution,ste.weight as weight, tp.id as token_prototype_id, tp.unique_identifier_id as token_prototype_unique_identifier, ste.number_of_rolls as number_of_rolls FROM spawn_tables as st LEFT JOIN spawn_table_entries as ste, token_prototypes as tp WHERE ste.spawn_table_id = st.id AND tp.id = ste.token_prototype_id;
 DROP VIEW IF EXISTS `room_prototypes_view`;
 CREATE VIEW room_prototypes_view AS 
 SELECT    room_prototypes.id     AS room_prototype_id, 
@@ -228,11 +231,11 @@ LEFT JOIN item_properties_prototypes,
 WHERE     item_properties_prototypes.id = item_prototypes.item_properties_prototype_id 
 AND       item_view_prototypes.id = item_prototypes.item_view_prototype_id;
 DROP VIEW IF EXISTS `inventory_table_entries_view`;
-CREATE VIEW inventory_table_entries_view AS SELECT it.id as inventory_table_id, it.unique_identifier_id,it.resolution,ite.weight as weight, ip.id as item_prototype_id, ip.unique_identifier_id as item_prototype_unique_identifier FROM inventory_tables as it LEFT JOIN inventory_table_entries as ite, item_prototypes as ip WHERE ite.inventory_table_id = it.id AND ip.id = ite.item_prototype_id;
+CREATE VIEW inventory_table_entries_view AS SELECT it.id as inventory_table_id, it.unique_identifier_id,it.resolution,ite.weight as weight, ip.id as item_prototype_id, ip.unique_identifier_id as item_prototype_unique_identifier, ite.number_of_rolls as number_of_rolls FROM inventory_tables as it LEFT JOIN inventory_table_entries as ite, item_prototypes as ip WHERE ite.inventory_table_id = it.id AND ip.id = ite.item_prototype_id;
 DROP VIEW IF EXISTS `inventory_prototype_inventory_tables_view`;
 CREATE VIEW inventory_prototype_inventory_tables_view AS SELECT inventory_prototypes.id as inventory_prototype_id, inventory_prototypes.unique_identifier_id AS inventory_unique_identifier, inventory_tables.id as inventory_table_id,inventory_tables.resolution as resolution, inventory_tables.unique_identifier_id AS inventory_table_unique_identifier FROM inventory_prototypes_to_inventory_tables LEFT JOIN inventory_tables, inventory_table_entries, inventory_prototypes WHERE inventory_prototypes_to_inventory_tables.inventory_table_id = inventory_tables.id AND inventory_prototypes_to_inventory_tables.inventory_prototype_id = inventory_prototypes.id;
 DROP VIEW IF EXISTS `equipment_table_entries_view`;
-CREATE VIEW equipment_table_entries_view AS SELECT et.id as equipment_table_id, et.unique_identifier_id,et.resolution,ete.weight as weight, ip.id as item_prototype_id, ip.unique_identifier_id as item_prototype_unique_identifier FROM equipment_tables as et LEFT JOIN equipment_table_entries as ete, item_prototypes as ip WHERE ete.equipment_table_id = et.id AND ip.id = ete.item_prototype_id;
+CREATE VIEW equipment_table_entries_view AS SELECT et.id as equipment_table_id, et.unique_identifier_id,et.resolution,ete.weight as weight, ip.id as item_prototype_id, ip.unique_identifier_id as item_prototype_unique_identifier, ete.number_of_rolls as number_of_rolls FROM equipment_tables as et LEFT JOIN equipment_table_entries as ete, item_prototypes as ip WHERE ete.equipment_table_id = et.id AND ip.id = ete.item_prototype_id;
 DROP VIEW IF EXISTS `equipment_prototype_equipment_tables_view`;
 CREATE VIEW equipment_prototype_equipment_tables_view AS SELECT equipment_prototypes.id as equipment_prototype_id, equipment_prototypes.unique_identifier_id AS equipment_unique_identifier, equipment_tables.id as equipment_table_id,equipment_tables.resolution as resolution, equipment_tables.unique_identifier_id AS equipment_table_unique_identifier FROM equipment_prototypes_to_equipment_tables LEFT JOIN equipment_tables, equipment_table_entries, equipment_prototypes WHERE equipment_prototypes_to_equipment_tables.equipment_table_id = equipment_tables.id AND equipment_prototypes_to_equipment_tables.equipment_prototype_id = equipment_prototypes.id;
 COMMIT;
