@@ -14,6 +14,12 @@ namespace Gamepackage
         public CouldNotResolvePrototypeException(string message) : base(message) { }
     }
 
+    public class CouldNotResolveTypeException : GamePackageException
+    {
+        public CouldNotResolveTypeException() : base() { }
+        public CouldNotResolveTypeException(string message) : base(message) { }
+    }
+
     public class DuplicateAssembliesException : GamePackageException
     {
         public DuplicateAssembliesException() : base() { }

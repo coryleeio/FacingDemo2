@@ -35,8 +35,123 @@ namespace Gamepackage
             LoadTokenPrototypes(dbConnection);
             LoadSpawnTables(dbConnection);
             LoadLevelPrototypes(dbConnection);
+            LoadRoomPrototypes(dbConnection);
             LoadLevelPrototypeRoomContent(dbConnection);
             LoadLevelPrototypeSpawnContent(dbConnection);
+        }
+
+        private void LoadLevelPrototypeSpawnContent(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from level_prototype_spawn_content_view";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var levelPrototypeUniqueId = reader.GetString(1);
+                var spawnTableUniqueIdentifier = reader.GetString(3);
+                string tagConstraint = null;
+                if(!reader.IsDBNull(4))
+                {
+                    tagConstraint = reader.GetString(4);
+                }
+
+                var levelPrototype = GetPrototypeByUniqueIdentifier<LevelPrototype>(levelPrototypeUniqueId);
+                var spawnTable = GetPrototypeByUniqueIdentifier<SpawnTable>(spawnTableUniqueIdentifier);
+
+                levelPrototype.Spawns.Add(new LevelSpawnPrototype()
+                {
+                    SpawnTable = spawnTable,
+                    TagConstraint = tagConstraint
+                });
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadLevelPrototypeRoomContent(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from level_prototype_room_content_view";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var levelPrototypeUniqueId = reader.GetString(1);
+                var roomPrototypeUniqueIdentifier = reader.GetString(3);
+                var tagsList = new List<string>();
+                if(!reader.IsDBNull(4))
+                {
+                    var tags = reader.GetString(4);
+                    tagsList.AddRange(tags.Split(','));
+                }
+
+                var levelPrototype = GetPrototypeByUniqueIdentifier<LevelPrototype>(levelPrototypeUniqueId);
+                var roomPrototype = GetPrototypeByUniqueIdentifier<RoomPrototype>(roomPrototypeUniqueIdentifier);
+
+                var levelRoomPrototype = new LevelRoomPrototype()
+                {
+                    RoomPrototype = roomPrototype
+                };
+                levelRoomPrototype.Tags.AddRange(tagsList);
+                levelPrototype.Rooms.Add(levelRoomPrototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadRoomPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from room_prototypes_view;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var uniqueId = reader.GetString(1);
+                var generatorClassName = reader.GetString(2);
+                var minimumHeight = reader.GetInt32(3);
+                var minimumWidth = reader.GetInt32(4);
+                var maximumWidth = reader.GetInt32(5);
+                var maximumHeight = reader.GetInt32(6);
+                var tilesetUniqueIdentifier = reader.GetString(7);
+
+                var tileset = GetPrototypeByUniqueIdentifier<Tileset>(tilesetUniqueIdentifier);
+
+                var generatorTypes = typeof(IRoomGenerator).ConcreteFromInterface();
+                IRoomGenerator roomGenerator = null;
+                foreach(var ty in generatorTypes)
+                {
+                    if(ty.Name == generatorClassName)
+                    {
+                        roomGenerator = Activator.CreateInstance(ty) as IRoomGenerator;
+                        roomGenerator.MaximumHeight = maximumHeight;
+                        roomGenerator.MaximumWidth = maximumWidth;
+                        roomGenerator.MinimumHeight = minimumHeight;
+                        roomGenerator.MinimumWidth = minimumWidth;
+                        roomGenerator.Tileset = tileset;
+                    }
+                }
+                if(roomGenerator == null)
+                {
+                    throw new CouldNotResolveTypeException(string.Format("Could not find type: {0}", generatorClassName));
+                }
+
+                RoomPrototype prototype = new RoomPrototype()
+                {
+                    UniqueIdentifier = uniqueId,
+                    RoomGenerator = roomGenerator,
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
         }
 
         private void LoadLevelPrototypes(IDbConnection dbConnection)
@@ -44,7 +159,7 @@ namespace Gamepackage
             IDbCommand dbcmd = dbConnection.CreateCommand();
             IDataReader reader;
 
-            dbcmd.CommandText = @"SELECT * from level_prototypes";
+            dbcmd.CommandText = @"SELECT * from level_prototypes_view";
 
             reader = dbcmd.ExecuteReader();
             while (reader.Read())
@@ -533,11 +648,21 @@ namespace Gamepackage
 
         public TPrototype GetPrototypeByUniqueIdentifier<TPrototype>(string uniqueIdentifier) where TPrototype : IResource
         {
-            if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueIdentifier))
+            try
             {
-                throw new CouldNotResolvePrototypeException(string.Format("Failed to lookup prototype: {0}", uniqueIdentifier));
+
+                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueIdentifier))
+                {
+                    throw new CouldNotResolvePrototypeException(string.Format("Failed to lookup prototype: {0}", uniqueIdentifier));
+                }
+
+                return (TPrototype)_prototypesByUniqueIdentifier[uniqueIdentifier];
+                
             }
-            return (TPrototype)_prototypesByUniqueIdentifier[uniqueIdentifier];
+            catch (InvalidCastException ex)
+            {
+                throw new CouldNotResolvePrototypeException(string.Format("Found prototype for {0}, but it is not a {1}", uniqueIdentifier, typeof(TPrototype).Name));
+            }
         }
     }
 }

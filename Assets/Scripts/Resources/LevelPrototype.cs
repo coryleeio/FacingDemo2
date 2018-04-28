@@ -7,7 +7,7 @@ namespace Gamepackage
         public string UniqueIdentifier { get; set; }
         public SpawnTable DefaultSpawnTable;
         public Tileset DefaultTileset;
-        public List<LevelRoomPrototype> Content = new List<LevelRoomPrototype>(0);
-        public List<LevelSpawnPrototype> Content = new List<LevelSpawnPrototype>(0);
+        public List<LevelRoomPrototype> Rooms = new List<LevelRoomPrototype>(0);
+        public List<LevelSpawnPrototype> Spawns = new List<LevelSpawnPrototype>(0);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Gamepackage
 {
-    public class LevelRoomPrototype : IResource
+    public class LevelRoomPrototype
     {
-        public string UniqueIdentifier { get; set; }
-        public RoomPro
+        public RoomPrototype RoomPrototype { get; set; }
+        public List<string> Tags = new List<string>(0);
     }
 }

@@ -2,8 +2,9 @@
 
 namespace Gamepackage
 {
-    public class LevelSpawnPrototype : IResource
+    public class LevelSpawnPrototype
     {
-        public string UniqueIdentifier { get; set; }
+        public SpawnTable SpawnTable { get; set; }
+        public string TagConstraint { get; set; }
     }
 }
