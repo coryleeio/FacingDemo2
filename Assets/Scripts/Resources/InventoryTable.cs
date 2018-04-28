@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public class LootTable : IResource
+    public class InventoryTable : IResource
     {
         public string UniqueIdentifier { get; set; }
         public ProbabilityTable<ItemPrototype> ProbabilityTable;

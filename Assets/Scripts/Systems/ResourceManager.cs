@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -19,8 +20,238 @@ namespace Gamepackage
         {
             _prototypesByUniqueIdentifier.Clear();
             LoadItemPrototypes(dbConnection);
-            LoadTokenPrototypes(dbConnection);
             LoadTilesets(dbConnection);
+            LoadEquipmentTables(dbConnection);
+            LoadInventoryTables(dbConnection);
+            LoadBehaviourPrototypes(dbConnection);
+            LoadEquipmentPrototypes(dbConnection);
+            LoadEquipmentPrototypeContent(dbConnection);
+            LoadInventoryPrototypes(dbConnection);
+            LoadInventoryPrototypeContent(dbConnection);
+            LoadMotorPrototypes(dbConnection);
+            LoadPersonaPrototypes(dbConnection);
+            LoadTriggerBehaviourPrototypes(dbConnection);
+            LoadTokenViewPrototypes(dbConnection);
+            LoadTokenPrototypes(dbConnection);
+            LoadSpawnTables(dbConnection);
+            LoadLevelPrototypes(dbConnection);
+            LoadLevelPrototypeRoomContent(dbConnection);
+            LoadLevelPrototypeSpawnContent(dbConnection);
+        }
+
+        private void LoadLevelPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from level_prototypes";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var uniqueId = reader.GetString(1);
+                var defaultSpawnTableUniqueId = reader.GetString(3);
+                var defaultTilesetUniqueId = reader.GetString(5);
+                var defaultSpawnTable = GetPrototypeByUniqueIdentifier<SpawnTable>(defaultSpawnTableUniqueId);
+                var defaultTileSet = GetPrototypeByUniqueIdentifier<Tileset>(defaultTilesetUniqueId);
+                LevelPrototype prototype = new LevelPrototype()
+                {
+                    UniqueIdentifier = uniqueId,
+                    DefaultSpawnTable = defaultSpawnTable,
+                    DefaultTileset = defaultTileSet
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadTokenViewPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from token_view_prototypes;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                TokenViewPrototype prototype = new TokenViewPrototype()
+                {
+                    UniqueIdentifier = reader.GetString(1),
+                    ClassName = reader.GetString(2)
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadTriggerBehaviourPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from trigger_behaviour_prototypes;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                TriggerBehaviourPrototype prototype = new TriggerBehaviourPrototype()
+                {
+                    UniqueIdentifier = reader.GetString(1),
+                    ClassName = reader.GetString(2)
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadPersonaPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from persona_prototypes;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                PersonaPrototype prototype = new PersonaPrototype()
+                {
+                    UniqueIdentifier = reader.GetString(1),
+                    ClassName = reader.GetString(2)
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadMotorPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from motor_prototypes;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                MotorPrototype prototype = new MotorPrototype()
+                {
+                    UniqueIdentifier = reader.GetString(1),
+                    ClassName = reader.GetString(2)
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadInventoryPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from inventory_prototypes;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                InventoryPrototype prototype = new InventoryPrototype()
+                {
+                    UniqueIdentifier = reader.GetString(1),
+                    ClassName = reader.GetString(2)
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadInventoryPrototypeContent(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from inventory_prototype_inventory_tables_view;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var inventoryPrototypeUniqueId = reader.GetString(1);
+                var inventoryTableId = reader.GetString(4);
+                var inventoryPrototype = GetPrototypeByUniqueIdentifier<InventoryPrototype>(inventoryPrototypeUniqueId);
+                var inventoryTable = GetPrototypeByUniqueIdentifier<InventoryTable>(inventoryTableId);
+                inventoryPrototype.InventoryTables.Add(inventoryTable);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+
+        private void LoadEquipmentPrototypeContent(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from equipment_prototype_equipment_tables_view;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var equipmentPrototypeUniqueId = reader.GetString(1);
+                var equipmentTableId = reader.GetString(4);
+                var equipmentPrototype = GetPrototypeByUniqueIdentifier<EquipmentPrototype>(equipmentPrototypeUniqueId);
+                var equipmentTable = GetPrototypeByUniqueIdentifier<EquipmentTable>(equipmentTableId);
+                equipmentPrototype.EquipmentTables.Add(equipmentTable);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadEquipmentPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from equipment_prototypes;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                EquipmentPrototype prototype = new EquipmentPrototype()
+                {
+                    UniqueIdentifier = reader.GetString(1),
+                    ClassName = reader.GetString(2)
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadBehaviourPrototypes(IDbConnection dbConnection)
+        {
+            IDbCommand dbcmd = dbConnection.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from behaviour_prototypes;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                BehaviourPrototype prototype = new BehaviourPrototype()
+                {
+                    UniqueIdentifier = reader.GetString(1),
+                    ClassName = reader.GetString(2)
+                };
+                CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
         }
 
         private void LoadTilesets(IDbConnection dbconn)
@@ -102,6 +333,159 @@ namespace Gamepackage
                     UniqueIdentifier = reader.GetString(0),
                 };
                 CacheResource(prototype);
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadInventoryTables(IDbConnection dbconn)
+        {
+            IDbCommand dbcmd = dbconn.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from inventory_table_entries_view;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var uniqueId = reader.GetString(1);
+                var resolutionStr = reader.GetString(2);
+                var resolution = (TableResolutionStrategy)System.Enum.Parse(typeof(TableResolutionStrategy), resolutionStr);
+                var weight = reader.GetInt32(3);
+                var itemPrototypeUniqueIdentifier = reader.GetString(5);
+                var numberOfRolls = reader.GetInt32(6);
+
+                var itemPrototype = GetPrototypeByUniqueIdentifier<ItemPrototype>(itemPrototypeUniqueIdentifier);
+
+                InventoryTable inventoryTable = null;
+                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueId))
+                {
+                    inventoryTable = new InventoryTable()
+                    {
+                        UniqueIdentifier = uniqueId,
+                        ProbabilityTable = new ProbabilityTable<ItemPrototype>()
+                        {
+                            Resolution = resolution
+                        }
+                    };
+                }
+                else
+                {
+                    inventoryTable = _prototypesByUniqueIdentifier[uniqueId] as InventoryTable;
+                }
+                inventoryTable.ProbabilityTable.Values.Add(new ProbabilityTableTuple<ItemPrototype>()
+                {
+                    NumberOfRolls = numberOfRolls,
+                    Value = itemPrototype,
+                    Weight = weight
+                });
+
+                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueId))
+                {
+                    CacheResource(inventoryTable);
+                }
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadEquipmentTables(IDbConnection dbconn)
+        {
+            IDbCommand dbcmd = dbconn.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from equipment_table_entries_view;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var uniqueId = reader.GetString(1);
+                var resolutionStr = reader.GetString(2);
+                var resolution = (TableResolutionStrategy)System.Enum.Parse(typeof(TableResolutionStrategy), resolutionStr);
+                var weight = reader.GetInt32(3);
+                var itemPrototypeUniqueIdentifier = reader.GetString(5);
+                var numberOfRolls = reader.GetInt32(6);
+
+                var itemPrototype = GetPrototypeByUniqueIdentifier<ItemPrototype>(itemPrototypeUniqueIdentifier);
+
+                EquipmentTable equipmentTable = null;
+                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueId))
+                {
+                    equipmentTable = new EquipmentTable()
+                    {
+                        UniqueIdentifier = uniqueId,
+                        ProbabilityTable = new ProbabilityTable<ItemPrototype>()
+                        {
+                            Resolution = resolution
+                        }
+                    };
+                }
+                else
+                {
+                    equipmentTable = _prototypesByUniqueIdentifier[uniqueId] as EquipmentTable;
+                }
+                equipmentTable.ProbabilityTable.Values.Add(new ProbabilityTableTuple<ItemPrototype>()
+                {
+                    NumberOfRolls = numberOfRolls,
+                    Value = itemPrototype,
+                    Weight = weight
+                });
+
+                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueId))
+                {
+                    CacheResource(equipmentTable);
+                }
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
+
+        private void LoadSpawnTables(IDbConnection dbconn)
+        {
+            IDbCommand dbcmd = dbconn.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from spawn_table_entries_view;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var uniqueId = reader.GetString(1);
+                var resolutionStr = reader.GetString(2);
+                var resolution = (TableResolutionStrategy)System.Enum.Parse(typeof(TableResolutionStrategy), resolutionStr);
+                var weight = reader.GetInt32(3);
+                var itemPrototypeUniqueIdentifier = reader.GetString(5);
+                var numberOfRolls = reader.GetInt32(6);
+
+                var itemPrototype = GetPrototypeByUniqueIdentifier<TokenPrototype>(itemPrototypeUniqueIdentifier);
+
+                SpawnTable equipmentTable = null;
+                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueId))
+                {
+                    equipmentTable = new SpawnTable()
+                    {
+                        UniqueIdentifier = uniqueId,
+                        ProbabilityTable = new ProbabilityTable<TokenPrototype>()
+                        {
+                            Resolution = resolution
+                        }
+                    };
+                }
+                else
+                {
+                    equipmentTable = _prototypesByUniqueIdentifier[uniqueId] as SpawnTable;
+                }
+                equipmentTable.ProbabilityTable.Values.Add(new ProbabilityTableTuple<TokenPrototype>()
+                {
+                    NumberOfRolls = numberOfRolls,
+                    Value = itemPrototype,
+                    Weight = weight
+                });
+
+                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueId))
+                {
+                    CacheResource(equipmentTable);
+                }
             }
             reader.Close();
             dbcmd.Dispose();

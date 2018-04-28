@@ -15,7 +15,7 @@ namespace Gamepackage
 
     public class ProbabilityTable<TProb>
     {
-        public List<ProbabilityTableTuple<TProb>> Values;
+        public List<ProbabilityTableTuple<TProb>> Values = new List<ProbabilityTableTuple<TProb>>(0);
         public TableResolutionStrategy Resolution;
 
         public TProb NextSingleItem()

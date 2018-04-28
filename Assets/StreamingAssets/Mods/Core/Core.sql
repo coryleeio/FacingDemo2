@@ -2,18 +2,20 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS `trigger_behaviour_prototypes`;
 CREATE TABLE IF NOT EXISTS `trigger_behaviour_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
 	`class_name`	TEXT NOT NULL
 );
-INSERT INTO `trigger_behaviour_prototypes` (id,class_name) VALUES (1,'HasTriggerBehaviour');
-INSERT INTO `trigger_behaviour_prototypes` (id,class_name) VALUES (2,'NoTriggerBehaviour');
+INSERT INTO `trigger_behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'TRIGGER_BEHAVIOUR_IS_TRIGGER','HasTriggerBehaviour');
+INSERT INTO `trigger_behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'TRIGGER_BEHAVIOUR_IS_NOT_TRIGGER','NoTriggerBehaviour');
 DROP TABLE IF EXISTS `token_view_prototypes`;
 CREATE TABLE IF NOT EXISTS `token_view_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
 	`class_name`	TEXT NOT NULL
 );
-INSERT INTO `token_view_prototypes` (id,class_name) VALUES (1,'NoView');
-INSERT INTO `token_view_prototypes` (id,class_name) VALUES (2,'SpineAnimatedView');
-INSERT INTO `token_view_prototypes` (id,class_name) VALUES (3,'StaticSpriteView');
+INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'TOKEN_VIEW_NONE','NoView');
+INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'TOKEN_VIEW_SPINE_ANIMATED','SpineAnimatedView');
+INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name) VALUES (3,'TOKEN_VIEW_STATIC_SPRITE','StaticSpriteView');
 DROP TABLE IF EXISTS `token_prototypes`;
 CREATE TABLE IF NOT EXISTS `token_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `spawn_tables` (
 	`unique_identifier_id`	INTEGER UNIQUE,
 	`resolution`	TEXT NOT NULL
 );
+INSERT INTO `spawn_tables` (id,unique_identifier_id,resolution) VALUES (1,'TEST_SPAWN','OneOf');
 DROP TABLE IF EXISTS `spawn_table_entries`;
 CREATE TABLE IF NOT EXISTS `spawn_table_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -65,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `spawn_table_entries` (
 	`weight`	INTEGER NOT NULL,
 	`number_of_rolls`	INTEGER NOT NULL
 );
+INSERT INTO `spawn_table_entries` (id,spawn_table_id,token_prototype_id,weight,number_of_rolls) VALUES (1,1,1,100,1);
 DROP TABLE IF EXISTS `room_prototypes`;
 CREATE TABLE IF NOT EXISTS `room_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -77,27 +81,59 @@ CREATE TABLE IF NOT EXISTS `room_prototypes` (
 	`fill_tileset_id`	INTEGER NOT NULL
 );
 INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id) VALUES (1,'SimpleStoneRoom','StandardRoomGenerator',5,5,9,9,1);
+DROP TABLE IF EXISTS `room_prototype_entries`;
+CREATE TABLE IF NOT EXISTS `room_prototype_entries` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	``	INTEGER
+);
 DROP TABLE IF EXISTS `persona_prototypes`;
 CREATE TABLE IF NOT EXISTS `persona_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
 	`class_name`	TEXT NOT NULL
 );
-INSERT INTO `persona_prototypes` (id,class_name) VALUES (1,'ObjectPersona');
-INSERT INTO `persona_prototypes` (id,class_name) VALUES (2,'PawnPersona');
+INSERT INTO `persona_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'PERSONA_OBJECT','ObjectPersona');
+INSERT INTO `persona_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'PERSONA_PAWN','PawnPersona');
 DROP TABLE IF EXISTS `motor_prototypes`;
 CREATE TABLE IF NOT EXISTS `motor_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
 	`class_name`	TEXT NOT NULL
 );
-INSERT INTO `motor_prototypes` (id,class_name) VALUES (1,'FlyingMotor');
-INSERT INTO `motor_prototypes` (id,class_name) VALUES (2,'GhostMotor');
-INSERT INTO `motor_prototypes` (id,class_name) VALUES (3,'NoMotor');
-INSERT INTO `motor_prototypes` (id,class_name) VALUES (4,'WalkingMotor');
+INSERT INTO `motor_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'MOTOR_FLYING','FlyingMotor');
+INSERT INTO `motor_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'MOTOR_GHOST','GhostMotor');
+INSERT INTO `motor_prototypes` (id,unique_identifier_id,class_name) VALUES (3,'MOTOR_NONE','NoMotor');
+INSERT INTO `motor_prototypes` (id,unique_identifier_id,class_name) VALUES (4,'MOTOR_WALKING','WalkingMotor');
+DROP TABLE IF EXISTS `level_prototypes`;
+CREATE TABLE IF NOT EXISTS `level_prototypes` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	INTEGER NOT NULL UNIQUE,
+	`default_spawn_table_id`	INTEGER NOT NULL,
+	`default_tileset_id`	INTEGER NOT NULL
+);
+INSERT INTO `level_prototypes` (id,unique_identifier_id,default_spawn_table_id,default_tileset_id) VALUES (1,'LEVEL_1_DEFAULT',1,1);
+DROP TABLE IF EXISTS `level_prototype_spawn_content_entries`;
+CREATE TABLE IF NOT EXISTS `level_prototype_spawn_content_entries` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`level_prototype_id`	INTEGER NOT NULL,
+	`spawn_table_id`	INTEGER NOT NULL,
+	`tag_constraint`	TEXT
+);
+INSERT INTO `level_prototype_spawn_content_entries` (id,level_prototype_id,spawn_table_id,tag_constraint) VALUES (1,1,1,NULL);
+DROP TABLE IF EXISTS `level_prototype_room_content_entries`;
+CREATE TABLE IF NOT EXISTS `level_prototype_room_content_entries` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`level_prototype_id`	INTEGER NOT NULL,
+	`room_prototype_id`	INTEGER NOT NULL,
+	`tags`	TEXT
+);
+INSERT INTO `level_prototype_room_content_entries` (id,level_prototype_id,room_prototype_id,tags) VALUES (1,1,1,NULL);
 DROP TABLE IF EXISTS `item_view_prototypes`;
 CREATE TABLE IF NOT EXISTS `item_view_prototypes` (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE
 );
-INSERT INTO `item_view_prototypes` (id) VALUES (1);
+INSERT INTO `item_view_prototypes` (id,unique_identifier_id) VALUES (1,'ITEM_VIEW_NONE');
 DROP TABLE IF EXISTS `item_prototypes`;
 CREATE TABLE IF NOT EXISTS `item_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -173,12 +209,13 @@ INSERT INTO `equipment_prototypes` (id,unique_identifier_id,class_name) VALUES (
 DROP TABLE IF EXISTS `behaviour_prototypes`;
 CREATE TABLE IF NOT EXISTS `behaviour_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
 	`class_name`	TEXT NOT NULL
 );
-INSERT INTO `behaviour_prototypes` (id,class_name) VALUES (1,'Player');
-INSERT INTO `behaviour_prototypes` (id,class_name) VALUES (2,'NoBehaviour');
-INSERT INTO `behaviour_prototypes` (id,class_name) VALUES (3,'AISlime');
-INSERT INTO `behaviour_prototypes` (id,class_name) VALUES (4,'AIBrute');
+INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'BEHAVIOUR_PLAYER','Player');
+INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'BEHAVIOUR_NONE','NoBehaviour');
+INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (3,'BEHAVIOUR_AI_SLIME','AISlime');
+INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (4,'BEHAVIOUR_AI_BRUTE','AIBrute');
 DROP VIEW IF EXISTS `token_prototypes_view`;
 CREATE VIEW token_prototypes_view AS 
 SELECT    token_prototypes.unique_identifier_id, 
@@ -222,14 +259,45 @@ SELECT    room_prototypes.id     AS room_prototype_id,
 FROM      room_prototypes 
 LEFT JOIN tilesets AS tile 
 where     fill_tileset_id = tile.id;
+DROP VIEW IF EXISTS `level_prototypes_view`;
+CREATE VIEW level_prototypes_view               AS 
+SELECT    level_prototypes.id                   AS level_prototypes_id, 
+          level_prototypes.unique_identifier_id AS level_prototypes_unique_identifier, 
+          spawn_tables.id                       AS default_spawn_table_id, 
+          spawn_tables.unique_identifier_id     AS default_spawn_table_unique_identifier, 
+          tilesets.id                           AS default_tileset_id, 
+          tilesets.unique_identifier_id         AS default_tileset_unique_identifier 
+FROM      level_prototypes 
+LEFT JOIN spawn_tables, 
+          tilesets 
+WHERE     level_prototypes.default_tileset_id = tilesets.id 
+AND       level_prototypes.default_spawn_table_id = spawn_tables.id;
+DROP VIEW IF EXISTS `level_prototype_spawn_content_view`;
+CREATE VIEW level_prototype_spawn_content_view         AS 
+SELECT     level_prototypes.id                   AS level_prototype_id, 
+           level_prototypes.unique_identifier_id AS level_prototype_unique_identifier, 
+           spawn_tables.id                       AS spawn_table_id, 
+           spawn_tables.unique_identifier_id     AS spawn_table_unique_identifier ,
+           level_prototype_spawn_content_entries.tag_constraint as tag_constraint
+FROM       level_prototype_spawn_content_entries 
+INNER JOIN level_prototypes, 
+           spawn_tables 
+WHERE      level_prototype_spawn_content_entries.level_prototype_id = level_prototypes.id 
+AND        level_prototype_spawn_content_entries.spawn_table_id = spawn_tables.id;
+DROP VIEW IF EXISTS `level_prototype_room_content_view`;
+CREATE VIEW level_prototype_room_content_view         AS 
+SELECT     level_prototypes.id                   AS level_prototype_id, 
+           level_prototypes.unique_identifier_id AS level_prototype_unique_identifier, 
+           room_prototypes.id                    AS room_prototype_id, 
+           room_prototypes.unique_identifier_id  AS room_prototype_unique_identifier,
+           level_prototype_room_content_entries.tags                  AS tags
+FROM       level_prototype_room_content_entries 
+INNER JOIN level_prototypes, 
+           room_prototypes 
+WHERE      level_prototype_room_content_entries.level_prototype_id = level_prototypes.id 
+AND        level_prototype_room_content_entries.room_prototype_id = room_prototypes.id;
 DROP VIEW IF EXISTS `item_prototypes_view`;
-CREATE VIEW item_prototypes_view AS 
-SELECT    unique_identifier_id 
-FROM      item_prototypes 
-LEFT JOIN item_properties_prototypes, 
-          item_view_prototypes 
-WHERE     item_properties_prototypes.id = item_prototypes.item_properties_prototype_id 
-AND       item_view_prototypes.id = item_prototypes.item_view_prototype_id;
+CREATE VIEW item_prototypes_view AS SELECT item_prototypes.unique_identifier_id as unique_identifier FROM item_prototypes LEFT JOIN item_properties_prototypes, item_view_prototypes WHERE item_properties_prototypes.id = item_prototypes.item_properties_prototype_id AND item_view_prototypes.id = item_prototypes.item_view_prototype_id;
 DROP VIEW IF EXISTS `inventory_table_entries_view`;
 CREATE VIEW inventory_table_entries_view AS SELECT it.id as inventory_table_id, it.unique_identifier_id,it.resolution,ite.weight as weight, ip.id as item_prototype_id, ip.unique_identifier_id as item_prototype_unique_identifier, ite.number_of_rolls as number_of_rolls FROM inventory_tables as it LEFT JOIN inventory_table_entries as ite, item_prototypes as ip WHERE ite.inventory_table_id = it.id AND ip.id = ite.item_prototype_id;
 DROP VIEW IF EXISTS `inventory_prototype_inventory_tables_view`;
