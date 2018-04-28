@@ -29,7 +29,7 @@ namespace Gamepackage
             _prototypeFactory.BuildGrid(_gameStateSystem.Game.CurrentLevel);
             foreach (var token in _gameStateSystem.Game.CurrentLevel.Tokens)
             {
-                token.View.BuildView();
+                token.TokenView.BuildView();
             }
         }
     }

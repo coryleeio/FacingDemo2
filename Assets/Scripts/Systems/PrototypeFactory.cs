@@ -29,7 +29,16 @@ namespace Gamepackage
         public void LoadTypes()
         {
             componentTypeMap.Clear();
-            var types = typeof(Component).ConcreteFromAbstract();
+
+            List<Type> types = new List<Type>();
+
+            types.AddRange(typeof(Component<BehaviourPrototype>).ConcreteFromAbstract());
+            types.AddRange(typeof(Component<EquipmentPrototype>).ConcreteFromAbstract());
+            types.AddRange(typeof(Component<InventoryPrototype>).ConcreteFromAbstract());
+            types.AddRange(typeof(Component<MotorPrototype>).ConcreteFromAbstract());
+            types.AddRange(typeof(Component<PersonaPrototype>).ConcreteFromAbstract());
+            types.AddRange(typeof(Component<TokenViewPrototype>).ConcreteFromAbstract());
+            types.AddRange(typeof(Component<TriggerBehaviourPrototype>).ConcreteFromAbstract());
             foreach (var type in types)
             {
                 componentTypeMap[type.Name] = type;
@@ -41,13 +50,14 @@ namespace Gamepackage
             var token = new Token();
             token.PrototypeUniqueIdentifier = prototype.UniqueIdentifier;
             token.Shape = new Shape(prototype.ShapeType, prototype.Width, prototype.Height);
-            token.Behaviour = Activator.CreateInstance(componentTypeMap[prototype.BehaviourClassName]) as Behaviour;
-            token.Equipment = Activator.CreateInstance(componentTypeMap[prototype.EquipmentClassName]) as Equipment;
-            token.Inventory = Activator.CreateInstance(componentTypeMap[prototype.InventoryClassName]) as Inventory;
-            token.Motor = Activator.CreateInstance(componentTypeMap[prototype.MotorClassName]) as Motor;
-            token.Persona = Activator.CreateInstance(componentTypeMap[prototype.PersonaClassName]) as Persona;
-            token.TriggerBehaviour = Activator.CreateInstance(componentTypeMap[prototype.TriggerBehaviourClassName]) as TriggerBehaviour;
-            token.View = Activator.CreateInstance(componentTypeMap[prototype.ViewClassName]) as View;
+
+            token.Behaviour = BuildBehaviour(prototype.BehaviourPrototype);
+            token.Equipment = BuildEquipment(prototype.EquipmentPrototype);
+            token.Inventory = BuildInventory(prototype.InventoryPrototype);
+            token.Motor = BuildMotor(prototype.MotorPrototype);
+            token.Persona = BuildPersona(prototype.PersonaPrototype);
+            token.TriggerBehaviour = BuildTriggerBehaviour(prototype.TriggerBehaviourPrototype);
+            token.TokenView = BuildTokenView(prototype.TokenViewPrototype);
 
             token.Behaviour.Owner = token;
             token.Equipment.Owner = token;
@@ -55,20 +65,90 @@ namespace Gamepackage
             token.Motor.Owner = token;
             token.Persona.Owner = token;
             token.TriggerBehaviour.Owner = token;
-            token.View.Owner = token;
+            token.TokenView.Owner = token;
 
             // Inject components
-            _container.BuildUp(token.PrototypeUniqueIdentifier);
             _container.BuildUp(token.Behaviour);
             _container.BuildUp(token.Equipment);
             _container.BuildUp(token.Inventory);
             _container.BuildUp(token.Motor);
             _container.BuildUp(token.Persona);
             _container.BuildUp(token.TriggerBehaviour);
-            _container.BuildUp(token.View);
+            _container.BuildUp(token.TokenView);
 
+            token.Behaviour.PrototypeReference = new PrototypeReference<BehaviourPrototype>()
+            {
+                Prototype = prototype.BehaviourPrototype
+            };
+            token.Equipment.PrototypeReference = new PrototypeReference<EquipmentPrototype>()
+            {
+                Prototype = prototype.EquipmentPrototype
+            };
+            token.Inventory.PrototypeReference = new PrototypeReference<InventoryPrototype>()
+            {
+                Prototype = prototype.InventoryPrototype
+            };
+            token.Motor.PrototypeReference = new PrototypeReference<MotorPrototype>()
+            {
+                Prototype = prototype.MotorPrototype
+            };
+            token.Persona.PrototypeReference = new PrototypeReference<PersonaPrototype>()
+            {
+                Prototype = prototype.PersonaPrototype
+            };
+            token.TriggerBehaviour.PrototypeReference = new PrototypeReference<TriggerBehaviourPrototype>()
+            {
+                Prototype = prototype.TriggerBehaviourPrototype
+            };
+            token.TokenView.PrototypeReference = new PrototypeReference<TokenViewPrototype>()
+            {
+                Prototype = prototype.TokenViewPrototype
+            };
+
+            token.Resolve(_resourceManager);
             _tokenSystem.Register(token);
             return token;
+        }
+
+        private TokenView BuildTokenView(TokenViewPrototype prototype)
+        {
+            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as TokenView;
+        }
+
+        private TriggerBehaviour BuildTriggerBehaviour(TriggerBehaviourPrototype prototype)
+        {
+            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as TriggerBehaviour;
+        }
+
+        private Persona BuildPersona(PersonaPrototype prototype)
+        {
+            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Persona;
+        }
+
+        private Motor BuildMotor(MotorPrototype prototype)
+        {
+            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Motor;
+        }
+
+        private Inventory BuildInventory(InventoryPrototype prototype)
+        {
+            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Inventory;
+        }
+
+        private Equipment BuildEquipment(EquipmentPrototype prototype)
+        {
+            Equipment equipment = Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Equipment;
+            foreach (var table in prototype.EquipmentTables)
+            {
+                table.ProbabilityTable.Next();
+            }
+
+            return equipment;
+        }
+
+        private Behaviour BuildBehaviour(BehaviourPrototype prototype)
+        {
+            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Behaviour;
         }
 
         public Token BuildToken(string uniqueIdentifier)

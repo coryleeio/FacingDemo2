@@ -1,6 +1,6 @@
 namespace Gamepackage
 {
-    public class SpineAnimatedView : View
+    public class SpineAnimatedView : TokenView
     {
         public SpineAnimatedView()
         {

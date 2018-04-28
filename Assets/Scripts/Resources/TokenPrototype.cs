@@ -6,12 +6,12 @@
         public ShapeType ShapeType { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public string BehaviourClassName { get; set; }
-        public string EquipmentClassName { get; set; }
-        public string InventoryClassName { get; set; }
-        public string MotorClassName { get; set; }
-        public string PersonaClassName { get; set; }
-        public string TriggerBehaviourClassName { get; set; }
-        public string ViewClassName { get; set; }
+        public BehaviourPrototype BehaviourPrototype { get; set; }
+        public EquipmentPrototype EquipmentPrototype { get; set; }
+        public InventoryPrototype InventoryPrototype { get; set; }
+        public MotorPrototype MotorPrototype { get; set; }
+        public PersonaPrototype PersonaPrototype { get; set; }
+        public TriggerBehaviourPrototype TriggerBehaviourPrototype { get; set; }
+        public TokenViewPrototype TokenViewPrototype { get; set; }
     }
 }

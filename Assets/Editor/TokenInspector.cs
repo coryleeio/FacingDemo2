@@ -26,7 +26,7 @@ public class TokenInspector : Editor
         EditorGUILayout.LabelField("Inventory", token.Inventory.GetType().ToString());
         EditorGUILayout.LabelField("Equipment", token.Equipment.GetType().ToString());
         EditorGUILayout.LabelField("Behaviour", token.Behaviour.GetType().ToString());
-        EditorGUILayout.LabelField("View", token.View.GetType().ToString());
+        EditorGUILayout.LabelField("View", token.TokenView.GetType().ToString());
         EditorGUILayout.LabelField("Persona", token.Persona.GetType().ToString());
         EditorGUILayout.LabelField("TriggerBehaviour", token.TriggerBehaviour.GetType().ToString());
         EditorGUILayout.EndVertical();

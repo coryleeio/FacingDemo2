@@ -626,19 +626,41 @@ namespace Gamepackage
             reader = dbcmd.ExecuteReader();
             while (reader.Read())
             {
+
+                var uniqueId = reader.GetString(0);
+                var width = reader.GetInt32(1);
+                var height = reader.GetInt32(2);
+                var shapeType = (ShapeType)reader.GetInt32(3);
+
+                var behaviourUniqueId = reader.GetString(4);
+                var equipmentUniqueId = reader.GetString(5);
+                var inventoryUniqueId = reader.GetString(6);
+                var motorUniqueId = reader.GetString(7);
+                var personaUniqueId = reader.GetString(8);
+                var triggerBehaviourUniqueId = reader.GetString(9);
+                var tokenViewBehaviourUniqueId = reader.GetString(10);
+
+                var behaviourPrototype = GetPrototypeByUniqueIdentifier<BehaviourPrototype>(behaviourUniqueId);
+                var equipmentPrototype = GetPrototypeByUniqueIdentifier<EquipmentPrototype>(equipmentUniqueId);
+                var inventoryPrototype = GetPrototypeByUniqueIdentifier<InventoryPrototype>(inventoryUniqueId);
+                var motorPrototype = GetPrototypeByUniqueIdentifier<MotorPrototype>(motorUniqueId);
+                var personaPrototype = GetPrototypeByUniqueIdentifier<PersonaPrototype>(personaUniqueId);
+                var triggerBehaviourPrototype = GetPrototypeByUniqueIdentifier<TriggerBehaviourPrototype>(triggerBehaviourUniqueId);
+                var tokenViewPrototype = GetPrototypeByUniqueIdentifier<TokenViewPrototype>(tokenViewBehaviourUniqueId);
+
                 TokenPrototype prototype = new TokenPrototype()
                 {
-                    UniqueIdentifier = reader.GetString(0),
-                    Width = reader.GetInt32(1),
-                    Height = reader.GetInt32(2),
-                    ShapeType = (ShapeType)reader.GetInt32(3),
-                    BehaviourClassName = reader.GetString(4),
-                    EquipmentClassName = reader.GetString(5),
-                    InventoryClassName = reader.GetString(6),
-                    MotorClassName = reader.GetString(7),
-                    PersonaClassName = reader.GetString(8),
-                    TriggerBehaviourClassName = reader.GetString(9),
-                    ViewClassName = reader.GetString(10)
+                    UniqueIdentifier = uniqueId,
+                    Width = width,
+                    Height = height,
+                    ShapeType = shapeType,
+                    BehaviourPrototype = behaviourPrototype,
+                    EquipmentPrototype = equipmentPrototype,
+                    InventoryPrototype = inventoryPrototype,
+                    MotorPrototype = motorPrototype,
+                    PersonaPrototype = personaPrototype,
+                    TriggerBehaviourPrototype = triggerBehaviourPrototype,
+                    TokenViewPrototype = tokenViewPrototype
                 };
                 CacheResource(prototype);
             }

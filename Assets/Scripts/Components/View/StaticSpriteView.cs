@@ -1,6 +1,6 @@
 namespace Gamepackage
 {
-    public class StaticSpriteView : View
+    public class StaticSpriteView : TokenView
     {
         public StaticSpriteView()
         {

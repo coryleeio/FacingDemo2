@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Gamepackage
 {
     [Serializable]
-    public class Token : IHandleMessage, IWasBuiltFromAPrototype, IHaveAnId
+    public class Token : IHandleMessage, IWasBuiltFromAPrototype, IHaveAnId, IResolvableReferences
     {
         public Token()
         {
@@ -36,7 +36,7 @@ namespace Gamepackage
 
         public Behaviour Behaviour;
 
-        public View View;
+        public TokenView TokenView;
 
         public Persona Persona;
 
@@ -50,9 +50,20 @@ namespace Gamepackage
             Inventory.HandleMessage(messageToHandle);
             Equipment.HandleMessage(messageToHandle);
             Behaviour.HandleMessage(messageToHandle);
-            View.HandleMessage(messageToHandle);
+            TokenView.HandleMessage(messageToHandle);
             Persona.HandleMessage(messageToHandle);
             TriggerBehaviour.HandleMessage(messageToHandle);
+        }
+
+        public void Resolve(IResourceManager resourceManager)
+        {
+            Motor.Resolve(resourceManager);
+            Inventory.Resolve(resourceManager);
+            Equipment.Resolve(resourceManager);
+            Behaviour.Resolve(resourceManager);
+            TokenView.Resolve(resourceManager);
+            Persona.Resolve(resourceManager);
+            TriggerBehaviour.Resolve(resourceManager);
         }
     }
 }

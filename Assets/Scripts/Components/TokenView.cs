@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public abstract class View : Component
+    public abstract class TokenView : Component<TokenViewPrototype>
     {
         protected GameObject gameObject;
-        public View()
+        public TokenView()
         {
 
         }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class NoView : View
+    public class NoView : TokenView
     {
         public NoView()
         {
