@@ -12,6 +12,7 @@ namespace Gamepackage
         private IGameStateSystem _gameStateSystem;
         private IVisibilitySystem _visibilitySystem;
         private ITokenSystem _tokenSystem;
+        private IPathFinder _pathFinder;
 
         void Start()
         {
@@ -41,6 +42,8 @@ namespace Gamepackage
             container.Register<IDungeonGenerator, DungeonGenerator>().AsSingleton();
             container.Register<ISpriteSortingSystem, SpriteSortingSystem>().AsSingleton();
             container.Register<IOverlaySystem, OverlaySystem>().AsSingleton();
+            container.Register<IPathFinder, PathFinder>().AsSingleton();
+            _pathFinder = container.Resolve<IPathFinder>();
             _gameStateSystem = container.Resolve<IGameStateSystem>();
             _tokenSystem = container.Resolve<ITokenSystem>();
             _visibilitySystem = container.Resolve<IVisibilitySystem>();
@@ -50,6 +53,11 @@ namespace Gamepackage
         void Update()
         {
             StateMachine.Process();
+        }
+
+        void OnDisable()
+        {
+            _pathFinder.Cleanup();
         }
 
         void OnGUI()

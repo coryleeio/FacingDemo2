@@ -59,15 +59,6 @@ namespace Gamepackage
             token.TriggerBehaviour = BuildTriggerBehaviour(prototype.TriggerBehaviourPrototype);
             token.TokenView = BuildTokenView(prototype.TokenViewPrototype);
 
-            token.Behaviour.Owner = token;
-            token.Equipment.Owner = token;
-            token.Inventory.Owner = token;
-            token.Motor.Owner = token;
-            token.Persona.Owner = token;
-            token.TriggerBehaviour.Owner = token;
-            token.TokenView.Owner = token;
-
-            // Inject components
             _container.BuildUp(token.Behaviour);
             _container.BuildUp(token.Equipment);
             _container.BuildUp(token.Inventory);

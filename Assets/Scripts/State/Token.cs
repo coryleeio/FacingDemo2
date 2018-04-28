@@ -57,6 +57,13 @@ namespace Gamepackage
 
         public void Resolve(IResourceManager resourceManager)
         {
+            Behaviour.Owner = this;
+            Equipment.Owner = this;
+            Inventory.Owner = this;
+            Motor.Owner = this;
+            Persona.Owner = this;
+            TriggerBehaviour.Owner = this;
+            TokenView.Owner = this;
             Motor.Resolve(resourceManager);
             Inventory.Resolve(resourceManager);
             Equipment.Resolve(resourceManager);

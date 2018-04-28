@@ -9,14 +9,18 @@ namespace Gamepackage
         private IVisibilitySystem _visibilitySystem;
         private IOverlaySystem _overlaySystem;
         private ISpriteSortingSystem _spriteSortingSystem;
+        private IPathFinder _pathFinder;
+        private IGameStateSystem _gameStateSystem;
 
-        public GamePlayState(GameScene gamePlayScene, ILogSystem logSystem, IVisibilitySystem visibilitySystem, IOverlaySystem overlaySystem, ISpriteSortingSystem spriteSortingSystem)
+        public GamePlayState(GameScene gamePlayScene, ILogSystem logSystem, IVisibilitySystem visibilitySystem, IOverlaySystem overlaySystem, ISpriteSortingSystem spriteSortingSystem, IPathFinder pathFinder, IGameStateSystem gameStateSystem)
         {
             _gamePlayScene = gamePlayScene;
             _logSystem = logSystem;
             _visibilitySystem = visibilitySystem;
             _overlaySystem = overlaySystem;
             _spriteSortingSystem = spriteSortingSystem;
+            _pathFinder = pathFinder;
+            _gameStateSystem = gameStateSystem;
         }
 
         public void Enter(Root owner)
@@ -25,6 +29,7 @@ namespace Gamepackage
             _gamePlayScene.Load();
             _visibilitySystem.Init();
             _overlaySystem.Init();
+            _pathFinder.Init(_gameStateSystem.Game.CurrentLevel.Domain.Width, _gameStateSystem.Game.CurrentLevel.Domain.Height, GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
 
             var newOverlay = new Overlay()
             {
@@ -58,6 +63,7 @@ namespace Gamepackage
             _overlaySystem.Clear();
             _visibilitySystem.Clear();
             _gamePlayScene.Unload();
+            _pathFinder.Cleanup();
         }
 
         public void HandleMessage(Message messageToHandle)
@@ -69,6 +75,7 @@ namespace Gamepackage
         {
             _overlaySystem.Process();
             _spriteSortingSystem.Sort();
+            _pathFinder.Process();
         }
     }
 }
