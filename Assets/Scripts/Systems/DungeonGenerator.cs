@@ -7,15 +7,20 @@ namespace Gamepackage
     {
         IGameStateSystem _gameStateSystem;
         IPrototypeFactory _prototypeFactory;
+        IResourceManager _resourceManager;
 
-        public DungeonGenerator(IGameStateSystem gameStateSystem, IPrototypeFactory prototypeFactory)
+        public DungeonGenerator(IGameStateSystem gameStateSystem, IPrototypeFactory prototypeFactory, IResourceManager resourceManager)
         {
             _gameStateSystem = gameStateSystem;
             _prototypeFactory = prototypeFactory;
+            _resourceManager = resourceManager;
         }
 
         public void GenerateDungeon()
         {
+            var roomPrototypes =_resourceManager.GetPrototypes<RoomPrototype>();
+            var spawnTables = _resourceManager.GetPrototypes<SpawnTable>();
+
             _gameStateSystem.Game.Dungeon.Levels = new List<Level>(10);
             var levels = _gameStateSystem.Game.Dungeon.Levels;
             for (var i = 0; i < 10; i++)

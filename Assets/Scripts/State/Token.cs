@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Gamepackage
 {
     [Serializable]
-    public class Token : IHandleMessage, IWasBuiltFromAPrototype, IHaveAnId, IResolvableReferences
+    public class Token : IHandleMessage, IWasBuiltFromAPrototype, IPlaceable, IHaveAnId, IResolvableReferences
     {
         public Token()
         {
@@ -19,6 +19,18 @@ namespace Gamepackage
             set
             {
                 Shape.Position = value;
+            }
+            get
+            {
+                return Shape.Position;
+            }
+        }
+
+        public Rectangle BoundingRectangle
+        {
+            get
+            {
+                return Shape.BoundingRectangle;
             }
         }
 
@@ -43,6 +55,16 @@ namespace Gamepackage
         public TriggerBehaviour TriggerBehaviour;
 
         public string PrototypeUniqueIdentifier { get; set; }
+
+        public Rectangle Rectangle
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+
 
         public void HandleMessage(Message messageToHandle)
         {

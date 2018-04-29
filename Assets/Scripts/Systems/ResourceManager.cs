@@ -9,6 +9,8 @@ namespace Gamepackage
     public class ResourceManager : IResourceManager
     {
         private Dictionary<string, IResource> _prototypesByUniqueIdentifier = new Dictionary<string, IResource>();
+        private Dictionary<Type, List<IResource>> _prototypesByType = new Dictionary<Type, List<IResource>>();
+
         private ILogSystem _logSystem;
 
         public ResourceManager(ILogSystem logSystem)
@@ -34,6 +36,7 @@ namespace Gamepackage
             LoadTokenViewPrototypes(dbConnection);
             LoadTokenPrototypes(dbConnection);
             LoadSpawnTables(dbConnection);
+            LoadSpawnTablesContent(dbConnection);
             LoadLevelPrototypes(dbConnection);
             LoadRoomPrototypes(dbConnection);
         }
@@ -55,6 +58,17 @@ namespace Gamepackage
                 var maximumWidth = reader.GetInt32(5);
                 var maximumHeight = reader.GetInt32(6);
                 var tilesetUniqueIdentifier = reader.GetString(7);
+                string tagsStr = null;
+                if(!reader.IsDBNull(8))
+                {
+                    tagsStr = reader.GetString(8);
+                }
+                string availableOnLevelsStr = null;
+                if(!reader.IsDBNull(9))
+                {
+                    availableOnLevelsStr = reader.GetString(9);
+                }
+                var mandatory = reader.GetBoolean(10);
 
                 var tileset = GetPrototypeByUniqueIdentifier<Tileset>(tilesetUniqueIdentifier);
 
@@ -81,7 +95,26 @@ namespace Gamepackage
                 {
                     UniqueIdentifier = uniqueId,
                     RoomGenerator = roomGenerator,
+                    Mandatory = mandatory
                 };
+
+                if(tagsStr != null)
+                {
+                    var tagsARr = tagsStr.Split(',');
+                    foreach(var tag in tagsARr)
+                    {
+                        prototype.Tags.Add(tag);
+                    }
+                }
+
+                if(availableOnLevelsStr != null)
+                {
+                    var availableOnLevelsArr = availableOnLevelsStr.Split(',');
+                    foreach (var levelStr in availableOnLevelsArr)
+                    {
+                        prototype.AvailableOnLevels.Add(Convert.ToInt32(levelStr));
+                    }
+                }
                 CacheResource(prototype);
             }
             reader.Close();
@@ -489,9 +522,9 @@ namespace Gamepackage
             dbcmd.Dispose();
         }
 
-        private void LoadSpawnTables(IDbConnection dbconn)
+        private void LoadSpawnTablesContent(IDbConnection dbConnection)
         {
-            IDbCommand dbcmd = dbconn.CreateCommand();
+            IDbCommand dbcmd = dbConnection.CreateCommand();
             IDataReader reader;
 
             dbcmd.CommandText = @"SELECT * from spawn_table_entries_view;";
@@ -500,41 +533,72 @@ namespace Gamepackage
             while (reader.Read())
             {
                 var uniqueId = reader.GetString(1);
-                var resolutionStr = reader.GetString(2);
-                var resolution = (TableResolutionStrategy)System.Enum.Parse(typeof(TableResolutionStrategy), resolutionStr);
                 var weight = reader.GetInt32(3);
                 var itemPrototypeUniqueIdentifier = reader.GetString(5);
                 var numberOfRolls = reader.GetInt32(6);
-
                 var itemPrototype = GetPrototypeByUniqueIdentifier<TokenPrototype>(itemPrototypeUniqueIdentifier);
 
-                SpawnTable equipmentTable = null;
-                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueId))
-                {
-                    equipmentTable = new SpawnTable()
-                    {
-                        UniqueIdentifier = uniqueId,
-                        ProbabilityTable = new ProbabilityTable<TokenPrototype>()
-                        {
-                            Resolution = resolution
-                        }
-                    };
-                }
-                else
-                {
-                    equipmentTable = _prototypesByUniqueIdentifier[uniqueId] as SpawnTable;
-                }
-                equipmentTable.ProbabilityTable.Values.Add(new ProbabilityTableTuple<TokenPrototype>()
+                SpawnTable spawnTable = GetPrototypeByUniqueIdentifier<SpawnTable>(uniqueId);
+                spawnTable.ProbabilityTable.Values.Add(new ProbabilityTableTuple<TokenPrototype>()
                 {
                     NumberOfRolls = numberOfRolls,
                     Value = itemPrototype,
                     Weight = weight
                 });
+            }
+            reader.Close();
+            dbcmd.Dispose();
+        }
 
-                if (!_prototypesByUniqueIdentifier.ContainsKey(uniqueId))
+        private void LoadSpawnTables(IDbConnection dbconn)
+        {
+            IDbCommand dbcmd = dbconn.CreateCommand();
+            IDataReader reader;
+
+            dbcmd.CommandText = @"SELECT * from spawn_tables;";
+
+            reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var uniqueId = reader.GetString(1);
+                var resolutionStr = reader.GetString(2);
+                var resolution = (TableResolutionStrategy)System.Enum.Parse(typeof(TableResolutionStrategy), resolutionStr);
+                string availableOnLevelsStr = null;
+
+                if(!reader.IsDBNull(3))
                 {
-                    CacheResource(equipmentTable);
+                    availableOnLevelsStr = reader.GetString(3);
                 }
+
+                var mandatory = reader.GetBoolean(4);
+
+                string roomWithTagConstraint = null;
+
+                if(!reader.IsDBNull(5))
+                {
+                    roomWithTagConstraint = reader.GetString(5);
+                }
+
+                SpawnTable spawnTable = null;
+                spawnTable = new SpawnTable()
+                {
+                    UniqueIdentifier = uniqueId,
+                    ProbabilityTable = new ProbabilityTable<TokenPrototype>()
+                    {
+                        Resolution = resolution
+                    },
+                    Mandatory = mandatory,
+                    ConstraintSpawnToRoomWithTag = roomWithTagConstraint,
+                };
+                if(availableOnLevelsStr != null)
+                {
+                    var availableOnLevelsArr = availableOnLevelsStr.Split(',');
+                    foreach(var str in availableOnLevelsArr)
+                    {
+                        spawnTable.AvailableOnLevels.Add(Convert.ToInt32(str));
+                    }
+                }
+                CacheResource(spawnTable);
             }
             reader.Close();
             dbcmd.Dispose();
@@ -546,8 +610,13 @@ namespace Gamepackage
             {
                 throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
             }
-            _logSystem.Log("Found prototype: " + prototype.UniqueIdentifier);
+            _logSystem.Log("Found " + prototype.GetType().Name.ToString() +" prototype: " + prototype.UniqueIdentifier);
             _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
+            if(!_prototypesByType.ContainsKey(prototype.GetType()))
+            {
+                _prototypesByType[prototype.GetType()] = new List<IResource>();
+            }
+            _prototypesByType[prototype.GetType()].Add(prototype);
         }
 
         private void LoadTokenPrototypes(IDbConnection dbconn)
@@ -619,6 +688,20 @@ namespace Gamepackage
             {
                 throw new CouldNotResolvePrototypeException(string.Format("Found prototype for {0}, but it is not a {1}", uniqueIdentifier, typeof(TPrototype).Name));
             }
+        }
+
+        public List<TPrototype> GetPrototypes<TPrototype>() where TPrototype : IResource
+        {
+            if(!_prototypesByType.ContainsKey(typeof(TPrototype)))
+            {
+                return new List<TPrototype>(0);
+            }
+            var returnList = new List<TPrototype>();
+            foreach(var ires in _prototypesByType[typeof(TPrototype)])
+            {
+                returnList.Add((TPrototype)ires);
+            }
+            return returnList;
         }
     }
 }

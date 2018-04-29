@@ -57,9 +57,12 @@ DROP TABLE IF EXISTS `spawn_tables`;
 CREATE TABLE IF NOT EXISTS `spawn_tables` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`unique_identifier_id`	INTEGER UNIQUE,
-	`resolution`	TEXT NOT NULL
+	`resolution`	TEXT NOT NULL,
+	`available_on_levels`	TEXT,
+	`mandatory`	INTEGER NOT NULL,
+	`room_with_tag_constraint`	TEXT
 );
-INSERT INTO `spawn_tables` (id,unique_identifier_id,resolution) VALUES (1,'TEST_SPAWN','OneOf');
+INSERT INTO `spawn_tables` (id,unique_identifier_id,resolution,available_on_levels,mandatory,room_with_tag_constraint) VALUES (1,'TEST_SPAWN','OneOf','1,2',1,NULL);
 DROP TABLE IF EXISTS `spawn_table_prototype_entries`;
 CREATE TABLE IF NOT EXISTS `spawn_table_prototype_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -78,25 +81,6 @@ CREATE TABLE IF NOT EXISTS `spawn_table_entries` (
 	`number_of_rolls`	INTEGER NOT NULL
 );
 INSERT INTO `spawn_table_entries` (id,spawn_table_id,token_prototype_id,weight,number_of_rolls) VALUES (1,1,1,100,1);
-DROP TABLE IF EXISTS `spawn_content_prototypes`;
-CREATE TABLE IF NOT EXISTS `spawn_content_prototypes` (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
-	`resolution`	TEXT NOT NULL
-);
-INSERT INTO `spawn_content_prototypes` (id,unique_identifier_id,resolution) VALUES (1,'SPAWN_LV1','AnyOf');
-DROP TABLE IF EXISTS `spawn_content_prototype_entries`;
-CREATE TABLE IF NOT EXISTS `spawn_content_prototype_entries` (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`spawn_content_prototype_id`	INTEGER,
-	`spawn_table_id`	INTEGER NOT NULL,
-	`room_tag_constraint`	TEXT,
-	`level_constraint`	TEXT,
-	`weight`	INTEGER NOT NULL,
-	`number_of_rolls`	INTEGER NOT NULL,
-	`placement_strategy`	INTEGER
-);
-INSERT INTO `spawn_content_prototype_entries` (id,spawn_content_prototype_id,spawn_table_id,room_tag_constraint,level_constraint,weight,number_of_rolls,placement_strategy) VALUES (1,1,1,NULL,NULL,100,1,'Random');
 DROP TABLE IF EXISTS `room_prototypes`;
 CREATE TABLE IF NOT EXISTS `room_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -106,33 +90,17 @@ CREATE TABLE IF NOT EXISTS `room_prototypes` (
 	`minimum_width`	INTEGER NOT NULL,
 	`maximum_width`	INTEGER NOT NULL,
 	`maximum_height`	INTEGER NOT NULL,
-	`fill_tileset_id`	INTEGER NOT NULL
+	`fill_tileset_id`	INTEGER NOT NULL,
+	`tags`	TEXT,
+	`available_on_levels`	TEXT,
+	`mandatory`	INTEGER NOT NULL
 );
-INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id) VALUES (1,'SimpleStoneRoom','StandardRoomGenerator',5,5,9,9,1);
+INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory) VALUES (1,'SimpleStoneRoom','StandardRoomGenerator',5,5,9,9,1,NULL,'1,2,3',1);
 DROP TABLE IF EXISTS `room_prototype_entries`;
 CREATE TABLE IF NOT EXISTS `room_prototype_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	``	INTEGER
 );
-DROP TABLE IF EXISTS `room_content_prototypes`;
-CREATE TABLE IF NOT EXISTS `room_content_prototypes` (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
-	`resolution`	TEXT NOT NULL
-);
-INSERT INTO `room_content_prototypes` (id,unique_identifier_id,resolution) VALUES (1,'1ST_ROOM_CONTENT','AnyOf');
-DROP TABLE IF EXISTS `room_content_prototype_entries`;
-CREATE TABLE IF NOT EXISTS `room_content_prototype_entries` (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`room_content_prototype_id`	INTEGER,
-	`room_prototype_id`	INTEGER NOT NULL,
-	`tags`	TEXT,
-	`level_constraint`	TEXT,
-	`weight`	INTEGER NOT NULL,
-	`number_of_rolls`	INTEGER NOT NULL,
-	`placement_strategy`	TEXT
-);
-INSERT INTO `room_content_prototype_entries` (id,room_content_prototype_id,room_prototype_id,tags,level_constraint,weight,number_of_rolls,placement_strategy) VALUES (1,1,1,NULL,NULL,100,1,'Random');
 DROP TABLE IF EXISTS `persona_prototypes`;
 CREATE TABLE IF NOT EXISTS `persona_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -172,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `item_prototypes` (
 	`item_properties_prototype_id`	INTEGER NOT NULL,
 	`item_view_prototype_id`	INTEGER NOT NULL
 );
-INSERT INTO `item_prototypes` (id,unique_identifier_id,item_properties_prototype_id,item_view_prototype_id) VALUES (1,'Shield of Amalure',1,1);
+INSERT INTO `item_prototypes` (id,unique_identifier_id,item_properties_prototype_id,item_view_prototype_id) VALUES (1,'SHIELD_OF_AMALURE_NO_ENCHANTMENTS',1,1);
 DROP TABLE IF EXISTS `item_properties_prototypes`;
 CREATE TABLE IF NOT EXISTS `item_properties_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE
@@ -277,51 +245,8 @@ AND       trigger_behaviour_prototypes.id = token_prototypes.trigger_behaviour_p
 AND       token_view_prototypes.id = token_prototypes.token_view_prototype_id;
 DROP VIEW IF EXISTS `spawn_table_entries_view`;
 CREATE VIEW spawn_table_entries_view AS SELECT st.id as spawn_table_id, st.unique_identifier_id,st.resolution,ste.weight as weight, tp.id as token_prototype_id, tp.unique_identifier_id as token_prototype_unique_identifier, ste.number_of_rolls as number_of_rolls FROM spawn_tables as st LEFT JOIN spawn_table_entries as ste, token_prototypes as tp WHERE ste.spawn_table_id = st.id AND tp.id = ste.token_prototype_id;
-DROP VIEW IF EXISTS `spawn_content_prototype_entries_view`;
-CREATE VIEW spawn_content_prototype_entries_view                 AS 
-SELECT spawn_content_prototypes.id                        AS spawn_content_prototype_id, 
-       spawn_content_prototypes.unique_identifier_id      AS spawn_content_prototype_id, 
-       spawn_content_prototypes.resolution                AS resolution, 
-       spawn_content_prototype_entries.weight             AS weight, 
-       spawn_content_prototype_entries.number_of_rolls    AS number_of_rolls, 
-       spawn_tables.unique_identifier_id                  AS spawn_table_unique_identifier, 
-       spawn_content_prototype_entries.placement_strategy AS placement_strategy, 
-       spawn_content_prototype_entries.level_constraint, 
-       spawn_content_prototype_entries.room_tag_constraint 
-FROM   spawn_content_prototype_entries 
-JOIN   spawn_content_prototypes, 
-       spawn_tables 
-WHERE  spawn_content_prototype_entries.spawn_table_id = spawn_tables.id 
-AND    spawn_content_prototype_entries.spawn_content_prototype_id = spawn_content_prototypes.id;
 DROP VIEW IF EXISTS `room_prototypes_view`;
-CREATE VIEW room_prototypes_view AS 
-SELECT    room_prototypes.id     AS room_prototype_id, 
-          room_prototypes.unique_identifier_id, 
-          generator, 
-          minimum_height, 
-          minimum_width, 
-          maximum_width, 
-          maximum_height, 
-          tile.unique_identifier_id AS tileset_unique_identifier 
-FROM      room_prototypes 
-LEFT JOIN tilesets AS tile 
-where     fill_tileset_id = tile.id;
-DROP VIEW IF EXISTS `room_content_prototype_entries_view`;
-CREATE VIEW room_content_prototype_entries_view                 AS 
-SELECT room_content_prototypes.id                        AS room_content_prototype_id, 
-       room_content_prototypes.unique_identifier_id      AS room_content_prototype_id, 
-       room_content_prototypes.resolution                AS resolution, 
-       room_content_prototype_entries.weight             AS weight, 
-       room_content_prototype_entries.number_of_rolls    AS number_of_rolls, 
-       room_prototypes.unique_identifier_id                  AS room_prototype_unique_identifier, 
-       room_content_prototype_entries.placement_strategy AS placement_strategy, 
-       room_content_prototype_entries.level_constraint as level_constraint,
-       room_content_prototype_entries.tags as tags
-FROM   room_content_prototype_entries 
-JOIN   room_content_prototypes, 
-       room_prototypes 
-WHERE  room_content_prototype_entries.room_prototype_id = room_prototypes.id 
-AND    room_content_prototype_entries.room_content_prototype_id = room_content_prototypes.id;
+CREATE VIEW room_prototypes_view AS SELECT room_prototypes.id AS room_prototype_id, room_prototypes.unique_identifier_id, generator, minimum_height, minimum_width, maximum_width, maximum_height, tile.unique_identifier_id AS tileset_unique_identifier, room_prototypes.tags, room_prototypes.available_on_levels, room_prototypes.mandatory FROM room_prototypes LEFT JOIN tilesets AS tile where fill_tileset_id = tile.id;
 DROP VIEW IF EXISTS `level_prototypes_view`;
 CREATE VIEW level_prototypes_view               AS 
 SELECT    level_prototypes.id                   AS level_prototypes_id, 
