@@ -2,13 +2,21 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public class Dungeon
+    public class Dungeon : IResolvableReferences
     {
         public Dungeon()
         {
             
         }
 
-        public List<Level> Levels = new List<Level>(0);
+        public Level[] Levels;
+
+        public void Resolve(IResourceManager resourceManager)
+        {
+            foreach(var level in Levels)
+            {
+                level.Resolve(resourceManager);
+            }
+        }
     }
 }

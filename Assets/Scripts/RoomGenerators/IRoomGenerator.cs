@@ -7,6 +7,6 @@
         int MaximumHeight { get; set; }
         int MaximumWidth { get; set; }
         Tileset Tileset { get; set; }
-        void Generate();
+        Room Generate(Level level, Rectangle rectangle);
     }
 }

@@ -60,9 +60,10 @@ CREATE TABLE IF NOT EXISTS `spawn_tables` (
 	`resolution`	TEXT NOT NULL,
 	`available_on_levels`	TEXT,
 	`mandatory`	INTEGER NOT NULL,
-	`room_with_tag_constraint`	TEXT
+	`room_with_tag_constraint`	TEXT,
+	`is_unique`	INTEGER NOT NULL
 );
-INSERT INTO `spawn_tables` (id,unique_identifier_id,resolution,available_on_levels,mandatory,room_with_tag_constraint) VALUES (1,'TEST_SPAWN','OneOf','1,2',1,NULL);
+INSERT INTO `spawn_tables` (id,unique_identifier_id,resolution,available_on_levels,mandatory,room_with_tag_constraint,is_unique) VALUES (1,'TEST_SPAWN','OneOf','1,2',1,NULL,1);
 DROP TABLE IF EXISTS `spawn_table_prototype_entries`;
 CREATE TABLE IF NOT EXISTS `spawn_table_prototype_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -93,9 +94,12 @@ CREATE TABLE IF NOT EXISTS `room_prototypes` (
 	`fill_tileset_id`	INTEGER NOT NULL,
 	`tags`	TEXT,
 	`available_on_levels`	TEXT,
-	`mandatory`	INTEGER NOT NULL
+	`mandatory`	INTEGER NOT NULL,
+	`is_unique`	INTEGER NOT NULL
 );
-INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory) VALUES (1,'SimpleStoneRoom','StandardRoomGenerator',5,5,9,9,1,NULL,'1,2,3',1);
+INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (1,'SIMPLE_STONE_ROOM_1','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
+INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (2,'SIMPLE_STONE_ROOM_2','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
+INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (3,'SIMPLE_STONE_ROOM_3','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
 DROP TABLE IF EXISTS `room_prototype_entries`;
 CREATE TABLE IF NOT EXISTS `room_prototype_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -246,7 +250,7 @@ AND       token_view_prototypes.id = token_prototypes.token_view_prototype_id;
 DROP VIEW IF EXISTS `spawn_table_entries_view`;
 CREATE VIEW spawn_table_entries_view AS SELECT st.id as spawn_table_id, st.unique_identifier_id,st.resolution,ste.weight as weight, tp.id as token_prototype_id, tp.unique_identifier_id as token_prototype_unique_identifier, ste.number_of_rolls as number_of_rolls FROM spawn_tables as st LEFT JOIN spawn_table_entries as ste, token_prototypes as tp WHERE ste.spawn_table_id = st.id AND tp.id = ste.token_prototype_id;
 DROP VIEW IF EXISTS `room_prototypes_view`;
-CREATE VIEW room_prototypes_view AS SELECT room_prototypes.id AS room_prototype_id, room_prototypes.unique_identifier_id, generator, minimum_height, minimum_width, maximum_width, maximum_height, tile.unique_identifier_id AS tileset_unique_identifier, room_prototypes.tags, room_prototypes.available_on_levels, room_prototypes.mandatory FROM room_prototypes LEFT JOIN tilesets AS tile where fill_tileset_id = tile.id;
+CREATE VIEW room_prototypes_view AS SELECT room_prototypes.id AS room_prototype_id, room_prototypes.unique_identifier_id, generator, minimum_height, minimum_width, maximum_width, maximum_height, tile.unique_identifier_id AS tileset_unique_identifier, room_prototypes.tags, room_prototypes.available_on_levels, room_prototypes.mandatory, room_prototypes.is_unique FROM room_prototypes LEFT JOIN tilesets AS tile where fill_tileset_id = tile.id;
 DROP VIEW IF EXISTS `level_prototypes_view`;
 CREATE VIEW level_prototypes_view               AS 
 SELECT    level_prototypes.id                   AS level_prototypes_id, 

@@ -9,5 +9,6 @@ namespace Gamepackage
         public bool Mandatory;
         public string ConstraintSpawnToRoomWithTag;
         public List<int> AvailableOnLevels = new List<int>(0);
+        public bool Unique;
     }
 }

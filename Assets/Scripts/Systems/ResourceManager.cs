@@ -69,6 +69,7 @@ namespace Gamepackage
                     availableOnLevelsStr = reader.GetString(9);
                 }
                 var mandatory = reader.GetBoolean(10);
+                var unique = reader.GetBoolean(11);
 
                 var tileset = GetPrototypeByUniqueIdentifier<Tileset>(tilesetUniqueIdentifier);
 
@@ -95,7 +96,8 @@ namespace Gamepackage
                 {
                     UniqueIdentifier = uniqueId,
                     RoomGenerator = roomGenerator,
-                    Mandatory = mandatory
+                    Mandatory = mandatory,
+                    Unique = unique,
                 };
 
                 if(tagsStr != null)
@@ -131,6 +133,7 @@ namespace Gamepackage
             reader = dbcmd.ExecuteReader();
             while (reader.Read())
             {
+                var levelIndex = reader.GetInt32(0);
                 var uniqueId = reader.GetString(1);
                 var defaultSpawnTableUniqueId = reader.GetString(3);
                 var defaultTilesetUniqueId = reader.GetString(5);
@@ -138,6 +141,7 @@ namespace Gamepackage
                 var defaultTileSet = GetPrototypeByUniqueIdentifier<Tileset>(defaultTilesetUniqueId);
                 LevelPrototype prototype = new LevelPrototype()
                 {
+                    LevelIndex = levelIndex,
                     UniqueIdentifier = uniqueId,
                     DefaultSpawnTable = defaultSpawnTable,
                     DefaultTileset = defaultTileSet
@@ -579,6 +583,8 @@ namespace Gamepackage
                     roomWithTagConstraint = reader.GetString(5);
                 }
 
+                var unique = reader.GetBoolean(6);
+
                 SpawnTable spawnTable = null;
                 spawnTable = new SpawnTable()
                 {
@@ -589,6 +595,7 @@ namespace Gamepackage
                     },
                     Mandatory = mandatory,
                     ConstraintSpawnToRoomWithTag = roomWithTagConstraint,
+                    Unique = unique,
                 };
                 if(availableOnLevelsStr != null)
                 {
@@ -610,7 +617,7 @@ namespace Gamepackage
             {
                 throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
             }
-            _logSystem.Log("Found " + prototype.GetType().Name.ToString() +" prototype: " + prototype.UniqueIdentifier);
+            _logSystem.Log("Found " + prototype.GetType().Name.ToString() +": " + prototype.UniqueIdentifier);
             _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
             if(!_prototypesByType.ContainsKey(prototype.GetType()))
             {

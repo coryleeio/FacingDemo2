@@ -20,7 +20,7 @@ namespace Gamepackage
             Game = new Game
             {
                 FurthestLevelReached = 1,
-                CurrentLevelIndex = 0,
+                CurrentLevelIndex = 1,
                 MonstersKilled = 0,
                 Time = 0,
                 IdManager = new IdManager()

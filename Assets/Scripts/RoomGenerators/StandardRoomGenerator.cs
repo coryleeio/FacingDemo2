@@ -8,9 +8,26 @@
         public int MaximumWidth { get; set; }
         public Tileset Tileset { get; set; }
 
-        public void Generate()
+        public Room Generate(Level level, Rectangle rectangle)
         {
-            throw new System.NotImplementedException();
+            for (var x = rectangle.Position.X; x < rectangle.Position.X + rectangle.Width + 1; x++)
+            {
+                for (var y = rectangle.Position.Y; y < rectangle.Position.Y + rectangle.Height + 1; y++)
+                {
+                    if (x == rectangle.Position.X || y == rectangle.Position.Y || x == rectangle.Position.X + rectangle.Width || y == rectangle.Position.Y + rectangle.Height)
+                    {
+                        level.TilesetGrid[x, y].TileType = TileType.Wall;
+                    }
+                    else
+                    {
+                        level.TilesetGrid[x, y].TileType = TileType.Floor;
+                    }
+                }
+            }
+            return new Room()
+            {
+                BoundingBox = rectangle
+            };
         }
     }
 }

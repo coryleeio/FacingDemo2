@@ -27,6 +27,19 @@ namespace Gamepackage
             return Contains(this, p);
         }
 
+        public bool Contains(Rectangle b)
+        {
+            return Contains(this, b);
+        }
+
+        public static bool Contains(Rectangle a, Rectangle b)
+        {
+            return ((b.Position.X + b.Width) < (a.Position.X + a.Width)
+                    && (b.Position.X) > (a.Position.X)
+                    && (b.Position.Y) > (a.Position.Y)
+                    && (b.Position.Y + b.Height) < (a.Position.Y + a.Height));
+        }
+
         public static bool Contains(Rectangle rect, Point p)
         {
             return p.X >= rect.Position.X && p.X < rect.Position.X + rect.Width &&
