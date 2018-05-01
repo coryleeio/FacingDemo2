@@ -100,6 +100,9 @@ CREATE TABLE IF NOT EXISTS `room_prototypes` (
 INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (1,'SIMPLE_STONE_ROOM_1','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
 INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (2,'SIMPLE_STONE_ROOM_2','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
 INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (3,'SIMPLE_STONE_ROOM_3','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
+INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (4,'SIMPLE_STONE_ROOM_4','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
+INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (5,'SIMPLE_STONE_ROOM_5','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
+INSERT INTO `room_prototypes` (id,unique_identifier_id,generator,minimum_height,minimum_width,maximum_width,maximum_height,fill_tileset_id,tags,available_on_levels,mandatory,is_unique) VALUES (6,'SIMPLE_STONE_ROOM_6','StandardRoomGenerator',4,4,9,9,1,NULL,'1,2,3',1,1);
 DROP TABLE IF EXISTS `room_prototype_entries`;
 CREATE TABLE IF NOT EXISTS `room_prototype_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,

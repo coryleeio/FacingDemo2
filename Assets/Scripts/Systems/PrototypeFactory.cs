@@ -225,8 +225,8 @@ namespace Gamepackage
                             }
                             else if (
                                  northEastPointTileType == TileType.Wall &&
-                                 southEastPointTileType == TileType.Wall &&
-                                 (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
+                                 (southEastPointTileType == TileType.Floor || southEastPointTileType == TileType.Empty) &&
+                                 southWestPointTileType == TileType.Wall &&
                                  northWestPointTileType == TileType.Wall
                             )
                             {
