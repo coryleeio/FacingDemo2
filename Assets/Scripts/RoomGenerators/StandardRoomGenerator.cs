@@ -26,7 +26,12 @@
             }
             return new Room()
             {
-                BoundingBox = rectangle
+                BoundingBox = new Rectangle()
+                {
+                    Height = rectangle.Height,
+                    Width = rectangle.Width,
+                    Position = new Point(rectangle.Position.X, rectangle.Position.Y)
+                }
             };
         }
     }

@@ -13,6 +13,7 @@ namespace Gamepackage
         private ITokenSystem _tokenSystem;
         private ISpriteSortingSystem _spriteSortingSystem;
         private Material DefaultSpriteMaterial;
+        private Sprite MissingSprite;
 
         public PrototypeFactory(IResourceManager resourceManager, TinyIoCContainer container, ITokenSystem tokenSystem, ISpriteSortingSystem spriteSortingSystem)
         {
@@ -23,6 +24,10 @@ namespace Gamepackage
             if(DefaultSpriteMaterial == null)
             {
                 DefaultSpriteMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
+            }
+            if(MissingSprite == null)
+            {
+                MissingSprite = Resources.Load<Sprite>("Missing");
             }
         }
 
@@ -310,6 +315,10 @@ namespace Gamepackage
                              )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.SouthCornerSprite, point);
+                            }
+                            else
+                            {
+                                BuildTileSpriteRenderer(folder, MissingSprite, point);
                             }
                         }
                     }
