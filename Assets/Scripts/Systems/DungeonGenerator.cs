@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using UnityEngine.Assertions;
 
@@ -10,12 +11,14 @@ namespace Gamepackage
         IGameStateSystem _gameStateSystem;
         IPrototypeFactory _prototypeFactory;
         IResourceManager _resourceManager;
+        ILogSystem _logSystem;
 
-        public DungeonGenerator(IGameStateSystem gameStateSystem, IPrototypeFactory prototypeFactory, IResourceManager resourceManager)
+        public DungeonGenerator(IGameStateSystem gameStateSystem, IPrototypeFactory prototypeFactory, IResourceManager resourceManager, ILogSystem logSystem)
         {
             _gameStateSystem = gameStateSystem;
             _prototypeFactory = prototypeFactory;
             _resourceManager = resourceManager;
+            _logSystem = logSystem;
         }
 
         public void GenerateDungeon()
@@ -104,6 +107,7 @@ namespace Gamepackage
                     roomPrototypesToSpawn.AddRange(MathUtil.ChooseNRandomElements(numberOfRoomsToSpawn, roomPrototypesOnLevel));
                 }
 
+                var roomConnections = new List<KeyValuePair<Room, Room>>();
                 foreach (var roomPrototypeToSpawn in roomPrototypesToSpawn)
                 {
                     Room previousRoom;
@@ -113,8 +117,14 @@ namespace Gamepackage
                     level.Rooms.Add(newRoom);
                     if (previousRoom != null)
                     {
-                        ConnectTwoRooms(level, previousRoom, newRoom);
+                        roomConnections.Add(new KeyValuePair<Room, Room>(previousRoom, newRoom));
                     }
+                }
+
+                // Do this after creating rooms so that the walls dont cause pathing issues
+                foreach(var pair in roomConnections)
+                {
+                    ConnectTwoRooms(level, pair.Key, pair.Value);
                 }
 
                 var numberOfSpawnTablesToSpawn = 5;
@@ -208,9 +218,21 @@ namespace Gamepackage
             var pathBIntersectsOtherRooms = level.Rooms.FindAll((roomInSearch) => PathIntersectsRoom(roomInSearch, pathB) && roomInSearch != nextRoom && roomInSearch != previousRoom).Count > 0;
 
             var path = pathBIntersectsOtherRooms && UnityEngine.Random.Range(0, 1) == 0 ? pathA : pathB;
-            foreach(var pathPoint in path)
+            foreach (var pathPoint in path)
             {
                 Carve(level, pathPoint);
+            }
+        }
+
+        private void Carve(Level level, Point centerPoint)
+        {
+            level.TilesetGrid[centerPoint.X, centerPoint.Y].TileType = TileType.Floor;
+            foreach (var point in MathUtil.SurroundingPoints(centerPoint))
+            {
+                if (level.TilesetGrid[point.X, point.Y].TileType == TileType.Empty)
+                {
+                    level.TilesetGrid[point.X, point.Y].TileType = TileType.Wall;
+                }
             }
         }
 
@@ -228,6 +250,7 @@ namespace Gamepackage
 
         private List<Point> ConnectPointsByX(Level level, int x1, int x2, int currentY)
         {
+
             var path = new List<Point>();
             for (var x = Math.Min(x1,x2); x < Math.Max(x1,x2) + 1; x++)
             {
@@ -244,18 +267,6 @@ namespace Gamepackage
                 path.Add(new Point(currentX, y));
             }
             return path;
-        }
-
-        private void Carve(Level level, Point centerPoint)
-        {
-            level.TilesetGrid[centerPoint.X, centerPoint.Y].TileType = TileType.Floor;
-            foreach(var point in MathUtil.SurroundingPoints(centerPoint))
-            {
-                if(level.TilesetGrid[point.X, point.Y].TileType == TileType.Empty)
-                {
-                    level.TilesetGrid[point.X, point.Y].TileType = TileType.Wall;
-                }
-            }
         }
 
         private static List<Point> FloorTilesInRect(Level level, Rectangle rect)
