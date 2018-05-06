@@ -136,32 +136,51 @@ namespace Gamepackage
         private void ConnectTwoPoints(Level level, Room previousRoom, Room nextRoom, Point previousTile, Point nextTile)
         {
             UnityEngine.Debug.Log("Connecting" + previousTile + " " + nextTile);
-            if(UnityEngine.Random.Range(0, 1) == 0)
+
+            var pathA = ConnectPointsByX(level, previousTile.X, nextTile.X, previousTile.Y);
+            pathA.AddRange(ConnectPointsByY(level, previousTile.Y, nextTile.Y, nextTile.X));
+
+            var pathB = ConnectPointsByY(level, previousTile.Y, nextTile.Y, previousTile.X);
+            pathB.AddRange(ConnectPointsByX(level, previousTile.X, nextTile.X, nextTile.Y));
+            var pathBIntersectsOtherRooms = level.Rooms.FindAll((roomInSearch) => PathIntersectsRoom(roomInSearch, pathB) && roomInSearch != nextRoom && roomInSearch != previousRoom).Count > 0;
+
+            var path = pathBIntersectsOtherRooms && UnityEngine.Random.Range(0, 1) == 0 ? pathA : pathB;
+            foreach(var pathPoint in path)
             {
-                ConnectPointsByX(level, previousTile.X, nextTile.X, previousTile.Y);
-                ConnectPointsByY(level, previousTile.Y, nextTile.Y, nextTile.X);
-            }
-            else
-            {
-                ConnectPointsByY(level, previousTile.Y, nextTile.Y, previousTile.X);
-                ConnectPointsByX(level, previousTile.X, nextTile.X, nextTile.Y);
+                Carve(level, pathPoint);
             }
         }
 
-        private void ConnectPointsByX(Level level, int x1, int x2, int currentY)
+        private bool PathIntersectsRoom(Room room, List<Point> path)
         {
+            foreach(var point in path)
+            {
+                if(room.BoundingBox.Contains(point))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private List<Point> ConnectPointsByX(Level level, int x1, int x2, int currentY)
+        {
+            var path = new List<Point>();
             for (var x = Math.Min(x1,x2); x < Math.Max(x1,x2) + 1; x++)
             {
-                Carve(level, new Point(x, currentY));
+                path.Add(new Point(x, currentY));
             }
+            return path;
         }
 
-        private void ConnectPointsByY(Level level, int y1, int y2, int currentX)
+        private List<Point> ConnectPointsByY(Level level, int y1, int y2, int currentX)
         {
+            var path = new List<Point>();
             for (var y = Math.Min(y1, y2); y < Math.Max(y1, y2) + 1; y++)
             {
-                Carve(level, new Point(currentX, y));
+                path.Add(new Point(currentX, y));
             }
+            return path;
         }
 
         private void Carve(Level level, Point centerPoint)
