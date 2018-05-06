@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
@@ -104,62 +106,134 @@ namespace Gamepackage
 
                 foreach (var roomPrototypeToSpawn in roomPrototypesToSpawn)
                 {
-                    var width = UnityEngine.Random.Range(roomPrototypeToSpawn.RoomGenerator.MinimumWidth, roomPrototypeToSpawn.RoomGenerator.MaximumWidth);
-                    var height = UnityEngine.Random.Range(roomPrototypeToSpawn.RoomGenerator.MinimumHeight, roomPrototypeToSpawn.RoomGenerator.MaximumHeight);
-                    var guage = new Rectangle()
+                    Room previousRoom;
+                    Rectangle rect = FindNextRoomRect(level, roomPrototypeToSpawn, out previousRoom);
+                    var newRoom = roomPrototypeToSpawn.RoomGenerator.Generate(level, rect);
+                    level.Rooms.Add(newRoom);
+                    if(previousRoom != null)
                     {
-                        Position = new Point(0, 0),
-                        Width = width,
-                        Height = height,
-                    };
-
-                    Rectangle roomToSurround = null;
-                    if (level.Rooms.Count > 0)
-                    {
-                        roomToSurround = MathUtil.ChooseRandomElement<Room>(level.Rooms).BoundingBox;
+                        ConnectTwoRooms(level, previousRoom, newRoom);
                     }
-                    else
-                    {
-                        roomToSurround = new Rectangle()
-                        {
-                            Position = new Point((level.Domain.Width / 4) + UnityEngine.Random.Range(0, 3), (level.Domain.Height / 4) + UnityEngine.Random.Range(0, 3)),
-                            Height = UnityEngine.Random.Range(2, 3),
-                            Width = UnityEngine.Random.Range(2, 3)
-                        };
-                    }
-                    var rects = FindValidSurroundingRectangles(roomToSurround, guage, level.Domain);
-                    rects = rects.FindAll((possibleRect) =>
-                    {
-                        return level.Rooms.FindAll((room) => room.BoundingBox.Adjacent(possibleRect) || room.BoundingBox.Intersects(possibleRect)).Count == 0;
-                    });
-
-                    level.Rooms.Add(roomPrototypeToSpawn.RoomGenerator.Generate(level, MathUtil.ChooseRandomElement<Rectangle>(rects)));
                 }
             }
+        }
 
-
-
-            /*
-            var placementLevel = levels[0];
-            for (var x = 0; x < 5; x++)
+        private void ConnectTwoRooms(Level level, Room previousRoom, Room newRoom)
+        {
+            var previousTiles = ConnectableTilesForRoom(level, previousRoom);
+            var currentTiles = ConnectableTilesForRoom(level, newRoom);
+            if(previousTiles.Count == 0 || currentTiles.Count == 0)
             {
-                for (var y = 0; y < 5; y++)
+                throw new SystemException("Rooms contain no walkable tiles?");
+            }
+            
+            var previousTile = MathUtil.ChooseRandomElement<Point>(previousTiles);
+            var currentTile = MathUtil.ChooseRandomElement<Point>(currentTiles);
+
+            ConnectTwoPoints(level, previousRoom, newRoom, previousTile, currentTile);
+        }
+
+        private void ConnectTwoPoints(Level level, Room previousRoom, Room nextRoom, Point previousTile, Point nextTile)
+        {
+            UnityEngine.Debug.Log("Connecting" + previousTile + " " + nextTile);
+            if(UnityEngine.Random.Range(0, 1) == 0)
+            {
+                ConnectPointsByX(level, previousTile.X, nextTile.X, previousTile.Y);
+                ConnectPointsByY(level, previousTile.Y, nextTile.Y, nextTile.X);
+            }
+            else
+            {
+                ConnectPointsByY(level, previousTile.Y, nextTile.Y, previousTile.X);
+                ConnectPointsByX(level, previousTile.X, nextTile.X, nextTile.Y);
+            }
+        }
+
+        private void ConnectPointsByX(Level level, int x1, int x2, int currentY)
+        {
+            for (var x = Math.Min(x1,x2); x < Math.Max(x1,x2) + 1; x++)
+            {
+                Carve(level, new Point(x, currentY));
+            }
+        }
+
+        private void ConnectPointsByY(Level level, int y1, int y2, int currentX)
+        {
+            for (var y = Math.Min(y1, y2); y < Math.Max(y1, y2) + 1; y++)
+            {
+                Carve(level, new Point(currentX, y));
+            }
+        }
+
+        private void Carve(Level level, Point centerPoint)
+        {
+            level.TilesetGrid[centerPoint.X, centerPoint.Y].TileType = TileType.Floor;
+            foreach(var point in MathUtil.SurroundingPoints(centerPoint))
+            {
+                if(level.TilesetGrid[point.X, point.Y].TileType == TileType.Empty)
                 {
-                    if (x == 0 || y == 0 || x == 4 || y == 4)
+                    level.TilesetGrid[point.X, point.Y].TileType = TileType.Wall;
+                }
+            }
+        }
+
+        private static List<Point> ConnectableTilesForRoom(Level level, Room room)
+        {
+            var walkableTiles = new List<Point>();
+            for (var x = room.BoundingBox.Position.X; x < room.BoundingBox.Position.X + room.BoundingBox.Width; x++)
+            {
+                for (var y = room.BoundingBox.Position.Y; y < room.BoundingBox.Position.Y + room.BoundingBox.Height; y++)
+                {
+                    if (level.TilesetGrid[x, y].TileType == TileType.Floor)
                     {
-                        placementLevel.TilesetGrid[x, y].TileType = TileType.Wall;
-                    }
-                    else
-                    {
-                        placementLevel.TilesetGrid[x, y].TileType = TileType.Floor;
+                        walkableTiles.Add(new Point(x, y));
                     }
                 }
             }
+            return walkableTiles;
+        }
 
-            var token = _prototypeFactory.BuildToken("Poncy");
-            token.Position = new Point(0, 0);
-            placementLevel.Tokens.Add(token);
-            */
+        private static Rectangle FindNextRoomRect(Level level, RoomPrototype roomPrototypeToSpawn, out Room previousRoom)
+        {
+            var width = UnityEngine.Random.Range(roomPrototypeToSpawn.RoomGenerator.MinimumWidth, roomPrototypeToSpawn.RoomGenerator.MaximumWidth);
+            var height = UnityEngine.Random.Range(roomPrototypeToSpawn.RoomGenerator.MinimumHeight, roomPrototypeToSpawn.RoomGenerator.MaximumHeight);
+
+            if (level.Rooms.Count == 0)
+            {
+                previousRoom = null;
+                return new Rectangle()
+                {
+                    Position = new Point((level.Domain.Width / 4) + UnityEngine.Random.Range(0, 3), (level.Domain.Height / 4) + UnityEngine.Random.Range(0, 3)),
+                    Height = height,
+                    Width = width
+                };
+            }
+
+            var guage = new Rectangle()
+            {
+                Position = new Point(0, 0),
+                Width = width,
+                Height = height,
+            };
+
+            Dictionary<Room, List<Rectangle>> rectsForRooms = new Dictionary<Room, List<Rectangle>>();
+            List<Room> validRooms = new List<Room>();
+            foreach (var room in level.Rooms)
+            {
+                var rects = FindValidSurroundingRectangles(room.BoundingBox, guage, level.Domain);
+                rects = rects.FindAll((possibleRect) =>
+                {
+                    return level.Rooms.FindAll((roomInLevel) => roomInLevel.BoundingBox.Adjacent(possibleRect) || roomInLevel.BoundingBox.Intersects(possibleRect)).Count == 0;
+                });
+                if(rects.Count > 0)
+                {
+                    Assert.IsFalse(rectsForRooms.ContainsKey(room));
+                    validRooms.Add(room);
+                    rectsForRooms.Add(room, new List<Rectangle>());
+                    rectsForRooms[room].AddRange(rects);
+                }
+            }
+            previousRoom = MathUtil.ChooseRandomElement<Room>(validRooms);
+            return MathUtil.ChooseRandomElement<Rectangle>(rectsForRooms[previousRoom]);
         }
 
         public static List<Rectangle> FindValidSurroundingRectangles(Rectangle source, Rectangle guage, Rectangle boundingBox)

@@ -99,6 +99,12 @@ namespace Gamepackage
                 }
                 _visibilitySystem.UpdateVisibility(newVis);
             }
+
+            var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
+            if(GUI.Button(new Rect(150, 10, 100, 50), mouseMapPosition.ToString()))
+            {
+
+            }
         }
     }
 }

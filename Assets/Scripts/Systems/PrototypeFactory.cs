@@ -21,11 +21,11 @@ namespace Gamepackage
             _container = container;
             _tokenSystem = tokenSystem;
             _spriteSortingSystem = spriteSortingSystem;
-            if(DefaultSpriteMaterial == null)
+            if (DefaultSpriteMaterial == null)
             {
                 DefaultSpriteMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             }
-            if(MissingSprite == null)
+            if (MissingSprite == null)
             {
                 MissingSprite = Resources.Load<Sprite>("Missing");
             }
@@ -264,7 +264,7 @@ namespace Gamepackage
                             else if (
                                  northEastPointTileType == TileType.Wall &&
                                  (southEastPointTileType == TileType.Floor || southEastPointTileType == TileType.Empty) &&
-                                 southWestPointTileType == TileType.Wall &&
+                                 (southWestPointTileType == TileType.Wall || southWestPointTileType == TileType.Floor) &&
                                  (northWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Empty)
                             )
                             {
@@ -273,7 +273,7 @@ namespace Gamepackage
 
                             else if (
                                  (northEastPointTileType == TileType.Floor || northEastPointTileType == TileType.Empty) &&
-                                 southEastPointTileType == TileType.Wall &&
+                                 (southEastPointTileType == TileType.Wall || southEastPointTileType  == TileType.Floor) &&
                                  (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
                                  northWestPointTileType == TileType.Wall
                             )
@@ -283,24 +283,24 @@ namespace Gamepackage
                             else if (
                                  northEastPointTileType == TileType.Wall &&
                                  southEastPointTileType == TileType.Wall &&
-                                 southWestPointTileType == TileType.Empty &&
-                                 northWestPointTileType == TileType.Empty
+                                 (southWestPointTileType == TileType.Empty || southWestPointTileType == TileType.Floor) &&
+                                 (northWestPointTileType == TileType.Empty || northWestPointTileType == TileType.Floor)
                              )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.WestCornerSprite, point);
                             }
                             else if (
-                                 northEastPointTileType == TileType.Empty &&
+                                 (northEastPointTileType == TileType.Empty || northEastPointTileType == TileType.Floor) &&
                                  southEastPointTileType == TileType.Wall &&
                                  southWestPointTileType == TileType.Wall &&
-                                 northWestPointTileType == TileType.Empty
+                                 (northWestPointTileType == TileType.Empty || northWestPointTileType == TileType.Floor)
                              )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.NorthCornerSprite, point);
                             }
                             else if (
-                                 northEastPointTileType == TileType.Empty &&
-                                 southEastPointTileType == TileType.Empty &&
+                                 (northEastPointTileType == TileType.Empty || northEastPointTileType == TileType.Floor) &&
+                                 (southEastPointTileType == TileType.Empty || southEastPointTileType == TileType.Floor) &&
                                  southWestPointTileType == TileType.Wall &&
                                  northWestPointTileType == TileType.Wall
                              )
@@ -309,8 +309,8 @@ namespace Gamepackage
                             }
                             else if (
                                  northEastPointTileType == TileType.Wall &&
-                                 southEastPointTileType == TileType.Empty &&
-                                 southWestPointTileType == TileType.Empty &&
+                                 (southEastPointTileType == TileType.Empty || southEastPointTileType== TileType.Floor) &&
+                                 (southWestPointTileType == TileType.Empty || southWestPointTileType == TileType.Floor) &&
                                  northWestPointTileType == TileType.Wall
                              )
                             {

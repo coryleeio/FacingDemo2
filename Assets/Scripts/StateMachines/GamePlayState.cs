@@ -38,11 +38,12 @@ namespace Gamepackage
                     new OverlayConfig
                     {
                         Name = "MouseHover",
-                        Shape = new Shape(ShapeType.HollowPlus, 5, 5),
+                        Shape = new Shape(ShapeType.Rect, 1, 1),
                         DefaultColor = new Color(0, 213, 255),
-                        OverlayBehaviour = OverlayBehaviour.StationaryNoRotation,
+                        OverlayBehaviour = OverlayBehaviour.PositionFollowsCursor,
                         RelativeSortOrder = 0,
                     },
+                    /*
                     new OverlayConfig
                     {
                         Name = "MouseHover",
@@ -52,10 +53,10 @@ namespace Gamepackage
                         OverlayConstraint = OverlayConstraints.ConstraintedToShapeOfPreviousConfig,
                         RelativeSortOrder = 2,
                         SpriteType = OverlaySpriteType.Circle
-                    }
+                    }*/
                 }
             };
-            //_overlaySystem.Activate(newOverlay);
+            _overlaySystem.Activate(newOverlay);
         }
 
         public void Exit(Root owner)
