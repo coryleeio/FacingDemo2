@@ -305,9 +305,9 @@ namespace Gamepackage
             Surrounding,
         }
 
-        public static ICollection<Point> FloodFill(Point p, int radius, ref List<Point> points, FloodFillType floodFillType, Predicate<Point> predicate = null)
+        public static List<Point> FloodFill(Point p, int radius, ref List<Point> points, FloodFillType floodFillType, Predicate<Point> predicate = null)
         {
-            if (predicate(p))
+            if (predicate == null || predicate(p))
             {
                 if (!points.Contains(p))
                 {
@@ -335,7 +335,7 @@ namespace Gamepackage
 
                 foreach (var relevantTile in relevantTiles)
                 {
-                    if (predicate(relevantTile))
+                    if (predicate == null || predicate(relevantTile))
                     {
                         FloodFill(relevantTile, radius - 1, ref points, floodFillType, predicate);
                     }

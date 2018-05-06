@@ -109,10 +109,75 @@ namespace Gamepackage
                     Room previousRoom;
                     Rectangle rect = FindNextRoomRect(level, roomPrototypeToSpawn, out previousRoom);
                     var newRoom = roomPrototypeToSpawn.RoomGenerator.Generate(level, rect);
+                    newRoom.Tags.AddRange(roomPrototypeToSpawn.Tags);
                     level.Rooms.Add(newRoom);
-                    if(previousRoom != null)
+                    if (previousRoom != null)
                     {
                         ConnectTwoRooms(level, previousRoom, newRoom);
+                    }
+                }
+
+                var numberOfSpawnTablesToSpawn = 5;
+                var spawnTablesOnLevel = spawnTablesByLevel[level.LevelIndex];
+                var spawnTablesToSpawn = new List<SpawnTable>();
+
+                spawnTablesToSpawn.AddRange(spawnTablesOnLevel.FindAll((x) => x.Mandatory));
+                numberOfSpawnTablesToSpawn = numberOfSpawnTablesToSpawn - spawnTablesToSpawn.Count;
+                spawnTablesToSpawn.ForEach((spawnTableBeingSpawned) =>
+                {
+                    // If it is unique, dont allow us to choose it for spawning.
+                    if (spawnTableBeingSpawned.Unique)
+                    {
+                        spawnTablesOnLevel.Remove(spawnTableBeingSpawned);
+                    }
+                });
+
+                // If we have stuff we can spawn, and we need some more stuff to spawn
+                if (numberOfSpawnTablesToSpawn > 0 && spawnTablesOnLevel.Count > 0)
+                {
+                    spawnTablesToSpawn.AddRange(MathUtil.ChooseNRandomElements(numberOfSpawnTablesToSpawn, spawnTablesOnLevel));
+                }
+
+                foreach (var spawnTableToSpawn in spawnTablesToSpawn)
+                {
+                    List<TokenPrototype> thingsToSpawn = spawnTableToSpawn.ProbabilityTable.Next();
+
+                    Point floodFillStartPoint;
+                    if(spawnTableToSpawn.ConstraintSpawnToRoomWithTag != null)
+                    {
+                        var roomForSpawn = level.Rooms.Find((room) => room.Tags.Contains(spawnTableToSpawn.ConstraintSpawnToRoomWithTag));
+                        var floorTilesInRoom = FloorTilesInRect(level, roomForSpawn.BoundingBox);
+                        floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
+                    }
+                    else
+                    {
+                        var floorTilesInRoom = FloorTilesInRect(level, level.Domain);
+                        floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
+                    }
+
+                    var pointsInDomain = MathUtil.PointsInRect(level.Domain);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        List<Point> spawnPoints = new List<Point>();
+                        MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding);
+                        
+                        foreach(var alreadyExistingToken in level.Tokens)
+                        {
+                            spawnPoints.RemoveAll((poi) => alreadyExistingToken.Shape.BoundingRectangle.Contains(poi));
+                        }
+
+                        if (spawnPoints.Count >= thingsToSpawn.Count)
+                        {
+                            foreach(var thingToSpawn in thingsToSpawn)
+                            {
+                                var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
+                                spawnPoints.Remove(spawnPoint);
+                                var thingSpawned= _prototypeFactory.BuildToken(thingToSpawn);
+                                thingSpawned.Position = spawnPoint;
+                                level.Tokens.Add(thingSpawned);
+                            }
+                            break;
+                        }
                     }
                 }
             }
@@ -120,8 +185,8 @@ namespace Gamepackage
 
         private void ConnectTwoRooms(Level level, Room previousRoom, Room newRoom)
         {
-            var previousTiles = ConnectableTilesForRoom(level, previousRoom);
-            var currentTiles = ConnectableTilesForRoom(level, newRoom);
+            var previousTiles = FloorTilesInRect(level, previousRoom.BoundingBox);
+            var currentTiles = FloorTilesInRect(level, newRoom.BoundingBox);
             if(previousTiles.Count == 0 || currentTiles.Count == 0)
             {
                 throw new SystemException("Rooms contain no walkable tiles?");
@@ -135,8 +200,6 @@ namespace Gamepackage
 
         private void ConnectTwoPoints(Level level, Room previousRoom, Room nextRoom, Point previousTile, Point nextTile)
         {
-            UnityEngine.Debug.Log("Connecting" + previousTile + " " + nextTile);
-
             var pathA = ConnectPointsByX(level, previousTile.X, nextTile.X, previousTile.Y);
             pathA.AddRange(ConnectPointsByY(level, previousTile.Y, nextTile.Y, nextTile.X));
 
@@ -195,12 +258,12 @@ namespace Gamepackage
             }
         }
 
-        private static List<Point> ConnectableTilesForRoom(Level level, Room room)
+        private static List<Point> FloorTilesInRect(Level level, Rectangle rect)
         {
             var walkableTiles = new List<Point>();
-            for (var x = room.BoundingBox.Position.X; x < room.BoundingBox.Position.X + room.BoundingBox.Width; x++)
+            for (var x = rect.Position.X; x < rect.Position.X + rect.Width; x++)
             {
-                for (var y = room.BoundingBox.Position.Y; y < room.BoundingBox.Position.Y + room.BoundingBox.Height; y++)
+                for (var y = rect.Position.Y; y < rect.Position.Y + rect.Height; y++)
                 {
                     if (level.TilesetGrid[x, y].TileType == TileType.Floor)
                     {
