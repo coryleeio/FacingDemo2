@@ -15,7 +15,10 @@ namespace Gamepackage
         {
             foreach(var level in Levels)
             {
-                level.Resolve(resourceManager);
+                if(level != null)
+                {
+                    level.Resolve(resourceManager);
+                }
             }
         }
     }

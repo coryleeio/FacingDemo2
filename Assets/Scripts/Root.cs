@@ -19,7 +19,6 @@ namespace Gamepackage
             DontDestroyOnLoad(this);
             var container = new TinyIoCContainer();
             container.Register<Root>(this);
-
             container.Register<GamePlayState, GamePlayState>().AsSingleton();
             container.Register<MainMenuState, MainMenuState>().AsSingleton();
             container.Register<LoadingResourcesState, LoadingResourcesState>().AsSingleton();
@@ -44,8 +43,9 @@ namespace Gamepackage
             container.Register<IOverlaySystem, OverlaySystem>().AsSingleton();
             container.Register<IPathFinder, PathFinder>().AsSingleton();
             _pathFinder = container.Resolve<IPathFinder>();
-            _gameStateSystem = container.Resolve<IGameStateSystem>();
             _tokenSystem = container.Resolve<ITokenSystem>();
+            _gameStateSystem = container.Resolve<IGameStateSystem>();
+            container.BuildUp(_gameStateSystem);
             _visibilitySystem = container.Resolve<IVisibilitySystem>();
             StateMachine = container.Resolve<GameStateMachine>();
         }
@@ -62,17 +62,19 @@ namespace Gamepackage
 
         void OnGUI()
         {
-            if (GUI.Button(new Rect(10, 10, 100, 50), "Start game"))
+            if (GUI.Button(new Rect(10, 10, 100, 50), "Start New game"))
             {
+                _gameStateSystem.Clear();
                 StateMachine.ChangeState(StateMachine.LoadingResourcesState);
             }
 
             if (GUI.Button(new Rect(10, 75, 100, 50), "Exit game"))
             {
+                _gameStateSystem.Clear();
                 StateMachine.ChangeState(StateMachine.MainMenuState);
             }
 
-            if (GUI.Button(new Rect(10, 140, 100, 50), "Next Level"))
+            if (GUI.Button(new Rect(10, 140, 100, 50), "Reload current"))
             {
                 StateMachine.ChangeState(StateMachine.GamePlayState);
             }
@@ -85,6 +87,7 @@ namespace Gamepackage
             if (GUI.Button(new Rect(10, 290, 100, 50), "Load"))
             {
                 _gameStateSystem.LoadGame();
+                StateMachine.ChangeState(StateMachine.GamePlayState);
             }
 
             if (GUI.Button(new Rect(10, 350, 100, 50), "Reveal"))

@@ -55,7 +55,6 @@ namespace Gamepackage
             var token = new Token();
             token.PrototypeUniqueIdentifier = prototype.UniqueIdentifier;
             token.Shape = new Shape(prototype.ShapeType, prototype.Width, prototype.Height);
-
             token.Behaviour = BuildBehaviour(prototype.BehaviourPrototype);
             token.Equipment = BuildEquipment(prototype.EquipmentPrototype);
             token.Inventory = BuildInventory(prototype.InventoryPrototype);
@@ -63,14 +62,6 @@ namespace Gamepackage
             token.Persona = BuildPersona(prototype.PersonaPrototype);
             token.TriggerBehaviour = BuildTriggerBehaviour(prototype.TriggerBehaviourPrototype);
             token.TokenView = BuildTokenView(prototype.TokenViewPrototype);
-
-            _container.BuildUp(token.Behaviour);
-            _container.BuildUp(token.Equipment);
-            _container.BuildUp(token.Inventory);
-            _container.BuildUp(token.Motor);
-            _container.BuildUp(token.Persona);
-            _container.BuildUp(token.TriggerBehaviour);
-            _container.BuildUp(token.TokenView);
 
             token.Behaviour.PrototypeReference = new PrototypeReference<BehaviourPrototype>()
             {
@@ -102,7 +93,7 @@ namespace Gamepackage
             };
 
             token.Resolve(_resourceManager);
-            _tokenSystem.Register(token);
+            token.PrepareForPlay(_container, _tokenSystem);
             return token;
         }
 

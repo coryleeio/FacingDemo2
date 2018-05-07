@@ -166,14 +166,14 @@ namespace Gamepackage
                     }
 
                     var pointsInDomain = MathUtil.PointsInRect(level.Domain);
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 1; i < 5; i = i + 2)
                     {
                         List<Point> spawnPoints = new List<Point>();
                         MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding);
                         
                         foreach(var alreadyExistingToken in level.Tokens)
                         {
-                            spawnPoints.RemoveAll((poi) => alreadyExistingToken.Shape.BoundingRectangle.Contains(poi));
+                            spawnPoints.RemoveAll((poi) => alreadyExistingToken.Position == poi);
                         }
 
                         if (spawnPoints.Count >= thingsToSpawn.Count)

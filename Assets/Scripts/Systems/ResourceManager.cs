@@ -12,6 +12,7 @@ namespace Gamepackage
         private Dictionary<Type, List<IResource>> _prototypesByType = new Dictionary<Type, List<IResource>>();
 
         private ILogSystem _logSystem;
+        private bool hasInit = false;
 
         public ResourceManager(ILogSystem logSystem)
         {
@@ -20,25 +21,29 @@ namespace Gamepackage
 
         public void LoadAllPrototypes(IDbConnection dbConnection)
         {
-            _prototypesByUniqueIdentifier.Clear();
-            LoadItemPrototypes(dbConnection);
-            LoadTilesets(dbConnection);
-            LoadEquipmentTables(dbConnection);
-            LoadInventoryTables(dbConnection);
-            LoadBehaviourPrototypes(dbConnection);
-            LoadEquipmentPrototypes(dbConnection);
-            LoadEquipmentPrototypeContent(dbConnection);
-            LoadInventoryPrototypes(dbConnection);
-            LoadInventoryPrototypeContent(dbConnection);
-            LoadMotorPrototypes(dbConnection);
-            LoadPersonaPrototypes(dbConnection);
-            LoadTriggerBehaviourPrototypes(dbConnection);
-            LoadTokenViewPrototypes(dbConnection);
-            LoadTokenPrototypes(dbConnection);
-            LoadSpawnTables(dbConnection);
-            LoadSpawnTablesContent(dbConnection);
-            LoadLevelPrototypes(dbConnection);
-            LoadRoomPrototypes(dbConnection);
+            if(!hasInit)
+            {
+                _prototypesByUniqueIdentifier.Clear();
+                LoadItemPrototypes(dbConnection);
+                LoadTilesets(dbConnection);
+                LoadEquipmentTables(dbConnection);
+                LoadInventoryTables(dbConnection);
+                LoadBehaviourPrototypes(dbConnection);
+                LoadEquipmentPrototypes(dbConnection);
+                LoadEquipmentPrototypeContent(dbConnection);
+                LoadInventoryPrototypes(dbConnection);
+                LoadInventoryPrototypeContent(dbConnection);
+                LoadMotorPrototypes(dbConnection);
+                LoadPersonaPrototypes(dbConnection);
+                LoadTriggerBehaviourPrototypes(dbConnection);
+                LoadTokenViewPrototypes(dbConnection);
+                LoadTokenPrototypes(dbConnection);
+                LoadSpawnTables(dbConnection);
+                LoadSpawnTablesContent(dbConnection);
+                LoadLevelPrototypes(dbConnection);
+                LoadRoomPrototypes(dbConnection);
+            }
+            hasInit = true;
         }
 
         private void LoadRoomPrototypes(IDbConnection dbConnection)
@@ -158,14 +163,21 @@ namespace Gamepackage
             IDataReader reader;
 
             dbcmd.CommandText = @"SELECT * from token_view_prototypes;";
-
             reader = dbcmd.ExecuteReader();
             while (reader.Read())
             {
+                Sprite resolvedSprite = null;
+                if (!reader.IsDBNull(3))
+                {
+                    var spriteId = reader.GetString(3);
+                    resolvedSprite = Resources.Load<Sprite>(spriteId);
+                }
+
                 TokenViewPrototype prototype = new TokenViewPrototype()
                 {
                     UniqueIdentifier = reader.GetString(1),
-                    ClassName = reader.GetString(2)
+                    ClassName = reader.GetString(2),
+                    Sprite = resolvedSprite
                 };
                 CacheResource(prototype);
             }

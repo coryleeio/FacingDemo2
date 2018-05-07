@@ -11,11 +11,12 @@ DROP TABLE IF EXISTS `token_view_prototypes`;
 CREATE TABLE IF NOT EXISTS `token_view_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
-	`class_name`	TEXT NOT NULL
+	`class_name`	TEXT NOT NULL,
+	`sprite_id`	TEXT
 );
-INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'TOKEN_VIEW_NONE','NoView');
-INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'TOKEN_VIEW_SPINE_ANIMATED','SpineAnimatedView');
-INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name) VALUES (3,'TOKEN_VIEW_STATIC_SPRITE','StaticSpriteView');
+INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name,sprite_id) VALUES (1,'TOKEN_VIEW_NONE','NoView',NULL);
+INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name,sprite_id) VALUES (2,'TOKEN_VIEW_SPINE_ANIMATED','SpineAnimatedView',NULL);
+INSERT INTO `token_view_prototypes` (id,unique_identifier_id,class_name,sprite_id) VALUES (3,'TOKEN_VIEW_STATIC_SPRITE','StaticSpriteView','Marker');
 DROP TABLE IF EXISTS `token_prototypes`;
 CREATE TABLE IF NOT EXISTS `token_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -32,7 +33,9 @@ CREATE TABLE IF NOT EXISTS `token_prototypes` (
 	`trigger_behaviour_prototype_id`	INTEGER NOT NULL,
 	`token_view_prototype_id`	INTEGER NOT NULL
 );
-INSERT INTO `token_prototypes` (id,unique_identifier_id,type,width,height,shape,behaviour_prototype_id,equipment_prototype_id,inventory_prototype_id,motor_prototype_id,persona_prototype_id,trigger_behaviour_prototype_id,token_view_prototype_id) VALUES (1,'Poncy','token',1,1,0,1,2,1,4,2,2,1);
+INSERT INTO `token_prototypes` (id,unique_identifier_id,type,width,height,shape,behaviour_prototype_id,equipment_prototype_id,inventory_prototype_id,motor_prototype_id,persona_prototype_id,trigger_behaviour_prototype_id,token_view_prototype_id) VALUES (1,'Poncy','token',1,1,0,1,2,1,4,2,2,3);
+INSERT INTO `token_prototypes` (id,unique_identifier_id,type,width,height,shape,behaviour_prototype_id,equipment_prototype_id,inventory_prototype_id,motor_prototype_id,persona_prototype_id,trigger_behaviour_prototype_id,token_view_prototype_id) VALUES (2,'Giant Bee','token',1,1,0,1,2,1,4,2,2,3);
+INSERT INTO `token_prototypes` (id,unique_identifier_id,type,width,height,shape,behaviour_prototype_id,equipment_prototype_id,inventory_prototype_id,motor_prototype_id,persona_prototype_id,trigger_behaviour_prototype_id,token_view_prototype_id) VALUES (3,'Queen Bee','token',1,1,0,1,2,1,4,2,2,3);
 DROP TABLE IF EXISTS `tilesets`;
 CREATE TABLE IF NOT EXISTS `tilesets` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -63,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `spawn_tables` (
 	`room_with_tag_constraint`	TEXT,
 	`is_unique`	INTEGER NOT NULL
 );
-INSERT INTO `spawn_tables` (id,unique_identifier_id,resolution,available_on_levels,mandatory,room_with_tag_constraint,is_unique) VALUES (1,'TEST_SPAWN','OneOf','1,2',1,NULL,1);
+INSERT INTO `spawn_tables` (id,unique_identifier_id,resolution,available_on_levels,mandatory,room_with_tag_constraint,is_unique) VALUES (1,'GIANT_BEES','AnyOf','1,2',1,NULL,1);
 DROP TABLE IF EXISTS `spawn_table_prototype_entries`;
 CREATE TABLE IF NOT EXISTS `spawn_table_prototype_entries` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -81,7 +84,8 @@ CREATE TABLE IF NOT EXISTS `spawn_table_entries` (
 	`weight`	INTEGER NOT NULL,
 	`number_of_rolls`	INTEGER NOT NULL
 );
-INSERT INTO `spawn_table_entries` (id,spawn_table_id,token_prototype_id,weight,number_of_rolls) VALUES (1,1,1,100,1);
+INSERT INTO `spawn_table_entries` (id,spawn_table_id,token_prototype_id,weight,number_of_rolls) VALUES (1,1,2,100,4);
+INSERT INTO `spawn_table_entries` (id,spawn_table_id,token_prototype_id,weight,number_of_rolls) VALUES (2,1,3,5,1);
 DROP TABLE IF EXISTS `room_prototypes`;
 CREATE TABLE IF NOT EXISTS `room_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,

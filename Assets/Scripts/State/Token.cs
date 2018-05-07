@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using TinyIoC;
 
 namespace Gamepackage
 {
@@ -19,18 +20,11 @@ namespace Gamepackage
             set
             {
                 Shape.Position = value;
+                TokenView.MapPosition = value;
             }
             get
             {
                 return Shape.Position;
-            }
-        }
-
-        public Rectangle BoundingRectangle
-        {
-            get
-            {
-                return Shape.BoundingRectangle;
             }
         }
 
@@ -56,6 +50,16 @@ namespace Gamepackage
 
         public string PrototypeUniqueIdentifier { get; set; }
 
+        [JsonIgnore]
+        public Rectangle BoundingRectangle
+        {
+            get
+            {
+                return Shape.BoundingRectangle;
+            }
+        }
+
+        [JsonIgnore]
         public Rectangle Rectangle
         {
             get
@@ -63,8 +67,6 @@ namespace Gamepackage
                 throw new System.NotImplementedException();
             }
         }
-
-
 
         public void HandleMessage(Message messageToHandle)
         {
@@ -93,6 +95,19 @@ namespace Gamepackage
             TokenView.Resolve(resourceManager);
             Persona.Resolve(resourceManager);
             TriggerBehaviour.Resolve(resourceManager);
+            Shape.Recalculate();
+        }
+
+        public void PrepareForPlay(TinyIoCContainer container, ITokenSystem tokenSystem)
+        {
+            container.BuildUp(Behaviour);
+            container.BuildUp(Equipment);
+            container.BuildUp(Inventory);
+            container.BuildUp(Motor);
+            container.BuildUp(Persona);
+            container.BuildUp(TriggerBehaviour);
+            container.BuildUp(TokenView);
+            tokenSystem.Register(this);
         }
     }
 }

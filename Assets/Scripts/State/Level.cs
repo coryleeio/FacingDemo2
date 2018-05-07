@@ -9,7 +9,6 @@ namespace Gamepackage
         public MapVisibilityState[,] VisibilityGrid;
         public TileInfo[,] TilesetGrid;
         public List<Token> Tokens;
-        public PrototypeReference<LevelPrototype> LevelPrototypeReference;
         public List<Room> Rooms = new List<Room>(0);
 
         public Level()
@@ -24,7 +23,10 @@ namespace Gamepackage
 
         public void Resolve(IResourceManager resourceManager)
         {
-            LevelPrototypeReference.Resolve(resourceManager);
+            foreach(var token in Tokens)
+            {
+                token.Resolve(resourceManager);
+            }
         }
     }
 }

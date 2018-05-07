@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public class Game
+    public class Game : IResolvableReferences
     {
         public int FurthestLevelReached { get; set; }
         public int CurrentLevelIndex { get; set; }
@@ -27,5 +27,9 @@ namespace Gamepackage
             }
         }
 
+        public void Resolve(IResourceManager resourceManager)
+        {
+            Dungeon.Resolve(resourceManager);
+        }
     }
 }

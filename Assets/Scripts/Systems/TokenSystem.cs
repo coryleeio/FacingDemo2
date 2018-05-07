@@ -18,7 +18,10 @@ namespace Gamepackage
             {
                 token.Id = _gameStateSystem.Game.IdManager.NextId;
             }
-            TokenMap.Add(token.Id, token);
+            if(!TokenMap.ContainsKey(token.Id))
+            {
+                TokenMap.Add(token.Id, token);
+            }
         }
 
         public void Clear()
