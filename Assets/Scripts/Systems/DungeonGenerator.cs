@@ -166,10 +166,10 @@ namespace Gamepackage
                     }
 
                     var pointsInDomain = MathUtil.PointsInRect(level.Domain);
-                    for (int i = 1; i < 5; i = i + 2)
+                    for (int i = 2; i < 8; i = i + 2)
                     {
                         List<Point> spawnPoints = new List<Point>();
-                        MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding);
+                        MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq)=> { return level.TilesetGrid[piq.X, piq.Y].TileType == TileType.Floor; });
                         
                         foreach(var alreadyExistingToken in level.Tokens)
                         {
