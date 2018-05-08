@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using TinyIoC;
 
 namespace Gamepackage
 {
@@ -27,9 +28,9 @@ namespace Gamepackage
 
         }
 
-        public virtual void Resolve(IResourceManager resourceManager)
+        public virtual void Resolve(TinyIoCContainer container)
         {
-            PrototypeReference.Resolve(resourceManager);
+            PrototypeReference.Resolve(container);
         }
     }
 }

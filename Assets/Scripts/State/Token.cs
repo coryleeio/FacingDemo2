@@ -79,8 +79,10 @@ namespace Gamepackage
             TriggerBehaviour.HandleMessage(messageToHandle);
         }
 
-        public void Resolve(IResourceManager resourceManager)
+        public void Resolve(TinyIoCContainer container)
         {
+            ITokenSystem tokenSystem = container.Resolve<ITokenSystem>();
+
             Behaviour.Owner = this;
             Equipment.Owner = this;
             Inventory.Owner = this;
@@ -88,18 +90,15 @@ namespace Gamepackage
             Persona.Owner = this;
             TriggerBehaviour.Owner = this;
             TokenView.Owner = this;
-            Motor.Resolve(resourceManager);
-            Inventory.Resolve(resourceManager);
-            Equipment.Resolve(resourceManager);
-            Behaviour.Resolve(resourceManager);
-            TokenView.Resolve(resourceManager);
-            Persona.Resolve(resourceManager);
-            TriggerBehaviour.Resolve(resourceManager);
-            Shape.Recalculate();
-        }
 
-        public void PrepareForPlay(TinyIoCContainer container, ITokenSystem tokenSystem)
-        {
+            Motor.Resolve(container);
+            Inventory.Resolve(container);
+            Equipment.Resolve(container);
+            Behaviour.Resolve(container);
+            TokenView.Resolve(container);
+            Persona.Resolve(container);
+            TriggerBehaviour.Resolve(container);
+
             container.BuildUp(Behaviour);
             container.BuildUp(Equipment);
             container.BuildUp(Inventory);
@@ -107,6 +106,8 @@ namespace Gamepackage
             container.BuildUp(Persona);
             container.BuildUp(TriggerBehaviour);
             container.BuildUp(TokenView);
+
+            Shape.Recalculate();
             tokenSystem.Register(this);
         }
     }

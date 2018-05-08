@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TinyIoC;
 
 namespace Gamepackage
 {
@@ -21,11 +22,11 @@ namespace Gamepackage
             return TilesetGrid[p.X, p.Y];
         }
 
-        public void Resolve(IResourceManager resourceManager)
+        public void Resolve(TinyIoCContainer container)
         {
             foreach(var token in Tokens)
             {
-                token.Resolve(resourceManager);
+                token.Resolve(container);
             }
         }
     }

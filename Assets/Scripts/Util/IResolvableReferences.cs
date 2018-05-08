@@ -1,7 +1,9 @@
-﻿namespace Gamepackage
+﻿using TinyIoC;
+
+namespace Gamepackage
 {
     interface IResolvableReferences
     {
-        void Resolve(IResourceManager resourceManager);
+        void Resolve(TinyIoCContainer resourceManager);
     }
 }

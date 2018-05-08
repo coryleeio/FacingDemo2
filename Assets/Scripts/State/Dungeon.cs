@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TinyIoC;
 
 namespace Gamepackage
 {
@@ -11,13 +12,13 @@ namespace Gamepackage
 
         public Level[] Levels;
 
-        public void Resolve(IResourceManager resourceManager)
+        public void Resolve(TinyIoCContainer container)
         {
             foreach(var level in Levels)
             {
                 if(level != null)
                 {
-                    level.Resolve(resourceManager);
+                    level.Resolve(container);
                 }
             }
         }

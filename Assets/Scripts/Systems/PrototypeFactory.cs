@@ -92,8 +92,7 @@ namespace Gamepackage
                 Prototype = prototype.TokenViewPrototype
             };
 
-            token.Resolve(_resourceManager);
-            token.PrepareForPlay(_container, _tokenSystem);
+            token.Resolve(_container);
             return token;
         }
 

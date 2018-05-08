@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using TinyIoC;
 
 namespace Gamepackage
 {
@@ -27,9 +28,9 @@ namespace Gamepackage
             }
         }
 
-        public void Resolve(IResourceManager resourceManager)
+        public void Resolve(TinyIoCContainer container)
         {
-            Dungeon.Resolve(resourceManager);
+            Dungeon.Resolve(container);
         }
     }
 }

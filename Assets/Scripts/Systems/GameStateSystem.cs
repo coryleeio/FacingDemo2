@@ -54,18 +54,7 @@ namespace Gamepackage
             _logSystem.Log("Loading game");
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(Application.persistentDataPath + "/dev.sav"), parameters);
-            Game.Resolve(_resourceManager);
-
-            foreach(var level in Game.Dungeon.Levels)
-            {
-                if(level != null)
-                {
-                    foreach(var token in level.Tokens)
-                    {
-                        token.PrepareForPlay(_container, _tokenSystem);
-                    }
-                }
-            }
+            Game.Resolve(_container);
         }
     }
 }
