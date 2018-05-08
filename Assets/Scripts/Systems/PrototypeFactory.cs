@@ -8,19 +8,15 @@ namespace Gamepackage
     public class PrototypeFactory : IPrototypeFactory
     {
         private Dictionary<string, Type> componentTypeMap = new Dictionary<string, Type>();
-        private IResourceManager _resourceManager;
-        private TinyIoCContainer _container;
-        private ITokenSystem _tokenSystem;
-        private ISpriteSortingSystem _spriteSortingSystem;
+        public IResourceManager ResourceManager { get; set; }
+        public TinyIoCContainer Container { get; set; }
+        public ITokenSystem TokenSystem { get; set; }
+        public ISpriteSortingSystem SpriteSortingSystem { get; set; }
         private Material DefaultSpriteMaterial;
         private Sprite MissingSprite;
 
-        public PrototypeFactory(IResourceManager resourceManager, TinyIoCContainer container, ITokenSystem tokenSystem, ISpriteSortingSystem spriteSortingSystem)
+        public PrototypeFactory()
         {
-            _resourceManager = resourceManager;
-            _container = container;
-            _tokenSystem = tokenSystem;
-            _spriteSortingSystem = spriteSortingSystem;
             if (DefaultSpriteMaterial == null)
             {
                 DefaultSpriteMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
@@ -92,7 +88,7 @@ namespace Gamepackage
                 Prototype = prototype.TokenViewPrototype
             };
 
-            token.Resolve(_container);
+            token.Resolve(Container);
             return token;
         }
 
@@ -139,7 +135,7 @@ namespace Gamepackage
 
         public Token BuildToken(string uniqueIdentifier)
         {
-            var prototype = _resourceManager.GetPrototypeByUniqueIdentifier<TokenPrototype>(uniqueIdentifier);
+            var prototype = ResourceManager.GetPrototypeByUniqueIdentifier<TokenPrototype>(uniqueIdentifier);
             return BuildToken(prototype);
         }
 
@@ -154,7 +150,7 @@ namespace Gamepackage
 
         public Item BuildItem(string uniqueIdentifier)
         {
-            var prototype = _resourceManager.GetPrototypeByUniqueIdentifier<ItemPrototype>(uniqueIdentifier);
+            var prototype = ResourceManager.GetPrototypeByUniqueIdentifier<ItemPrototype>(uniqueIdentifier);
             return BuildItem(prototype);
         }
 
@@ -335,13 +331,13 @@ namespace Gamepackage
             o.transform.SetParent(folder.transform);
             renderer.sprite = sprite;
             o.transform.localPosition = MathUtil.MapToWorld(position);
-            _spriteSortingSystem.RegisterTile(renderer, position);
+            SpriteSortingSystem.RegisterTile(renderer, position);
             return renderer;
         }
 
         private Tileset GetTileset(TileInfo tileInfo)
         {
-            return _resourceManager.GetPrototypeByUniqueIdentifier<Tileset>(tileInfo.TilesetIdentifier);
+            return ResourceManager.GetPrototypeByUniqueIdentifier<Tileset>(tileInfo.TilesetIdentifier);
         }
     }
 }

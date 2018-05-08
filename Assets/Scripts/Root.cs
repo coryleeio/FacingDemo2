@@ -1,6 +1,3 @@
-using Mono.Data.Sqlite;
-using System.Data;
-using System.IO;
 using TinyIoC;
 using UnityEngine;
 
@@ -8,11 +5,11 @@ namespace Gamepackage
 {
     public class Root : MonoBehaviour
     {
-        public GameStateMachine StateMachine;
-        private IGameStateSystem _gameStateSystem;
-        private IVisibilitySystem _visibilitySystem;
-        private ITokenSystem _tokenSystem;
-        private IPathFinder _pathFinder;
+        public GameStateMachine StateMachine { get; set; }
+        public IGameStateSystem GameStateSystem { get; set; }
+        public IVisibilitySystem VisibilitySystem { get; set; }
+        public ITokenSystem TokenSystem { get; set; }
+        public IPathFinder PathFinder { get; set; }
 
         void Start()
         {
@@ -42,12 +39,31 @@ namespace Gamepackage
             container.Register<ISpriteSortingSystem, SpriteSortingSystem>().AsSingleton();
             container.Register<IOverlaySystem, OverlaySystem>().AsSingleton();
             container.Register<IPathFinder, PathFinder>().AsSingleton();
-            _pathFinder = container.Resolve<IPathFinder>();
-            _tokenSystem = container.Resolve<ITokenSystem>();
-            _gameStateSystem = container.Resolve<IGameStateSystem>();
-            container.BuildUp(_gameStateSystem);
-            _visibilitySystem = container.Resolve<IVisibilitySystem>();
-            StateMachine = container.Resolve<GameStateMachine>();
+
+            container.BuildUp(container.Resolve<GamePlayState>());
+            container.BuildUp(container.Resolve<MainMenuState>());
+            container.BuildUp(container.Resolve<LoadingResourcesState>());
+            container.BuildUp(container.Resolve<GameStateMachine>());
+            container.BuildUp(container.Resolve<ILogSystem>());
+            container.BuildUp(container.Resolve<ICombatSystem>());
+            container.BuildUp(container.Resolve<IDialogueSystem>());
+            container.BuildUp(container.Resolve<IGameStateSystem>());
+            container.BuildUp(container.Resolve<IItemSystem>());
+            container.BuildUp(container.Resolve<ILogSystem>());
+            container.BuildUp(container.Resolve<IMessageBusSystem>());
+            container.BuildUp(container.Resolve<IMovementSystem>());
+            container.BuildUp(container.Resolve<ITriggerSystem>());
+            container.BuildUp(container.Resolve<ITurnSystem>());
+            container.BuildUp(container.Resolve<IVisibilitySystem>());
+            container.BuildUp(container.Resolve<IModSystem>());
+            container.BuildUp(container.Resolve<IResourceManager>());
+            container.BuildUp(container.Resolve<IPrototypeFactory>());
+            container.BuildUp(container.Resolve<ITokenSystem>());
+            container.BuildUp(container.Resolve<IDungeonGenerator>());
+            container.BuildUp(container.Resolve<ISpriteSortingSystem>());
+            container.BuildUp(container.Resolve<IOverlaySystem>());
+            container.BuildUp(container.Resolve<IPathFinder>());
+            container.BuildUp(this);
         }
 
         void Update()
@@ -57,20 +73,20 @@ namespace Gamepackage
 
         void OnDisable()
         {
-            _pathFinder.Cleanup();
+            PathFinder.Cleanup();
         }
 
         void OnGUI()
         {
             if (GUI.Button(new Rect(10, 10, 100, 50), "Start New game"))
             {
-                _gameStateSystem.Clear();
+                GameStateSystem.Clear();
                 StateMachine.ChangeState(StateMachine.LoadingResourcesState);
             }
 
             if (GUI.Button(new Rect(10, 75, 100, 50), "Exit game"))
             {
-                _gameStateSystem.Clear();
+                GameStateSystem.Clear();
                 StateMachine.ChangeState(StateMachine.MainMenuState);
             }
 
@@ -81,12 +97,12 @@ namespace Gamepackage
 
             if (GUI.Button(new Rect(10, 215, 100, 50), "Save"))
             {
-                _gameStateSystem.SaveGame();
+                GameStateSystem.SaveGame();
             }
 
             if (GUI.Button(new Rect(10, 290, 100, 50), "Load"))
             {
-                _gameStateSystem.LoadGame();
+                GameStateSystem.LoadGame();
                 StateMachine.ChangeState(StateMachine.GamePlayState);
             }
 
@@ -100,14 +116,18 @@ namespace Gamepackage
                         newVis[x,y] = true;
                     }
                 }
-                _visibilitySystem.UpdateVisibility(newVis);
+                VisibilitySystem.UpdateVisibility(newVis);
             }
 
-            var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
-            if(GUI.Button(new Rect(150, 10, 100, 50), mouseMapPosition.ToString()))
+            if(Camera.main != null)
             {
+                var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
+                if (GUI.Button(new Rect(150, 10, 100, 50), mouseMapPosition.ToString()))
+                {
 
+                }
             }
+
         }
     }
 }

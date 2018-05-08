@@ -8,15 +8,14 @@ namespace Gamepackage
 {
     public class ResourceManager : IResourceManager
     {
+        public ILogSystem LogSystem { get; set; }
+
         private Dictionary<string, IResource> _prototypesByUniqueIdentifier = new Dictionary<string, IResource>();
         private Dictionary<Type, List<IResource>> _prototypesByType = new Dictionary<Type, List<IResource>>();
-
-        private ILogSystem _logSystem;
         private bool hasInit = false;
 
-        public ResourceManager(ILogSystem logSystem)
+        public ResourceManager()
         {
-            _logSystem = logSystem;
         }
 
         public void LoadAllPrototypes(IDbConnection dbConnection)
@@ -629,7 +628,7 @@ namespace Gamepackage
             {
                 throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
             }
-            _logSystem.Log("Found " + prototype.GetType().Name.ToString() +": " + prototype.UniqueIdentifier);
+            LogSystem.Log("Found " + prototype.GetType().Name.ToString() +": " + prototype.UniqueIdentifier);
             _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
             if(!_prototypesByType.ContainsKey(prototype.GetType()))
             {

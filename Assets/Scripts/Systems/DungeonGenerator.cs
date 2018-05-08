@@ -8,25 +8,21 @@ namespace Gamepackage
 {
     public class DungeonGenerator : IDungeonGenerator
     {
-        IGameStateSystem _gameStateSystem;
-        IPrototypeFactory _prototypeFactory;
-        IResourceManager _resourceManager;
-        ILogSystem _logSystem;
+        public IGameStateSystem GameStateSystem { get; set; }
+        public IPrototypeFactory PrototypeFactory { get; set; }
+        public IResourceManager ResourceManager { get; set; }
+        public ILogSystem LogSystem { get; set; }
 
-        public DungeonGenerator(IGameStateSystem gameStateSystem, IPrototypeFactory prototypeFactory, IResourceManager resourceManager, ILogSystem logSystem)
+        public DungeonGenerator()
         {
-            _gameStateSystem = gameStateSystem;
-            _prototypeFactory = prototypeFactory;
-            _resourceManager = resourceManager;
-            _logSystem = logSystem;
         }
 
         public void GenerateDungeon()
         {
-            var levelPrototypes = _resourceManager.GetPrototypes<LevelPrototype>();
-            var roomPrototypes = _resourceManager.GetPrototypes<RoomPrototype>();
+            var levelPrototypes = ResourceManager.GetPrototypes<LevelPrototype>();
+            var roomPrototypes = ResourceManager.GetPrototypes<RoomPrototype>();
             var roomPrototypesByLevel = new Dictionary<int, List<RoomPrototype>>();
-            var spawnTables = _resourceManager.GetPrototypes<SpawnTable>();
+            var spawnTables = ResourceManager.GetPrototypes<SpawnTable>();
             var spawnTablesByLevel = new Dictionary<int, List<SpawnTable>>();
             int numberOfLevelsInArray = levelPrototypes.Count + 1;
 
@@ -56,8 +52,8 @@ namespace Gamepackage
                 }
             }
 
-            _gameStateSystem.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
-            var levels = _gameStateSystem.Game.Dungeon.Levels;
+            GameStateSystem.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
+            var levels = GameStateSystem.Game.Dungeon.Levels;
             foreach (var levelPrototype in levelPrototypes)
             {
                 var level = new Level();
@@ -182,7 +178,7 @@ namespace Gamepackage
                             {
                                 var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
                                 spawnPoints.Remove(spawnPoint);
-                                var thingSpawned= _prototypeFactory.BuildToken(thingToSpawn);
+                                var thingSpawned= PrototypeFactory.BuildToken(thingToSpawn);
                                 thingSpawned.Position = spawnPoint;
                                 level.Tokens.Add(thingSpawned);
                             }

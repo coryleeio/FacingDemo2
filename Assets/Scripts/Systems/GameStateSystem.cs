@@ -8,21 +8,19 @@ namespace Gamepackage
     public class GameStateSystem : IGameStateSystem
     {
         public Game Game { get; private set; }
-        private ILogSystem _logSystem { get; set; }
-        private IResourceManager _resourceManager { get; set; }
+        public ILogSystem LogSystem { get; set; }
+        public IResourceManager ResourceManager { get; set; }
 
-        public ITokenSystem _tokenSystem { get; set; }
-        public TinyIoCContainer _container { get; set; }
+        public ITokenSystem TokenSystem { get; set; }
+        public TinyIoCContainer Container { get; set; }
 
-        public GameStateSystem(ILogSystem logSystem, IResourceManager resourceManager)
+        public GameStateSystem()
         {
-            _logSystem = logSystem;
-            _resourceManager = resourceManager;
         }
 
         public void NewGame()
         {
-            _logSystem.Log("New Game");
+            LogSystem.Log("New Game");
             Game = new Game
             {
                 FurthestLevelReached = 1,
@@ -37,13 +35,13 @@ namespace Gamepackage
 
         public void Clear()
         {
-            _logSystem.Log("Clearing game state");
+            LogSystem.Log("Clearing game state");
             Game = null;
         }
 
         public void SaveGame()
         {
-            _logSystem.Log("Saving game");
+            LogSystem.Log("Saving game");
             // parameters are required to deserialize abstract types
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             File.WriteAllText(Application.persistentDataPath + "/dev.sav", JsonConvert.SerializeObject(Game, Formatting.Indented, parameters));
@@ -51,10 +49,10 @@ namespace Gamepackage
 
         public void LoadGame()
         {
-            _logSystem.Log("Loading game");
+            LogSystem.Log("Loading game");
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(Application.persistentDataPath + "/dev.sav"), parameters);
-            Game.Resolve(_container);
+            Game.Resolve(Container);
         }
     }
 }

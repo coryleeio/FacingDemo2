@@ -15,10 +15,11 @@ namespace Gamepackage
 
     public class VisibilitySystem : IVisibilitySystem
     {
-        IGameStateSystem _gameStateSystem;
-        public VisibilitySystem(IGameStateSystem gameStateSystem)
+        public IGameStateSystem _gameStateSystem { get; set; }
+
+        public VisibilitySystem()
         {
-            _gameStateSystem = gameStateSystem;
+
         }
 
         public Texture2D RevealMask;

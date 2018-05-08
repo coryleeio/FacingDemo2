@@ -4,19 +4,18 @@ namespace Gamepackage
 {
     public class SpriteSortingSystem : ISpriteSortingSystem
     {
-        public ILogSystem _logSystem;
-        public SpriteRenderer[,] Tiles;
-        public IGameStateSystem _gameStateSystem;
+        public ILogSystem LogSystem { get; set; }
+        public IGameStateSystem GameStateSystem { get; set; }
+        private SpriteRenderer[,] Tiles;
 
-        public SpriteSortingSystem(ILogSystem logSystem, IGameStateSystem gameStateSystem)
+        public SpriteSortingSystem()
         {
-            _logSystem = logSystem;
-            _gameStateSystem = gameStateSystem;
+
         }
 
         public void Init()
         {
-            var level = _gameStateSystem.Game.CurrentLevel;
+            var level = GameStateSystem.Game.CurrentLevel;
             Tiles = new SpriteRenderer[level.Domain.Width, level.Domain.Height];
         }
 
@@ -27,7 +26,7 @@ namespace Gamepackage
 
         public void Sort()
         {
-            var level = _gameStateSystem.Game.CurrentLevel;
+            var level = GameStateSystem.Game.CurrentLevel;
             var sortOrder = 0;
             for(var x = 0; x < level.Domain.Width; x++)
             {

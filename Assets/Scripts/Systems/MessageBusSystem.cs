@@ -6,11 +6,10 @@ namespace Gamepackage
     public class MessageBusSystem : IMessageBusSystem
     {
         private List<Message> UnsentMessages = new List<Message>();
-        private ITokenSystem _tokenSystem;
+        public ITokenSystem TokenSystem { get; set; }
 
-        public MessageBusSystem(ITokenSystem tokenSystem)
+        public MessageBusSystem()
         {
-            _tokenSystem = tokenSystem;
         }
 
         public void Process()
@@ -32,7 +31,7 @@ namespace Gamepackage
 
         private void DeliverImmediately(Message m)
         {
-            var token = _tokenSystem.GetTokenById(m.Receiver);
+            var token = TokenSystem.GetTokenById(m.Receiver);
             token.HandleMessage(m);
         }
     }

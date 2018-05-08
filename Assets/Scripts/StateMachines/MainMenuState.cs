@@ -2,29 +2,25 @@ namespace Gamepackage
 {
     public class MainMenuState : IStateMachineState<Root>
     {
-        private MainMenuScene _mainMenuScene;
-        private ILogSystem _logSystem;
-        private IGameStateSystem _gameStateSystem;
-        private ITokenSystem _tokenSystem;
+        public MainMenuScene MainMenuScene { get; set; }
+        public ILogSystem LogSystem { get; set; }
+        public IGameStateSystem GameStateSystem { get; set; }
+        public ITokenSystem TokenSystem { get; set; }
 
-        public MainMenuState(MainMenuScene mainMenuScene, ILogSystem logSystem, IGameStateSystem gameStateSystem, ITokenSystem tokenSystem)
+        public MainMenuState()
         {
-            _mainMenuScene = mainMenuScene;
-            _logSystem = logSystem;
-            _gameStateSystem = gameStateSystem;
-            _tokenSystem = tokenSystem;
         }
 
         public void Enter(Root owner)
         {
-            _gameStateSystem.Clear();
-            _tokenSystem.Clear();
-            _mainMenuScene.Load();
+            GameStateSystem.Clear();
+            TokenSystem.Clear();
+            MainMenuScene.Load();
         }
 
         public void Exit(Root owner)
         {
-            _mainMenuScene.Unload();
+            MainMenuScene.Unload();
         }
 
         public void HandleMessage(Message messageToHandle)

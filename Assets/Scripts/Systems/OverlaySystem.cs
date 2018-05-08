@@ -51,11 +51,10 @@ namespace Gamepackage
         private GameObjectPool<SpriteRenderer> _pool;
         private GameObject _overlayFolder;
         private List<Overlay> _overlays = new List<Overlay>(0);
-        private IGameStateSystem _gameStateSystem;
+        public IGameStateSystem GameStateSystem { get; set; }
 
-        public OverlaySystem(GameStateSystem gameStateSystem)
+        public OverlaySystem()
         {
-            _gameStateSystem = gameStateSystem;
         }
 
         public void Init()

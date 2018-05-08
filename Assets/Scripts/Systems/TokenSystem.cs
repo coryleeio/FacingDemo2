@@ -4,10 +4,11 @@ namespace Gamepackage
 {
     public class TokenSystem : ITokenSystem
     {
-        IGameStateSystem _gameStateSystem;
-        public TokenSystem(IGameStateSystem gameStateSystem)
+        public IGameStateSystem GameStateSystem { get; set; }
+
+        public TokenSystem()
         {
-            _gameStateSystem = gameStateSystem;
+
         }
 
         private Dictionary<int, Token> TokenMap = new Dictionary<int, Token>();
@@ -16,7 +17,7 @@ namespace Gamepackage
         {
             if(token.Id == 0)
             {
-                token.Id = _gameStateSystem.Game.IdManager.NextId;
+                token.Id = GameStateSystem.Game.IdManager.NextId;
             }
             if(!TokenMap.ContainsKey(token.Id))
             {

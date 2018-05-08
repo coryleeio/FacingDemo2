@@ -7,36 +7,22 @@ namespace Gamepackage
 {
     public class LoadingResourcesState : IStateMachineState<Root>
     {
-        private LoadingScene _loadingScene;
-        private ILogSystem _logSystem;
-        private IResourceManager _prototypeSystem;
-        private IModSystem _modSystem;
-        private IPrototypeFactory _prototypeFactory;
-        private IGameStateSystem _gameStateSystem;
-        private IDungeonGenerator _dungeonGenerator;
+        public LoadingScene LoadingScene { get; set; }
+        public ILogSystem LogSystem { get; set; }
+        public IResourceManager PrototypeSystem { get; set; }
+        public IModSystem ModSystem { get; set; }
+        public IPrototypeFactory PrototypeFactory { get; set; }
+        public IGameStateSystem GameStateSystem { get; set; }
+        public IDungeonGenerator DungeonGenerator { get; set; }
 
         public LoadingResourcesState(
-            LoadingScene loadingScene, 
-            ILogSystem logSystem, 
-            IResourceManager prototypeSystem, 
-            IModSystem modSystem, 
-            IPrototypeFactory prototypeFactory,
-            IGameStateSystem gameStateSystem,
-            IDungeonGenerator dungeonGenerator
         )
         {
-            _loadingScene = loadingScene;
-            _logSystem = logSystem;
-            _prototypeSystem = prototypeSystem;
-            _modSystem = modSystem;
-            _prototypeFactory = prototypeFactory;
-            _gameStateSystem = gameStateSystem;
-            _dungeonGenerator = dungeonGenerator;
         }
 
         public void Enter(Root owner)
         {   
-            _loadingScene.Load();
+            LoadingScene.Load();
             owner.StartCoroutine(LoadPrototypes(owner));
         }
 
@@ -46,28 +32,28 @@ namespace Gamepackage
             using (var dbConnection = new SqliteConnection(conn) as IDbConnection)
             {
                 dbConnection.Open();
-                _modSystem.PopulateModList();
+                ModSystem.PopulateModList();
                 yield return new WaitForEndOfFrame();
 
-                _modSystem.LoadAssemblies();
+                ModSystem.LoadAssemblies();
                 yield return new WaitForEndOfFrame();
 
-                _prototypeFactory.LoadTypes();
+                PrototypeFactory.LoadTypes();
                 yield return new WaitForEndOfFrame();
 
-                _modSystem.LoadAssetBundles();
+                ModSystem.LoadAssetBundles();
                 yield return new WaitForEndOfFrame();
 
-                _modSystem.LoadSqlFiles(dbConnection);
+                ModSystem.LoadSqlFiles(dbConnection);
                 yield return new WaitForEndOfFrame();
 
-                _prototypeSystem.LoadAllPrototypes(dbConnection);
+                PrototypeSystem.LoadAllPrototypes(dbConnection);
                 yield return new WaitForEndOfFrame();
 
-                if (_gameStateSystem.Game == null)
+                if (GameStateSystem.Game == null)
                 {
-                    _gameStateSystem.NewGame();
-                    _dungeonGenerator.GenerateDungeon();
+                    GameStateSystem.NewGame();
+                    DungeonGenerator.GenerateDungeon();
                 }
 
                 dbConnection.Close();
@@ -77,7 +63,7 @@ namespace Gamepackage
 
         public void Exit(Root owner)
         {
-            _loadingScene.Unload();
+            LoadingScene.Unload();
         }
 
         public void HandleMessage(Message messageToHandle)
