@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using TinyIoC;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
@@ -12,6 +13,7 @@ namespace Gamepackage
         public IPrototypeFactory PrototypeFactory { get; set; }
         public IResourceManager ResourceManager { get; set; }
         public ILogSystem LogSystem { get; set; }
+        public TinyIoCContainer Container { get; set; }
 
         public DungeonGenerator()
         {
@@ -187,6 +189,7 @@ namespace Gamepackage
                     }
                 }
             }
+            GameStateSystem.Game.Resolve(Container);
         }
 
         private void ConnectTwoRooms(Level level, Room previousRoom, Room newRoom)

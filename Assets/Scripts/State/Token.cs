@@ -20,7 +20,10 @@ namespace Gamepackage
             set
             {
                 Shape.Position = value;
-                TokenView.MapPosition = value;
+                // Dont set the position on the view here because
+                // sorting differs depending on the direction of your movement.
+                // as such you need to be able to update the token position
+                // before or after a move.
             }
             get
             {
@@ -82,7 +85,6 @@ namespace Gamepackage
         public void Resolve(TinyIoCContainer container)
         {
             ITokenSystem tokenSystem = container.Resolve<ITokenSystem>();
-
             Behaviour.Owner = this;
             Equipment.Owner = this;
             Inventory.Owner = this;
