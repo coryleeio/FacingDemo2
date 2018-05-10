@@ -39,8 +39,9 @@ namespace Gamepackage
                         DefaultColor = new Color(0, 213, 255),
                         OverlayBehaviour = OverlayBehaviour.PositionFollowsCursor,
                         RelativeSortOrder = 0,
+                        WalkableTilesOnly = true,
+                        ConstrainToLevel = true
                     },
-
                 }
             };
             OverlaySystem.Activate(newOverlay);

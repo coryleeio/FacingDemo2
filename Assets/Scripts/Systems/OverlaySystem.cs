@@ -40,6 +40,8 @@ namespace Gamepackage
         public OverlaySpriteType SpriteType = OverlaySpriteType.Square;
         public Color DefaultColor = new Color(0, 213, 255);
         public int RelativeSortOrder = 0;
+        public bool WalkableTilesOnly = false;
+        public bool ConstrainToLevel = false;
         public List<SpriteWithMapPosition> TilesInUse = new List<SpriteWithMapPosition>(0);
         public GameObject Folder;
     }
@@ -78,9 +80,9 @@ namespace Gamepackage
             _overlayFolder = GameObjectUtils.MakeFolder("Overlays");
             _pool = new GameObjectPool<SpriteWithMapPosition>("Overlay/OverlayPrefab", _overlayFolder);
             AllOverlayTilesInUse = new List<SpriteRenderer>[mapWidth, mapHeight];
-            for(var x = 0; x < mapWidth; x ++)
+            for (var x = 0; x < mapWidth; x++)
             {
-                for(var y= 0; y< mapHeight; y++)
+                for (var y = 0; y < mapHeight; y++)
                 {
                     AllOverlayTilesInUse[x, y] = new List<SpriteRenderer>(0);
                 }
@@ -98,11 +100,11 @@ namespace Gamepackage
 
         private Sprite GetSpriteForType(OverlaySpriteType spriteType)
         {
-            if(spriteType == OverlaySpriteType.Square)
+            if (spriteType == OverlaySpriteType.Square)
             {
                 return _squareSprite;
             }
-            else if(spriteType == OverlaySpriteType.Circle)
+            else if (spriteType == OverlaySpriteType.Circle)
             {
                 return _circleSprite;
             }
@@ -169,19 +171,30 @@ namespace Gamepackage
                     ReturnToPool(tileInUse);
                 }
                 config.TilesInUse.Clear();
-                if(ShouldDraw(config, previous, mouseMapPosition))
+                if (ShouldDraw(config, previous, mouseMapPosition))
                 {
                     foreach (var point in config.Shape.Points)
                     {
+                        if (config.ConstrainToLevel && !GameStateSystem.Game.CurrentLevel.Domain.Contains(point))
+                        {
+                            continue;
+                        }
+                        // This duplication of the contains check is necessary 
+                        if (config.WalkableTilesOnly && GameStateSystem.Game.CurrentLevel.Domain.Contains(point) && GameStateSystem.Game.CurrentLevel.TilesetGrid[point.X, point.Y].TileType != TileType.Floor)
+                        {
+                            continue;
+                        }
                         var tile = GetTileFromPoolAndActivate(config);
                         tile.SpriteRenderer.sortingOrder = overlay.SortOrder + config.RelativeSortOrder;
                         tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
                         tile.Position = new Point(point.X, point.Y);
                         tile.SpriteRenderer.color = config.DefaultColor;
-                        if(BoundingBox.Contains(point))
+
+                        if (BoundingBox.Contains(point))
                         {
                             AllOverlayTilesInUse[tile.Position.X, tile.Position.Y].Add(tile.SpriteRenderer);
                         }
+
                     }
                 }
                 previous = config;
@@ -190,19 +203,19 @@ namespace Gamepackage
 
         private bool ShouldDraw(OverlayConfig config, OverlayConfig previousConfig, Point mouseMapPosition)
         {
-            if(config.OverlayConstraint == OverlayConstraints.AllTiles)
+            if (config.OverlayConstraint == OverlayConstraints.AllTiles)
             {
                 return true;
             }
-            else if(config.OverlayConstraint == OverlayConstraints.Diagonals)
+            else if (config.OverlayConstraint == OverlayConstraints.Diagonals)
             {
                 return config.Shape.Position.IsDiagonalTo(mouseMapPosition);
             }
-            else if(config.OverlayConstraint == OverlayConstraints.Orthogonals)
+            else if (config.OverlayConstraint == OverlayConstraints.Orthogonals)
             {
                 return config.Shape.Position.IsOrthogonalTo(mouseMapPosition);
             }
-            else if(config.OverlayConstraint == OverlayConstraints.ConstraintedToShapeOfPreviousConfig)
+            else if (config.OverlayConstraint == OverlayConstraints.ConstraintedToShapeOfPreviousConfig)
             {
                 return config.Shape.Intersects(previousConfig.Shape);
             }
@@ -227,7 +240,7 @@ namespace Gamepackage
 
         private void ReturnToPool(SpriteWithMapPosition sprite)
         {
-            if(BoundingBox.Contains(sprite.Position))
+            if (BoundingBox.Contains(sprite.Position))
             {
                 AllOverlayTilesInUse[sprite.Position.X, sprite.Position.Y].Remove(sprite.SpriteRenderer);
             }
