@@ -248,7 +248,7 @@ namespace Gamepackage
                             // if we cant determine which wall should be used opt for the SE and SW ones, as they
                             // might be shorter to prevent vision from being obscured.
                             else if (
-                                 northEastPointTileType == TileType.Wall &&
+                                 (northEastPointTileType == TileType.Wall || northEastPointTileType  == TileType.Floor)&&
                                  (southEastPointTileType == TileType.Floor || southEastPointTileType == TileType.Empty) &&
                                  (southWestPointTileType == TileType.Wall || southWestPointTileType == TileType.Floor) &&
                                  (northWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Empty)
@@ -261,7 +261,7 @@ namespace Gamepackage
                                  (northEastPointTileType == TileType.Floor || northEastPointTileType == TileType.Empty) &&
                                  (southEastPointTileType == TileType.Wall || southEastPointTileType  == TileType.Floor) &&
                                  (southWestPointTileType == TileType.Floor || southWestPointTileType == TileType.Empty) &&
-                                 northWestPointTileType == TileType.Wall
+                                 (northWestPointTileType == TileType.Wall || northWestPointTileType == TileType.Floor)
                             )
                             {
                                 BuildTileSpriteRenderer(folder, tileSet.SouthWestWallSprite, point);

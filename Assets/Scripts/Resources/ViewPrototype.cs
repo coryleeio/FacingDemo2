@@ -7,5 +7,6 @@ namespace Gamepackage
         public string UniqueIdentifier { get; set; }
         public string ClassName { get; set; }
         public Sprite Sprite { get; set; }
+        public Material Material { get; set; }
     }
 }

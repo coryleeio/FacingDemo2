@@ -178,6 +178,8 @@ namespace Gamepackage
                     ClassName = reader.GetString(2),
                     Sprite = resolvedSprite
                 };
+                prototype.Material = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
+                Assert.IsNotNull(prototype.Material);
                 CacheResource(prototype);
             }
             reader.Close();

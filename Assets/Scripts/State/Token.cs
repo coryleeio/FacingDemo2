@@ -19,6 +19,11 @@ namespace Gamepackage
         {
             set
             {
+                if(Level != null)
+                {
+                    Level.UnindexToken(this, Position);
+                    Level.IndexToken(this, value);
+                }
                 Shape.Position = value;
                 // Dont set the position on the view here because
                 // sorting differs depending on the direction of your movement.
@@ -52,6 +57,30 @@ namespace Gamepackage
         public TriggerBehaviour TriggerBehaviour;
 
         public string PrototypeUniqueIdentifier { get; set; }
+
+        [JsonIgnore]
+        private Level _level;
+
+        [JsonIgnore]
+        public Level Level
+        {
+            get
+            {
+                return _level;
+            }
+            set
+            {
+                if(_level != null)
+                {
+                    _level.UnindexToken(this, Position);
+                }
+                _level = value;
+                if(value != null)
+                {
+                    _level.IndexToken(this, Position);
+                }
+            }
+        }
 
         [JsonIgnore]
         public Rectangle BoundingRectangle

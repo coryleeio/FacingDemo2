@@ -14,10 +14,11 @@ namespace Gamepackage
         public override void BuildView()
         {
             base.BuildView();
-            if(gameObject != null)
+            if(GameObject != null)
             {
-                _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+                _spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
                 _spriteRenderer.sprite = Prototype.Sprite;
+                _spriteRenderer.material = Prototype.Material;
             }
         }
 

@@ -1,10 +1,12 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Gamepackage
 {
     public abstract class TokenView : Component<TokenViewPrototype>
     {
-        protected GameObject gameObject;
+        [JsonIgnore]
+        public GameObject GameObject;
 
         private bool _isVisible;
         protected bool IsVisible
@@ -12,9 +14,9 @@ namespace Gamepackage
             set
             {
                 _isVisible = value;
-                if(gameObject != null)
+                if(GameObject != null)
                 {
-                    gameObject.SetActive(value);
+                    GameObject.SetActive(value);
                 }
             }
             get
@@ -36,9 +38,9 @@ namespace Gamepackage
         {
             set
             {
-                if(gameObject != null)
+                if(GameObject != null)
                 {
-                    gameObject.transform.position = value;
+                    GameObject.transform.position = value;
                 }
             }
         }
@@ -68,9 +70,9 @@ namespace Gamepackage
 
         public virtual void BuildView()
         {
-            gameObject = new GameObject();
-            gameObject.name = Owner.PrototypeUniqueIdentifier.ToString();
-            var utr = gameObject.AddComponent<UnityTokenReference>();
+            GameObject = new GameObject();
+            GameObject.name = Owner.PrototypeUniqueIdentifier.ToString();
+            var utr = GameObject.AddComponent<UnityTokenReference>();
             utr.Owner = Owner;
             MapPosition = Owner.Position;
         }

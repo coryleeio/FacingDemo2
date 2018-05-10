@@ -168,15 +168,12 @@ namespace Gamepackage
             Offsets.Clear();
             if (_shapeType == ShapeType.Rect)
             {
-                if(BoundingRectangle != null && BoundingRectangle.Position != null)
-                {
-                    BoundingRectangle.Position = Position;
-                    BoundingRectangle.Width = Width;
-                    BoundingRectangle.Height = Height;
-                    Points.AddRange(MathUtil.PointsInRect(BoundingRectangle));
-                    Offsets.AddRange(MathUtil.ConvertMapSpaceToLocalMapSpace(Position, Points));
-                    ApplyRotation(Points);
-                }
+                BoundingRectangle.Position = Position;
+                BoundingRectangle.Width = Width;
+                BoundingRectangle.Height = Height;
+                Points.AddRange(MathUtil.PointsInRect(BoundingRectangle));
+                Offsets.AddRange(MathUtil.ConvertMapSpaceToLocalMapSpace(Position, Points));
+                ApplyRotation(Points);
             }
 
             else if (_shapeType == ShapeType.Plus || _shapeType == ShapeType.HollowPlus)

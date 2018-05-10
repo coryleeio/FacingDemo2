@@ -188,7 +188,23 @@ namespace Gamepackage
                         }
                     }
                 }
+                if(level.LevelIndex == 1)
+                {
+                    var possiblePlayerSpawnPoints = FloorTilesInRect(level, level.Domain);
+                    foreach (var alreadyExistingToken in level.Tokens)
+                    {
+                        possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingToken.Position == poi);
+                    }
+                    var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
+
+                    var player = PrototypeFactory.BuildToken("Poncy");
+                    player.Tags.Add(Tags.Player);
+                    player.Position = spawnPoint;
+                    level.Tokens.Add(player);
+                }
             }
+
+
             GameStateSystem.Game.Resolve(Container);
         }
 

@@ -40,7 +40,7 @@ namespace Gamepackage
         public OverlaySpriteType SpriteType = OverlaySpriteType.Square;
         public Color DefaultColor = new Color(0, 213, 255);
         public int RelativeSortOrder = 0;
-        public List<SpriteRenderer> TilesInUse = new List<SpriteRenderer>(0);
+        public List<SpriteWithMapPosition> TilesInUse = new List<SpriteWithMapPosition>(0);
         public GameObject Folder;
     }
 
@@ -48,18 +48,26 @@ namespace Gamepackage
     {
         private Sprite _squareSprite;
         private Sprite _circleSprite;
-        private GameObjectPool<SpriteRenderer> _pool;
+        private GameObjectPool<SpriteWithMapPosition> _pool;
         private GameObject _overlayFolder;
         private List<Overlay> _overlays = new List<Overlay>(0);
         public IGameStateSystem GameStateSystem { get; set; }
+        private List<SpriteRenderer>[,] AllOverlayTilesInUse;
+        private Rectangle BoundingBox;
 
         public OverlaySystem()
         {
         }
 
-        public void Init()
+        public void Init(int mapWidth, int mapHeight)
         {
-            if(_squareSprite == null)
+            BoundingBox = new Rectangle()
+            {
+                Position = new Point(0, 0),
+                Width = mapWidth,
+                Height = mapHeight
+            };
+            if (_squareSprite == null)
             {
                 _squareSprite = Resources.Load<Sprite>("Overlay/Square");
             }
@@ -68,7 +76,15 @@ namespace Gamepackage
                 _circleSprite = Resources.Load<Sprite>("Overlay/Circle");
             }
             _overlayFolder = GameObjectUtils.MakeFolder("Overlays");
-            _pool = new GameObjectPool<SpriteRenderer>("Overlay/OverlayPrefab", _overlayFolder);
+            _pool = new GameObjectPool<SpriteWithMapPosition>("Overlay/OverlayPrefab", _overlayFolder);
+            AllOverlayTilesInUse = new List<SpriteRenderer>[mapWidth, mapHeight];
+            for(var x = 0; x < mapWidth; x ++)
+            {
+                for(var y= 0; y< mapHeight; y++)
+                {
+                    AllOverlayTilesInUse[x, y] = new List<SpriteRenderer>(0);
+                }
+            }
             _pool.Init();
         }
 
@@ -158,9 +174,14 @@ namespace Gamepackage
                     foreach (var point in config.Shape.Points)
                     {
                         var tile = GetTileFromPoolAndActivate(config);
-                        tile.sortingOrder = overlay.SortOrder + config.RelativeSortOrder;
+                        tile.SpriteRenderer.sortingOrder = overlay.SortOrder + config.RelativeSortOrder;
                         tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
-                        tile.color = config.DefaultColor;
+                        tile.Position = new Point(point.X, point.Y);
+                        tile.SpriteRenderer.color = config.DefaultColor;
+                        if(BoundingBox.Contains(point))
+                        {
+                            AllOverlayTilesInUse[tile.Position.X, tile.Position.Y].Add(tile.SpriteRenderer);
+                        }
                     }
                 }
                 previous = config;
@@ -191,23 +212,27 @@ namespace Gamepackage
             }
         }
 
-        private SpriteRenderer GetTileFromPoolAndActivate(OverlayConfig overlay)
+        private SpriteWithMapPosition GetTileFromPoolAndActivate(OverlayConfig overlay)
         {
             var result = _pool.CheckOut();
             result.transform.parent = overlay.Folder.transform;
             overlay.TilesInUse.Add(result);
             var sprite = GetSpriteForType(overlay.SpriteType);
-            if (result.sprite != sprite)
+            if (result.SpriteRenderer.sprite != sprite)
             {
-                result.sprite = sprite;
+                result.SpriteRenderer.sprite = sprite;
             }
             return result;
         }
 
-        private void ReturnToPool(SpriteRenderer spriteRenderer)
+        private void ReturnToPool(SpriteWithMapPosition sprite)
         {
-            _pool.CheckIn(spriteRenderer);
-            spriteRenderer.sortingOrder = 0;
+            if(BoundingBox.Contains(sprite.Position))
+            {
+                AllOverlayTilesInUse[sprite.Position.X, sprite.Position.Y].Remove(sprite.SpriteRenderer);
+            }
+            _pool.CheckIn(sprite);
+            sprite.SpriteRenderer.sortingOrder = 0;
         }
 
         public void Clear()
@@ -219,6 +244,11 @@ namespace Gamepackage
                 Deactivate(overlay);
             }
             _overlays.Clear();
+        }
+
+        public List<SpriteRenderer> GetTilesInPosition(int x, int y)
+        {
+            return AllOverlayTilesInUse[x, y];
         }
     }
 }

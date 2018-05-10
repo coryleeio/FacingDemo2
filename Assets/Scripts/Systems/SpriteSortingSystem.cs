@@ -6,6 +6,7 @@ namespace Gamepackage
     {
         public ILogSystem LogSystem { get; set; }
         public IGameStateSystem GameStateSystem { get; set; }
+        public IOverlaySystem OverlaySystem { get; set; }
         private SpriteRenderer[,] Tiles;
 
         public SpriteSortingSystem()
@@ -36,7 +37,24 @@ namespace Gamepackage
                     if(tileSpriteRenderer != null)
                     {
                         tileSpriteRenderer.sortingOrder = sortOrder;
-                        sortOrder = sortOrder + 1;
+                        sortOrder++;
+                    }
+                    if(OverlaySystem != null)
+                    {
+                        var tiles = OverlaySystem.GetTilesInPosition(x, y);
+                        foreach(var tile in tiles)
+                        {
+                            tile.sortingOrder = sortOrder;
+                            sortOrder++;
+                        }
+                    }
+                    if(level.TokenGrid != null)
+                    {
+                        foreach(var token in level.TokenGrid[x,y])
+                        {
+                            token.TokenView.SortOrder = sortOrder;
+                            sortOrder++;
+                        }
                     }
                 }
             }

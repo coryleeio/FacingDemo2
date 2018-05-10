@@ -12,6 +12,8 @@ namespace Gamepackage
         public IPathFinder PathFinder { get; set; }
         public IGameStateSystem GameStateSystem { get; set; }
 
+        private GameSceneCameraDriver CameraDriver;
+
         public GamePlayState()
         {
 
@@ -22,8 +24,9 @@ namespace Gamepackage
             SpriteSortingSystem.Init();
             GamePlayScene.Load();
             VisibilitySystem.Init();
-            OverlaySystem.Init();
+            OverlaySystem.Init(GameStateSystem.Game.CurrentLevel.TilesetGrid.GetLength(0), GameStateSystem.Game.CurrentLevel.TilesetGrid.GetLength(1));
             PathFinder.Init(GameStateSystem.Game.CurrentLevel.Domain.Width, GameStateSystem.Game.CurrentLevel.Domain.Height, GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
+            CameraDriver = GamePlayScene.GetCamera();
 
             var newOverlay = new Overlay()
             {
@@ -37,17 +40,7 @@ namespace Gamepackage
                         OverlayBehaviour = OverlayBehaviour.PositionFollowsCursor,
                         RelativeSortOrder = 0,
                     },
-                    /*
-                    new OverlayConfig
-                    {
-                        Name = "MouseHover",
-                        Shape = new Shape(ShapeType.Rect, 4, 1),
-                        DefaultColor = new Color(112, 112, 0),
-                        OverlayBehaviour = OverlayBehaviour.StationaryRotationFollowsCursor,
-                        OverlayConstraint = OverlayConstraints.ConstraintedToShapeOfPreviousConfig,
-                        RelativeSortOrder = 2,
-                        SpriteType = OverlaySpriteType.Circle
-                    }*/
+
                 }
             };
             OverlaySystem.Activate(newOverlay);
@@ -71,6 +64,7 @@ namespace Gamepackage
             OverlaySystem.Process();
             SpriteSortingSystem.Sort();
             PathFinder.Process();
+            CameraDriver.MoveCamera();
         }
     }
 }
