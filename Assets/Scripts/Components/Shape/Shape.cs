@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,10 +27,15 @@ namespace Gamepackage
             Recalculate();
         }
 
+        [JsonProperty]
         private int _width;
+        [JsonProperty]
         private int _height;
 
+        [JsonIgnore]
         private List<Point> _points = new List<Point>(0);
+
+        [JsonIgnore]
         public List<Point> Points
         {
             set
@@ -42,7 +48,10 @@ namespace Gamepackage
             }
         }
 
+        [JsonProperty]
         private List<Point> _offsets = new List<Point>(0);
+
+        [JsonIgnore]
         public List<Point> Offsets
         {
             get
@@ -51,7 +60,10 @@ namespace Gamepackage
             }
         }
 
+        [JsonProperty]
         private ShapeType _shapeType;
+
+        [JsonIgnore]
         public ShapeType ShapeType
         {
             get
@@ -65,7 +77,10 @@ namespace Gamepackage
             }
         }
 
+        [JsonProperty]
         private Direction _direction;
+
+        [JsonIgnore]
         public Direction Direction
         {
             get
@@ -79,6 +94,7 @@ namespace Gamepackage
             }
         }
 
+        [JsonIgnore]
         public int Width
         {
             get
@@ -92,6 +108,7 @@ namespace Gamepackage
             }
         }
 
+        [JsonIgnore]
         public int Height
         {
             get
@@ -105,7 +122,10 @@ namespace Gamepackage
             }
         }
 
+        [JsonProperty]
         private Point _position;
+
+        [JsonIgnore]
         public Point Position
         {
             get
