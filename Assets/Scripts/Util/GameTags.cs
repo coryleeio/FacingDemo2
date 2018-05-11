@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Gamepackage
 {
-    public static class Tags
+    public static class GameTags
     {
         public static string Player = "Player";
     }

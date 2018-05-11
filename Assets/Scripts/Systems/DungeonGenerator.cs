@@ -198,7 +198,7 @@ namespace Gamepackage
                     var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
 
                     var player = PrototypeFactory.BuildToken("Poncy");
-                    player.Tags.Add(Tags.Player);
+                    player.Tags.Add(GameTags.Player);
                     player.Position = spawnPoint;
                     level.Tokens.Add(player);
                 }

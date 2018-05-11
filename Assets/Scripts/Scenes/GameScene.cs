@@ -25,7 +25,7 @@ namespace Gamepackage
             var camera = obj.AddComponent<Camera>();
             var gameSceneCameraDriver = obj.AddComponent<GameSceneCameraDriver>();
             obj.transform.position = new Vector3(0, 0, -30);
-            camera.orthographicSize = 1.5f;
+            camera.orthographicSize = 3f;
             camera.orthographic = true;
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
@@ -34,13 +34,14 @@ namespace Gamepackage
             Token Player = null;
             foreach (var token in _gameStateSystem.Game.CurrentLevel.Tokens)
             {
-                if(token.Tags.Contains(Tags.Player))
+                if(token.Tags.Contains(GameTags.Player))
                 {
                     Player = token;
                 }
                 token.TokenView.BuildView();
             }
             gameSceneCameraDriver.target = Player.TokenView.GameObject;
+            gameSceneCameraDriver.JumpToTarget();
             CameraDriver = gameSceneCameraDriver;
         }
 

@@ -11,6 +11,7 @@ namespace Gamepackage
         public ISpriteSortingSystem SpriteSortingSystem { get; set; }
         public IPathFinder PathFinder { get; set; }
         public IGameStateSystem GameStateSystem { get; set; }
+        public IMessageBusSystem MessageBusSystem { get; set; }
 
         private GameSceneCameraDriver CameraDriver;
 
@@ -27,6 +28,8 @@ namespace Gamepackage
             OverlaySystem.Init(GameStateSystem.Game.CurrentLevel.TilesetGrid.GetLength(0), GameStateSystem.Game.CurrentLevel.TilesetGrid.GetLength(1));
             PathFinder.Init(GameStateSystem.Game.CurrentLevel.Domain.Width, GameStateSystem.Game.CurrentLevel.Domain.Height, GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
             CameraDriver = GamePlayScene.GetCamera();
+            VisibilitySystem.UpdateVisibility();
+
 
             var newOverlay = new Overlay()
             {
@@ -66,6 +69,7 @@ namespace Gamepackage
             SpriteSortingSystem.Sort();
             PathFinder.Process();
             CameraDriver.MoveCamera();
+            MessageBusSystem.Process();
         }
     }
 }

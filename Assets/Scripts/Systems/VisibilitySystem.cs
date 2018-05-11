@@ -34,6 +34,7 @@ namespace Gamepackage
         private Color ObfuscatedColor = new Color(0, 0, 0, .75f);
         private bool[,] _updatedVisibilityGrid;
         private GameObject FogOfWarGameObject;
+        public IGameStateSystem GameStateSystem { get; set; }
 
         public void Init()
         {
@@ -220,27 +221,27 @@ namespace Gamepackage
 
         public void UpdateVisibility()
         {
-            // commented param: ICollection<PawnActor> actors
-            
-            /*
-            for (int x = 0; x < Current.MapSize; x++)
+            for (int x = 0; x < _mapSize; x++)
             {
-                for (int y = 0; y < Current.MapSize; y++)
+                for (int y = 0; y < _mapSize; y++)
                 {
                     _updatedVisibilityGrid[x, y] = false;
                 }
             }
 
-            var player = Current.Player;
-            foreach (var tile in player.GetVisiblePoints())
+            var level = GameStateSystem.Game.CurrentLevel;
+            var player = level.Player;
+
+            var visiblePoints = new List<Point>();
+            visiblePoints.AddRange(MathUtil.FloodFill(player.Position, 5, ref visiblePoints, MathUtil.FloodFillType.Orthogonal, (pointOnLevel) => { return level.Domain.Contains(pointOnLevel) && level.TilesetGrid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; }));
+
+            foreach (var tile in visiblePoints)
             {
-                if (Current.Level.TileGrid[tile.x, tile.y] != null)
-                {
-                    _updatedVisibilityGrid[tile.x, tile.y] = true;
-                }
+               _updatedVisibilityGrid[tile.X, tile.Y] = true;
             }
 
-            foreach (var pawn in Current.SceneActors)
+            /*
+            foreach (var pawn in level.Tokens)
             {
                 if (!pawn.IsPlayer)
                 {

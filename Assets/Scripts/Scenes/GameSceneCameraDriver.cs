@@ -7,9 +7,8 @@ namespace Gamepackage
         private const float _cameraZOffset = -30;
         public GameObject target;
 
-        public void JumpToTarget(GameObject newTarget)
+        public void JumpToTarget()
         {
-            target = newTarget;
             var targetPos = new Vector3(target.transform.position.x, target.transform.position.y, _cameraZOffset);
             transform.position = targetPos;
         }

@@ -111,6 +111,11 @@ namespace Gamepackage
             TriggerBehaviour.HandleMessage(messageToHandle);
         }
 
+        public bool IsPlayer()
+        {
+            return Tags.Contains(GameTags.Player);
+        }
+
         public void Resolve(TinyIoCContainer container)
         {
             ITokenSystem tokenSystem = container.Resolve<ITokenSystem>();

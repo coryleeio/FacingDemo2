@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using TinyIoC;
 
@@ -13,6 +14,22 @@ namespace Gamepackage
         public List<Room> Rooms = new List<Room>(0);
         public List<Token>[,] TokenGrid;
 
+        [JsonIgnore]
+        private Token _player;
+
+        [JsonIgnore]
+        public Token Player
+        {
+            get
+            {
+                if (_player == null)
+                {
+                    _player = Tokens.Find((t) => t.IsPlayer());
+                }
+                return _player;
+            }
+        }
+
         public Level()
         {
             
@@ -22,6 +39,7 @@ namespace Gamepackage
         {
             return TilesetGrid[p.X, p.Y];
         }
+
 
         public void UnindexToken(Token token, Point oldPosition)
         {
