@@ -69,7 +69,7 @@ namespace Gamepackage
                 };
                 level.Tokens = new List<Token>();
                 levels[levelPrototype.LevelIndex] = level;
-                level.TilesetGrid = new TileInfo[size, size];
+                level.TilesetGrid = new Grid<TileInfo>(size, size);
 
                 for (var x = 0; x < size; x++)
                 {
@@ -83,6 +83,8 @@ namespace Gamepackage
                         level.TilesetGrid[x, y].TilesetIdentifier = levelPrototype.DefaultTileset.UniqueIdentifier;
                     }
                 }
+
+                level.PathfindingGrid = new Grid<GraphNode>(size, size);
 
                 var numberOfRoomsToSpawn = 5;
                 var roomPrototypesOnLevel = roomPrototypesByLevel[level.LevelIndex];

@@ -30,17 +30,12 @@ namespace Gamepackage
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
 
-            _prototypeFactory.BuildGrid(_gameStateSystem.Game.CurrentLevel);
-            Token Player = null;
+            _prototypeFactory.BuildMapTiles(_gameStateSystem.Game.CurrentLevel);
             foreach (var token in _gameStateSystem.Game.CurrentLevel.Tokens)
             {
-                if(token.Tags.Contains(GameTags.Player))
-                {
-                    Player = token;
-                }
                 token.TokenView.BuildView();
             }
-            gameSceneCameraDriver.target = Player.TokenView.GameObject;
+            gameSceneCameraDriver.target = _gameStateSystem.Game.CurrentLevel.Player.TokenView.GameObject;
             gameSceneCameraDriver.JumpToTarget();
             CameraDriver = gameSceneCameraDriver;
         }

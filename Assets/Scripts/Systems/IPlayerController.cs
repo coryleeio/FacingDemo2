@@ -1,8 +1,7 @@
 ﻿namespace Gamepackage
 {
-    public interface ITurnSystem
+    public interface IPlayerController
     {
-        void Init();
         void Process();
     }
 }

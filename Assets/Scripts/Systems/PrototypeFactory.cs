@@ -154,7 +154,7 @@ namespace Gamepackage
             return BuildItem(prototype);
         }
 
-        public void BuildGrid(Level level)
+        public void BuildMapTiles(Level level)
         {
             var folder = GameObjectUtils.MakeFolder("Grid");
             for (int x = 0; x < level.Domain.Width; x++)

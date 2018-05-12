@@ -128,7 +128,7 @@ namespace Gamepackage
             _tileCenterPointForCoordinates = new Point[_mapSize, _mapSize];
             if (_gameStateSystem.Game.CurrentLevel.VisibilityGrid == null)
             {
-                _gameStateSystem.Game.CurrentLevel.VisibilityGrid = new MapVisibilityState[_mapSize, _mapSize];
+                _gameStateSystem.Game.CurrentLevel.VisibilityGrid = new Grid<MapVisibilityState>(_mapSize, _mapSize);
             }
             for (var x = 0; x < _mapSize; x++)
             {

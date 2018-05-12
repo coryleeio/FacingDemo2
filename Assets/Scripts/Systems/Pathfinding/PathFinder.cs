@@ -24,46 +24,30 @@ namespace Gamepackage
         private List<Thread> _threads = new List<Thread>();
         public LogLevel PathLogging;
 
+        public DiagonalOptions DiagonalSetting;
+
         private int _numberOfPathsToDrawInDebug = 5;
         private ConcurrentQueue<PathRequest> _incompletePaths = new ConcurrentQueue<PathRequest>();
         private ConcurrentQueue<PathRequest> _completePaths = new ConcurrentQueue<PathRequest>();
         private Queue<PathRequest> _previouslyCompletedPaths = new Queue<PathRequest>();
 
-        private GridGraph _grid;
-        public GridGraph Grid
-        {
-            get
-            {
-                return _grid;
-            }
-            private set
-            {
-                _grid = value;
-            }
-        }
-
-        public void StartPath(Point start, Point end, OnPathComplete handler)
-        {
-            StartPath(start.X, start.Y, end.X, end.Y, handler);
-        }
-
-        public void StartPath(int startX, int startY, int endX, int endY, OnPathComplete handler)
+        public void StartPath(Point start, Point end, Grid<GraphNode> grid, OnPathComplete handler)
         {
             Log("Pathfinding: Started path!");
             _incompletePaths.Enqueue(new PathRequest()
             {
-                StartX = startX,
-                StartY = startY,
-                EndX = endX,
-                EndY = endY,
-                Handler = handler
+                Start = start,
+                End = end,
+                Handler = handler,
+                Grid = grid,
             });
         }
 
-        public void Init(int gridSizeX, int gridSizeY, GridGraph.DiagonalOptions diagonalSetting, int numberOfThreads)
+
+        public void Init(DiagonalOptions diagonalSetting, int numberOfThreads)
         {
-            Grid = new GridGraph(gridSizeX, gridSizeY, diagonalSetting);
             Log("Pathfinding: Started with " + numberOfThreads + " threads.");
+            DiagonalSetting = diagonalSetting;
             for (var i = 0; i < numberOfThreads; i++)
             {
                 _threads.Add(new Thread(PathingWorker));
@@ -129,7 +113,7 @@ namespace Gamepackage
                 var min = request.TimeToFind.Minutes;
                 var sec = request.TimeToFind.Seconds;
                 var milli = request.TimeToFind.Milliseconds;
-                _logSystem.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.StartX, request.StartY, request.EndX, request.EndY, min, sec, milli));
+                _logSystem.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.Start, request.End, min, sec, milli));
             }
         }
 
@@ -149,7 +133,7 @@ namespace Gamepackage
                 {
                     watch.Reset(); ;
                     watch.Start();
-                    incompletePath.Path = solver.FindPath(incompletePath.StartX, incompletePath.StartY, incompletePath.EndX, incompletePath.EndY, Grid);
+                    incompletePath.Path = solver.FindPath(incompletePath.Start, incompletePath.End, DiagonalSetting, incompletePath.Grid);
                     watch.Stop();
                     incompletePath.TimeToFind = watch.Elapsed;
                     incompletePath.ThreadId = Thread.CurrentThread.ManagedThreadId;
@@ -166,14 +150,13 @@ namespace Gamepackage
 
         private class PathRequest
         {
-            public int StartX;
-            public int StartY;
-            public int EndX;
-            public int EndY;
+            public Point Start;
+            public Point End;
             public int ThreadId;
             public Path Path = null;
             public OnPathComplete Handler;
             public TimeSpan TimeToFind;
+            public Grid<GraphNode> Grid;
         }
     }
 }

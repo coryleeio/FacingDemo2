@@ -8,11 +8,13 @@ namespace Gamepackage
     {
         public int LevelIndex;
         public Rectangle Domain;
-        public MapVisibilityState[,] VisibilityGrid;
-        public TileInfo[,] TilesetGrid;
         public List<Token> Tokens;
         public List<Room> Rooms = new List<Room>(0);
-        public List<Token>[,] TokenGrid;
+        public Grid<MapVisibilityState> VisibilityGrid;
+        public Grid<TileInfo> TilesetGrid;
+        public ListGrid<Token> TokenGrid;
+        public Grid<GraphNode> PathfindingGrid;
+
 
         [JsonIgnore]
         private Token _player;
@@ -59,14 +61,7 @@ namespace Gamepackage
 
         public void Resolve(TinyIoCContainer container)
         {
-            TokenGrid = new List<Token>[TilesetGrid.GetLength(0), TilesetGrid.GetLength(1)];
-            for(var x = 0; x < TokenGrid.GetLength(0); x++)
-            {
-                for(var y= 0; y < TilesetGrid.GetLength(1); y++)
-                {
-                    TokenGrid[x, y] = new List<Token>(0);
-                }
-            }
+            TokenGrid = new ListGrid<Token>(TilesetGrid.SizeX, TilesetGrid.SizeY);
             foreach (var token in Tokens)
             {
                 token.Resolve(container);

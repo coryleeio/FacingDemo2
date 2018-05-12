@@ -2,11 +2,9 @@
 {
     public interface IPathFinder
     {
-        void StartPath(Point start, Point end, OnPathComplete handler);
+        void StartPath(Point start, Point end, Grid<GraphNode> Grid, OnPathComplete handler);
 
-        void StartPath(int startX, int startY, int endX, int endY, OnPathComplete handler);
-
-        void Init(int gridSizeX, int gridSizeY, GridGraph.DiagonalOptions diagonalSetting, int numberOfThreads);
+        void Init(DiagonalOptions setting, int numberOfThreads);
 
         void Process();
 

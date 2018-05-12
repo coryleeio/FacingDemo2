@@ -15,11 +15,16 @@ namespace Gamepackage
         {
             DontDestroyOnLoad(this);
             var container = new TinyIoCContainer();
+
+            // Dont forget to add the injection down below...
             container.Register<Root>(this);
             container.Register<GamePlayState, GamePlayState>().AsSingleton();
             container.Register<MainMenuState, MainMenuState>().AsSingleton();
             container.Register<LoadingResourcesState, LoadingResourcesState>().AsSingleton();
             container.Register<GameStateMachine, GameStateMachine>().AsSingleton();
+            container.Register<TurnStateMachine, TurnStateMachine>().AsSingleton();
+            container.Register<AdvancingTime, AdvancingTime>().AsSingleton();
+            container.Register<ITurnSystem, TurnSystem>().AsSingleton();
             container.Register<ILogSystem, LogSystem>().AsSingleton();
             container.Register<ICombatSystem, CombatSystem>().AsSingleton();
             container.Register<IDialogueSystem, DialogueSystem>().AsSingleton();
@@ -29,7 +34,6 @@ namespace Gamepackage
             container.Register<IMessageBusSystem, MessageBusSystem>().AsSingleton();
             container.Register<IMovementSystem, MovementSystem>().AsSingleton();
             container.Register<ITriggerSystem, TriggerSystem>().AsSingleton();
-            container.Register<ITurnSystem, TurnSystem>().AsSingleton();
             container.Register<IVisibilitySystem, VisibilitySystem>().AsSingleton();
             container.Register<IModSystem, ModSystem>().AsSingleton();
             container.Register<IResourceManager, ResourceManager>().AsSingleton();
@@ -39,11 +43,15 @@ namespace Gamepackage
             container.Register<ISpriteSortingSystem, SpriteSortingSystem>().AsSingleton();
             container.Register<IOverlaySystem, OverlaySystem>().AsSingleton();
             container.Register<IPathFinder, PathFinder>().AsSingleton();
+            container.Register<IPlayerController, PlayerController>().AsSingleton();
 
+            container.BuildUp(container.Resolve<AdvancingTime>());
+            container.BuildUp(container.Resolve<TurnStateMachine>());
             container.BuildUp(container.Resolve<GamePlayState>());
             container.BuildUp(container.Resolve<MainMenuState>());
             container.BuildUp(container.Resolve<LoadingResourcesState>());
             container.BuildUp(container.Resolve<GameStateMachine>());
+            container.BuildUp(container.Resolve<ITurnSystem>());
             container.BuildUp(container.Resolve<ILogSystem>());
             container.BuildUp(container.Resolve<ICombatSystem>());
             container.BuildUp(container.Resolve<IDialogueSystem>());
@@ -53,7 +61,6 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<IMessageBusSystem>());
             container.BuildUp(container.Resolve<IMovementSystem>());
             container.BuildUp(container.Resolve<ITriggerSystem>());
-            container.BuildUp(container.Resolve<ITurnSystem>());
             container.BuildUp(container.Resolve<IVisibilitySystem>());
             container.BuildUp(container.Resolve<IModSystem>());
             container.BuildUp(container.Resolve<IResourceManager>());
@@ -127,7 +134,6 @@ namespace Gamepackage
 
                 }
             }
-
         }
     }
 }

@@ -12,20 +12,20 @@ namespace Gamepackage
         private FastPriorityQueue<PathNode> _open = new FastPriorityQueue<PathNode>(_max_open_nodes); // open min-priority queue sorted by lowest F
         private List<PathNode> _closed = new List<PathNode>();
 
-        public Path FindPath(int startX, int startY, int endX, int endY, GridGraph grid)
+        public Path FindPath(Point start, Point end, DiagonalOptions diagonalOptions, Grid<GraphNode> grid)
         {
             _open.Clear();
             _closed.Clear();
             var path = new Path();
             path.Reset();
 
-            if (!grid.NodeInGrid(startX, startY) || !grid.NodeInGrid(endX, endY))
+            if (!grid.PointInGrid(start) || !grid.PointInGrid(end))
             {
                 path.Errors.Add("Start or endpoint were not in the grid");
                 return path;
             }
 
-            if (!grid.NodeAt(endX, endY).Walkable)
+            if (!grid[end].Walkable)
             {
                 path.Errors.Add("endpoint was not walkable");
                 return path;
@@ -35,8 +35,7 @@ namespace Gamepackage
             parentNode.G = 0;
             parentNode.H = 2;
             parentNode.F = parentNode.G + parentNode.H;
-            parentNode.X = startX;
-            parentNode.Y = startY;
+            parentNode.Position = new Point(start.X, start.Y);
             parentNode.parent = null;
             path.StartNode = parentNode;
             _open.Enqueue(parentNode, parentNode.F);
@@ -44,7 +43,7 @@ namespace Gamepackage
             while (_open.Count > 0)
             {
                 parentNode = _open.Dequeue();
-                if (parentNode.X == endX && parentNode.Y == endY)
+                if (parentNode.Position == end)
                 {
                     path.Found = true;
                     break;
@@ -56,34 +55,42 @@ namespace Gamepackage
                     return path;
                 }
 
-                var neighbors = grid.Neighbors(parentNode.X, parentNode.Y);
-                foreach (var neighbor in neighbors)
+                var neighborPoints = MathUtil.GetPointsByOffset(parentNode.Position, MathUtil.OrthogonalOffsets);
+                if(diagonalOptions == DiagonalOptions.DiagonalsWithCornerCutting || diagonalOptions == DiagonalOptions.DiagonalsWithoutCornerCutting)
                 {
+                    neighborPoints.AddRange(MathUtil.GetPointsByOffset(parentNode.Position, MathUtil.DiagonalOffsets));
+                }
+
+
+                foreach (var neighborPoint in neighborPoints)
+                {
+                    var neighbor = grid[neighborPoint];
                     if (!neighbor.Walkable)
                     {
                         continue;
                     }
 
                     var neighborNode = new PathNode();
-                    neighborNode.X = neighbor.X;
-                    neighborNode.Y = neighbor.Y;
+                    neighborNode.Position = new Point(neighborPoint.X, neighborPoint.Y);
 
-                    var moveWasDiagonal = parentNode.X != neighborNode.X && parentNode.Y != neighborNode.Y;
+                    var moveWasDiagonal = parentNode.Position.X != neighborNode.Position.X && parentNode.Position.Y != neighborNode.Position.Y;
 
                     var newGValueForPath = parentNode.G + neighbor.Weight;
 
                     if (moveWasDiagonal)
                     {
-                        if (grid.DiagonalSetting == GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting)
+                        if (diagonalOptions == DiagonalOptions.DiagonalsWithoutCornerCutting)
                         {
                             // If we dont allow cutting corners and this is a corner cut, skip this node,
                             // as it cannot be traversed from this position
                             var foundCornerCut = false;
-                            foreach (var offset in grid.DiagonalOffsets)
+                            foreach (var offset in MathUtil.DiagonalOffsets)
                             {
                                 // If this is the correct offset, and either of its orthogonal offsets are not walkable
                                 // skip this node as we are cutting a corner to walk here
-                                if (parentNode.X + offset.X == neighborNode.X && parentNode.Y + offset.Y == neighborNode.Y && (!grid.NodeAt(parentNode.X + offset.X, parentNode.Y).Walkable || !grid.NodeAt(parentNode.X, parentNode.Y + offset.Y).Walkable))
+                                var p1 = new Point(parentNode.Position.X + offset.X, parentNode.Position.Y);
+                                var p2 = new Point(parentNode.Position.X, parentNode.Position.Y + offset.Y);
+                                if (parentNode.Position.X + offset.X == neighborNode.Position.X && parentNode.Position.Y + offset.Y == neighborNode.Position.Y && (!grid[p1].Walkable || !grid[p2].Walkable))
                                 {
                                     foundCornerCut = true;
                                     break; // break offset loop
@@ -109,7 +116,7 @@ namespace Gamepackage
                     PathNode foundInOpen = null;
                     foreach (var openNode in _open)
                     {
-                        if (openNode.X == neighborNode.X && openNode.Y == neighborNode.Y)
+                        if (openNode.Position.X == neighborNode.Position.X && openNode.Position.Y == neighborNode.Position.Y)
                         {
                             foundInOpen = openNode;
                             break;
@@ -125,7 +132,7 @@ namespace Gamepackage
                     PathNode foundInClosed = null;
                     foreach (var closedNode in _closed)
                     {
-                        if (closedNode.X == neighborNode.X && closedNode.Y == neighborNode.Y)
+                        if (closedNode.Position.X == neighborNode.Position.X && closedNode.Position.Y == neighborNode.Position.Y)
                         {
                             foundInClosed = closedNode;
                             break;
@@ -145,7 +152,7 @@ namespace Gamepackage
                     // it does not need to be removed from the priority queue
                     neighborNode.parent = parentNode;
                     neighborNode.G = newGValueForPath;
-                    neighborNode.H = (int)(2 * (Math.Pow((neighborNode.X - endX), 2) + Math.Pow((neighborNode.Y - endY), 2)));
+                    neighborNode.H = (int)(2 * (Math.Pow((neighborNode.Position.X - end.X), 2) + Math.Pow((neighborNode.Position.Y - end.Y), 2)));
                     neighborNode.F = neighborNode.G + neighborNode.H;
 
                     _open.Enqueue(neighborNode, neighborNode.F);

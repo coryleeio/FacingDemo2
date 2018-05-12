@@ -16,6 +16,7 @@ namespace Gamepackage
 
         public GameStateSystem()
         {
+
         }
 
         public void NewGame()
@@ -31,7 +32,6 @@ namespace Gamepackage
             };
             Game.Dungeon = new Dungeon();
         }
-
 
         public void Clear()
         {

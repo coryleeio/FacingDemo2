@@ -54,7 +54,7 @@ namespace Gamepackage
         private GameObject _overlayFolder;
         private List<Overlay> _overlays = new List<Overlay>(0);
         public IGameStateSystem GameStateSystem { get; set; }
-        private List<SpriteRenderer>[,] AllOverlayTilesInUse;
+        private ListGrid<SpriteRenderer> AllOverlayTilesInUse;
         private Rectangle BoundingBox;
 
         public OverlaySystem()
@@ -79,14 +79,7 @@ namespace Gamepackage
             }
             _overlayFolder = GameObjectUtils.MakeFolder("Overlays");
             _pool = new GameObjectPool<SpriteWithMapPosition>("Overlay/OverlayPrefab", _overlayFolder);
-            AllOverlayTilesInUse = new List<SpriteRenderer>[mapWidth, mapHeight];
-            for (var x = 0; x < mapWidth; x++)
-            {
-                for (var y = 0; y < mapHeight; y++)
-                {
-                    AllOverlayTilesInUse[x, y] = new List<SpriteRenderer>(0);
-                }
-            }
+            AllOverlayTilesInUse = new ListGrid< SpriteRenderer>(mapWidth, mapHeight);
             _pool.Init();
         }
 

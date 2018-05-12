@@ -34,3 +34,4 @@ sysinfo.txt
 *.unitypackage
 
 /[Aa]ssets/StreamingAssets/Mods/**/Sprites/
+/Tests/obj/*
