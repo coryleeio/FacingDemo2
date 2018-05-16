@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public class TokenSystem : ITokenSystem
+    public class TokenSystem
     {
-        public IGameStateSystem GameStateSystem { get; set; }
+        public GameStateManager GameStateManager { get; set; }
 
         public TokenSystem()
         {
@@ -17,7 +17,7 @@ namespace Gamepackage
         {
             if(token.Id == 0)
             {
-                token.Id = GameStateSystem.Game.IdManager.NextId;
+                token.Id = GameStateManager.Game.IdManager.NextId;
             }
             if(!TokenMap.ContainsKey(token.Id))
             {

@@ -1,4 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+
 namespace Gamepackage
 {
     public class Grid<TGrid>
@@ -13,7 +16,7 @@ namespace Gamepackage
         public TGrid this[int x, int y]
         {
             get { return this._grid[x, y]; }
-            set { this._grid[x,y] = value; }
+            set { this._grid[x, y] = value; }
         }
 
         public TGrid this[Point p]
@@ -54,18 +57,40 @@ namespace Gamepackage
                 Width = sizeX,
                 Height = sizeY
             };
-            for (var x = 0; x < sizeX; x++)
+            Each((x, y, v) =>
             {
-                for (var y = 0; y < sizeY; y++)
-                {
-                    _grid[x, y] = default(TGrid);
-                }
-            }
+                this[x, y] = default(TGrid);
+            });
         }
 
         public bool PointInGrid(Point p)
         {
             return _boundingBox.Contains(p);
+        }
+
+        public List<TGrid> Filter(Predicate<TGrid> predicate)
+        {
+            var lis = new List<TGrid>();
+            Each((x, y, v) =>
+            {
+                if (predicate(this[x, y]))
+                {
+                    lis.Add(this[x, y]);
+                }
+            });
+            return lis;
+        }
+
+        public delegate void GridEachDelegate(int x, int y, TGrid value);
+        public void Each(GridEachDelegate fn)
+        {
+            for (var x = 0; x < SizeX; x++)
+            {
+                for (var y = 0; y < SizeY; y++)
+                {
+                    fn(x, y, this[x, y]);
+                }
+            }
         }
     }
 }

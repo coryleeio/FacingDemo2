@@ -2,6 +2,6 @@
 {
     public class ItemPrototype : IResource
     {
-        public string UniqueIdentifier { get; set; }
+        public UniqueIdentifier UniqueIdentifier { get; set; }
     }
 }

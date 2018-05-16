@@ -4,8 +4,7 @@ namespace Gamepackage
 {
     public class Tileset : IResource
     {
-        public string UniqueIdentifier { get; set; }
-
+        public UniqueIdentifier UniqueIdentifier { get; set; }
         public Sprite FloorSprite;
         public Sprite TeeSprite;
         public Sprite NorthCornerSprite;

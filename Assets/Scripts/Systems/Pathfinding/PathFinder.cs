@@ -6,7 +6,7 @@ using System;
 
 namespace Gamepackage
 {
-    public class PathFinder : IPathFinder
+    public class PathFinder
     {
         public enum LogLevel
         {
@@ -14,11 +14,7 @@ namespace Gamepackage
             Off
         }
 
-        public ILogSystem _logSystem;
-        public PathFinder(ILogSystem logSystem)
-        {
-            _logSystem = logSystem;
-        }
+        public Logger Logger { get; set; }
 
         private bool _threadsRunning;
         private List<Thread> _threads = new List<Thread>();
@@ -31,7 +27,12 @@ namespace Gamepackage
         private ConcurrentQueue<PathRequest> _completePaths = new ConcurrentQueue<PathRequest>();
         private Queue<PathRequest> _previouslyCompletedPaths = new Queue<PathRequest>();
 
-        public void StartPath(Point start, Point end, Grid<GraphNode> grid, OnPathComplete handler)
+        public PathFinder()
+        {
+
+        }
+
+        public void StartPath(Point start, Point end, Grid<Tile> grid, OnPathComplete handler)
         {
             Log("Pathfinding: Started path!");
             _incompletePaths.Enqueue(new PathRequest()
@@ -102,7 +103,7 @@ namespace Gamepackage
         {
             if (PathLogging == LogLevel.On)
             {
-                _logSystem.Log(log);
+                Logger.Log(log);
             }
         }
 
@@ -113,7 +114,7 @@ namespace Gamepackage
                 var min = request.TimeToFind.Minutes;
                 var sec = request.TimeToFind.Seconds;
                 var milli = request.TimeToFind.Milliseconds;
-                _logSystem.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.Start, request.End, min, sec, milli));
+                Logger.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.Start, request.End, min, sec, milli));
             }
         }
 
@@ -156,7 +157,7 @@ namespace Gamepackage
             public Path Path = null;
             public OnPathComplete Handler;
             public TimeSpan TimeToFind;
-            public Grid<GraphNode> Grid;
+            public Grid<Tile> Grid;
         }
     }
 }

@@ -6,10 +6,10 @@ namespace Gamepackage
     public class Root : MonoBehaviour
     {
         public GameStateMachine StateMachine { get; set; }
-        public IGameStateSystem GameStateSystem { get; set; }
-        public IVisibilitySystem VisibilitySystem { get; set; }
-        public ITokenSystem TokenSystem { get; set; }
-        public IPathFinder PathFinder { get; set; }
+        public GameStateManager GameStateManager { get; set; }
+        public VisibilitySystem VisibilitySystem { get; set; }
+        public TokenSystem TokenSystem { get; set; }
+        public PathFinder PathFinder { get; set; }
 
         void Start()
         {
@@ -24,52 +24,41 @@ namespace Gamepackage
             container.Register<GameStateMachine, GameStateMachine>().AsSingleton();
             container.Register<TurnStateMachine, TurnStateMachine>().AsSingleton();
             container.Register<AdvancingTime, AdvancingTime>().AsSingleton();
-            container.Register<ITurnSystem, TurnSystem>().AsSingleton();
-            container.Register<ILogSystem, LogSystem>().AsSingleton();
-            container.Register<ICombatSystem, CombatSystem>().AsSingleton();
-            container.Register<IDialogueSystem, DialogueSystem>().AsSingleton();
-            container.Register<IGameStateSystem, GameStateSystem>().AsSingleton();
-            container.Register<IItemSystem, ItemSystem>().AsSingleton();
-            container.Register<ILogSystem, LogSystem>().AsSingleton();
-            container.Register<IMessageBusSystem, MessageBusSystem>().AsSingleton();
-            container.Register<IMovementSystem, MovementSystem>().AsSingleton();
-            container.Register<ITriggerSystem, TriggerSystem>().AsSingleton();
-            container.Register<IVisibilitySystem, VisibilitySystem>().AsSingleton();
-            container.Register<IModSystem, ModSystem>().AsSingleton();
-            container.Register<IResourceManager, ResourceManager>().AsSingleton();
-            container.Register<IPrototypeFactory, PrototypeFactory>().AsSingleton();
-            container.Register<ITokenSystem, TokenSystem>().AsSingleton();
-            container.Register<IDungeonGenerator, DungeonGenerator>().AsSingleton();
-            container.Register<ISpriteSortingSystem, SpriteSortingSystem>().AsSingleton();
-            container.Register<IOverlaySystem, OverlaySystem>().AsSingleton();
-            container.Register<IPathFinder, PathFinder>().AsSingleton();
-            container.Register<IPlayerController, PlayerController>().AsSingleton();
+            container.Register<DoTurn, DoTurn>().AsSingleton();
+            container.Register<GatherInput, GatherInput>().AsSingleton();
+            container.Register<TurnSystem, TurnSystem>().AsSingleton();
+            container.Register<Logger, Logger>().AsSingleton();
+            container.Register<GameStateManager, GameStateManager>().AsSingleton();
+            container.Register<Logger, Logger>().AsSingleton();
+            container.Register<VisibilitySystem, VisibilitySystem>().AsSingleton();
+            container.Register<ResourceManager, ResourceManager>().AsSingleton();
+            container.Register<PrototypeFactory, PrototypeFactory>().AsSingleton();
+            container.Register<TokenSystem, TokenSystem>().AsSingleton();
+            container.Register<DungeonGenerator, DungeonGenerator>().AsSingleton();
+            container.Register<SpriteSortingSystem, SpriteSortingSystem>().AsSingleton();
+            container.Register<OverlaySystem, OverlaySystem>().AsSingleton();
+            container.Register<PathFinder, PathFinder>().AsSingleton();
 
-            container.BuildUp(container.Resolve<AdvancingTime>());
+
             container.BuildUp(container.Resolve<TurnStateMachine>());
+            container.BuildUp(container.Resolve<AdvancingTime>());
+            container.BuildUp(container.Resolve<DoTurn>());
+            container.BuildUp(container.Resolve<GatherInput>());
             container.BuildUp(container.Resolve<GamePlayState>());
             container.BuildUp(container.Resolve<MainMenuState>());
             container.BuildUp(container.Resolve<LoadingResourcesState>());
             container.BuildUp(container.Resolve<GameStateMachine>());
-            container.BuildUp(container.Resolve<ITurnSystem>());
-            container.BuildUp(container.Resolve<ILogSystem>());
-            container.BuildUp(container.Resolve<ICombatSystem>());
-            container.BuildUp(container.Resolve<IDialogueSystem>());
-            container.BuildUp(container.Resolve<IGameStateSystem>());
-            container.BuildUp(container.Resolve<IItemSystem>());
-            container.BuildUp(container.Resolve<ILogSystem>());
-            container.BuildUp(container.Resolve<IMessageBusSystem>());
-            container.BuildUp(container.Resolve<IMovementSystem>());
-            container.BuildUp(container.Resolve<ITriggerSystem>());
-            container.BuildUp(container.Resolve<IVisibilitySystem>());
-            container.BuildUp(container.Resolve<IModSystem>());
-            container.BuildUp(container.Resolve<IResourceManager>());
-            container.BuildUp(container.Resolve<IPrototypeFactory>());
-            container.BuildUp(container.Resolve<ITokenSystem>());
-            container.BuildUp(container.Resolve<IDungeonGenerator>());
-            container.BuildUp(container.Resolve<ISpriteSortingSystem>());
-            container.BuildUp(container.Resolve<IOverlaySystem>());
-            container.BuildUp(container.Resolve<IPathFinder>());
+            container.BuildUp(container.Resolve<TurnSystem>());
+            container.BuildUp(container.Resolve<Logger>());
+            container.BuildUp(container.Resolve<GameStateManager>());
+            container.BuildUp(container.Resolve<VisibilitySystem>());
+            container.BuildUp(container.Resolve<ResourceManager>());
+            container.BuildUp(container.Resolve<PrototypeFactory>());
+            container.BuildUp(container.Resolve<TokenSystem>());
+            container.BuildUp(container.Resolve<DungeonGenerator>());
+            container.BuildUp(container.Resolve<SpriteSortingSystem>());
+            container.BuildUp(container.Resolve<OverlaySystem>());
+            container.BuildUp(container.Resolve<PathFinder>());
             container.BuildUp(this);
         }
 
@@ -87,13 +76,13 @@ namespace Gamepackage
         {
             if (GUI.Button(new Rect(10, 10, 100, 50), "Start New game"))
             {
-                GameStateSystem.Clear();
+                GameStateManager.Clear();
                 StateMachine.ChangeState(StateMachine.LoadingResourcesState);
             }
 
             if (GUI.Button(new Rect(10, 75, 100, 50), "Exit game"))
             {
-                GameStateSystem.Clear();
+                GameStateManager.Clear();
                 StateMachine.ChangeState(StateMachine.MainMenuState);
             }
 
@@ -104,12 +93,12 @@ namespace Gamepackage
 
             if (GUI.Button(new Rect(10, 215, 100, 50), "Save"))
             {
-                GameStateSystem.SaveGame();
+                GameStateManager.SaveGame();
             }
 
             if (GUI.Button(new Rect(10, 290, 100, 50), "Load"))
             {
-                GameStateSystem.LoadGame();
+                GameStateManager.LoadGame();
                 StateMachine.ChangeState(StateMachine.GamePlayState);
             }
 

@@ -4,10 +4,11 @@ namespace Gamepackage
 {
     public class MainMenuScene : Scene
     {
-        private ILogSystem _logger;
-        public MainMenuScene(ILogSystem logger)
+        public Logger Logger { get; set; }
+
+        public MainMenuScene()
         {
-            _logger = logger;
+
         }
 
         protected override void BuildScene()

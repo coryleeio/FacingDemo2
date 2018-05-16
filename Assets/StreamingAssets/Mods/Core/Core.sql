@@ -2,11 +2,10 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS `trigger_behaviour_prototypes`;
 CREATE TABLE IF NOT EXISTS `trigger_behaviour_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
-	`class_name`	TEXT NOT NULL
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE
 );
-INSERT INTO `trigger_behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'TRIGGER_BEHAVIOUR_IS_TRIGGER','HasTriggerBehaviour');
-INSERT INTO `trigger_behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'TRIGGER_BEHAVIOUR_IS_NOT_TRIGGER','NoTriggerBehaviour');
+INSERT INTO `trigger_behaviour_prototypes` (id,unique_identifier_id) VALUES (1,'TRIGGER_BEHAVIOUR_IS_TRIGGER');
+INSERT INTO `trigger_behaviour_prototypes` (id,unique_identifier_id) VALUES (2,'TRIGGER_BEHAVIOUR_IS_NOT_TRIGGER');
 DROP TABLE IF EXISTS `token_view_prototypes`;
 CREATE TABLE IF NOT EXISTS `token_view_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -115,11 +114,10 @@ CREATE TABLE IF NOT EXISTS `room_prototype_entries` (
 DROP TABLE IF EXISTS `persona_prototypes`;
 CREATE TABLE IF NOT EXISTS `persona_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
-	`class_name`	TEXT NOT NULL
+	`unique_identifier_id`	TEXT NOT NULL UNIQUE
 );
-INSERT INTO `persona_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'PERSONA_OBJECT','ObjectPersona');
-INSERT INTO `persona_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'PERSONA_PAWN','PawnPersona');
+INSERT INTO `persona_prototypes` (id,unique_identifier_id) VALUES (1,'PERSONA_OBJECT');
+INSERT INTO `persona_prototypes` (id,unique_identifier_id) VALUES (2,'PERSONA_PAWN');
 DROP TABLE IF EXISTS `motor_prototypes`;
 CREATE TABLE IF NOT EXISTS `motor_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -180,11 +178,10 @@ CREATE TABLE IF NOT EXISTS `inventory_prototypes_to_inventory_tables` (
 DROP TABLE IF EXISTS `inventory_prototypes`;
 CREATE TABLE IF NOT EXISTS `inventory_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`unique_identifier_id`	INTEGER NOT NULL UNIQUE,
-	`class_name`	TEXT NOT NULL
+	`unique_identifier_id`	INTEGER NOT NULL UNIQUE
 );
-INSERT INTO `inventory_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'STARTING_MAGE_INVENTORY','HasInventory');
-INSERT INTO `inventory_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'NO_INVENTORY','HasNoInventory');
+INSERT INTO `inventory_prototypes` (id,unique_identifier_id) VALUES (1,'STARTING_MAGE_INVENTORY');
+INSERT INTO `inventory_prototypes` (id,unique_identifier_id) VALUES (2,'NO_INVENTORY');
 DROP TABLE IF EXISTS `equipment_tables`;
 CREATE TABLE IF NOT EXISTS `equipment_tables` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -211,21 +208,21 @@ INSERT INTO `equipment_prototypes_to_equipment_tables` (id,equipment_prototype_i
 DROP TABLE IF EXISTS `equipment_prototypes`;
 CREATE TABLE IF NOT EXISTS `equipment_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`unique_identifier_id`	INTEGER NOT NULL UNIQUE,
-	`class_name`	TEXT NOT NULL
+	`unique_identifier_id`	INTEGER NOT NULL UNIQUE
 );
-INSERT INTO `equipment_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'NO_EQUIPMENT','CannotWearEquipment');
-INSERT INTO `equipment_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'STARTING_MAGE_EQUIPMENT','WearsEquipment');
+INSERT INTO `equipment_prototypes` (id,unique_identifier_id) VALUES (1,'NO_EQUIPMENT');
+INSERT INTO `equipment_prototypes` (id,unique_identifier_id) VALUES (2,'STARTING_MAGE_EQUIPMENT');
 DROP TABLE IF EXISTS `behaviour_prototypes`;
 CREATE TABLE IF NOT EXISTS `behaviour_prototypes` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`unique_identifier_id`	TEXT NOT NULL UNIQUE,
-	`class_name`	TEXT NOT NULL
+	`class_name`	TEXT NOT NULL,
+	`blocks_pathing`	INTEGER NOT NULL
 );
-INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (1,'BEHAVIOUR_PLAYER','Player');
-INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (2,'BEHAVIOUR_NONE','NoBehaviour');
-INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (3,'BEHAVIOUR_AI_SLIME','AISlime');
-INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name) VALUES (4,'BEHAVIOUR_AI_BRUTE','AIBrute');
+INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name,blocks_pathing) VALUES (1,'BEHAVIOUR_PLAYER','Player',1);
+INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name,blocks_pathing) VALUES (2,'BEHAVIOUR_NONE','NoBehaviour',0);
+INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name,blocks_pathing) VALUES (3,'BEHAVIOUR_AI_SLIME','AISlime',1);
+INSERT INTO `behaviour_prototypes` (id,unique_identifier_id,class_name,blocks_pathing) VALUES (4,'BEHAVIOUR_AI_BRUTE','AIBrute',1);
 DROP VIEW IF EXISTS `token_prototypes_view`;
 CREATE VIEW token_prototypes_view AS 
 SELECT    token_prototypes.unique_identifier_id, 

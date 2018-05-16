@@ -12,7 +12,7 @@ namespace Gamepackage
         private FastPriorityQueue<PathNode> _open = new FastPriorityQueue<PathNode>(_max_open_nodes); // open min-priority queue sorted by lowest F
         private List<PathNode> _closed = new List<PathNode>();
 
-        public Path FindPath(Point start, Point end, DiagonalOptions diagonalOptions, Grid<GraphNode> grid)
+        public Path FindPath(Point start, Point end, DiagonalOptions diagonalOptions, Grid<Tile> grid)
         {
             _open.Clear();
             _closed.Clear();
@@ -56,7 +56,7 @@ namespace Gamepackage
                 }
 
                 var neighborPoints = MathUtil.GetPointsByOffset(parentNode.Position, MathUtil.OrthogonalOffsets);
-                if(diagonalOptions == DiagonalOptions.DiagonalsWithCornerCutting || diagonalOptions == DiagonalOptions.DiagonalsWithoutCornerCutting)
+                if (diagonalOptions == DiagonalOptions.DiagonalsWithCornerCutting || diagonalOptions == DiagonalOptions.DiagonalsWithoutCornerCutting)
                 {
                     neighborPoints.AddRange(MathUtil.GetPointsByOffset(parentNode.Position, MathUtil.DiagonalOffsets));
                 }

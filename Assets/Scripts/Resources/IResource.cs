@@ -1,7 +1,10 @@
 ﻿namespace Gamepackage
 {
-    public interface IResource : IHaveAUniqueIdentifier
+    public interface IResource
     {
-
+        UniqueIdentifier UniqueIdentifier
+        {
+            get; set;
+        }
     }
 }

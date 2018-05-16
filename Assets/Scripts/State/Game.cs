@@ -1,16 +1,26 @@
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using TinyIoC;
 
 namespace Gamepackage
 {
-    public class Game : IResolvableReferences
+    public class Game
     {
         public int FurthestLevelReached { get; set; }
         public int CurrentLevelIndex { get; set; }
         public int MonstersKilled { get; set; }
         public int Time { get; set; }
-        public IdManager IdManager { get; set; }
+
+        [JsonProperty]
+        public int _nextId = 0;
+
+        [JsonIgnore]
+        public int NextId
+        {
+            get
+            {
+                _nextId = _nextId + 1;
+                return _nextId;
+            }
+        }
 
         public Game()
         {
@@ -26,11 +36,6 @@ namespace Gamepackage
             {
                 return Dungeon.Levels[CurrentLevelIndex];
             }
-        }
-
-        public void Resolve(TinyIoCContainer container)
-        {
-            Dungeon.Resolve(container);
         }
     }
 }

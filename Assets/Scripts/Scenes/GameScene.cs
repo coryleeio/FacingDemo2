@@ -4,15 +4,13 @@ namespace Gamepackage
 {
     public class GameScene : Scene
     {
-        private ILogSystem _logger;
-        private IPrototypeFactory _prototypeFactory;
-        private IGameStateSystem _gameStateSystem;
-        private GameSceneCameraDriver CameraDriver;
-        public GameScene(ILogSystem logger, IPrototypeFactory prototypeFactory, IGameStateSystem gameStateSystem)
+        public Logger Logger { get; set; }
+        public PrototypeFactory PrototypeFactory { get; set; }
+        public GameStateManager GameStateManager { get; set; }
+        public GameSceneCameraDriver CameraDriver { get; set; }
+
+        public GameScene()
         {
-            _logger = logger;
-            _prototypeFactory = prototypeFactory;
-            _gameStateSystem = gameStateSystem;
         }
 
         protected override void BuildScene()
@@ -30,12 +28,12 @@ namespace Gamepackage
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
 
-            _prototypeFactory.BuildMapTiles(_gameStateSystem.Game.CurrentLevel);
-            foreach (var token in _gameStateSystem.Game.CurrentLevel.Tokens)
+            PrototypeFactory.BuildMapTiles(GameStateManager.Game.CurrentLevel);
+            foreach (var token in GameStateManager.Game.CurrentLevel.Tokens)
             {
-                token.TokenView.BuildView();
+                token.View = PrototypeFactory.BuildView(token);
             }
-            gameSceneCameraDriver.target = _gameStateSystem.Game.CurrentLevel.Player.TokenView.GameObject;
+            gameSceneCameraDriver.target = GameStateManager.Game.CurrentLevel.Player.View;
             gameSceneCameraDriver.JumpToTarget();
             CameraDriver = gameSceneCameraDriver;
         }

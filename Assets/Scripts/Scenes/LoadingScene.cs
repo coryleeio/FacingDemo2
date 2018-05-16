@@ -4,10 +4,11 @@ namespace Gamepackage
 {
     public class LoadingScene : Scene
     {
-        private ILogSystem _logger;
-        public LoadingScene(ILogSystem logger)
+        public Logger LogSystem { get; set; }
+
+        public LoadingScene()
         {
-            _logger = logger;
+
         }
 
         protected override void BuildScene()

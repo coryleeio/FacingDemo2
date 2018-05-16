@@ -1,6 +1,6 @@
 namespace Gamepackage
 {
-    public class Item : IWasBuiltFromAPrototype
+    public class Item
     {
         public Item()
         {

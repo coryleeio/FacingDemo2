@@ -1,55 +1,41 @@
 namespace Gamepackage
 {
-    public abstract class StateMachine<TOwner> : IHandleMessage
+    public abstract class StateMachine
     {
-        public StateMachine(TOwner owner)
+        public StateMachine()
         {
-            this.Owner = owner;
         }
 
-        public TOwner Owner;
-        public IStateMachineState<TOwner> CurrentState;
-        public IStateMachineState<TOwner> PreviousState;
-        public IStateMachineState<TOwner> GlobalState;
+        public IStateMachineState CurrentState;
+        public IStateMachineState PreviousState;
+        public IStateMachineState GlobalState;
 
         public void Process()
         {
             if(GlobalState != null)
             {
-                GlobalState.Process(Owner);
+                GlobalState.Process();
             }
             if (CurrentState != null)
             {
-                CurrentState.Process(Owner);
+                CurrentState.Process();
             }
         }
 
-        public void ChangeState(IStateMachineState<TOwner> state)
+        public void ChangeState(IStateMachineState state)
         {
             if(CurrentState != null)
             {
-                CurrentState.Exit(Owner);
+                CurrentState.Exit();
                 PreviousState = CurrentState;
             }
             CurrentState = state;
-            CurrentState.Enter(Owner);
+            CurrentState.Enter();
         }
 
         public void RevertToPreviousState()
         {
             ChangeState(PreviousState);
-        }
-
-        public void HandleMessage(Message messageToHandle)
-        {
-            if(GlobalState != null)
-            {
-                GlobalState.HandleMessage(messageToHandle);
-            }
-            if (CurrentState != null)
-            {
-                CurrentState.HandleMessage(messageToHandle);
-            }
         }
     }
 }

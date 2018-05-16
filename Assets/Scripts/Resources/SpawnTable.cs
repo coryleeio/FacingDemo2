@@ -4,8 +4,8 @@ namespace Gamepackage
 {
     public class SpawnTable : IResource
     {
-        public string UniqueIdentifier { get; set; }
-        public ProbabilityTable<TokenPrototype> ProbabilityTable;
+        public UniqueIdentifier UniqueIdentifier { get; set; }
+        public ProbabilityTable<UniqueIdentifier> ProbabilityTable;
         public bool Mandatory;
         public string ConstraintSpawnToRoomWithTag;
         public List<int> AvailableOnLevels = new List<int>(0);

@@ -3,7 +3,7 @@ using TinyIoC;
 
 namespace Gamepackage
 {
-    public class Dungeon : IResolvableReferences
+    public class Dungeon
     {
         public Dungeon()
         {
@@ -11,16 +11,5 @@ namespace Gamepackage
         }
 
         public Level[] Levels;
-
-        public void Resolve(TinyIoCContainer container)
-        {
-            foreach(var level in Levels)
-            {
-                if(level != null)
-                {
-                    level.Resolve(container);
-                }
-            }
-        }
     }
 }

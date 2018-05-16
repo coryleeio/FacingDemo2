@@ -4,17 +4,15 @@ using TinyIoC;
 
 namespace Gamepackage
 {
-    public class Level : IResolvableReferences
+    public class Level
     {
         public int LevelIndex;
-        public Rectangle Domain;
+        public Rectangle BoundingBox;
         public List<Token> Tokens;
         public List<Room> Rooms = new List<Room>(0);
         public Grid<MapVisibilityState> VisibilityGrid;
-        public Grid<TileInfo> TilesetGrid;
+        public Grid<Tile> TilesetGrid;
         public ListGrid<Token> TokenGrid;
-        public Grid<GraphNode> PathfindingGrid;
-
 
         [JsonIgnore]
         private Token _player;
@@ -26,7 +24,7 @@ namespace Gamepackage
             {
                 if (_player == null)
                 {
-                    _player = Tokens.Find((t) => t.IsPlayer());
+                    _player = Tokens.Find((t) => t.IsPlayer);
                 }
                 return _player;
             }
@@ -37,7 +35,7 @@ namespace Gamepackage
             
         }
 
-        public TileInfo GetTileInfo(Point p)
+        public Tile GetTileInfo(Point p)
         {
             return TilesetGrid[p.X, p.Y];
         }
@@ -56,16 +54,6 @@ namespace Gamepackage
             if (!TokenGrid[newPosition.X, newPosition.Y].Contains(token))
             {
                 TokenGrid[newPosition.X, newPosition.Y].Add(token);
-            }
-        }
-
-        public void Resolve(TinyIoCContainer container)
-        {
-            TokenGrid = new ListGrid<Token>(TilesetGrid.SizeX, TilesetGrid.SizeY);
-            foreach (var token in Tokens)
-            {
-                token.Resolve(container);
-                token.Level = this;
             }
         }
     }

@@ -1,11 +1,9 @@
 namespace Gamepackage
 {
-    public interface IStateMachineState<OwnerType> : IHandleMessage
+    public interface IStateMachineState
     {
-        void Enter(OwnerType owner);
-
-        void Process(OwnerType owner);
-
-        void Exit(OwnerType owner);
+        void Enter();
+        void Process();
+        void Exit();
     }
 }

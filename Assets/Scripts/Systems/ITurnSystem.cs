@@ -1,8 +1,0 @@
-﻿namespace Gamepackage
-{
-    public interface ITurnSystem
-    {
-        void Init();
-        void Process();
-    }
-}

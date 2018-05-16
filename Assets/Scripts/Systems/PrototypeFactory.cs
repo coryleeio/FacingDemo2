@@ -5,13 +5,12 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class PrototypeFactory : IPrototypeFactory
+    public class PrototypeFactory
     {
-        private Dictionary<string, Type> componentTypeMap = new Dictionary<string, Type>();
-        public IResourceManager ResourceManager { get; set; }
+        public ResourceManager ResourceManager { get; set; }
         public TinyIoCContainer Container { get; set; }
-        public ITokenSystem TokenSystem { get; set; }
-        public ISpriteSortingSystem SpriteSortingSystem { get; set; }
+        public TokenSystem TokenSystem { get; set; }
+        public SpriteSortingSystem SpriteSortingSystem { get; set; }
         private Material DefaultSpriteMaterial;
         private Sprite MissingSprite;
 
@@ -24,25 +23,6 @@ namespace Gamepackage
             if (MissingSprite == null)
             {
                 MissingSprite = Resources.Load<Sprite>("Missing");
-            }
-        }
-
-        public void LoadTypes()
-        {
-            componentTypeMap.Clear();
-
-            List<Type> types = new List<Type>();
-
-            types.AddRange(typeof(Component<BehaviourPrototype>).ConcreteFromAbstract());
-            types.AddRange(typeof(Component<EquipmentPrototype>).ConcreteFromAbstract());
-            types.AddRange(typeof(Component<InventoryPrototype>).ConcreteFromAbstract());
-            types.AddRange(typeof(Component<MotorPrototype>).ConcreteFromAbstract());
-            types.AddRange(typeof(Component<PersonaPrototype>).ConcreteFromAbstract());
-            types.AddRange(typeof(Component<TokenViewPrototype>).ConcreteFromAbstract());
-            types.AddRange(typeof(Component<TriggerBehaviourPrototype>).ConcreteFromAbstract());
-            foreach (var type in types)
-            {
-                componentTypeMap[type.Name] = type;
             }
         }
 
@@ -92,45 +72,15 @@ namespace Gamepackage
             return token;
         }
 
-        private TokenView BuildTokenView(TokenViewPrototype prototype)
+        public GameObject BuildView(Token token)
         {
-            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as TokenView;
-        }
-
-        private TriggerBehaviour BuildTriggerBehaviour(TriggerBehaviourPrototype prototype)
-        {
-            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as TriggerBehaviour;
-        }
-
-        private Persona BuildPersona(PersonaPrototype prototype)
-        {
-            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Persona;
-        }
-
-        private Motor BuildMotor(MotorPrototype prototype)
-        {
-            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Motor;
-        }
-
-        private Inventory BuildInventory(InventoryPrototype prototype)
-        {
-            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Inventory;
-        }
-
-        private Equipment BuildEquipment(EquipmentPrototype prototype)
-        {
-            Equipment equipment = Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Equipment;
-            foreach (var table in prototype.EquipmentTables)
-            {
-                table.ProbabilityTable.Next();
-            }
-
-            return equipment;
-        }
-
-        private Behaviour BuildBehaviour(BehaviourPrototype prototype)
-        {
-            return Activator.CreateInstance(componentTypeMap[prototype.ClassName]) as Behaviour;
+            var prototype = ResourceManager.GetPrototypeByUniqueIdentifier<TokenPrototype>(token.PrototypeIdentifier);
+            var go = new GameObject();
+            go.name = prototype.UniqueIdentifier.ToString();
+            var utr = go.AddComponent<UnityTokenReference>();
+            utr.Owner = token;
+            go.transform.position = MathUtil.MapToWorld(token.Position);
+            return go;
         }
 
         public Token BuildToken(string uniqueIdentifier)
@@ -157,9 +107,9 @@ namespace Gamepackage
         public void BuildMapTiles(Level level)
         {
             var folder = GameObjectUtils.MakeFolder("Grid");
-            for (int x = 0; x < level.Domain.Width; x++)
+            for (int x = 0; x < level.BoundingBox.Width; x++)
             {
-                for (var y = 0; y < level.Domain.Height; y++)
+                for (var y = 0; y < level.BoundingBox.Height; y++)
                 {
                     var point = new Point(x, y);
                     var tileInfo = level.TilesetGrid[x, y];
@@ -315,7 +265,7 @@ namespace Gamepackage
         private static TileType GetTileInfoForOffset(Level level, Point position, Point offset)
         {
             var offsetPoint = MathUtil.GetPointByOffset(position, offset);
-            if (!level.Domain.Contains(offsetPoint))
+            if (!level.BoundingBox.Contains(offsetPoint))
             {
                 return TileType.Empty;
             }
@@ -335,7 +285,7 @@ namespace Gamepackage
             return renderer;
         }
 
-        private Tileset GetTileset(TileInfo tileInfo)
+        private Tileset GetTileset(Tile tileInfo)
         {
             return ResourceManager.GetPrototypeByUniqueIdentifier<Tileset>(tileInfo.TilesetIdentifier);
         }

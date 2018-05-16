@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using TinyIoC;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class DungeonGenerator : IDungeonGenerator
+    public class DungeonGenerator
     {
-        public IGameStateSystem GameStateSystem { get; set; }
-        public IPrototypeFactory PrototypeFactory { get; set; }
-        public IResourceManager ResourceManager { get; set; }
-        public ILogSystem LogSystem { get; set; }
+        public GameStateManager GameStateManager { get; set; }
+        public PrototypeFactory PrototypeFactory { get; set; }
+        public ResourceManager ResourceManager { get; set; }
+        public Logger LogSystem { get; set; }
         public TinyIoCContainer Container { get; set; }
 
         public DungeonGenerator()
         {
+
         }
 
         public void GenerateDungeon()
         {
-            var levelPrototypes = ResourceManager.GetPrototypes<LevelPrototype>();
             var roomPrototypes = ResourceManager.GetPrototypes<RoomPrototype>();
             var roomPrototypesByLevel = new Dictionary<int, List<RoomPrototype>>();
             var spawnTables = ResourceManager.GetPrototypes<SpawnTable>();
@@ -54,14 +52,14 @@ namespace Gamepackage
                 }
             }
 
-            GameStateSystem.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
-            var levels = GameStateSystem.Game.Dungeon.Levels;
+            GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
+            var levels = GameStateManager.Game.Dungeon.Levels;
             foreach (var levelPrototype in levelPrototypes)
             {
                 var level = new Level();
                 level.LevelIndex = levelPrototype.LevelIndex;
                 int size = 40;
-                level.Domain = new Rectangle
+                level.BoundingBox = new Rectangle
                 {
                     Position = new Point(0, 0),
                     Width = size,
@@ -69,20 +67,17 @@ namespace Gamepackage
                 };
                 level.Tokens = new List<Token>();
                 levels[levelPrototype.LevelIndex] = level;
-                level.TilesetGrid = new Grid<TileInfo>(size, size);
+                level.TilesetGrid = new Grid<Tile>(size, size);
 
-                for (var x = 0; x < size; x++)
+                level.TilesetGrid.Each((x, y, v) =>
                 {
-                    for (var y = 0; y < size; y++)
+                    level.TilesetGrid[x, y] = new Tile()
                     {
-                        level.TilesetGrid[x, y] = new TileInfo()
-                        {
-                            TilesetIdentifier = null,
-                            TileType = TileType.Empty,
-                        };
-                        level.TilesetGrid[x, y].TilesetIdentifier = levelPrototype.DefaultTileset.UniqueIdentifier;
-                    }
-                }
+                        TilesetIdentifier = null,
+                        TileType = TileType.Empty,
+                    };
+                    level.TilesetGrid[x, y].TilesetIdentifier = levelPrototype.DefaultTileset.UniqueIdentifier;
+                });
 
                 level.PathfindingGrid = new Grid<GraphNode>(size, size);
 
@@ -122,7 +117,7 @@ namespace Gamepackage
                 }
 
                 // Do this after creating rooms so that the walls dont cause pathing issues
-                foreach(var pair in roomConnections)
+                foreach (var pair in roomConnections)
                 {
                     ConnectTwoRooms(level, pair.Key, pair.Value);
                 }
@@ -153,7 +148,7 @@ namespace Gamepackage
                     List<TokenPrototype> thingsToSpawn = spawnTableToSpawn.ProbabilityTable.Next();
 
                     Point floodFillStartPoint;
-                    if(spawnTableToSpawn.ConstraintSpawnToRoomWithTag != null)
+                    if (spawnTableToSpawn.ConstraintSpawnToRoomWithTag != null)
                     {
                         var roomForSpawn = level.Rooms.Find((room) => room.Tags.Contains(spawnTableToSpawn.ConstraintSpawnToRoomWithTag));
                         var floorTilesInRoom = FloorTilesInRect(level, roomForSpawn.BoundingBox);
@@ -161,28 +156,28 @@ namespace Gamepackage
                     }
                     else
                     {
-                        var floorTilesInRoom = FloorTilesInRect(level, level.Domain);
+                        var floorTilesInRoom = FloorTilesInRect(level, level.BoundingBox);
                         floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
                     }
 
-                    var pointsInDomain = MathUtil.PointsInRect(level.Domain);
+                    var pointsInDomain = MathUtil.PointsInRect(level.BoundingBox);
                     for (int i = 2; i < 8; i = i + 2)
                     {
                         List<Point> spawnPoints = new List<Point>();
-                        MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq)=> { return level.TilesetGrid[piq.X, piq.Y].TileType == TileType.Floor; });
-                        
-                        foreach(var alreadyExistingToken in level.Tokens)
+                        MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq) => { return level.TilesetGrid[piq.X, piq.Y].TileType == TileType.Floor; });
+
+                        foreach (var alreadyExistingToken in level.Tokens)
                         {
                             spawnPoints.RemoveAll((poi) => alreadyExistingToken.Position == poi);
                         }
 
                         if (spawnPoints.Count >= thingsToSpawn.Count)
                         {
-                            foreach(var thingToSpawn in thingsToSpawn)
+                            foreach (var thingToSpawn in thingsToSpawn)
                             {
                                 var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
                                 spawnPoints.Remove(spawnPoint);
-                                var thingSpawned= PrototypeFactory.BuildToken(thingToSpawn);
+                                var thingSpawned = PrototypeFactory.BuildToken(thingToSpawn);
                                 thingSpawned.Position = spawnPoint;
                                 level.Tokens.Add(thingSpawned);
                             }
@@ -190,9 +185,9 @@ namespace Gamepackage
                         }
                     }
                 }
-                if(level.LevelIndex == 1)
+                if (level.LevelIndex == 1)
                 {
-                    var possiblePlayerSpawnPoints = FloorTilesInRect(level, level.Domain);
+                    var possiblePlayerSpawnPoints = FloorTilesInRect(level, level.BoundingBox);
                     foreach (var alreadyExistingToken in level.Tokens)
                     {
                         possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingToken.Position == poi);
@@ -205,20 +200,41 @@ namespace Gamepackage
                     level.Tokens.Add(player);
                 }
             }
+            var game = GameStateManager.Game;
+            game.Resolve(Container);
+            BuildPathfindingGrid(game);
+        }
 
-
-            GameStateSystem.Game.Resolve(Container);
+        private static void BuildPathfindingGrid(Game game)
+        {
+            var levels = game.Dungeon.Levels;
+            foreach (var level in levels)
+            {
+                if (level != null)
+                {
+                    level.TilesetGrid.Each((x, y, v) =>
+                    {
+                        
+                        var occupied = level.TokenGrid[x, y].FindAll((token) => { return ResourceManager.GetPrototypeByUniqueIdentifier<TokenPrototype>(token.PrototypeIdentifier).BlocksPathing; }).Count == 0;
+                        level.TilesetGrid[x, y] = new Tile()
+                        {
+                            Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied,
+                            Weight = 1
+                        };
+                    });
+                }
+            }
         }
 
         private void ConnectTwoRooms(Level level, Room previousRoom, Room newRoom)
         {
             var previousTiles = FloorTilesInRect(level, previousRoom.BoundingBox);
             var currentTiles = FloorTilesInRect(level, newRoom.BoundingBox);
-            if(previousTiles.Count == 0 || currentTiles.Count == 0)
+            if (previousTiles.Count == 0 || currentTiles.Count == 0)
             {
                 throw new SystemException("Rooms contain no walkable tiles?");
             }
-            
+
             var previousTile = MathUtil.ChooseRandomElement<Point>(previousTiles);
             var currentTile = MathUtil.ChooseRandomElement<Point>(currentTiles);
 
@@ -255,9 +271,9 @@ namespace Gamepackage
 
         private bool PathIntersectsRoom(Room room, List<Point> path)
         {
-            foreach(var point in path)
+            foreach (var point in path)
             {
-                if(room.BoundingBox.Contains(point))
+                if (room.BoundingBox.Contains(point))
                 {
                     return true;
                 }
@@ -269,7 +285,7 @@ namespace Gamepackage
         {
 
             var path = new List<Point>();
-            for (var x = Math.Min(x1,x2); x < Math.Max(x1,x2) + 1; x++)
+            for (var x = Math.Min(x1, x2); x < Math.Max(x1, x2) + 1; x++)
             {
                 path.Add(new Point(x, currentY));
             }
@@ -312,7 +328,7 @@ namespace Gamepackage
                 previousRoom = null;
                 return new Rectangle()
                 {
-                    Position = new Point((level.Domain.Width / 4) + UnityEngine.Random.Range(0, 3), (level.Domain.Height / 4) + UnityEngine.Random.Range(0, 3)),
+                    Position = new Point((level.BoundingBox.Width / 4) + UnityEngine.Random.Range(0, 3), (level.BoundingBox.Height / 4) + UnityEngine.Random.Range(0, 3)),
                     Height = height,
                     Width = width
                 };
@@ -329,12 +345,12 @@ namespace Gamepackage
             List<Room> validRooms = new List<Room>();
             foreach (var room in level.Rooms)
             {
-                var rects = FindValidSurroundingRectangles(room.BoundingBox, guage, level.Domain);
+                var rects = FindValidSurroundingRectangles(room.BoundingBox, guage, level.BoundingBox);
                 rects = rects.FindAll((possibleRect) =>
                 {
                     return level.Rooms.FindAll((roomInLevel) => roomInLevel.BoundingBox.Adjacent(possibleRect) || roomInLevel.BoundingBox.Intersects(possibleRect)).Count == 0;
                 });
-                if(rects.Count > 0)
+                if (rects.Count > 0)
                 {
                     Assert.IsFalse(rectsForRooms.ContainsKey(room));
                     validRooms.Add(room);

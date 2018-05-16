@@ -46,14 +46,14 @@ namespace Gamepackage
         public GameObject Folder;
     }
 
-    public class OverlaySystem : IOverlaySystem
+    public class OverlaySystem
     {
         private Sprite _squareSprite;
         private Sprite _circleSprite;
         private GameObjectPool<SpriteWithMapPosition> _pool;
         private GameObject _overlayFolder;
         private List<Overlay> _overlays = new List<Overlay>(0);
-        public IGameStateSystem GameStateSystem { get; set; }
+        public GameStateManager GameStateManager { get; set; }
         private ListGrid<SpriteRenderer> AllOverlayTilesInUse;
         private Rectangle BoundingBox;
 
@@ -79,7 +79,7 @@ namespace Gamepackage
             }
             _overlayFolder = GameObjectUtils.MakeFolder("Overlays");
             _pool = new GameObjectPool<SpriteWithMapPosition>("Overlay/OverlayPrefab", _overlayFolder);
-            AllOverlayTilesInUse = new ListGrid< SpriteRenderer>(mapWidth, mapHeight);
+            AllOverlayTilesInUse = new ListGrid<SpriteRenderer>(mapWidth, mapHeight);
             _pool.Init();
         }
 
@@ -168,12 +168,12 @@ namespace Gamepackage
                 {
                     foreach (var point in config.Shape.Points)
                     {
-                        if (config.ConstrainToLevel && !GameStateSystem.Game.CurrentLevel.Domain.Contains(point))
+                        if (config.ConstrainToLevel && !GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point))
                         {
                             continue;
                         }
                         // This duplication of the contains check is necessary 
-                        if (config.WalkableTilesOnly && GameStateSystem.Game.CurrentLevel.Domain.Contains(point) && GameStateSystem.Game.CurrentLevel.TilesetGrid[point.X, point.Y].TileType != TileType.Floor)
+                        if (config.WalkableTilesOnly && GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point) && GameStateManager.Game.CurrentLevel.TilesetGrid[point.X, point.Y].TileType != TileType.Floor)
                         {
                             continue;
                         }

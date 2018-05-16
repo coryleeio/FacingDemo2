@@ -2,11 +2,11 @@
 
 namespace Gamepackage
 {
-    public class SpriteSortingSystem : ISpriteSortingSystem
+    public class SpriteSortingSystem
     {
-        public ILogSystem LogSystem { get; set; }
-        public IGameStateSystem GameStateSystem { get; set; }
-        public IOverlaySystem OverlaySystem { get; set; }
+        public Logger LogSystem { get; set; }
+        public GameStateManager GameStateManager { get; set; }
+        public OverlaySystem OverlaySystem { get; set; }
         private SpriteRenderer[,] Tiles;
 
         public SpriteSortingSystem()
@@ -16,8 +16,8 @@ namespace Gamepackage
 
         public void Init()
         {
-            var level = GameStateSystem.Game.CurrentLevel;
-            Tiles = new SpriteRenderer[level.Domain.Width, level.Domain.Height];
+            var level = GameStateManager.Game.CurrentLevel;
+            Tiles = new SpriteRenderer[level.BoundingBox.Width, level.BoundingBox.Height];
         }
 
         public void RegisterTile(SpriteRenderer tileSpriteRenderer, Point position)
@@ -27,33 +27,41 @@ namespace Gamepackage
 
         public void Sort()
         {
-            var level = GameStateSystem.Game.CurrentLevel;
+            var level = GameStateManager.Game.CurrentLevel;
             var sortOrder = 0;
-            for(var x = 0; x < level.Domain.Width; x++)
+            for (var x = 0; x < level.BoundingBox.Width; x++)
             {
-                for(var y= 0; y < level.Domain.Height; y++)
+                for (var y = 0; y < level.BoundingBox.Height; y++)
                 {
                     var tileSpriteRenderer = Tiles[x, y];
-                    if(tileSpriteRenderer != null)
+                    if (tileSpriteRenderer != null)
                     {
                         tileSpriteRenderer.sortingOrder = sortOrder;
                         sortOrder++;
                     }
-                    if(OverlaySystem != null)
+                    if (OverlaySystem != null)
                     {
                         var tiles = OverlaySystem.GetTilesInPosition(x, y);
-                        foreach(var tile in tiles)
+                        foreach (var tile in tiles)
                         {
                             tile.sortingOrder = sortOrder;
                             sortOrder++;
                         }
                     }
-                    if(level.TokenGrid != null)
+                    if (level.TokenGrid != null)
                     {
-                        foreach(var token in level.TokenGrid[x,y])
+                        foreach (var token in level.TokenGrid[x, y])
                         {
-                            token.TokenView.SortOrder = sortOrder;
-                            sortOrder++;
+                            if(token.ViewType == ViewType.StaticSprite)
+                            {
+                                var spriteRenderer = token.View.GetComponent<SpriteRenderer>();
+                                spriteRenderer.sortingOrder = sortOrder;
+                                sortOrder++;
+                            }
+                            else
+                            {
+                                throw new NotImplementedException();
+                            }
                         }
                     }
                 }
