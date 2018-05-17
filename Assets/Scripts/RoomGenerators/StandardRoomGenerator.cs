@@ -6,7 +6,7 @@
         public int MinimumHeight { get; set; }
         public int MaximumHeight { get; set; }
         public int MaximumWidth { get; set; }
-        public Tileset Tileset { get; set; }
+        public UniqueIdentifier TilesetUniqueIdentifier { get; set; }
 
         public Room Generate(Level level, Rectangle rectangle)
         {

@@ -10,9 +10,7 @@ namespace Gamepackage
         public Game Game { get; private set; }
         public Logger LogSystem { get; set; }
         public ResourceManager ResourceManager { get; set; }
-
         public TokenSystem TokenSystem { get; set; }
-        public TinyIoCContainer Container { get; set; }
 
         public GameStateManager()
         {
@@ -51,7 +49,6 @@ namespace Gamepackage
             LogSystem.Log("Loading game");
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(Application.persistentDataPath + "/dev.sav"), parameters);
-            Game.Resolve(Container);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public class SpawnTable : IResource
+    public class EncounterPrototype : IResource
     {
         public UniqueIdentifier UniqueIdentifier { get; set; }
         public ProbabilityTable<UniqueIdentifier> ProbabilityTable;

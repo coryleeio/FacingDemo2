@@ -22,13 +22,13 @@ namespace Gamepackage
 
         public List<Inventory> Inventory = new List<Inventory>(0);
 
-        public Dictionary<ItemSlot, Item> Equipment = new Dictionary<ItemSlot, Item>();
+        public Dictionary<ItemSlot, ItemPrototypes> Equipment = new Dictionary<ItemSlot, ItemPrototypes>();
 
-        public UniqueIdentifier BehaviorIdentifier;
-
-        public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
+        public AIBehaviourType BehaviorIdentifier;
 
         public ViewType ViewType;
+
+        public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
 
         public UniqueIdentifier ViewUniqueIdentifier;
 

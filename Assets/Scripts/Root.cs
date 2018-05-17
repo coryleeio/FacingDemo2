@@ -22,11 +22,6 @@ namespace Gamepackage
             container.Register<MainMenuState, MainMenuState>().AsSingleton();
             container.Register<LoadingResourcesState, LoadingResourcesState>().AsSingleton();
             container.Register<GameStateMachine, GameStateMachine>().AsSingleton();
-            container.Register<TurnStateMachine, TurnStateMachine>().AsSingleton();
-            container.Register<AdvancingTime, AdvancingTime>().AsSingleton();
-            container.Register<DoTurn, DoTurn>().AsSingleton();
-            container.Register<GatherInput, GatherInput>().AsSingleton();
-            container.Register<TurnSystem, TurnSystem>().AsSingleton();
             container.Register<Logger, Logger>().AsSingleton();
             container.Register<GameStateManager, GameStateManager>().AsSingleton();
             container.Register<Logger, Logger>().AsSingleton();
@@ -38,17 +33,14 @@ namespace Gamepackage
             container.Register<SpriteSortingSystem, SpriteSortingSystem>().AsSingleton();
             container.Register<OverlaySystem, OverlaySystem>().AsSingleton();
             container.Register<PathFinder, PathFinder>().AsSingleton();
+            container.Register<GameScene, GameScene>().AsSingleton();
+            container.Register<LoadingScene, LoadingScene>().AsSingleton();
+            container.Register<MainMenuScene, MainMenuScene>().AsSingleton();
 
-
-            container.BuildUp(container.Resolve<TurnStateMachine>());
-            container.BuildUp(container.Resolve<AdvancingTime>());
-            container.BuildUp(container.Resolve<DoTurn>());
-            container.BuildUp(container.Resolve<GatherInput>());
             container.BuildUp(container.Resolve<GamePlayState>());
             container.BuildUp(container.Resolve<MainMenuState>());
             container.BuildUp(container.Resolve<LoadingResourcesState>());
             container.BuildUp(container.Resolve<GameStateMachine>());
-            container.BuildUp(container.Resolve<TurnSystem>());
             container.BuildUp(container.Resolve<Logger>());
             container.BuildUp(container.Resolve<GameStateManager>());
             container.BuildUp(container.Resolve<VisibilitySystem>());
@@ -59,6 +51,9 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<SpriteSortingSystem>());
             container.BuildUp(container.Resolve<OverlaySystem>());
             container.BuildUp(container.Resolve<PathFinder>());
+            container.BuildUp(container.Resolve<GameScene>());
+            container.BuildUp(container.Resolve<LoadingScene>());
+            container.BuildUp(container.Resolve<MainMenuScene>());
             container.BuildUp(this);
         }
 

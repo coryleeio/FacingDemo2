@@ -20,10 +20,11 @@ namespace Gamepackage
 
         public void GenerateDungeon()
         {
+            var levelPrototypes = ResourceManager.GetPrototypes<LevelPrototype>();
             var roomPrototypes = ResourceManager.GetPrototypes<RoomPrototype>();
             var roomPrototypesByLevel = new Dictionary<int, List<RoomPrototype>>();
-            var spawnTables = ResourceManager.GetPrototypes<SpawnTable>();
-            var spawnTablesByLevel = new Dictionary<int, List<SpawnTable>>();
+            var spawnTables = ResourceManager.GetPrototypes<EncounterPrototype>();
+            var spawnTablesByLevel = new Dictionary<int, List<EncounterPrototype>>();
             int numberOfLevelsInArray = levelPrototypes.Count + 1;
 
             for (var i = 1; i < numberOfLevelsInArray; i++)
@@ -45,7 +46,7 @@ namespace Gamepackage
                     {
                         if (!spawnTablesByLevel.ContainsKey(i))
                         {
-                            spawnTablesByLevel[i] = new List<SpawnTable>();
+                            spawnTablesByLevel[i] = new List<EncounterPrototype>();
                         }
                         spawnTablesByLevel[i].Add(spawnTable);
                     }
@@ -68,20 +69,17 @@ namespace Gamepackage
                 level.Tokens = new List<Token>();
                 levels[levelPrototype.LevelIndex] = level;
                 level.TilesetGrid = new Grid<Tile>(size, size);
-
                 level.TilesetGrid.Each((x, y, v) =>
                 {
                     level.TilesetGrid[x, y] = new Tile()
                     {
-                        TilesetIdentifier = null,
+                        TilesetIdentifier = levelPrototype.DefaultTilesetUniqueIdentifier,
                         TileType = TileType.Empty,
                     };
-                    level.TilesetGrid[x, y].TilesetIdentifier = levelPrototype.DefaultTileset.UniqueIdentifier;
                 });
+                level.TokenGrid = new ListGrid<Token>(size, size);
 
-                level.PathfindingGrid = new Grid<GraphNode>(size, size);
-
-                var numberOfRoomsToSpawn = 5;
+                var numberOfRoomsToSpawn = levelPrototype.NumberOfRooms;
                 var roomPrototypesOnLevel = roomPrototypesByLevel[level.LevelIndex];
                 var roomPrototypesToSpawn = new List<RoomPrototype>();
 
@@ -99,7 +97,11 @@ namespace Gamepackage
                 // If we have stuff we can spawn, and we need some more stuff to spawn
                 if (numberOfRoomsToSpawn > 0 && roomPrototypesOnLevel.Count > 0)
                 {
-                    roomPrototypesToSpawn.AddRange(MathUtil.ChooseNRandomElements(numberOfRoomsToSpawn, roomPrototypesOnLevel));
+                    for(var i=0; i < numberOfRoomsToSpawn;  i++)
+                    {
+                        roomPrototypesToSpawn.Add(MathUtil.ChooseRandomElement<RoomPrototype>(roomPrototypesOnLevel));
+                    }
+                    
                 }
 
                 var roomConnections = new List<KeyValuePair<Room, Room>>();
@@ -122,9 +124,9 @@ namespace Gamepackage
                     ConnectTwoRooms(level, pair.Key, pair.Value);
                 }
 
-                var numberOfSpawnTablesToSpawn = 5;
+                var numberOfSpawnTablesToSpawn = 0;
                 var spawnTablesOnLevel = spawnTablesByLevel[level.LevelIndex];
-                var spawnTablesToSpawn = new List<SpawnTable>();
+                var spawnTablesToSpawn = new List<EncounterPrototype>();
 
                 spawnTablesToSpawn.AddRange(spawnTablesOnLevel.FindAll((x) => x.Mandatory));
                 numberOfSpawnTablesToSpawn = numberOfSpawnTablesToSpawn - spawnTablesToSpawn.Count;
@@ -145,7 +147,7 @@ namespace Gamepackage
 
                 foreach (var spawnTableToSpawn in spawnTablesToSpawn)
                 {
-                    List<TokenPrototype> thingsToSpawn = spawnTableToSpawn.ProbabilityTable.Next();
+                    List<UniqueIdentifier> thingsToSpawn = spawnTableToSpawn.ProbabilityTable.Next();
 
                     Point floodFillStartPoint;
                     if (spawnTableToSpawn.ConstraintSpawnToRoomWithTag != null)
@@ -194,18 +196,17 @@ namespace Gamepackage
                     }
                     var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
 
-                    var player = PrototypeFactory.BuildToken("Poncy");
+                    var player = PrototypeFactory.BuildToken(UniqueIdentifier.TOKEN_PONCY);
                     player.Tags.Add(GameTags.Player);
                     player.Position = spawnPoint;
                     level.Tokens.Add(player);
                 }
             }
             var game = GameStateManager.Game;
-            game.Resolve(Container);
             BuildPathfindingGrid(game);
         }
 
-        private static void BuildPathfindingGrid(Game game)
+        private void BuildPathfindingGrid(Game game)
         {
             var levels = game.Dungeon.Levels;
             foreach (var level in levels)
@@ -213,9 +214,8 @@ namespace Gamepackage
                 if (level != null)
                 {
                     level.TilesetGrid.Each((x, y, v) =>
-                    {
-                        
-                        var occupied = level.TokenGrid[x, y].FindAll((token) => { return ResourceManager.GetPrototypeByUniqueIdentifier<TokenPrototype>(token.PrototypeIdentifier).BlocksPathing; }).Count == 0;
+                    { 
+                        var occupied = level.TokenGrid[x, y].FindAll((token) => { return ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier).BlocksPathing; }).Count == 0;
                         level.TilesetGrid[x, y] = new Tile()
                         {
                             Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied,

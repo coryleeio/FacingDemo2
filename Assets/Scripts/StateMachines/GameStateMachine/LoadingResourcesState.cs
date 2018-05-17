@@ -28,23 +28,14 @@ namespace Gamepackage
 
         IEnumerator LoadPrototypes(Root owner)
         {
-            string conn = "Data Source=:memory:";
-            using (var dbConnection = new SqliteConnection(conn) as IDbConnection)
+            ResourceManager.LoadAllPrototypes();
+            if (GameStateManager.Game == null)
             {
-                dbConnection.Open();
-
-                ResourceManager.LoadAllPrototypes(dbConnection);
-                yield return new WaitForEndOfFrame();
-
-                if (GameStateManager.Game == null)
-                {
-                    GameStateManager.NewGame();
-                    DungeonGenerator.GenerateDungeon();
-                }
-
-                dbConnection.Close();
+                GameStateManager.NewGame();
+                DungeonGenerator.GenerateDungeon();
             }
             owner.StateMachine.ChangeState(owner.StateMachine.GamePlayState);
+            yield return new WaitForEndOfFrame();
         }
 
         public void Process()

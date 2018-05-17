@@ -17,7 +17,7 @@ namespace Gamepackage
         {
             if(token.Id == 0)
             {
-                token.Id = GameStateManager.Game.IdManager.NextId;
+                token.Id = GameStateManager.Game.NextId;
             }
             if(!TokenMap.ContainsKey(token.Id))
             {
