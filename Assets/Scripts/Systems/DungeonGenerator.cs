@@ -97,11 +97,11 @@ namespace Gamepackage
                 // If we have stuff we can spawn, and we need some more stuff to spawn
                 if (numberOfRoomsToSpawn > 0 && roomPrototypesOnLevel.Count > 0)
                 {
-                    for(var i=0; i < numberOfRoomsToSpawn;  i++)
+                    for (var i = 0; i < numberOfRoomsToSpawn; i++)
                     {
                         roomPrototypesToSpawn.Add(MathUtil.ChooseRandomElement<RoomPrototype>(roomPrototypesOnLevel));
                     }
-                    
+
                 }
 
                 var roomConnections = new List<KeyValuePair<Room, Room>>();
@@ -214,13 +214,10 @@ namespace Gamepackage
                 if (level != null)
                 {
                     level.TilesetGrid.Each((x, y, v) =>
-                    { 
+                    {
                         var occupied = level.TokenGrid[x, y].FindAll((token) => { return ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier).BlocksPathing; }).Count == 0;
-                        level.TilesetGrid[x, y] = new Tile()
-                        {
-                            Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied,
-                            Weight = 1
-                        };
+                        v.Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied;
+                        v.Weight = 1;
                     });
                 }
             }
