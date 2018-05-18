@@ -24,7 +24,7 @@ namespace Gamepackage
             SpriteSortingSystem.Init();
             GamePlayScene.Load();
             VisibilitySystem.Init();
-            OverlaySystem.Init(GameStateManager.Game.CurrentLevel.TilesetGrid.SizeX, GameStateManager.Game.CurrentLevel.TilesetGrid.SizeY);
+            OverlaySystem.Init(GameStateManager.Game.CurrentLevel.TilesetGrid.Width, GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
             PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
             CameraDriver = GamePlayScene.GetCamera();
             VisibilitySystem.UpdateVisibility();

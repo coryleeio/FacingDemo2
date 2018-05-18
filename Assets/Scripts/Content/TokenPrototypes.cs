@@ -13,16 +13,22 @@ namespace Gamepackage
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_PONCY,
                     BlocksPathing = true,
+                    ViewType = ViewType.StaticSprite,
+                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER,
                 },
                 new TokenPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_GIANT_BEE,
                     BlocksPathing = true,
+                    ViewType = ViewType.StaticSprite,
+                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER,
                 },
                 new TokenPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_QUEEN_BEE,
                     BlocksPathing = true,
+                    ViewType = ViewType.StaticSprite,
+                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER,
                 },
             };
         }

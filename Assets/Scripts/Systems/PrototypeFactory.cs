@@ -38,16 +38,23 @@ namespace Gamepackage
                 TriggerPrototypeUniqueIdentifier = prototype.TriggerPrototypeUniqueIdentifier,
                 ViewUniqueIdentifier = prototype.ViewUniqueIdentifier
             };
-            token.Tags.AddRange(prototype.Tags);
+            token.Traits.AddRange(prototype.Traits);
             return token;
         }
 
         public GameObject BuildView(Token token)
         {
             var tokenPrototype = ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier);
+            var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var go = new GameObject();
             go.name = tokenPrototype.UniqueIdentifier.ToString();
             go.transform.position = MathUtil.MapToWorld(token.Position);
+            if(tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("Marker");
+                spriteRenderer.material = defaultMaterial;
+            }
             return go;
         }
 

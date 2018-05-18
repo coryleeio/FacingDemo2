@@ -26,7 +26,7 @@ namespace Gamepackage
         }
 
         [JsonIgnore]
-        public int SizeX
+        public int Width
         {
             get
             {
@@ -35,7 +35,7 @@ namespace Gamepackage
         }
 
         [JsonIgnore]
-        public int SizeY
+        public int Height
         {
             get
             {
@@ -84,9 +84,9 @@ namespace Gamepackage
         public delegate void GridEachDelegate(int x, int y, TGrid value);
         public void Each(GridEachDelegate fn)
         {
-            for (var x = 0; x < SizeX; x++)
+            for (var x = 0; x < Width; x++)
             {
-                for (var y = 0; y < SizeY; y++)
+                for (var y = 0; y < Height; y++)
                 {
                     fn(x, y, this[x, y]);
                 }

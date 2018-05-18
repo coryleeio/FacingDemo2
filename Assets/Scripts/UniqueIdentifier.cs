@@ -11,6 +11,7 @@
         LEVEL_2,
         ROOM_STANDARD_STONE_ROOM,
         ITEM_LONGSWORD,
+        VIEW_MARKER,
         
     }
 }

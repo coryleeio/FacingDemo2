@@ -13,7 +13,7 @@ namespace Gamepackage
 
         private Dictionary<int, Token> TokenMap = new Dictionary<int, Token>();
 
-        public void Register(Token token)
+        public void Register(Token token, Level level)
         {
             if(token.Id == 0)
             {
@@ -23,6 +23,11 @@ namespace Gamepackage
             {
                 TokenMap.Add(token.Id, token);
             }
+            if(!level.Tokens.Contains(token))
+            {
+                level.Tokens.Add(token);
+            }
+            level.IndexToken(token, token.Position);
         }
 
         public void Clear()
@@ -35,12 +40,17 @@ namespace Gamepackage
             return TokenMap[id];
         }
 
-        public void Deregister(Token token)
+        public void Deregister(Token token, Level level)
         {
             if(TokenMap.ContainsKey(token.Id))
             {
                 TokenMap.Remove(token.Id);
             }
+            if (level.Tokens.Contains(token))
+            {
+                level.Tokens.Remove(token);
+            }
+            level.UnindexToken(token, token.Position);
         }
     }
 }

@@ -12,6 +12,8 @@ namespace Gamepackage
         public List<Room> Rooms = new List<Room>(0);
         public Grid<MapVisibilityState> VisibilityGrid;
         public Grid<Tile> TilesetGrid;
+
+        [JsonIgnore]
         public ListGrid<Token> TokenGrid;
 
         [JsonIgnore]

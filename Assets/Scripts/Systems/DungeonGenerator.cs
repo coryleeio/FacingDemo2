@@ -9,6 +9,7 @@ namespace Gamepackage
     {
         public GameStateManager GameStateManager { get; set; }
         public PrototypeFactory PrototypeFactory { get; set; }
+        public TokenSystem TokenSystem { get; set; }
         public ResourceManager ResourceManager { get; set; }
         public Logger LogSystem { get; set; }
         public TinyIoCContainer Container { get; set; }
@@ -181,7 +182,7 @@ namespace Gamepackage
                                 spawnPoints.Remove(spawnPoint);
                                 var thingSpawned = PrototypeFactory.BuildToken(thingToSpawn);
                                 thingSpawned.Position = spawnPoint;
-                                level.Tokens.Add(thingSpawned);
+                                TokenSystem.Register(thingSpawned, level);
                             }
                             break;
                         }
@@ -197,9 +198,9 @@ namespace Gamepackage
                     var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
 
                     var player = PrototypeFactory.BuildToken(UniqueIdentifier.TOKEN_PONCY);
-                    player.Tags.Add(GameTags.Player);
+                    player.Traits.Add(Traits.Player);
                     player.Position = spawnPoint;
-                    level.Tokens.Add(player);
+                    TokenSystem.Register(player, level);
                 }
             }
             var game = GameStateManager.Game;

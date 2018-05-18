@@ -14,11 +14,14 @@ namespace Gamepackage
 
         public Point Position;
 
+        [JsonIgnore]
+        public Pointf LerpPosition;
+
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 
         public int Id { get; set; }
 
-        public List<string> Tags = new List<string>();
+        public List<Traits> Traits = new List<Traits>();
 
         public List<Inventory> Inventory = new List<Inventory>(0);
 
@@ -36,7 +39,7 @@ namespace Gamepackage
         {
             get
             {
-                return Tags.Contains(GameTags.Player);
+                return Traits.Contains(Gamepackage.Traits.Player);
             }
         }
 
