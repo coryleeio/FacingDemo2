@@ -22,6 +22,10 @@ namespace Gamepackage
 
         public override bool Equals(object obj)
         {
+            if(obj == null)
+            {
+                return false;
+            }
             if (obj.GetType() == typeof(Point))
             {
                 var objAsPoint = obj as Point;
@@ -49,6 +53,16 @@ namespace Gamepackage
             }
 
             return point1.Equals(point2);
+        }
+
+        public Pointf ToPointF()
+        {
+            return new Pointf(Convert.ToSingle(X), Convert.ToSingle(Y));
+        }
+
+        public Vector2 ToVector2()
+        {
+            return new Vector2(Convert.ToSingle(X), Convert.ToSingle(Y));
         }
 
         public static bool operator !=(Point lhs, Point rhs)

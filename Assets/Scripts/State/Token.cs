@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using TinyIoC;
 using UnityEngine;
 
 namespace Gamepackage
@@ -15,7 +14,19 @@ namespace Gamepackage
         public Point Position;
 
         [JsonIgnore]
-        public Pointf LerpPosition;
+        public Vector2 LerpCurrentPosition;
+
+        [JsonIgnore]
+        public Vector2 LerpTargetPosition;
+
+        [JsonIgnore]
+        public float ElapsedMovementTime;
+
+        public bool IsMoving;
+
+        public Queue<Point> CurrentPath = new Queue<Point>(0);
+
+        public Point TargetPosition;
 
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 

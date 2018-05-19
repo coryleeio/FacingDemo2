@@ -9,7 +9,7 @@ namespace Gamepackage
         public float X;
         public float Y;
 
-        public Pointf(int x, int y)
+        public Pointf(float x, float y)
         {
             this.X = x;
             this.Y = y;
@@ -54,6 +54,11 @@ namespace Gamepackage
         public static bool operator !=(Pointf lhs, Pointf rhs)
         {
             return !(lhs == rhs);
+        }
+
+        public Vector2 ToVector2()
+        {
+            return new Vector2(X, Y);
         }
     }
 }

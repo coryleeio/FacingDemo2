@@ -229,36 +229,35 @@ namespace Gamepackage
             return elements[ChooseRandomIntInRange(0, elements.Count)];
         }
 
-        public static Vector3 MapToWorld(Point p)
+        public static Vector2 MapToWorld(Point p)
         {
             return MapToWorld(p.X, p.Y);
         }
 
-        public static Vector3 MapToWorld(Pointf p)
+        public static Vector2 MapToWorld(Pointf p)
         {
             return MapToWorld(p.X, p.Y);
         }
 
-        public static Vector3 MapToWorld(int x, int y)
+        public static Vector2 MapToWorld(int x, int y)
         {
             return MapToWorld(x * 1.0f, y * 1.0f);
         }
 
-        public static Vector3 MapToWorld(float x, float y)
+        public static Vector2 MapToWorld(float x, float y)
         {
             var newX = (x - y) * HalfTileWidth;
             var newY = (-x - y) * HalfTileHeight;
-            return new Vector3(newX, newY, 0.0f);
+            return new Vector2(newX, newY);
         }
 
-        public static Vector3 MapToWorld(float x, float y, float height)
+        public static Vector2 MapToWorld(float x, float y, float height)
         {
             var amountToSubtract = 0.0f;
             amountToSubtract += height;
 
             var newPos = MathUtil.MapToWorld(x - amountToSubtract, y - amountToSubtract);
-            var newZ = ((y + 0.9f * x) + .00001f * height);
-            newPos = new Vector3(newPos.x, newPos.y, newZ);
+            newPos = new Vector2(newPos.x, newPos.y);
             return newPos;
         }
 

@@ -26,6 +26,7 @@ namespace Gamepackage
                 CurrentLevelIndex = 1,
                 MonstersKilled = 0,
                 Time = 0,
+                IsPlayerTurn = true,
             };
             Game.Dungeon = new Dungeon();
         }

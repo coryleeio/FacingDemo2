@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -11,7 +12,7 @@ namespace Gamepackage
         public SpriteSortingSystem SpriteSortingSystem { get; set; }
         public PathFinder PathFinder { get; set; }
         public GameStateManager GameStateManager { get; set; }
-
+        public MovementSystem MovementSystem { get; set; }
         private GameSceneCameraDriver CameraDriver;
 
         public GamePlayState()
@@ -46,6 +47,8 @@ namespace Gamepackage
                 }
             };
             OverlaySystem.Activate(newOverlay);
+
+            MovementSystem.FollowPath(GameStateManager.Game.CurrentLevel.Player, new List<Point> { new Point(0, 0), new Point(39, 39) } );
         }
 
         public void Process()
@@ -53,6 +56,7 @@ namespace Gamepackage
             OverlaySystem.Process();
             SpriteSortingSystem.Sort();
             PathFinder.Process();
+            MovementSystem.Process(GameStateManager.Game.CurrentLevel.Tokens, GameStateManager.Game.CurrentLevel, Time.deltaTime);
             CameraDriver.MoveCamera();
         }
 
