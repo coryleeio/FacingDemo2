@@ -51,6 +51,8 @@ namespace Gamepackage
 
         public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
 
+        public List<int> TokensAffectedByTriggerOnThisTurn = new List<int>(0);
+
         public UniqueIdentifier ViewUniqueIdentifier;
 
         public bool IsPlayer

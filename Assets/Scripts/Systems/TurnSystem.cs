@@ -3,20 +3,17 @@
     public class TurnSystem
     {
         public GameStateManager GameStateManager { get; set; }
-        public TurnStateMachine TurnStateMachine { get; set; }
-
-        public TurnSystem() {
-            
-        }
+        public StateMachine StateMachine { get; set; }
+        public DoNextAction DoNextAction { get; set; }
 
         public void Init()
         {
-            TurnStateMachine.ChangeState(TurnStateMachine.DoNextAction);
+            StateMachine.ChangeState(DoNextAction);
         }
 
         public void Process()
         {
-            TurnStateMachine.Process();
+            StateMachine.Process();
         }
     }
 }

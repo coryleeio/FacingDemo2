@@ -42,14 +42,14 @@ namespace Gamepackage
             LogSystem.Log("Saving game");
             // parameters are required to deserialize abstract types
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
-            File.WriteAllText(Application.persistentDataPath + "/dev.sav", JsonConvert.SerializeObject(Game, Formatting.Indented, parameters));
+            File.WriteAllText(UnityEngine.Application.persistentDataPath + "/dev.sav", JsonConvert.SerializeObject(Game, Formatting.Indented, parameters));
         }
 
         public void LoadGame()
         {
             LogSystem.Log("Loading game");
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
-            Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(Application.persistentDataPath + "/dev.sav"), parameters);
+            Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(UnityEngine.Application.persistentDataPath + "/dev.sav"), parameters);
             foreach(var level in Game.Dungeon.Levels)
             {
                 if(level != null)

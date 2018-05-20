@@ -3,13 +3,16 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class Root : MonoBehaviour
+    public class Application : MonoBehaviour
     {
-        public GameStateMachine StateMachine { get; set; }
+        public StateMachine StateMachine = new StateMachine();
         public GameStateManager GameStateManager { get; set; }
         public VisibilitySystem VisibilitySystem { get; set; }
         public TokenSystem TokenSystem { get; set; }
         public PathFinder PathFinder { get; set; }
+        public LoadingResourcesState LoadingResourcesState { get; set; }
+        public MainMenuState MainMenuState { get; set; }
+        public GamePlayState GamePlayState { get; set; }
 
         void Start()
         {
@@ -17,11 +20,10 @@ namespace Gamepackage
             var container = new TinyIoCContainer();
 
             // Dont forget to add the injection down below...
-            container.Register<Root>(this);
+            container.Register<Application>(this);
             container.Register<GamePlayState, GamePlayState>().AsSingleton();
             container.Register<MainMenuState, MainMenuState>().AsSingleton();
             container.Register<LoadingResourcesState, LoadingResourcesState>().AsSingleton();
-            container.Register<GameStateMachine, GameStateMachine>().AsSingleton();
             container.Register<Logger, Logger>().AsSingleton();
             container.Register<GameStateManager, GameStateManager>().AsSingleton();
             container.Register<Logger, Logger>().AsSingleton();
@@ -38,13 +40,13 @@ namespace Gamepackage
             container.Register<MainMenuScene, MainMenuScene>().AsSingleton();
             container.Register<MovementSystem, MovementSystem>().AsSingleton();
             container.Register<TurnSystem, TurnSystem>().AsSingleton();
-            container.Register<TurnStateMachine, TurnStateMachine>().AsSingleton();
             container.Register<DoNextAction, DoNextAction>().AsSingleton();
+            container.Register<DoTriggers, DoTriggers>().AsSingleton();
+            container.Register<StateMachine>();
 
             container.BuildUp(container.Resolve<GamePlayState>());
             container.BuildUp(container.Resolve<MainMenuState>());
             container.BuildUp(container.Resolve<LoadingResourcesState>());
-            container.BuildUp(container.Resolve<GameStateMachine>());
             container.BuildUp(container.Resolve<Logger>());
             container.BuildUp(container.Resolve<GameStateManager>());
             container.BuildUp(container.Resolve<VisibilitySystem>());
@@ -60,10 +62,10 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<MainMenuScene>());
             container.BuildUp(container.Resolve<MovementSystem>());
             container.BuildUp(container.Resolve<TurnSystem>());
-            container.BuildUp(container.Resolve<TurnStateMachine>());
             container.BuildUp(container.Resolve<DoNextAction>());
-
+            container.BuildUp(container.Resolve<DoTriggers>());
             container.BuildUp(this);
+            StateMachine.ChangeState(MainMenuState);
         }
 
         void Update()
@@ -81,18 +83,18 @@ namespace Gamepackage
             if (GUI.Button(new Rect(10, 10, 100, 50), "Start New game"))
             {
                 GameStateManager.Clear();
-                StateMachine.ChangeState(StateMachine.LoadingResourcesState);
+                StateMachine.ChangeState(LoadingResourcesState);
             }
 
             if (GUI.Button(new Rect(10, 75, 100, 50), "Exit game"))
             {
                 GameStateManager.Clear();
-                StateMachine.ChangeState(StateMachine.MainMenuState);
+                StateMachine.ChangeState(MainMenuState);
             }
 
             if (GUI.Button(new Rect(10, 140, 100, 50), "Reload current"))
             {
-                StateMachine.ChangeState(StateMachine.GamePlayState);
+                StateMachine.ChangeState(GamePlayState);
             }
 
             if (GUI.Button(new Rect(10, 215, 100, 50), "Save"))
@@ -103,7 +105,7 @@ namespace Gamepackage
             if (GUI.Button(new Rect(10, 290, 100, 50), "Load"))
             {
                 GameStateManager.LoadGame();
-                StateMachine.ChangeState(StateMachine.GamePlayState);
+                StateMachine.ChangeState(GamePlayState);
             }
 
             if (GUI.Button(new Rect(10, 350, 100, 50), "Reveal"))

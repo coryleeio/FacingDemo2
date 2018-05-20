@@ -1,11 +1,8 @@
 namespace Gamepackage
 {
-    public abstract class StateMachine
+    public class StateMachine
     {
-        public StateMachine()
-        {
-        }
-
+        public StateMachine() {}
         public IStateMachineState CurrentState;
         public IStateMachineState PreviousState;
         public IStateMachineState GlobalState;

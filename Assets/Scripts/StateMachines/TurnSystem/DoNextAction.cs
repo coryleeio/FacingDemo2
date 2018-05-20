@@ -2,11 +2,6 @@
 
 namespace Gamepackage
 {
-    public class TurnStateMachine : StateMachine
-    {
-        public DoNextAction DoNextAction { get; set; }
-    }
-
     public class DoNextAction : IStateMachineState
     {
         private Token NextActor;
@@ -14,27 +9,7 @@ namespace Gamepackage
 
         public void Enter()
         {
-
-        }
-
-        private void EndTurnForToken(Game game, Token token)
-        {
-            Debug.Log("EndTurnForToken turn for " + token.Id + " " + token.View.gameObject.name);
-            NextActor.HasActed = true;
             NextActor = null;
-            if(token.IsPlayer)
-            {
-                game.IsPlayerTurn = !game.IsPlayerTurn;
-            }
-        }
-
-        private void EndAIPhase(Game game)
-        {
-            // If No actor is found it is time to advance the game turn
-            game.CurrentTurn += 1;
-            Debug.Log("Turn is now: " + game.CurrentTurn);
-            game.IsPlayerTurn = true;
-            game.CurrentLevel.Player.HasActed = false;
         }
 
         public void Process()
@@ -60,7 +35,7 @@ namespace Gamepackage
                 }
                 if (NextActor == null)
                 {
-                    EndAIPhase(game);
+                    EndTurn(game);
                 }
             }
             else
@@ -140,6 +115,30 @@ namespace Gamepackage
         public void Exit()
         {
             NextActor = null;
+        }
+
+        private void EndTurnForToken(Game game, Token token)
+        {
+            Debug.Log("EndTurnForToken turn for " + token.Id + " " + token.View.gameObject.name);
+            NextActor.HasActed = true;
+            NextActor = null;
+            if (token.IsPlayer)
+            {
+                game.IsPlayerTurn = !game.IsPlayerTurn;
+            }
+        }
+
+        private void EndTurn(Game game)
+        {
+            game.CurrentTurn += 1;
+            Debug.Log("Turn is now: " + game.CurrentTurn);
+            game.IsPlayerTurn = true;
+            game.CurrentLevel.Player.HasActed = false;
+            NextActor = null;
+            foreach(var token in game.CurrentLevel.Tokens)
+            {
+                token.TokensAffectedByTriggerOnThisTurn.Clear();
+            }
         }
     }
 }
