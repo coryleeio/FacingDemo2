@@ -6,20 +6,23 @@ namespace Gamepackage
     public class MovementSystem
     {
         public PathFinder PathFinder { get; set; }
+        public GameStateManager GameStateManager { get; set; }
         private float TimeBetweenTiles = 15f;
 
-        public void Process(List<Token> tokens, Level level, float deltaTime)
+        public void Process()
         {
+            var tokens = GameStateManager.Game.CurrentLevel.Tokens;
+
             foreach (var token in tokens)
             {
                 if(!token.IsMoving && token.CurrentPath.Count > 0)
                 {
-                    var nextPos = token.CurrentPath.Dequeue();
+                    var nextPos = token.CurrentPath.Peek();
                     MoveTo(token, nextPos);
                 }
                 if (token.IsMoving)
                 {
-                    token.ElapsedMovementTime += deltaTime;
+                    token.ElapsedMovementTime += Time.deltaTime;
                     if (token.ElapsedMovementTime > TimeBetweenTiles)
                     {
                         token.ElapsedMovementTime = TimeBetweenTiles;
@@ -35,9 +38,10 @@ namespace Gamepackage
                     if (Vector2.Distance(_lerpPos, targetVectorPos) < 0.005f)
                     {
                         token.Position = token.TargetPosition;
+                        var oldPos = token.CurrentPath.Dequeue();
                         if (token.CurrentPath.Count > 0)
                         {
-                            var nextPos = token.CurrentPath.Dequeue();
+                            var nextPos = token.CurrentPath.Peek();
                             MoveTo(token, nextPos);
                         }
                         else

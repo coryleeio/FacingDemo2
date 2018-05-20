@@ -13,6 +13,8 @@ namespace Gamepackage
 
         public Point Position;
 
+        public int TimeAccrued = 0;
+
         [JsonIgnore]
         public Vector2 LerpCurrentPosition;
 
@@ -22,9 +24,14 @@ namespace Gamepackage
         [JsonIgnore]
         public float ElapsedMovementTime;
 
+        [JsonIgnore]
+        public Queue<TokenAction> ActionQueue= new Queue<TokenAction>(0);
+
         public bool IsMoving;
 
         public Queue<Point> CurrentPath = new Queue<Point>(0);
+
+        public bool HasActed = false;
 
         public Point TargetPosition;
 

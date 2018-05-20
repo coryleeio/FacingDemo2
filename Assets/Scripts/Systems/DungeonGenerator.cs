@@ -125,7 +125,7 @@ namespace Gamepackage
                     ConnectTwoRooms(level, pair.Key, pair.Value);
                 }
 
-                var numberOfSpawnTablesToSpawn = 0;
+                var numberOfSpawnTablesToSpawn = 1;
                 var spawnTablesOnLevel = spawnTablesByLevel[level.LevelIndex];
                 var spawnTablesToSpawn = new List<EncounterPrototype>();
 
@@ -143,7 +143,10 @@ namespace Gamepackage
                 // If we have stuff we can spawn, and we need some more stuff to spawn
                 if (numberOfSpawnTablesToSpawn > 0 && spawnTablesOnLevel.Count > 0)
                 {
-                    spawnTablesToSpawn.AddRange(MathUtil.ChooseNRandomElements(numberOfSpawnTablesToSpawn, spawnTablesOnLevel));
+                    for(var i =0; i < numberOfSpawnTablesToSpawn; i++)
+                    {
+                        spawnTablesToSpawn.Add(MathUtil.ChooseRandomElement<EncounterPrototype>(spawnTablesOnLevel));
+                    }
                 }
 
                 foreach (var spawnTableToSpawn in spawnTablesToSpawn)

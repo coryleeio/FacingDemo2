@@ -25,7 +25,7 @@ namespace Gamepackage
                 FurthestLevelReached = 1,
                 CurrentLevelIndex = 1,
                 MonstersKilled = 0,
-                Time = 0,
+                CurrentTurn = 0,
                 IsPlayerTurn = true,
             };
             Game.Dungeon = new Dungeon();

@@ -7,7 +7,7 @@ namespace Gamepackage
         public int FurthestLevelReached { get; set; }
         public int CurrentLevelIndex { get; set; }
         public int MonstersKilled { get; set; }
-        public int Time { get; set; }
+        public int CurrentTurn { get; set; }
         public bool IsPlayerTurn { get; set; }
 
         [JsonProperty]

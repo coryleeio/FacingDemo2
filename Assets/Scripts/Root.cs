@@ -37,6 +37,9 @@ namespace Gamepackage
             container.Register<LoadingScene, LoadingScene>().AsSingleton();
             container.Register<MainMenuScene, MainMenuScene>().AsSingleton();
             container.Register<MovementSystem, MovementSystem>().AsSingleton();
+            container.Register<TurnSystem, TurnSystem>().AsSingleton();
+            container.Register<TurnStateMachine, TurnStateMachine>().AsSingleton();
+            container.Register<DoNextAction, DoNextAction>().AsSingleton();
 
             container.BuildUp(container.Resolve<GamePlayState>());
             container.BuildUp(container.Resolve<MainMenuState>());
@@ -56,6 +59,10 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<LoadingScene>());
             container.BuildUp(container.Resolve<MainMenuScene>());
             container.BuildUp(container.Resolve<MovementSystem>());
+            container.BuildUp(container.Resolve<TurnSystem>());
+            container.BuildUp(container.Resolve<TurnStateMachine>());
+            container.BuildUp(container.Resolve<DoNextAction>());
+
             container.BuildUp(this);
         }
 
