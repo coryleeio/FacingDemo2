@@ -29,6 +29,8 @@ namespace Gamepackage
 
         public bool IsMoving;
 
+        public bool CanTriggerNow = false;
+
         public Queue<Point> CurrentPath = new Queue<Point>(0);
 
         public bool HasActed = false;
@@ -49,11 +51,10 @@ namespace Gamepackage
 
         public ViewType ViewType;
 
+        public UniqueIdentifier ViewUniqueIdentifier;
         public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
 
-        public List<int> TokensAffectedByTriggerOnThisTurn = new List<int>(0);
-
-        public UniqueIdentifier ViewUniqueIdentifier;
+        public Dictionary<string, string> TriggerParamters;
 
         public bool IsPlayer
         {

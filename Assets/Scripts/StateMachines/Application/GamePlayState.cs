@@ -21,7 +21,6 @@ namespace Gamepackage
             SpriteSortingSystem.Init();
             GamePlayScene.Load();
             VisibilitySystem.Init();
-            TurnSystem.Init();
             OverlaySystem.Init(GameStateManager.Game.CurrentLevel.TilesetGrid.Width, GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
             PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
             CameraDriver = GamePlayScene.GetCamera();
@@ -51,7 +50,7 @@ namespace Gamepackage
         public void Process()
         {
             OverlaySystem.Process();
-            SpriteSortingSystem.Sort();
+            SpriteSortingSystem.Process();
             PathFinder.Process();
             TurnSystem.Process();
             MovementSystem.Process();

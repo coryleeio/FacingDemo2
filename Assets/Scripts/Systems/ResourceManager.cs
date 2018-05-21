@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using TinyIoC;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -9,13 +10,12 @@ namespace Gamepackage
     public class ResourceManager
     {
         public Logger LogSystem { get; set; }
+        public TinyIoCContainer Container { get; set; }
         private Dictionary<UniqueIdentifier, IResource> _prototypesByUniqueIdentifier = new Dictionary<UniqueIdentifier, IResource>();
         private Dictionary<Type, List<IResource>> _prototypesByType = new Dictionary<Type, List<IResource>>();
         private bool hasInit = false;
 
-        public ResourceManager()
-        {
-        }
+        public ResourceManager() {}
 
         public void LoadAllPrototypes()
         {
@@ -29,6 +29,8 @@ namespace Gamepackage
                 CacheResources<LevelPrototype>(LevelPrototypes.LoadAll());
                 CacheResources<RoomPrototype>(RoomPrototypes.LoadAll());
                 CacheResources<TokenPrototype>(TokenPrototypes.LoadAll());
+                CacheResources<TriggerPrototype>(TriggerPrototypes.LoadAll(Container));
+                CacheResources<EffectPrototype>(EffectPrototypes.LoadAll());
             }
             hasInit = true;
         }

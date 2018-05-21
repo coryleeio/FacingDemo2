@@ -30,6 +30,20 @@ namespace Gamepackage
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER,
                 },
+                new TokenPrototype()
+                {
+                    UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_UP,
+                    BlocksPathing = false,
+                    ViewType = ViewType.StaticSprite,
+                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER,
+                },
+                new TokenPrototype()
+                {
+                    UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_DOWN,
+                    BlocksPathing = false,
+                    ViewType = ViewType.StaticSprite,
+                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER,
+                },
             };
         }
     }

@@ -2,6 +2,13 @@
 
 public class Wait : TokenAction
 {
+    private TurnSystem _turnSystem;
+
+    public Wait(TurnSystem turnSystem)
+    {
+        _turnSystem = turnSystem;
+    }
+
     public override int TimeCost
     {
         get
@@ -16,5 +23,10 @@ public class Wait : TokenAction
         {
             return true;
         }
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
     }
 }

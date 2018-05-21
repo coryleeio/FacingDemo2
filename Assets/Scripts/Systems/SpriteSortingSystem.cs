@@ -25,7 +25,7 @@ namespace Gamepackage
             Tiles[position.X, position.Y] = tileSpriteRenderer;
         }
 
-        public void Sort()
+        public void Process()
         {
             var level = GameStateManager.Game.CurrentLevel;
             var sortOrder = 0;

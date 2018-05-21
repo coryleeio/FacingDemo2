@@ -57,7 +57,7 @@ namespace Gamepackage
             }
         }
 
-        private void MoveTo(Token token, Point newPosition)
+        public void MoveTo(Token token, Point newPosition)
         {
             token.TargetPosition = newPosition;
             token.LerpCurrentPosition = MathUtil.MapToWorld(token.Position);

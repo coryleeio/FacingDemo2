@@ -35,10 +35,6 @@ namespace Gamepackage
                        }
                     }
                 },
-
-
-
-
             };
         }
     }
