@@ -2,13 +2,6 @@
 
 public class Wait : TokenAction
 {
-    private TurnSystem _turnSystem;
-
-    public Wait(TurnSystem turnSystem)
-    {
-        _turnSystem = turnSystem;
-    }
-
     public override int TimeCost
     {
         get

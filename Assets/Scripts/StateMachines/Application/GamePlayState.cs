@@ -13,8 +13,9 @@ namespace Gamepackage
         public PathFinder PathFinder { get; set; }
         public GameStateManager GameStateManager { get; set; }
         public MovementSystem MovementSystem { get; set; }
-        public TurnSystem TurnSystem { get; set; }
+        public FlowSystem TurnSystem { get; set; }
         private GameSceneCameraDriver CameraDriver;
+        private OverlayConfig MouseOverlay { get; set; }
 
         public void Enter()
         {
@@ -25,21 +26,22 @@ namespace Gamepackage
             PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
             CameraDriver = GamePlayScene.GetCamera();
             VisibilitySystem.UpdateVisibility();
-
+            MouseOverlay = new OverlayConfig
+            {
+                Name = "MouseHover",
+                Position = new Point(0, 0),
+                OffsetPoints = new List<Point>() { new Point(0,0)},
+                DefaultColor = new Color(0, 213, 255),
+                RelativeSortOrder = 0,
+                WalkableTilesOnly = true,
+                ConstrainToLevel = true,
+                Sprite = Resources.Load<Sprite>("Overlay/Square"),
+            };
             var newOverlay = new Overlay()
             {
                 Configs = new System.Collections.Generic.List<OverlayConfig>()
                 {
-                    new OverlayConfig
-                    {
-                        Name = "MouseHover",
-                        Shape = new Shape(ShapeType.Rect, 1, 1),
-                        DefaultColor = new Color(0, 213, 255),
-                        OverlayBehaviour = OverlayBehaviour.PositionFollowsCursor,
-                        RelativeSortOrder = 0,
-                        WalkableTilesOnly = true,
-                        ConstrainToLevel = true
-                    },
+                    MouseOverlay
                 }
             };
             OverlaySystem.Activate(newOverlay);
@@ -49,6 +51,7 @@ namespace Gamepackage
 
         public void Process()
         {
+            MouseOverlay.Position = MathUtil.GetMousePositionOnMap(Camera.main);
             OverlaySystem.Process();
             SpriteSortingSystem.Process();
             PathFinder.Process();

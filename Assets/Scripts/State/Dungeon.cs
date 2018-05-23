@@ -3,7 +3,7 @@ using TinyIoC;
 
 namespace Gamepackage
 {
-    public class Dungeon
+    public class Dungeon : IHasApplicationContext
     {
         public Dungeon()
         {
@@ -11,5 +11,23 @@ namespace Gamepackage
         }
 
         public Level[] Levels;
+
+        public ApplicationContext ApplicationContext
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        private ApplicationContext Context;
+        public void InjectContext(ApplicationContext context)
+        {
+            Context = context;
+            foreach(var level in Levels)
+            {
+                level.InjectContext(context);
+            }
+        }
     }
 }

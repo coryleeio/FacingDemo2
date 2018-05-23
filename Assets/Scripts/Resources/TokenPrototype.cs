@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Gamepackage
 {
@@ -9,7 +10,7 @@ namespace Gamepackage
         public List<Traits> Traits = new List<Traits>(0);
         public AIBehaviourType BehaviorIdentifier;
         public ViewType ViewType;
-        public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
         public UniqueIdentifier ViewUniqueIdentifier;
+        public UniqueIdentifier TriggerUniqueIdentifier;
     }
 }

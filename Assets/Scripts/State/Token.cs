@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Gamepackage
 {
     [Serializable]
-    public class Token
+    public class Token : IHasApplicationContext
     {
         public Token() {}
 
@@ -29,7 +29,7 @@ namespace Gamepackage
 
         public bool IsMoving;
 
-        public bool CanTriggerNow = false;
+        public bool NeedToCheckIfMovementTriggeredTriggers = false;
 
         public Queue<Point> CurrentPath = new Queue<Point>(0);
 
@@ -52,9 +52,11 @@ namespace Gamepackage
         public ViewType ViewType;
 
         public UniqueIdentifier ViewUniqueIdentifier;
-        public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
 
-        public Dictionary<string, string> TriggerParamters;
+        public Trigger Trigger;
+
+        public bool TriggerHasBeenChecked = false;
+        public bool IsTriggering = false;
 
         public bool IsPlayer
         {
@@ -68,5 +70,15 @@ namespace Gamepackage
         public GameObject View;
 
         public bool IsVisible;
+
+        private ApplicationContext Context;
+        public void InjectContext(ApplicationContext context)
+        {
+            Context = context;
+            if(Trigger != null)
+            {
+                Trigger.InjectContext(context);
+            }
+        }
     }
 }

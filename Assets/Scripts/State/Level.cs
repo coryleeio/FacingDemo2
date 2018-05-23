@@ -4,7 +4,7 @@ using TinyIoC;
 
 namespace Gamepackage
 {
-    public class Level
+    public class Level : IHasApplicationContext
     {
         public int LevelIndex;
         public Rectangle BoundingBox;
@@ -56,6 +56,16 @@ namespace Gamepackage
             if (!TokenGrid[newPosition.X, newPosition.Y].Contains(token))
             {
                 TokenGrid[newPosition.X, newPosition.Y].Add(token);
+            }
+        }
+
+        private ApplicationContext Context;
+        public void InjectContext(ApplicationContext context)
+        {
+            Context = context;
+            foreach(var token in Tokens)
+            {
+                token.InjectContext(context);
             }
         }
     }

@@ -1,12 +1,17 @@
 ﻿namespace Gamepackage
 {
-    public abstract class TokenAction : IStateMachineState
+    public abstract class TokenAction
     {
-        public bool HasStarted = false;
-
         public abstract int TimeCost
         {
-            get; 
+            get;
+        }
+
+        public bool HasStarted = false;
+
+        public abstract bool IsComplete
+        {
+            get;
         }
 
         public virtual void Enter()
@@ -22,11 +27,6 @@
         public virtual void Process()
         {
 
-        }
-
-        public abstract bool IsComplete
-        {
-             get;
         }
     }
 }

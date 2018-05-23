@@ -4,12 +4,7 @@
     {
         public Token Token;
         public Point TargetLocation;
-        public MovementSystem MovementSystem;
-
-        public Move(MovementSystem movementSystem)
-        {
-            MovementSystem = movementSystem;
-        }
+        public MovementSystem MovementSystem { get; set; }
 
         public override int TimeCost
         {
@@ -27,7 +22,7 @@
         public override void Exit()
         {
             base.Exit();
-            Token.CanTriggerNow = true;
+            Token.NeedToCheckIfMovementTriggeredTriggers = true;
         }
 
         public override bool IsComplete

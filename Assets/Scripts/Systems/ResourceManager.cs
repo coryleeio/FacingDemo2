@@ -29,7 +29,7 @@ namespace Gamepackage
                 CacheResources<LevelPrototype>(LevelPrototypes.LoadAll());
                 CacheResources<RoomPrototype>(RoomPrototypes.LoadAll());
                 CacheResources<TokenPrototype>(TokenPrototypes.LoadAll());
-                CacheResources<TriggerPrototype>(TriggerPrototypes.LoadAll(Container));
+                CacheResources<TriggerBehaviourPrototype>(TriggerBehaviourPrototypes.LoadAll(Container));
                 CacheResources<EffectPrototype>(EffectPrototypes.LoadAll());
             }
             hasInit = true;

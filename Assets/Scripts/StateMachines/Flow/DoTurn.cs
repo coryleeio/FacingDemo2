@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class TurnSystem
+    public class DoTurn : IStateMachineState
     {
         public GameStateManager GameStateManager { get; set; }
         public StateMachine StateMachine { get; set; }
@@ -56,7 +56,7 @@ namespace Gamepackage
                     // We have atleast one action to do(the player may have multiple, the AI has 1)
                     var action = NextActor.ActionQueue.Peek();
 
-                    if (!action.HasStarted)
+                    if (!action.IsComplete)
                     {
                         if (!NextActor.IsPlayer)
                         {
@@ -135,6 +135,11 @@ namespace Gamepackage
             game.IsPlayerTurn = true;
             game.CurrentLevel.Player.HasActed = false;
             NextActor = null;
+        }
+
+        public void Exit()
+        {
+
         }
     }
 }

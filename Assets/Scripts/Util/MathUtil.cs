@@ -348,6 +348,17 @@ namespace Gamepackage
 
             return points;
         }
+
+        public static List<Point> GetPointsByOffset(Point point, List<Point> offsets)
+        {
+            var list = new List<Point>();
+            foreach (var offset in offsets)
+            {
+                list.Add(GetPointByOffset(point, offset));
+            }
+            return list;
+        }
+
         public static List<Point> GetPointsByOffset(Point point, Point[] offsets)
         {
             var list = new List<Point>();

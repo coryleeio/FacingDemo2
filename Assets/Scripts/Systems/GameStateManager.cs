@@ -8,9 +8,8 @@ namespace Gamepackage
     public class GameStateManager
     {
         public Game Game { get; private set; }
-        public Logger LogSystem { get; set; }
-        public ResourceManager ResourceManager { get; set; }
         public TokenSystem TokenSystem { get; set; }
+        public ApplicationContext Context;
 
         public GameStateManager()
         {
@@ -19,7 +18,7 @@ namespace Gamepackage
 
         public void NewGame()
         {
-            LogSystem.Log("New Game");
+            Context.Logger.Log("New Game");
             Game = new Game
             {
                 FurthestLevelReached = 1,
@@ -33,13 +32,13 @@ namespace Gamepackage
 
         public void Clear()
         {
-            LogSystem.Log("Clearing game state");
+            Context.Logger.Log("Clearing game state");
             Game = null;
         }
 
         public void SaveGame()
         {
-            LogSystem.Log("Saving game");
+            Context.Logger.Log("Saving game");
             // parameters are required to deserialize abstract types
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             File.WriteAllText(UnityEngine.Application.persistentDataPath + "/dev.sav", JsonConvert.SerializeObject(Game, Formatting.Indented, parameters));
@@ -47,7 +46,7 @@ namespace Gamepackage
 
         public void LoadGame()
         {
-            LogSystem.Log("Loading game");
+            Context.Logger.Log("Loading game");
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(UnityEngine.Application.persistentDataPath + "/dev.sav"), parameters);
             foreach(var level in Game.Dungeon.Levels)
@@ -61,6 +60,7 @@ namespace Gamepackage
                     }
                 }
             }
+            Game.InjectContext(Context);
         }
     }
 }

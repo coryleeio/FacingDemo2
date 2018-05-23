@@ -21,6 +21,7 @@ namespace Gamepackage
 
             // Dont forget to add the injection down below...
             container.Register<Application>(this);
+            container.Register<ApplicationContext, ApplicationContext>().AsSingleton();
             container.Register<GamePlayState, GamePlayState>().AsSingleton();
             container.Register<MainMenuState, MainMenuState>().AsSingleton();
             container.Register<LoadingResourcesState, LoadingResourcesState>().AsSingleton();
@@ -39,7 +40,7 @@ namespace Gamepackage
             container.Register<LoadingScene, LoadingScene>().AsSingleton();
             container.Register<MainMenuScene, MainMenuScene>().AsSingleton();
             container.Register<MovementSystem, MovementSystem>().AsSingleton();
-            container.Register<TurnSystem, TurnSystem>().AsSingleton();
+            container.Register<FlowSystem, FlowSystem>().AsSingleton();
             container.Register<StateMachine>();
 
             container.BuildUp(container.Resolve<GamePlayState>());
@@ -59,8 +60,9 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<LoadingScene>());
             container.BuildUp(container.Resolve<MainMenuScene>());
             container.BuildUp(container.Resolve<MovementSystem>());
-            container.BuildUp(container.Resolve<TurnSystem>());
+            container.BuildUp(container.Resolve<FlowSystem>());
             container.BuildUp(this);
+            container.BuildUp(container.Resolve<ApplicationContext>());
             StateMachine.ChangeState(MainMenuState);
         }
 

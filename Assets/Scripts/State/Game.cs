@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Gamepackage
 {
-    public class Game
+    public class Game : IHasApplicationContext
     {
         public int FurthestLevelReached { get; set; }
         public int CurrentLevelIndex { get; set; }
@@ -37,6 +37,12 @@ namespace Gamepackage
             {
                 return Dungeon.Levels[CurrentLevelIndex];
             }
+        }
+
+        private ApplicationContext Context;
+        public void InjectContext(ApplicationContext context)
+        {
+            Context = context;
         }
     }
 }

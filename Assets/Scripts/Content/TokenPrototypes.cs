@@ -36,6 +36,7 @@ namespace Gamepackage
                     BlocksPathing = false,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER,
+                    TriggerPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE
                 },
                 new TokenPrototype()
                 {
@@ -43,6 +44,7 @@ namespace Gamepackage
                     BlocksPathing = false,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER,
+                    TriggerPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
                 },
             };
         }

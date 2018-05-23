@@ -26,6 +26,36 @@ namespace Gamepackage
             }
         }
 
+        public TokenAction BuildTokenAction<TAction> () where TAction : TokenAction
+        {
+            var action = default(TAction);
+            Container.BuildUp(action);
+            return action;
+        }
+
+        public Trigger BuildTrigger(UniqueIdentifier identifier)
+        {
+            Trigger ret;
+            if(identifier == UniqueIdentifier.TRIGGER_NONE)
+            {
+                return null;
+            }
+            else if(identifier == UniqueIdentifier.TRIGGER_POISON_DART)
+            {
+                ret = new PoisonDart();
+            }
+            else if(identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
+            {
+                ret = new TraverseStaircase();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            Container.BuildUp(ret);
+            return ret;
+        }
+
         public Token BuildToken(UniqueIdentifier identifier)
         {
             var prototype = ResourceManager.GetPrototype<TokenPrototype>(identifier);
@@ -35,8 +65,8 @@ namespace Gamepackage
                 PrototypeIdentifier = identifier,
                 BehaviorIdentifier = prototype.BehaviorIdentifier,
                 ViewType = prototype.ViewType,
-                TriggerPrototypeUniqueIdentifier = prototype.TriggerPrototypeUniqueIdentifier,
-                ViewUniqueIdentifier = prototype.ViewUniqueIdentifier
+                ViewUniqueIdentifier = prototype.ViewUniqueIdentifier,
+                Trigger = BuildTrigger(prototype.TriggerUniqueIdentifier),
             };
             token.Traits.AddRange(prototype.Traits);
             return token;
