@@ -5,16 +5,17 @@ namespace Gamepackage
 {
     public class FlowSystem
     {
-        public GameStateManager GameStateManager { get; set; }
-        public StateMachine StateMachine { get; set; }
-        private Token NextActor;
-        private TokenAction StartedAction;
-        public TinyIoCContainer Container { get; set; }
-        public DoTurn DoTurn { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
+        public StateMachine StateMachine { get; private set; }
+
+        public FlowSystem()
+        {
+            StateMachine = new StateMachine();
+        }
 
         public void Init()
         {
-            StateMachine.ChangeState(DoTurn);
+            StateMachine.ChangeState(ApplicationContext.DoTurn);
         }
 
         public void Process()

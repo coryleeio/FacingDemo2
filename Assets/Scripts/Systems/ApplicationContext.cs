@@ -1,4 +1,6 @@
-﻿namespace Gamepackage
+﻿using TinyIoC;
+
+namespace Gamepackage
 {
     public class ApplicationContext
     {
@@ -21,6 +23,8 @@
         public MainMenuScene MainMenuScene { get; set; }
         public MovementSystem MovementSystem { get; set; }
         public FlowSystem FlowSystem { get; set; }
-        public StateMachine StateMachine { get; set; }
+        public DoTurn DoTurn { get; set; }
+        public DoTurn DoTriggers { get; set; }
+        public TinyIoCContainer Container { get; set; }
     }
 }

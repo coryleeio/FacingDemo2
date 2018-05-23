@@ -14,14 +14,13 @@ namespace Gamepackage
             Off
         }
 
-        public Logger Logger { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
 
         private bool _threadsRunning;
         private List<Thread> _threads = new List<Thread>();
-        public LogLevel PathLogging;
 
-        public DiagonalOptions DiagonalSetting;
-
+        private LogLevel PathLogging;
+        private DiagonalOptions DiagonalSetting;
         private int _numberOfPathsToDrawInDebug = 5;
         private ConcurrentQueue<PathRequest> _incompletePaths = new ConcurrentQueue<PathRequest>();
         private ConcurrentQueue<PathRequest> _completePaths = new ConcurrentQueue<PathRequest>();
@@ -103,7 +102,7 @@ namespace Gamepackage
         {
             if (PathLogging == LogLevel.On)
             {
-                Logger.Log(log);
+                ApplicationContext.Logger.Log(log);
             }
         }
 
@@ -114,7 +113,7 @@ namespace Gamepackage
                 var min = request.TimeToFind.Minutes;
                 var sec = request.TimeToFind.Seconds;
                 var milli = request.TimeToFind.Milliseconds;
-                Logger.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.Start, request.End, min, sec, milli));
+                ApplicationContext.Logger.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.Start, request.End, min, sec, milli));
             }
         }
 

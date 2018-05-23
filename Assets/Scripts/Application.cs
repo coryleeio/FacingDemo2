@@ -41,6 +41,8 @@ namespace Gamepackage
             container.Register<MainMenuScene, MainMenuScene>().AsSingleton();
             container.Register<MovementSystem, MovementSystem>().AsSingleton();
             container.Register<FlowSystem, FlowSystem>().AsSingleton();
+            container.Register<DoTriggers, DoTriggers>().AsSingleton();
+            container.Register<DoTurn, DoTurn>().AsSingleton();
             container.Register<StateMachine>();
 
             container.BuildUp(container.Resolve<GamePlayState>());
@@ -61,8 +63,10 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<MainMenuScene>());
             container.BuildUp(container.Resolve<MovementSystem>());
             container.BuildUp(container.Resolve<FlowSystem>());
-            container.BuildUp(this);
+            container.BuildUp(container.Resolve<DoTriggers>());
+            container.BuildUp(container.Resolve<DoTurn>());
             container.BuildUp(container.Resolve<ApplicationContext>());
+            container.BuildUp(this);
             StateMachine.ChangeState(MainMenuState);
         }
 

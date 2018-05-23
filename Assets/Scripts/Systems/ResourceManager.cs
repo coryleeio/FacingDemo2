@@ -9,8 +9,7 @@ namespace Gamepackage
 {
     public class ResourceManager
     {
-        public Logger LogSystem { get; set; }
-        public TinyIoCContainer Container { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
         private Dictionary<UniqueIdentifier, IResource> _prototypesByUniqueIdentifier = new Dictionary<UniqueIdentifier, IResource>();
         private Dictionary<Type, List<IResource>> _prototypesByType = new Dictionary<Type, List<IResource>>();
         private bool hasInit = false;
@@ -29,7 +28,6 @@ namespace Gamepackage
                 CacheResources<LevelPrototype>(LevelPrototypes.LoadAll());
                 CacheResources<RoomPrototype>(RoomPrototypes.LoadAll());
                 CacheResources<TokenPrototype>(TokenPrototypes.LoadAll());
-                CacheResources<TriggerBehaviourPrototype>(TriggerBehaviourPrototypes.LoadAll(Container));
                 CacheResources<EffectPrototype>(EffectPrototypes.LoadAll());
             }
             hasInit = true;
@@ -43,7 +41,7 @@ namespace Gamepackage
                 {
                     throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
                 }
-                LogSystem.Log("Found " + prototype.GetType().Name.ToString() + ": " + prototype.UniqueIdentifier);
+                ApplicationContext.Logger.Log("Found " + prototype.GetType().Name.ToString() + ": " + prototype.UniqueIdentifier);
                 _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
                 if (!_prototypesByType.ContainsKey(prototype.GetType()))
                 {

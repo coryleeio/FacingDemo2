@@ -53,6 +53,8 @@ namespace Gamepackage
 
         public UniqueIdentifier ViewUniqueIdentifier;
 
+
+        public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
         public Trigger Trigger;
 
         public bool TriggerHasBeenChecked = false;

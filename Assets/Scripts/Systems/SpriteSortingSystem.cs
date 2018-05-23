@@ -4,9 +4,7 @@ namespace Gamepackage
 {
     public class SpriteSortingSystem
     {
-        public Logger LogSystem { get; set; }
-        public GameStateManager GameStateManager { get; set; }
-        public OverlaySystem OverlaySystem { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
         private SpriteRenderer[,] Tiles;
 
         public SpriteSortingSystem()
@@ -16,7 +14,7 @@ namespace Gamepackage
 
         public void Init()
         {
-            var level = GameStateManager.Game.CurrentLevel;
+            var level = ApplicationContext.GameStateManager.Game.CurrentLevel;
             Tiles = new SpriteRenderer[level.BoundingBox.Width, level.BoundingBox.Height];
         }
 
@@ -27,7 +25,7 @@ namespace Gamepackage
 
         public void Process()
         {
-            var level = GameStateManager.Game.CurrentLevel;
+            var level = ApplicationContext.GameStateManager.Game.CurrentLevel;
             var sortOrder = 0;
             for (var x = 0; x < level.BoundingBox.Width; x++)
             {
@@ -39,9 +37,9 @@ namespace Gamepackage
                         tileSpriteRenderer.sortingOrder = sortOrder;
                         sortOrder++;
                     }
-                    if (OverlaySystem != null)
+                    if (ApplicationContext.OverlaySystem != null)
                     {
-                        var tiles = OverlaySystem.GetTilesInPosition(x, y);
+                        var tiles = ApplicationContext.OverlaySystem.GetTilesInPosition(x, y);
                         foreach (var tile in tiles)
                         {
                             tile.sortingOrder = sortOrder;

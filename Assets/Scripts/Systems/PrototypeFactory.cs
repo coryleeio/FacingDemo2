@@ -7,10 +7,7 @@ namespace Gamepackage
 {
     public class PrototypeFactory
     {
-        public ResourceManager ResourceManager { get; set; }
-        public TinyIoCContainer Container { get; set; }
-        public TokenSystem TokenSystem { get; set; }
-        public SpriteSortingSystem SpriteSortingSystem { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
         private Material DefaultSpriteMaterial;
         private Sprite MissingSprite;
 
@@ -29,7 +26,7 @@ namespace Gamepackage
         public TokenAction BuildTokenAction<TAction> () where TAction : TokenAction
         {
             var action = default(TAction);
-            Container.BuildUp(action);
+            ApplicationContext.Container.BuildUp(action);
             return action;
         }
 
@@ -50,15 +47,15 @@ namespace Gamepackage
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException(string.Format("Tried to instantiate trigger: {0}, but it hasn't been implemented yet", identifier));
             }
-            Container.BuildUp(ret);
+            ApplicationContext.Container.BuildUp(ret);
             return ret;
         }
 
         public Token BuildToken(UniqueIdentifier identifier)
         {
-            var prototype = ResourceManager.GetPrototype<TokenPrototype>(identifier);
+            var prototype = ApplicationContext.ResourceManager.GetPrototype<TokenPrototype>(identifier);
             var token = new Token
             {
                 Position = new Point(0, 0),
@@ -67,6 +64,7 @@ namespace Gamepackage
                 ViewType = prototype.ViewType,
                 ViewUniqueIdentifier = prototype.ViewUniqueIdentifier,
                 Trigger = BuildTrigger(prototype.TriggerUniqueIdentifier),
+                TriggerPrototypeUniqueIdentifier = prototype.TriggerUniqueIdentifier,
             };
             token.Traits.AddRange(prototype.Traits);
             return token;
@@ -74,7 +72,7 @@ namespace Gamepackage
 
         public GameObject BuildView(Token token)
         {
-            var tokenPrototype = ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier);
+            var tokenPrototype = ApplicationContext.ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier);
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var go = new GameObject();
             go.name = tokenPrototype.UniqueIdentifier.ToString();
@@ -97,7 +95,7 @@ namespace Gamepackage
                 {
                     var point = new Point(x, y);
                     var tileInfo = level.TilesetGrid[x, y];
-                    var tileSet = ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
+                    var tileSet = ApplicationContext.ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
 
                     if (tileInfo.TileType == TileType.Floor)
                     {
@@ -262,7 +260,7 @@ namespace Gamepackage
             o.transform.SetParent(folder.transform);
             renderer.sprite = sprite;
             o.transform.localPosition = MathUtil.MapToWorld(position);
-            SpriteSortingSystem.RegisterTile(renderer, position);
+            ApplicationContext.SpriteSortingSystem.RegisterTile(renderer, position);
             return renderer;
         }
     }

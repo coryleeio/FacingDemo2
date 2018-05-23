@@ -8,8 +8,7 @@ namespace Gamepackage
     public class GameStateManager
     {
         public Game Game { get; private set; }
-        public TokenSystem TokenSystem { get; set; }
-        public ApplicationContext Context;
+        public ApplicationContext Context { get; set; }
 
         public GameStateManager()
         {
@@ -56,7 +55,7 @@ namespace Gamepackage
                     level.TokenGrid = new ListGrid<Token>(level.TilesetGrid.Width, level.TilesetGrid.Height);
                     foreach (var token in level.Tokens)
                     {
-                        TokenSystem.Register(token, level);
+                        Context.TokenSystem.Register(token, level);
                     }
                 }
             }

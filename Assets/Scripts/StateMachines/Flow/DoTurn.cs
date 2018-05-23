@@ -5,11 +5,10 @@ namespace Gamepackage
 {
     public class DoTurn : IStateMachineState
     {
-        public GameStateManager GameStateManager { get; set; }
-        public StateMachine StateMachine { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
+
         private Token NextActor;
         private TokenAction StartedAction;
-        public TinyIoCContainer Container { get; set; }
 
         public void Enter()
         {
@@ -18,7 +17,7 @@ namespace Gamepackage
 
         public void Process()
         {
-            Game game = GameStateManager.Game;
+            Game game = ApplicationContext.GameStateManager.Game;
             Level level = game.CurrentLevel;
             if (NextActor == null)
             {
@@ -48,7 +47,7 @@ namespace Gamepackage
                 {
                     // AI calculates and requeues its next action
                     NextActor.ActionQueue.Clear();
-                    NextActor.ActionQueue.Enqueue(Container.Resolve<Wait>());
+                    NextActor.ActionQueue.Enqueue(ApplicationContext.PrototypeFactory.BuildTokenAction<Wait>());
                 }
 
                 if (NextActor.ActionQueue.Count != 0)
@@ -112,7 +111,7 @@ namespace Gamepackage
                     // we are still waiting for the player to fill in their input, they have to fill in an input that they can't yet complete
                     Debug.Log("Waiting for input");
                     NextActor.ActionQueue.Clear();
-                    NextActor.ActionQueue.Enqueue(Container.Resolve<Wait>());
+                    NextActor.ActionQueue.Enqueue(ApplicationContext.PrototypeFactory.BuildTokenAction<Wait>());
                 }
             }
         }

@@ -10,7 +10,7 @@ namespace Gamepackage
         public List<Traits> Traits = new List<Traits>(0);
         public AIBehaviourType BehaviorIdentifier;
         public ViewType ViewType;
-        public UniqueIdentifier ViewUniqueIdentifier;
-        public UniqueIdentifier TriggerUniqueIdentifier;
+        public UniqueIdentifier ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER;
+        public UniqueIdentifier TriggerUniqueIdentifier = UniqueIdentifier.TRIGGER_NONE;
     }
 }

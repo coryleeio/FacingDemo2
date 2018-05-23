@@ -7,12 +7,7 @@ namespace Gamepackage
 {
     public class DungeonGenerator
     {
-        public GameStateManager GameStateManager { get; set; }
-        public PrototypeFactory PrototypeFactory { get; set; }
-        public TokenSystem TokenSystem { get; set; }
-        public ResourceManager ResourceManager { get; set; }
-        public Logger LogSystem { get; set; }
-        public TinyIoCContainer Container { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
 
         public DungeonGenerator()
         {
@@ -21,10 +16,10 @@ namespace Gamepackage
 
         public void GenerateDungeon()
         {
-            var levelPrototypes = ResourceManager.GetPrototypes<LevelPrototype>();
-            var roomPrototypes = ResourceManager.GetPrototypes<RoomPrototype>();
+            var levelPrototypes = ApplicationContext.ResourceManager.GetPrototypes<LevelPrototype>();
+            var roomPrototypes = ApplicationContext.ResourceManager.GetPrototypes<RoomPrototype>();
             var roomPrototypesByLevel = new Dictionary<int, List<RoomPrototype>>();
-            var spawnTables = ResourceManager.GetPrototypes<EncounterPrototype>();
+            var spawnTables = ApplicationContext.ResourceManager.GetPrototypes<EncounterPrototype>();
             var spawnTablesByLevel = new Dictionary<int, List<EncounterPrototype>>();
             int numberOfLevelsInArray = levelPrototypes.Count + 1;
 
@@ -54,8 +49,8 @@ namespace Gamepackage
                 }
             }
 
-            GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
-            var levels = GameStateManager.Game.Dungeon.Levels;
+            ApplicationContext.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
+            var levels = ApplicationContext.GameStateManager.Game.Dungeon.Levels;
             foreach (var levelPrototype in levelPrototypes)
             {
                 var level = new Level();
@@ -183,9 +178,9 @@ namespace Gamepackage
                             {
                                 var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
                                 spawnPoints.Remove(spawnPoint);
-                                var thingSpawned = PrototypeFactory.BuildToken(thingToSpawn);
+                                var thingSpawned = ApplicationContext.PrototypeFactory.BuildToken(thingToSpawn);
                                 thingSpawned.Position = spawnPoint;
-                                TokenSystem.Register(thingSpawned, level);
+                                ApplicationContext.TokenSystem.Register(thingSpawned, level);
                             }
                             break;
                         }
@@ -200,13 +195,13 @@ namespace Gamepackage
                     }
                     var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
 
-                    var player = PrototypeFactory.BuildToken(UniqueIdentifier.TOKEN_PONCY);
+                    var player = ApplicationContext.PrototypeFactory.BuildToken(UniqueIdentifier.TOKEN_PONCY);
                     player.Traits.Add(Traits.Player);
                     player.Position = spawnPoint;
-                    TokenSystem.Register(player, level);
+                    ApplicationContext.TokenSystem.Register(player, level);
                 }
             }
-            var game = GameStateManager.Game;
+            var game = ApplicationContext.GameStateManager.Game;
             BuildPathfindingGrid(game);
         }
 
@@ -219,7 +214,7 @@ namespace Gamepackage
                 {
                     level.TilesetGrid.Each((x, y, v) =>
                     {
-                        var occupied = level.TokenGrid[x, y].FindAll((token) => { return ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier).BlocksPathing; }).Count == 0;
+                        var occupied = level.TokenGrid[x, y].FindAll((token) => { return ApplicationContext.ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier).BlocksPathing; }).Count == 0;
                         v.Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied;
                         v.Weight = 1;
                     });

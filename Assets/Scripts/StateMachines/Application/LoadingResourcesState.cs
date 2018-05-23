@@ -5,30 +5,23 @@ namespace Gamepackage
 {
     public class LoadingResourcesState : IStateMachineState
     {
-        public LoadingScene LoadingScene { get; set; }
-        public Logger Logger { get; set; }
-        public ResourceManager ResourceManager { get; set; }
-        public PrototypeFactory PrototypeFactory { get; set; }
-        public GameStateManager GameStateManager { get; set; }
-        public DungeonGenerator DungeonGenerator { get; set; }
-        public Application Application { get; set; }
-        public GamePlayState GamePlayState { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
 
         public void Enter()
         {
-            LoadingScene.Load();
-            Application.StartCoroutine(LoadPrototypes());
+            ApplicationContext.LoadingScene.Load();
+            ApplicationContext.Application.StartCoroutine(LoadPrototypes());
         }
 
         IEnumerator LoadPrototypes()
         {
-            ResourceManager.LoadAllPrototypes();
-            if (GameStateManager.Game == null)
+            ApplicationContext.ResourceManager.LoadAllPrototypes();
+            if (ApplicationContext.GameStateManager.Game == null)
             {
-                GameStateManager.NewGame();
-                DungeonGenerator.GenerateDungeon();
+                ApplicationContext.GameStateManager.NewGame();
+                ApplicationContext.DungeonGenerator.GenerateDungeon();
             }
-            Application.StateMachine.ChangeState(GamePlayState);
+            ApplicationContext.Application.StateMachine.ChangeState(ApplicationContext.GamePlayState);
             yield return new WaitForEndOfFrame();
         }
 
@@ -39,7 +32,7 @@ namespace Gamepackage
 
         public void Exit()
         {
-            LoadingScene.Unload();
+            ApplicationContext.LoadingScene.Unload();
         }
     }
 }

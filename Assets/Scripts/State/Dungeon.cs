@@ -12,14 +12,6 @@ namespace Gamepackage
 
         public Level[] Levels;
 
-        public ApplicationContext ApplicationContext
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
         private ApplicationContext Context;
         public void InjectContext(ApplicationContext context)
         {

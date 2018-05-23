@@ -5,27 +5,19 @@ namespace Gamepackage
 {
     public class GamePlayState : IStateMachineState
     {
-        public GameScene GamePlayScene { get; set; }
-        public Logger LogSystem { get; set; }
-        public VisibilitySystem VisibilitySystem { get; set; }
-        public OverlaySystem OverlaySystem { get; set; }
-        public SpriteSortingSystem SpriteSortingSystem { get; set; }
-        public PathFinder PathFinder { get; set; }
-        public GameStateManager GameStateManager { get; set; }
-        public MovementSystem MovementSystem { get; set; }
-        public FlowSystem TurnSystem { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
         private GameSceneCameraDriver CameraDriver;
         private OverlayConfig MouseOverlay { get; set; }
 
         public void Enter()
         {
-            SpriteSortingSystem.Init();
-            GamePlayScene.Load();
-            VisibilitySystem.Init();
-            OverlaySystem.Init(GameStateManager.Game.CurrentLevel.TilesetGrid.Width, GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
-            PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
-            CameraDriver = GamePlayScene.GetCamera();
-            VisibilitySystem.UpdateVisibility();
+            ApplicationContext.SpriteSortingSystem.Init();
+            ApplicationContext.GameScene.Load();
+            ApplicationContext.VisibilitySystem.Init();
+            ApplicationContext.OverlaySystem.Init(ApplicationContext.GameStateManager.Game.CurrentLevel.TilesetGrid.Width, ApplicationContext.GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
+            ApplicationContext.PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
+            CameraDriver = ApplicationContext.GameScene.GetCamera();
+            ApplicationContext.VisibilitySystem.UpdateVisibility();
             MouseOverlay = new OverlayConfig
             {
                 Name = "MouseHover",
@@ -44,28 +36,27 @@ namespace Gamepackage
                     MouseOverlay
                 }
             };
-            OverlaySystem.Activate(newOverlay);
-
-            MovementSystem.FollowPath(GameStateManager.Game.CurrentLevel.Player, new List<Point> { new Point(0, 0), new Point(39, 39) });
+            ApplicationContext.OverlaySystem.Activate(newOverlay);
+            ApplicationContext.MovementSystem.FollowPath(ApplicationContext.GameStateManager.Game.CurrentLevel.Player, new List<Point> { new Point(0, 0), new Point(39, 39) });
         }
 
         public void Process()
         {
             MouseOverlay.Position = MathUtil.GetMousePositionOnMap(Camera.main);
-            OverlaySystem.Process();
-            SpriteSortingSystem.Process();
-            PathFinder.Process();
-            TurnSystem.Process();
-            MovementSystem.Process();
+            ApplicationContext.OverlaySystem.Process();
+            ApplicationContext.SpriteSortingSystem.Process();
+            ApplicationContext.PathFinder.Process();
+            ApplicationContext.FlowSystem.Process();
+            ApplicationContext.MovementSystem.Process();
             CameraDriver.MoveCamera();
         }
 
         public void Exit()
         {
-            OverlaySystem.Clear();
-            VisibilitySystem.Clear();
-            GamePlayScene.Unload();
-            PathFinder.Cleanup();
+            ApplicationContext.OverlaySystem.Clear();
+            ApplicationContext.VisibilitySystem.Clear();
+            ApplicationContext.GameScene.Unload();
+            ApplicationContext.PathFinder.Cleanup();
         }
     }
 }

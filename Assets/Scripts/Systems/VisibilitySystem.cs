@@ -20,8 +20,10 @@ namespace Gamepackage
 
         }
 
-        public Texture2D RevealMask;
-        public LayerMask FogLayer;
+        public ApplicationContext ApplicationContext { get; set; }
+
+        private Texture2D RevealMask;
+        private LayerMask FogLayer;
         private const int _numberOfPixelsPerTile = 64;
         private Texture2D _texture;
         private int _mapSize;
@@ -32,7 +34,6 @@ namespace Gamepackage
         private Color ObfuscatedColor = new Color(0, 0, 0, .75f);
         private bool[,] _updatedVisibilityGrid;
         private GameObject FogOfWarGameObject;
-        public GameStateManager GameStateManager { get; set; }
 
         public void Init()
         {
@@ -47,7 +48,7 @@ namespace Gamepackage
                 RevealMask = Resources.Load<Texture2D>("Fog/CubeMask");
             }
 
-            _mapSize = GameStateManager.Game.CurrentLevel.BoundingBox.Width;
+            _mapSize = ApplicationContext.GameStateManager.Game.CurrentLevel.BoundingBox.Width;
 
             _updatedVisibilityGrid = new bool[_mapSize, _mapSize];
             var textureX = _mapSize * _numberOfPixelsPerTile;
@@ -76,11 +77,11 @@ namespace Gamepackage
             {
                 for (var y = 0; y < _mapSize; y++)
                 {
-                    if (GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Obfuscated)
+                    if (ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Obfuscated)
                     {
                         obfuscated.Add(new Point(x, y));
                     }
-                    else if (GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed)
+                    else if (ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed)
                     {
                         revealed.Add(new Point(x, y));
                     }
@@ -102,16 +103,16 @@ namespace Gamepackage
             {
                 for (var y = 0; y < _mapSize; y++)
                 {
-                    var changedToObfuscated = !newVisibility[x, y] && GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed;
+                    var changedToObfuscated = !newVisibility[x, y] && ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed;
                     if (newVisibility[x, y])
                     {
-                        GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Revealed;
+                        ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Revealed;
                         revealed.Add(new Point(x, y));
                     }
                     else if (changedToObfuscated)
                     {
 
-                        GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Obfuscated;
+                        ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Obfuscated;
                         obfuscated.Add(new Point(x, y));
                     }
                 }
@@ -124,9 +125,9 @@ namespace Gamepackage
         private void BuildIndexes()
         {
             _tileCenterPointForCoordinates = new Point[_mapSize, _mapSize];
-            if (GameStateManager.Game.CurrentLevel.VisibilityGrid == null)
+            if (ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid == null)
             {
-                GameStateManager.Game.CurrentLevel.VisibilityGrid = new Grid<MapVisibilityState>(_mapSize, _mapSize);
+                ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid = new Grid<MapVisibilityState>(_mapSize, _mapSize);
             }
             for (var x = 0; x < _mapSize; x++)
             {
@@ -227,7 +228,7 @@ namespace Gamepackage
                 }
             }
 
-            var level = GameStateManager.Game.CurrentLevel;
+            var level = ApplicationContext.GameStateManager.Game.CurrentLevel;
             var player = level.Player;
 
             var visiblePoints = new List<Point>();

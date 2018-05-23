@@ -5,13 +5,12 @@ namespace Gamepackage
 {
     public class MovementSystem
     {
-        public PathFinder PathFinder { get; set; }
-        public GameStateManager GameStateManager { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
         private float TimeBetweenTiles = 15f;
 
         public void Process()
         {
-            var tokens = GameStateManager.Game.CurrentLevel.Tokens;
+            var tokens = ApplicationContext.GameStateManager.Game.CurrentLevel.Tokens;
 
             foreach (var token in tokens)
             {
