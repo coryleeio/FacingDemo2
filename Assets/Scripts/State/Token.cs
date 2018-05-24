@@ -15,16 +15,12 @@ namespace Gamepackage
 
         public int TimeAccrued = 0;
 
-        [JsonIgnore]
-        public Vector2 LerpCurrentPosition;
+        public Pointf LerpCurrentPosition;
 
-        [JsonIgnore]
-        public Vector2 LerpTargetPosition;
+        public Pointf LerpTargetPosition;
 
-        [JsonIgnore]
         public float ElapsedMovementTime;
 
-        [JsonIgnore]
         public Queue<TokenAction> ActionQueue= new Queue<TokenAction>(0);
 
         public bool IsMoving;
@@ -80,6 +76,10 @@ namespace Gamepackage
             if(Trigger != null)
             {
                 Trigger.InjectContext(context);
+            }
+            foreach(var action in ActionQueue)
+            {
+                action.InjectContext(Context);
             }
         }
     }

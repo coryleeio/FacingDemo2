@@ -31,7 +31,7 @@ namespace Gamepackage
             };
             var newOverlay = new Overlay()
             {
-                Configs = new System.Collections.Generic.List<OverlayConfig>()
+                Configs = new List<OverlayConfig>()
                 {
                     MouseOverlay
                 }

@@ -1,7 +1,8 @@
 ﻿namespace Gamepackage
 {
-    public abstract class TokenAction
+    public abstract class TokenAction : IHasApplicationContext
     {
+
         public abstract int TimeCost
         {
             get;
@@ -27,6 +28,12 @@
         public virtual void Process()
         {
 
+        }
+
+        protected ApplicationContext Context;
+        public void InjectContext(ApplicationContext context)
+        {
+            Context = context;
         }
     }
 }

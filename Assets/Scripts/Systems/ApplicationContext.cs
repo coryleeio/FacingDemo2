@@ -25,6 +25,5 @@ namespace Gamepackage
         public FlowSystem FlowSystem { get; set; }
         public DoTurn DoTurn { get; set; }
         public DoTurn DoTriggers { get; set; }
-        public TinyIoCContainer Container { get; set; }
     }
 }

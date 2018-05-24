@@ -7,7 +7,7 @@ namespace Gamepackage
 {
     public class PrototypeFactory
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
         private Material DefaultSpriteMaterial;
         private Sprite MissingSprite;
 
@@ -26,7 +26,7 @@ namespace Gamepackage
         public TokenAction BuildTokenAction<TAction> () where TAction : TokenAction
         {
             var action = default(TAction);
-            ApplicationContext.Container.BuildUp(action);
+            action.InjectContext(Context);
             return action;
         }
 
@@ -49,13 +49,13 @@ namespace Gamepackage
             {
                 throw new NotImplementedException(string.Format("Tried to instantiate trigger: {0}, but it hasn't been implemented yet", identifier));
             }
-            ApplicationContext.Container.BuildUp(ret);
+            ret.InjectContext(Context);
             return ret;
         }
 
         public Token BuildToken(UniqueIdentifier identifier)
         {
-            var prototype = ApplicationContext.ResourceManager.GetPrototype<TokenPrototype>(identifier);
+            var prototype = Context.ResourceManager.GetPrototype<TokenPrototype>(identifier);
             var token = new Token
             {
                 Position = new Point(0, 0),
@@ -67,12 +67,13 @@ namespace Gamepackage
                 TriggerPrototypeUniqueIdentifier = prototype.TriggerUniqueIdentifier,
             };
             token.Traits.AddRange(prototype.Traits);
+            token.InjectContext(Context);
             return token;
         }
 
         public GameObject BuildView(Token token)
         {
-            var tokenPrototype = ApplicationContext.ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier);
+            var tokenPrototype = Context.ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier);
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var go = new GameObject();
             go.name = tokenPrototype.UniqueIdentifier.ToString();
@@ -95,7 +96,7 @@ namespace Gamepackage
                 {
                     var point = new Point(x, y);
                     var tileInfo = level.TilesetGrid[x, y];
-                    var tileSet = ApplicationContext.ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
+                    var tileSet = Context.ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
 
                     if (tileInfo.TileType == TileType.Floor)
                     {
@@ -260,7 +261,7 @@ namespace Gamepackage
             o.transform.SetParent(folder.transform);
             renderer.sprite = sprite;
             o.transform.localPosition = MathUtil.MapToWorld(position);
-            ApplicationContext.SpriteSortingSystem.RegisterTile(renderer, position);
+            Context.SpriteSortingSystem.RegisterTile(renderer, position);
             return renderer;
         }
     }

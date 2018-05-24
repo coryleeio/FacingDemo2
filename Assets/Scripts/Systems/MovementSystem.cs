@@ -28,13 +28,13 @@ namespace Gamepackage
                     }
                     var lerpPercentarge = token.ElapsedMovementTime / TimeBetweenTiles;
                     var targetVectorPos = token.LerpTargetPosition;
-                    var _lerpPos = Vector2.Lerp(token.LerpCurrentPosition, targetVectorPos, lerpPercentarge);
+                    var _lerpPos = Vector2.Lerp(token.LerpCurrentPosition.ToVector2(), targetVectorPos.ToVector2(), lerpPercentarge);
 
                     if (token.View != null)
                     {
                         token.View.transform.position = _lerpPos;
                     }
-                    if (Vector2.Distance(_lerpPos, targetVectorPos) < 0.005f)
+                    if (Vector2.Distance(_lerpPos, targetVectorPos.ToVector2()) < 0.005f)
                     {
                         token.Position = token.TargetPosition;
                         var oldPos = token.CurrentPath.Dequeue();
@@ -59,8 +59,8 @@ namespace Gamepackage
         public void MoveTo(Token token, Point newPosition)
         {
             token.TargetPosition = newPosition;
-            token.LerpCurrentPosition = MathUtil.MapToWorld(token.Position);
-            token.LerpTargetPosition = MathUtil.MapToWorld(newPosition);
+            token.LerpCurrentPosition = MathUtil.MapToWorld(token.Position).ToPointf();
+            token.LerpTargetPosition = MathUtil.MapToWorld(newPosition).ToPointf();
             token.ElapsedMovementTime = 0.0f;
             token.IsMoving = true;
         }

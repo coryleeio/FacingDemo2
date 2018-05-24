@@ -4,7 +4,6 @@
     {
         public Token Token;
         public Point TargetLocation;
-        public MovementSystem MovementSystem { get; set; }
 
         public override int TimeCost
         {
@@ -17,7 +16,7 @@
         public override void Enter()
         {
             base.Enter();
-            MovementSystem.MoveTo(Token, TargetLocation);
+            Context.MovementSystem.MoveTo(Token, TargetLocation);
         }
         public override void Exit()
         {
