@@ -4,7 +4,7 @@ namespace Gamepackage
 {
     public class TokenSystem
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
 
         public TokenSystem()
         {
@@ -17,7 +17,7 @@ namespace Gamepackage
         {
             if(token.Id == 0)
             {
-                token.Id = ApplicationContext.GameStateManager.Game.NextId;
+                token.Id = Context.GameStateManager.Game.NextId;
             }
             if(!TokenMap.ContainsKey(token.Id))
             {

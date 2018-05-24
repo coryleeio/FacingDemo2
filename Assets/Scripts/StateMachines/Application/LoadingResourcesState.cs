@@ -5,23 +5,23 @@ namespace Gamepackage
 {
     public class LoadingResourcesState : IStateMachineState
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
 
         public void Enter()
         {
-            ApplicationContext.LoadingScene.Load();
-            ApplicationContext.Application.StartCoroutine(LoadPrototypes());
+            Context.LoadingScene.Load();
+            Context.Application.StartCoroutine(LoadPrototypes());
         }
 
         IEnumerator LoadPrototypes()
         {
-            ApplicationContext.ResourceManager.LoadAllPrototypes();
-            if (ApplicationContext.GameStateManager.Game == null)
+            Context.ResourceManager.LoadAllPrototypes();
+            if (Context.GameStateManager.Game == null)
             {
-                ApplicationContext.GameStateManager.NewGame();
-                ApplicationContext.DungeonGenerator.GenerateDungeon();
+                Context.GameStateManager.NewGame();
+                Context.DungeonGenerator.GenerateDungeon();
             }
-            ApplicationContext.Application.StateMachine.ChangeState(ApplicationContext.GamePlayState);
+            Context.Application.StateMachine.ChangeState(Context.GamePlayState);
             yield return new WaitForEndOfFrame();
         }
 
@@ -32,7 +32,7 @@ namespace Gamepackage
 
         public void Exit()
         {
-            ApplicationContext.LoadingScene.Unload();
+            Context.LoadingScene.Unload();
         }
     }
 }

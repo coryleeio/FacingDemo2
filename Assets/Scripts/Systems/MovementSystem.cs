@@ -5,12 +5,12 @@ namespace Gamepackage
 {
     public class MovementSystem
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
         private float TimeBetweenTiles = 15f;
 
         public void Process()
         {
-            var tokens = ApplicationContext.GameStateManager.Game.CurrentLevel.Tokens;
+            var tokens = Context.GameStateManager.Game.CurrentLevel.Tokens;
 
             foreach (var token in tokens)
             {

@@ -10,7 +10,7 @@ public class Wait : TokenAction
         }
     }
 
-    public override bool IsComplete
+    public override bool ShouldEnd
     {
         get
         {

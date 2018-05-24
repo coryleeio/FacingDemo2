@@ -14,7 +14,7 @@ namespace Gamepackage
             Off
         }
 
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
 
         private bool _threadsRunning;
         private List<Thread> _threads = new List<Thread>();
@@ -102,7 +102,7 @@ namespace Gamepackage
         {
             if (PathLogging == LogLevel.On)
             {
-                ApplicationContext.Logger.Log(log);
+                Context.Logger.Log(log);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Gamepackage
                 var min = request.TimeToFind.Minutes;
                 var sec = request.TimeToFind.Seconds;
                 var milli = request.TimeToFind.Milliseconds;
-                ApplicationContext.Logger.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.Start, request.End, min, sec, milli));
+                Context.Logger.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.Start, request.End, min, sec, milli));
             }
         }
 

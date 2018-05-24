@@ -20,7 +20,7 @@ namespace Gamepackage
 
         }
 
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
 
         private Texture2D RevealMask;
         private LayerMask FogLayer;
@@ -34,9 +34,11 @@ namespace Gamepackage
         private Color ObfuscatedColor = new Color(0, 0, 0, .75f);
         private bool[,] _updatedVisibilityGrid;
         private GameObject FogOfWarGameObject;
+        private Point LastPlayerPosition;
 
         public void Init()
         {
+            LastPlayerPosition = null;
             FogLayer = LayerMask.GetMask(new string[] { "Fog" });
             if (FogOfWarGameObject == null)
             {
@@ -48,7 +50,7 @@ namespace Gamepackage
                 RevealMask = Resources.Load<Texture2D>("Fog/CubeMask");
             }
 
-            _mapSize = ApplicationContext.GameStateManager.Game.CurrentLevel.BoundingBox.Width;
+            _mapSize = Context.GameStateManager.Game.CurrentLevel.BoundingBox.Width;
 
             _updatedVisibilityGrid = new bool[_mapSize, _mapSize];
             var textureX = _mapSize * _numberOfPixelsPerTile;
@@ -77,11 +79,11 @@ namespace Gamepackage
             {
                 for (var y = 0; y < _mapSize; y++)
                 {
-                    if (ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Obfuscated)
+                    if (Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Obfuscated)
                     {
                         obfuscated.Add(new Point(x, y));
                     }
-                    else if (ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed)
+                    else if (Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed)
                     {
                         revealed.Add(new Point(x, y));
                     }
@@ -103,16 +105,16 @@ namespace Gamepackage
             {
                 for (var y = 0; y < _mapSize; y++)
                 {
-                    var changedToObfuscated = !newVisibility[x, y] && ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed;
+                    var changedToObfuscated = !newVisibility[x, y] && Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed;
                     if (newVisibility[x, y])
                     {
-                        ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Revealed;
+                        Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Revealed;
                         revealed.Add(new Point(x, y));
                     }
                     else if (changedToObfuscated)
                     {
 
-                        ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Obfuscated;
+                        Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Obfuscated;
                         obfuscated.Add(new Point(x, y));
                     }
                 }
@@ -125,9 +127,9 @@ namespace Gamepackage
         private void BuildIndexes()
         {
             _tileCenterPointForCoordinates = new Point[_mapSize, _mapSize];
-            if (ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid == null)
+            if (Context.GameStateManager.Game.CurrentLevel.VisibilityGrid == null)
             {
-                ApplicationContext.GameStateManager.Game.CurrentLevel.VisibilityGrid = new Grid<MapVisibilityState>(_mapSize, _mapSize);
+                Context.GameStateManager.Game.CurrentLevel.VisibilityGrid = new Grid<MapVisibilityState>(_mapSize, _mapSize);
             }
             for (var x = 0; x < _mapSize; x++)
             {
@@ -218,41 +220,44 @@ namespace Gamepackage
             throw new NotImplementedException("Not implemented");
         }
 
-        public void UpdateVisibility()
+        public void Process()
         {
-            for (int x = 0; x < _mapSize; x++)
-            {
-                for (int y = 0; y < _mapSize; y++)
-                {
-                    _updatedVisibilityGrid[x, y] = false;
-                }
-            }
-
-            var level = ApplicationContext.GameStateManager.Game.CurrentLevel;
+            var level = Context.GameStateManager.Game.CurrentLevel;
             var player = level.Player;
 
-            var visiblePoints = new List<Point>();
-            visiblePoints.AddRange(MathUtil.FloodFill(player.Position, 5, ref visiblePoints, MathUtil.FloodFillType.Orthogonal, (pointOnLevel) => { return level.BoundingBox.Contains(pointOnLevel) && level.TilesetGrid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; }));
-
-            foreach (var tile in visiblePoints)
+            if (LastPlayerPosition == null || (player != null && player.Position != LastPlayerPosition))
             {
-               _updatedVisibilityGrid[tile.X, tile.Y] = true;
-            }
-
-            foreach (var token in level.Tokens)
-            {
-                if(token.IsPlayer)
+                for (int x = 0; x < _mapSize; x++)
                 {
-                    token.IsVisible = true;
+                    for (int y = 0; y < _mapSize; y++)
+                    {
+                        _updatedVisibilityGrid[x, y] = false;
+                    }
                 }
-                else
-                {
-                    token.IsVisible = _updatedVisibilityGrid[token.Position.X, token.Position.Y];
-                }
-                token.View.SetActive(token.IsVisible);
-            }
 
-            UpdateVisibility(_updatedVisibilityGrid);
+                var visiblePoints = new List<Point>();
+                visiblePoints.AddRange(MathUtil.FloodFill(player.Position, 5, ref visiblePoints, MathUtil.FloodFillType.Orthogonal, (pointOnLevel) => { return level.BoundingBox.Contains(pointOnLevel) && level.TilesetGrid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; }));
+
+                foreach (var tile in visiblePoints)
+                {
+                    _updatedVisibilityGrid[tile.X, tile.Y] = true;
+                }
+
+                foreach (var token in level.Tokens)
+                {
+                    if (token.IsPlayer)
+                    {
+                        token.IsVisible = true;
+                    }
+                    else
+                    {
+                        token.IsVisible = _updatedVisibilityGrid[token.Position.X, token.Position.Y];
+                    }
+                    token.View.SetActive(token.IsVisible);
+                }
+
+                UpdateVisibility(_updatedVisibilityGrid);
+            }
         }
 
         public void Clear()

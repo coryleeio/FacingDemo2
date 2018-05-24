@@ -6,7 +6,7 @@ namespace Gamepackage
 {
     public class DoTriggers : IStateMachineState
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
 
         public void Enter()
         {

@@ -11,7 +11,7 @@ namespace Gamepackage
 
         }
 
-        public override bool IsComplete
+        public override bool ShouldEnd
         {
             get
             {

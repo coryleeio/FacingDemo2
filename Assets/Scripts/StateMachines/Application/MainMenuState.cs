@@ -4,13 +4,13 @@ namespace Gamepackage
 { 
     public class MainMenuState : IStateMachineState
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
         
         public void Enter()
         {
-            ApplicationContext.GameStateManager.Clear();
-            ApplicationContext.TokenSystem.Clear();
-            ApplicationContext.MainMenuScene.Load();
+            Context.GameStateManager.Clear();
+            Context.TokenSystem.Clear();
+            Context.MainMenuScene.Load();
         }
 
         public void Process()
@@ -20,7 +20,7 @@ namespace Gamepackage
 
         public void Exit()
         {
-            ApplicationContext.MainMenuScene.Unload();
+            Context.MainMenuScene.Unload();
         }
     }
 }

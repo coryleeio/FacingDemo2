@@ -5,7 +5,7 @@ namespace Gamepackage
 {
     public class FlowSystem
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
         public StateMachine StateMachine { get; private set; }
 
         public FlowSystem()
@@ -15,7 +15,7 @@ namespace Gamepackage
 
         public void Init()
         {
-            StateMachine.ChangeState(ApplicationContext.DoTurn);
+            StateMachine.ChangeState(Context.DoTurn);
         }
 
         public void Process()

@@ -1,39 +1,44 @@
-﻿namespace Gamepackage
-{
-    public abstract class TokenAction : IHasApplicationContext
-    {
+﻿using System;
+using Newtonsoft.Json;
 
+namespace Gamepackage
+{
+    public abstract class TokenAction : ASyncAction
+    {
         public abstract int TimeCost
         {
             get;
         }
 
-        public bool HasStarted = false;
-
-        public abstract bool IsComplete
+        public int TokenId;
+        [JsonIgnore]
+        public Token Token
         {
-            get;
+            get
+            {
+                return Context.TokenSystem.GetTokenById(TokenId);
+            }
         }
 
-        public virtual void Enter()
+        [JsonIgnore]
+        public Game Game
         {
-
+            get
+            {
+                return Context.GameStateManager.Game;
+            }
         }
 
-        public virtual void Exit()
+        public override void Enter()
         {
-
+            base.Enter();
         }
 
-        public virtual void Process()
+        public override void Exit()
         {
-
-        }
-
-        protected ApplicationContext Context;
-        public void InjectContext(ApplicationContext context)
-        {
-            Context = context;
+            base.Exit();
+            Token.TimeAccrued += TimeCost;
+            Token.ActionQueue.Dequeue();
         }
     }
 }

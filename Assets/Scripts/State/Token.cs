@@ -21,15 +21,13 @@ namespace Gamepackage
 
         public float ElapsedMovementTime;
 
-        public Queue<TokenAction> ActionQueue= new Queue<TokenAction>(0);
+        public Queue<TokenAction> ActionQueue = new Queue<TokenAction>(0);
 
         public bool IsMoving;
 
-        public bool NeedToCheckIfMovementTriggeredTriggers = false;
-
         public Queue<Point> CurrentPath = new Queue<Point>(0);
 
-        public bool HasActed = false;
+        public bool IsDoneThisTurn = false;
 
         public Point TargetPosition;
 

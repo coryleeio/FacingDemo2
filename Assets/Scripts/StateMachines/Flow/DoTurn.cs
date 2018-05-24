@@ -1,11 +1,12 @@
-﻿using TinyIoC;
+﻿using System;
+using TinyIoC;
 using UnityEngine;
 
 namespace Gamepackage
 {
     public class DoTurn : IStateMachineState
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
 
         public void Enter()
         {
@@ -14,12 +15,47 @@ namespace Gamepackage
 
         public void Process()
         {
-            Token currentActor = null;
-            Game game = ApplicationContext.GameStateManager.Game;
+            Token currentActor = GetCurrentToken();
+            
+            // All tokens have acted, so end this turn
+            if (currentActor == null)
+            {
+                EndTurn();
+            }
+            else
+            {
+                if (currentActor.ActionQueue.Count == 0)
+                {
+                    // Simulating user and AI input...
+                    currentActor.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<Wait>(currentActor));
+                    currentActor.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<EndTurn>(currentActor));
+                }
+
+                if (currentActor.ActionQueue.Count != 0)
+                {
+                    // TokenActions dequeue themselves on exit.
+                    var action = currentActor.ActionQueue.Peek();
+                    action.Do();
+                    if (action.Completed && action.GetType() == typeof(Move))
+                    {
+                        Context.FlowSystem.StateMachine.ChangeState(Context.DoTriggers);
+                    }
+                }
+            }
+        }
+
+        public void Exit()
+        {
+
+        }
+
+        private Token GetCurrentToken()
+        {
+            Game game = Context.GameStateManager.Game;
             Level level = game.CurrentLevel;
             foreach (var token in level.Tokens)
             {
-                if (token.HasActed)
+                if (token.IsDoneThisTurn)
                 {
                     continue;
                 }
@@ -28,108 +64,26 @@ namespace Gamepackage
                 if (isPlayerThatNeedsToAct || isNPCThatNeedsToAct)
                 {
                     Debug.Log("NextActor set to " + token.Id + " " + token.View.gameObject.name);
-                    currentActor = token;
-                    break;
+                    return token;
                 }
             }
-
-            if (currentActor == null)
-            {
-                EndTurn(game);
-            }
-            if (!currentActor.IsPlayer)
-            {
-                // AI calculates and requeues its next action
-                currentActor.ActionQueue.Clear();
-                currentActor.ActionQueue.Enqueue(ApplicationContext.PrototypeFactory.BuildTokenAction<Wait>());
-            }
-
-            if (currentActor.ActionQueue.Count != 0)
-            {
-                // We have atleast one action to do, and our turn is not over
-                var action = currentActor.ActionQueue.Peek();
-
-                if (!action.IsComplete && !action.HasStarted)
-                {
-                    if (!currentActor.IsPlayer)
-                    {
-                        // I f we are the AI, see if we can pay the cost of the action we want to do, and end our turn if not
-                        if (action.TimeCost >= currentActor.TimeAccrued)
-                        {
-                            currentActor.TimeAccrued = currentActor.TimeAccrued - action.TimeCost;
-                        }
-                        else
-                        {
-                            // AIs turn ends when it wants to do something, but does not have the time accrued to do it.
-                            EndTurnForToken(game, currentActor);
-                            return;
-                        }
-                    }
-
-                    action.HasStarted = true;
-                    action.Enter();
-                }
-                if (action.IsComplete)
-                {
-                    action.Exit();
-
-                    // The turn is over, if the token is a NPC it may have multiple moves queued up though
-                    if (currentActor.IsPlayer)
-                    {
-                        // If it's a player we are done, but we need to push time to all npcs
-                        foreach (var tokenToPushTime in level.Tokens)
-                        {
-                            if (!tokenToPushTime.IsPlayer)
-                            {
-                                tokenToPushTime.TimeAccrued = tokenToPushTime.TimeAccrued + action.TimeCost;
-                                // Mark non players as having not acted for the next turn we are about to switch to.
-                                tokenToPushTime.HasActed = false;
-                            }
-                        }
-                    }
-                    currentActor.ActionQueue.Dequeue();
-                    if (currentActor.ActionQueue.Count == 0)
-                    {
-                        EndTurnForToken(game, currentActor);
-                        return;
-                    }
-                }
-                else
-                {
-                    // Action is still underway
-                    action.Process();
-                }
-            }
-            else
-            {
-                // we are still waiting for the player to fill in their input, they have to fill in an input that they can't yet complete
-                Debug.Log("Waiting for input");
-                currentActor.ActionQueue.Clear();
-                currentActor.ActionQueue.Enqueue(ApplicationContext.PrototypeFactory.BuildTokenAction<Wait>());
-            }
+            return null;
         }
 
-        private void EndTurnForToken(Game game, Token token)
+        private void EndTurn()
         {
-            Debug.Log("EndTurnForToken turn for " + token.Id + " " + token.View.gameObject.name);
-            token.HasActed = true;
-            if (token.IsPlayer)
-            {
-                game.IsPlayerTurn = !game.IsPlayerTurn;
-            }
-        }
-
-        private void EndTurn(Game game)
-        {
+            var game = Context.GameStateManager.Game;
             game.CurrentTurn += 1;
             Debug.Log("Turn is now: " + game.CurrentTurn);
             game.IsPlayerTurn = true;
-            game.CurrentLevel.Player.HasActed = false;
-        }
-
-        public void Exit()
-        {
-
+            foreach(var token in game.CurrentLevel.Tokens)
+            {
+                if(token.IsPlayer)
+                {
+                    token.TimeAccrued = 0;
+                }
+                token.IsDoneThisTurn = false;
+            }
         }
     }
 }

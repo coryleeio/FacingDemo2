@@ -26,7 +26,7 @@ namespace Gamepackage
 
     public class OverlaySystem
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
 
         private Sprite _squareSprite;
         private Sprite _circleSprite;
@@ -108,12 +108,12 @@ namespace Gamepackage
                 var points = MathUtil.GetPointsByOffset(config.Position, config.OffsetPoints);
                 foreach (var point in points)
                 {
-                    if (config.ConstrainToLevel && !ApplicationContext.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point))
+                    if (config.ConstrainToLevel && !Context.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point))
                     {
                         continue;
                     }
                     // This duplication of the contains check is necessary 
-                    if (config.WalkableTilesOnly && ApplicationContext.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point) && ApplicationContext.GameStateManager.Game.CurrentLevel.TilesetGrid[point.X, point.Y].TileType != TileType.Floor)
+                    if (config.WalkableTilesOnly && Context.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point) && Context.GameStateManager.Game.CurrentLevel.TilesetGrid[point.X, point.Y].TileType != TileType.Floor)
                     {
                         continue;
                     }

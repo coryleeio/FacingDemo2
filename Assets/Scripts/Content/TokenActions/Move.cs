@@ -1,8 +1,9 @@
-﻿namespace Gamepackage
+﻿using Newtonsoft.Json;
+
+namespace Gamepackage
 {
     public class Move : TokenAction
     {
-        public Token Token;
         public Point TargetLocation;
 
         public override int TimeCost
@@ -18,13 +19,13 @@
             base.Enter();
             Context.MovementSystem.MoveTo(Token, TargetLocation);
         }
+
         public override void Exit()
         {
             base.Exit();
-            Token.NeedToCheckIfMovementTriggeredTriggers = true;
         }
 
-        public override bool IsComplete
+        public override bool ShouldEnd
         {
             get
             {

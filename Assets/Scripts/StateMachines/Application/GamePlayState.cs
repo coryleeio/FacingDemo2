@@ -5,19 +5,19 @@ namespace Gamepackage
 {
     public class GamePlayState : IStateMachineState
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
         private GameSceneCameraDriver CameraDriver;
         private OverlayConfig MouseOverlay { get; set; }
 
         public void Enter()
         {
-            ApplicationContext.SpriteSortingSystem.Init();
-            ApplicationContext.GameScene.Load();
-            ApplicationContext.VisibilitySystem.Init();
-            ApplicationContext.OverlaySystem.Init(ApplicationContext.GameStateManager.Game.CurrentLevel.TilesetGrid.Width, ApplicationContext.GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
-            ApplicationContext.PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
-            CameraDriver = ApplicationContext.GameScene.GetCamera();
-            ApplicationContext.VisibilitySystem.UpdateVisibility();
+            Context.SpriteSortingSystem.Init();
+            Context.GameScene.Load();
+            Context.VisibilitySystem.Init();
+            Context.OverlaySystem.Init(Context.GameStateManager.Game.CurrentLevel.TilesetGrid.Width, Context.GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
+            Context.PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
+            Context.FlowSystem.Init();
+            CameraDriver = Context.GameScene.GetCamera();
             MouseOverlay = new OverlayConfig
             {
                 Name = "MouseHover",
@@ -36,27 +36,29 @@ namespace Gamepackage
                     MouseOverlay
                 }
             };
-            ApplicationContext.OverlaySystem.Activate(newOverlay);
-            ApplicationContext.MovementSystem.FollowPath(ApplicationContext.GameStateManager.Game.CurrentLevel.Player, new List<Point> { new Point(0, 0), new Point(39, 39) });
+            Context.OverlaySystem.Activate(newOverlay);
+            Context.MovementSystem.FollowPath(Context.GameStateManager.Game.CurrentLevel.Player, new List<Point> { new Point(0, 0), new Point(39, 39) });
+            CameraDriver.JumpToTarget();
         }
 
         public void Process()
         {
             MouseOverlay.Position = MathUtil.GetMousePositionOnMap(Camera.main);
-            ApplicationContext.OverlaySystem.Process();
-            ApplicationContext.SpriteSortingSystem.Process();
-            ApplicationContext.PathFinder.Process();
-            ApplicationContext.FlowSystem.Process();
-            ApplicationContext.MovementSystem.Process();
+            Context.OverlaySystem.Process();
+            Context.SpriteSortingSystem.Process();
+            Context.PathFinder.Process();
+            Context.FlowSystem.Process();
+            Context.MovementSystem.Process();
+            Context.VisibilitySystem.Process();
             CameraDriver.MoveCamera();
         }
 
         public void Exit()
         {
-            ApplicationContext.OverlaySystem.Clear();
-            ApplicationContext.VisibilitySystem.Clear();
-            ApplicationContext.GameScene.Unload();
-            ApplicationContext.PathFinder.Cleanup();
+            Context.OverlaySystem.Clear();
+            Context.VisibilitySystem.Clear();
+            Context.GameScene.Unload();
+            Context.PathFinder.Cleanup();
         }
     }
 }

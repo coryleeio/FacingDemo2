@@ -34,7 +34,6 @@ namespace Gamepackage
                 token.View = PrototypeFactory.BuildView(token);
             }
             gameSceneCameraDriver.target = GameStateManager.Game.CurrentLevel.Player.View;
-            gameSceneCameraDriver.JumpToTarget();
             CameraDriver = gameSceneCameraDriver;
         }
 

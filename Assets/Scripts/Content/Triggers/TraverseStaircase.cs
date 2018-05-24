@@ -4,7 +4,7 @@ namespace Gamepackage
 {
     public class TraverseStaircase : Trigger
     {
-        public override bool IsComplete
+        public override bool ShouldEnd
         {
             get
             {

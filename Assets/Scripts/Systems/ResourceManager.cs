@@ -9,7 +9,7 @@ namespace Gamepackage
 {
     public class ResourceManager
     {
-        public ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext Context { get; set; }
         private Dictionary<UniqueIdentifier, IResource> _prototypesByUniqueIdentifier = new Dictionary<UniqueIdentifier, IResource>();
         private Dictionary<Type, List<IResource>> _prototypesByType = new Dictionary<Type, List<IResource>>();
         private bool hasInit = false;
@@ -41,7 +41,7 @@ namespace Gamepackage
                 {
                     throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
                 }
-                ApplicationContext.Logger.Log("Found " + prototype.GetType().Name.ToString() + ": " + prototype.UniqueIdentifier);
+                Context.Logger.Log("Found " + prototype.GetType().Name.ToString() + ": " + prototype.UniqueIdentifier);
                 _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
                 if (!_prototypesByType.ContainsKey(prototype.GetType()))
                 {

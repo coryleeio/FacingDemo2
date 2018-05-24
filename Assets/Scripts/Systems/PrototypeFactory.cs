@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TinyIoC;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
@@ -23,9 +24,11 @@ namespace Gamepackage
             }
         }
 
-        public TokenAction BuildTokenAction<TAction> () where TAction : TokenAction
+        public TokenAction BuildTokenAction<TAction> (Token token) where TAction : TokenAction
         {
-            var action = default(TAction);
+            var action = Activator.CreateInstance<TAction>();
+            action.TokenId = token.Id;
+            Assert.IsNotNull(action, string.Format("Failed to create {0}", typeof(TAction)));
             action.InjectContext(Context);
             return action;
         }
