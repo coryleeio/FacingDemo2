@@ -31,6 +31,7 @@ namespace Gamepackage
 
         public void Clear()
         {
+            Context.TokenSystem.Clear();
             Debug.Log("Clearing game state");
             Game = null;
         }
@@ -45,6 +46,7 @@ namespace Gamepackage
 
         public void LoadGame()
         {
+            Clear();
             Debug.Log("Loading game");
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(UnityEngine.Application.persistentDataPath + "/dev.sav"), parameters);
