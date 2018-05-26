@@ -8,7 +8,6 @@ namespace Gamepackage
         public GamePlayState GamePlayState { get; set; }
         public MainMenuState MainMenuState { get; set; }
         public LoadingResourcesState LoadingResourcesState { get; set; }
-        public Logger Logger { get; set; }
         public GameStateManager GameStateManager { get; set; }
         public VisibilitySystem VisibilitySystem { get; set; }
         public ResourceManager ResourceManager { get; set; }
@@ -24,6 +23,7 @@ namespace Gamepackage
         public MovementSystem MovementSystem { get; set; }
         public FlowSystem FlowSystem { get; set; }
         public DoTurn DoTurn { get; set; }
-        public DoTurn DoTriggers { get; set; }
+        public DoTriggers DoTriggers { get; set; }
+        public PlayerController PlayerController { get; set; }
     }
 }

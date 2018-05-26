@@ -138,7 +138,7 @@ namespace Gamepackage
                 // If we have stuff we can spawn, and we need some more stuff to spawn
                 if (numberOfSpawnTablesToSpawn > 0 && spawnTablesOnLevel.Count > 0)
                 {
-                    for(var i =0; i < numberOfSpawnTablesToSpawn; i++)
+                    for (var i = 0; i < numberOfSpawnTablesToSpawn; i++)
                     {
                         spawnTablesToSpawn.Add(MathUtil.ChooseRandomElement<EncounterPrototype>(spawnTablesOnLevel));
                     }
@@ -188,21 +188,47 @@ namespace Gamepackage
                 }
                 if (level.LevelIndex == 1)
                 {
-                    var possiblePlayerSpawnPoints = FloorTilesInRect(level, level.BoundingBox);
-                    foreach (var alreadyExistingToken in level.Tokens)
-                    {
-                        possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingToken.Position == poi);
-                    }
-                    var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
-
-                    var player = Context.PrototypeFactory.BuildToken(UniqueIdentifier.TOKEN_PONCY);
-                    player.Traits.Add(Traits.Player);
-                    player.Position = spawnPoint;
-                    Context.TokenSystem.Register(player, level);
+                    SpawnOnLevel(UniqueIdentifier.TOKEN_PONCY, new List<Traits>() { Traits.Player }, level);
                 }
             }
+
+            ConnectLevelsByStairway(levels[1], levels[2]);
+
             var game = Context.GameStateManager.Game;
             BuildPathfindingGrid(game);
+        }
+
+        private void ConnectLevelsByStairway(Level level1, Level level2)
+        {
+            Assert.AreNotEqual(level1.LevelIndex, level2.LevelIndex);
+            var lowerLevel = level1.LevelIndex < level2.LevelIndex ? level1 : level2;
+            var higherLevel = lowerLevel == level1 ? level2 : level1;
+
+            var downStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_DOWN, new List<Traits>(0), Context.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
+            var upStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_UP, new List<Traits>(0), Context.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
+
+            downStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
+            downStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), upStair.Position.X.ToString());
+            downStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), upStair.Position.Y.ToString());
+
+            upStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), lowerLevel.LevelIndex.ToString());
+            upStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), downStair.Position.X.ToString());
+            upStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
+        }
+
+        private Token SpawnOnLevel(UniqueIdentifier identifier, List<Traits> traits, Level level)
+        {
+            var possiblePlayerSpawnPoints = FloorTilesInRect(level, level.BoundingBox);
+            foreach (var alreadyExistingToken in level.Tokens)
+            {
+                possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingToken.Position == poi);
+            }
+            var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
+            var thing = Context.PrototypeFactory.BuildToken(identifier);
+            thing.Traits.AddRange(traits);
+            thing.Position = spawnPoint;
+            Context.TokenSystem.Register(thing, level);
+            return thing;
         }
 
         private void BuildPathfindingGrid(Game game)
@@ -214,7 +240,7 @@ namespace Gamepackage
                 {
                     level.TilesetGrid.Each((x, y, v) =>
                     {
-                        var occupied = level.TokenGrid[x, y].FindAll((token) => { return Context.ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier).BlocksPathing; }).Count == 0;
+                        var occupied = level.TokenGrid[x, y].FindAll((token) => { return token.TokenPrototype.BlocksPathing; }).Count > 0;
                         v.Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied;
                         v.Weight = 1;
                     });

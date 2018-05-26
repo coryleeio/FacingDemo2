@@ -321,7 +321,7 @@ namespace Gamepackage
 
             if (radius > 0)
             {
-                List<Point> relevantTiles;
+                List<Point> relevantTiles = null;
                 switch (floodFillType)
                 {
                     case FloodFillType.Orthogonal:

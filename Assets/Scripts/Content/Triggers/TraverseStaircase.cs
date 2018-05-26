@@ -1,10 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Gamepackage
 {
     public class TraverseStaircase : Trigger
     {
-        public override bool ShouldEnd
+        public enum Params
+        {
+            TARGET_POSX,
+            TARGET_POSY,
+            TARGET_LEVEL_ID,
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+            var levelId = Convert.ToInt32(Parameters[Params.TARGET_LEVEL_ID.ToString()]);
+            var posX = Convert.ToInt32(Parameters[Params.TARGET_POSX.ToString()]);
+            var posY = Convert.ToInt32(Parameters[Params.TARGET_POSY.ToString()]);
+            foreach (var target in Targets)
+            {
+                var newLevel = Context.GameStateManager.Game.Dungeon.Levels[levelId];
+                var pos = new Point(posX, posY);
+                Context.TokenSystem.Deregister(target, Context.GameStateManager.Game.CurrentLevel);
+                target.Position = pos;
+                Context.TokenSystem.Register(target, newLevel);
+                target.ActionQueue.Clear();
+            }
+            Context.GameStateManager.Game.CurrentLevelIndex = levelId;
+            Context.GameStateManager.Game.FurthestLevelReached = levelId;
+           Context.Application.StateMachine.ChangeState(Context.GamePlayState);
+        }
+
+        public override bool IsEndable
         {
             get
             {
@@ -19,6 +47,14 @@ namespace Gamepackage
             {
                 return _offsets;
 
+            }
+        }
+
+        public override bool IsStartable
+        {
+            get
+            {
+                return true;
             }
         }
     }

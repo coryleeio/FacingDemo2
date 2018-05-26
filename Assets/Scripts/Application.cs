@@ -25,9 +25,7 @@ namespace Gamepackage
             container.Register<GamePlayState, GamePlayState>().AsSingleton();
             container.Register<MainMenuState, MainMenuState>().AsSingleton();
             container.Register<LoadingResourcesState, LoadingResourcesState>().AsSingleton();
-            container.Register<Logger, Logger>().AsSingleton();
             container.Register<GameStateManager, GameStateManager>().AsSingleton();
-            container.Register<Logger, Logger>().AsSingleton();
             container.Register<VisibilitySystem, VisibilitySystem>().AsSingleton();
             container.Register<ResourceManager, ResourceManager>().AsSingleton();
             container.Register<PrototypeFactory, PrototypeFactory>().AsSingleton();
@@ -43,12 +41,12 @@ namespace Gamepackage
             container.Register<FlowSystem, FlowSystem>().AsSingleton();
             container.Register<DoTriggers, DoTriggers>().AsSingleton();
             container.Register<DoTurn, DoTurn>().AsSingleton();
+            container.Register<PlayerController, PlayerController>().AsSingleton();
             container.Register<StateMachine>();
 
             container.BuildUp(container.Resolve<GamePlayState>());
             container.BuildUp(container.Resolve<MainMenuState>());
             container.BuildUp(container.Resolve<LoadingResourcesState>());
-            container.BuildUp(container.Resolve<Logger>());
             container.BuildUp(container.Resolve<GameStateManager>());
             container.BuildUp(container.Resolve<VisibilitySystem>());
             container.BuildUp(container.Resolve<ResourceManager>());
@@ -66,6 +64,7 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<DoTriggers>());
             container.BuildUp(container.Resolve<DoTurn>());
             container.BuildUp(container.Resolve<ApplicationContext>());
+            container.BuildUp(container.Resolve<PlayerController>());
             container.BuildUp(this);
             StateMachine.ChangeState(MainMenuState);
         }

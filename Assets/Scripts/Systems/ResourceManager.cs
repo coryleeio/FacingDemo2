@@ -41,7 +41,7 @@ namespace Gamepackage
                 {
                     throw new DuplicatePrototypeIdException(string.Format("Duplicate prototype: {0}", prototype.UniqueIdentifier));
                 }
-                Context.Logger.Log("Found " + prototype.GetType().Name.ToString() + ": " + prototype.UniqueIdentifier);
+                Debug.Log("Found " + prototype.GetType().Name.ToString() + ": " + prototype.UniqueIdentifier);
                 _prototypesByUniqueIdentifier[prototype.UniqueIdentifier] = prototype;
                 if (!_prototypesByType.ContainsKey(prototype.GetType()))
                 {

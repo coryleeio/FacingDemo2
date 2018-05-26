@@ -10,7 +10,23 @@
             }
         }
 
-        public override bool ShouldEnd
+        public override bool IsEndable
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool IsAMovementAction
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool IsStartable
         {
             get
             {

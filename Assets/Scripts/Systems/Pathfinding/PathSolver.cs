@@ -27,7 +27,7 @@ namespace Gamepackage
 
             if (!grid[end].Walkable)
             {
-                path.Errors.Add("endpoint was not walkable");
+                path.Errors.Add("endpoint " + end + " was not walkable");
                 return path;
             }
 

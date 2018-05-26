@@ -43,6 +43,7 @@ namespace Gamepackage
         public void InjectContext(ApplicationContext context)
         {
             Context = context;
+            Dungeon.InjectContext(Context);
         }
     }
 }

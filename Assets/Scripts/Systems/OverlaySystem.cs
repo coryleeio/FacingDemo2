@@ -92,6 +92,10 @@ namespace Gamepackage
             if (_overlays.Contains(overlay))
             {
                 _overlays.Remove(overlay);
+                foreach(var config in overlay.Configs)
+                {
+                    ReturnTilesInConfig(config);
+                }
             }
         }
 
@@ -100,11 +104,7 @@ namespace Gamepackage
             OverlayConfig previous = null;
             foreach (var config in overlay.Configs)
             {
-                foreach (var tileInUse in config.TilesInUse)
-                {
-                    ReturnToPool(tileInUse);
-                }
-                config.TilesInUse.Clear();
+                ReturnTilesInConfig(config);
                 var points = MathUtil.GetPointsByOffset(config.Position, config.OffsetPoints);
                 foreach (var point in points)
                 {
@@ -131,6 +131,15 @@ namespace Gamepackage
                 }
                 previous = config;
             }
+        }
+
+        private void ReturnTilesInConfig(OverlayConfig config)
+        {
+            foreach (var tileInUse in config.TilesInUse)
+            {
+                ReturnToPool(tileInUse);
+            }
+            config.TilesInUse.Clear();
         }
 
         private SpriteWithMapPosition GetTileFromPoolAndActivate(OverlayConfig overlay)

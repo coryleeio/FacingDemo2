@@ -24,7 +24,7 @@ namespace Gamepackage
             }
         }
 
-        public TokenAction BuildTokenAction<TAction> (Token token) where TAction : TokenAction
+        public TAction BuildTokenAction<TAction> (Token token) where TAction : TokenAction
         {
             var action = Activator.CreateInstance<TAction>();
             action.TokenId = token.Id;
@@ -81,10 +81,16 @@ namespace Gamepackage
             var go = new GameObject();
             go.name = tokenPrototype.UniqueIdentifier.ToString();
             go.transform.position = MathUtil.MapToWorld(token.Position);
-            if(tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER)
+            if(tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Marker");
+                spriteRenderer.sprite = Resources.Load<Sprite>("RedMarker");
+                spriteRenderer.material = defaultMaterial;
+            }
+            else if (tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_GREEN)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("GreenMarker");
                 spriteRenderer.material = defaultMaterial;
             }
             return go;

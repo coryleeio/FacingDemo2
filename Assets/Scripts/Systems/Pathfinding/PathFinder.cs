@@ -102,7 +102,7 @@ namespace Gamepackage
         {
             if (PathLogging == LogLevel.On)
             {
-                Context.Logger.Log(log);
+                UnityEngine.Debug.Log(log);
             }
         }
 
@@ -113,7 +113,15 @@ namespace Gamepackage
                 var min = request.TimeToFind.Minutes;
                 var sec = request.TimeToFind.Seconds;
                 var milli = request.TimeToFind.Milliseconds;
-                Context.Logger.Log(string.Format("Pathfinding: Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.Start, request.End, min, sec, milli));
+
+                UnityEngine.Debug.Log(string.Format("Pathfinding: Thread {0} Completed path {1} -> {2} in: {3}m:{4}s.{5}", request.ThreadId, request.Start, request.End, min, sec, milli));
+                if(request.Path.HasErrors)
+                {
+                    foreach (var error in request.Path.Errors)
+                    {
+                        UnityEngine.Debug.Log("Pathfinding: " + error);
+                    }
+                }
             }
         }
 

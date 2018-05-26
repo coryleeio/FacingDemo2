@@ -9,7 +9,12 @@ namespace Gamepackage
         public bool IsRunning = false;
 
         [JsonIgnore]
-        public abstract bool ShouldEnd
+        public abstract bool IsEndable
+        {
+            get;
+        }
+
+        public abstract bool IsStartable
         {
             get;
         }
@@ -18,12 +23,20 @@ namespace Gamepackage
         {
             HasStarted = true;
             IsRunning = true;
+            Completed = false;
         }
 
         public virtual void Exit()
         {
             Completed = true;
             IsRunning = false;
+        }
+
+        public virtual void Reset()
+        {
+            HasStarted = false;
+            IsRunning = false;
+            Completed = false;
         }
 
         public virtual void Process()
@@ -46,7 +59,7 @@ namespace Gamepackage
                 Enter();
             }
             Process();
-            if (ShouldEnd)
+            if (IsEndable)
             {
                 Exit();
             }

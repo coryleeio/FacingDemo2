@@ -23,13 +23,30 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
+            Token.HasMovedSinceLastTriggerCheck = true;
         }
 
-        public override bool ShouldEnd
+        public override bool IsEndable
         {
             get
             {
                 return Token.Position == TargetLocation;
+            }
+        }
+
+        public override bool IsAMovementAction
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool IsStartable
+        {
+            get
+            {
+                return true;
             }
         }
     }

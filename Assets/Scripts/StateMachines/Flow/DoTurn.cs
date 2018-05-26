@@ -24,7 +24,7 @@ namespace Gamepackage
             }
             else
             {
-                if (currentActor.ActionQueue.Count == 0)
+                if (!currentActor.IsPlayer && currentActor.ActionQueue.Count == 0)
                 {
                     // Simulating user and AI input...
                     currentActor.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<Wait>(currentActor));
@@ -33,10 +33,12 @@ namespace Gamepackage
 
                 if (currentActor.ActionQueue.Count != 0)
                 {
-                    // TokenActions dequeue themselves on exit.
+
                     var action = currentActor.ActionQueue.Peek();
                     action.Do();
-                    if (action.Completed && action.GetType() == typeof(Move))
+                    // TokenActions dequeue themselves on exit.
+                    // so it may have been dequeued by this point.
+                    if (action.Completed && action.IsAMovementAction)
                     {
                         Context.FlowSystem.StateMachine.ChangeState(Context.DoTriggers);
                     }

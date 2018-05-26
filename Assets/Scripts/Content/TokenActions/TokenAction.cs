@@ -38,7 +38,15 @@ namespace Gamepackage
         {
             base.Exit();
             Token.TimeAccrued += TimeCost;
-            Token.ActionQueue.Dequeue();
+            if(Token.ActionQueue.Contains(this))
+            {
+                Token.ActionQueue.Dequeue();
+            }
+        }
+
+        public abstract bool IsAMovementAction
+        {
+            get;
         }
     }
 }

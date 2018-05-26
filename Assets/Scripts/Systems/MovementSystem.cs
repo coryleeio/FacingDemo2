@@ -6,11 +6,12 @@ namespace Gamepackage
     public class MovementSystem
     {
         public ApplicationContext Context { get; set; }
-        private float TimeBetweenTiles = 15f;
+        private float TimeBetweenTiles = 0.001f;
 
         public void Process()
         {
-            var tokens = Context.GameStateManager.Game.CurrentLevel.Tokens;
+            var level = Context.GameStateManager.Game.CurrentLevel;
+            var tokens = level.Tokens;
 
             foreach (var token in tokens)
             {
@@ -36,10 +37,11 @@ namespace Gamepackage
                     }
                     if (Vector2.Distance(_lerpPos, targetVectorPos.ToVector2()) < 0.005f)
                     {
-                        token.Position = token.TargetPosition;
-                        var oldPos = token.CurrentPath.Dequeue();
+                        TokenArriveAtPosition(level, token);
+
                         if (token.CurrentPath.Count > 0)
                         {
+                            var oldPos = token.CurrentPath.Dequeue();
                             var nextPos = token.CurrentPath.Peek();
                             MoveTo(token, nextPos);
                         }
@@ -53,6 +55,21 @@ namespace Gamepackage
                         }
                     }
                 }
+            }
+        }
+
+        private static void TokenArriveAtPosition(Level level, Token token)
+        {
+            if (token.TokenPrototype.BlocksPathing)
+            {
+                level.TilesetGrid[token.Position].Walkable = true;
+            }
+            level.UnindexToken(token, token.Position);
+            token.Position = token.TargetPosition;
+            level.IndexToken(token, token.Position);
+            if (token.TokenPrototype.BlocksPathing)
+            {
+                level.TilesetGrid[token.Position].Walkable = false;
             }
         }
 

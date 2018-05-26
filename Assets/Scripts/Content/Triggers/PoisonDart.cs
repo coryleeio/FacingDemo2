@@ -11,7 +11,7 @@ namespace Gamepackage
 
         }
 
-        public override bool ShouldEnd
+        public override bool IsEndable
         {
             get
             {
@@ -25,6 +25,14 @@ namespace Gamepackage
             get {
                 return _offsets;
 
+            }
+        }
+
+        public override bool IsStartable
+        {
+            get
+            {
+                return true;
             }
         }
     }

@@ -13,6 +13,8 @@ namespace Gamepackage
 
         public Point Position;
 
+        public Point SortingPosition;
+
         public int TimeAccrued = 0;
 
         public Pointf LerpCurrentPosition;
@@ -33,6 +35,22 @@ namespace Gamepackage
 
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 
+        [JsonIgnore]
+        private TokenPrototype _tokenPrototype;
+
+        [JsonIgnore]
+        public TokenPrototype TokenPrototype
+        {
+            get
+            {
+                if(_tokenPrototype == null)
+                {
+                    _tokenPrototype = Context.ResourceManager.GetPrototype<TokenPrototype>(PrototypeIdentifier);
+                }
+                return _tokenPrototype;
+            }
+        }
+
         public int Id { get; set; }
 
         public List<Traits> Traits = new List<Traits>();
@@ -47,12 +65,11 @@ namespace Gamepackage
 
         public UniqueIdentifier ViewUniqueIdentifier;
 
-
         public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
+
         public Trigger Trigger;
 
-        public bool TriggerHasBeenChecked = false;
-        public bool IsTriggering = false;
+        public bool HasMovedSinceLastTriggerCheck = false;
 
         public bool IsPlayer
         {

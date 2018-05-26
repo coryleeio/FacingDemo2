@@ -18,7 +18,10 @@ namespace Gamepackage
             Context = context;
             foreach(var level in Levels)
             {
-                level.InjectContext(context);
+                if(level != null)
+                {
+                    level.InjectContext(context);
+                }
             }
         }
     }
