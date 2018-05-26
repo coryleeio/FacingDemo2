@@ -11,6 +11,12 @@ namespace Gamepackage
     {
         public Token() {}
 
+        public int CurrentHealth;
+        public int MaxHealth;
+
+        public bool IsDead = false;
+        public float ElapsedTimeDead = 0.0f;
+
         public Point Position;
 
         public Point SortingPosition;
@@ -71,11 +77,21 @@ namespace Gamepackage
 
         public bool HasMovedSinceLastTriggerCheck = false;
 
+        [JsonIgnore]
         public bool IsPlayer
         {
             get
             {
                 return Traits.Contains(Gamepackage.Traits.Player);
+            }
+        }
+
+        [JsonIgnore]
+        public bool IsCombatant
+        {
+            get
+            {
+                return Traits.Contains(Gamepackage.Traits.Combatant);
             }
         }
 

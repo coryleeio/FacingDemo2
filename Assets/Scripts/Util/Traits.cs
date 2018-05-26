@@ -3,5 +3,6 @@
     public enum Traits
     {
         Player,
+        Combatant,
     }
 }

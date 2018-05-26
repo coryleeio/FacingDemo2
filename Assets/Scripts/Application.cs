@@ -42,6 +42,7 @@ namespace Gamepackage
             container.Register<DoTriggers, DoTriggers>().AsSingleton();
             container.Register<DoTurn, DoTurn>().AsSingleton();
             container.Register<PlayerController, PlayerController>().AsSingleton();
+            container.Register<CombatSystem, CombatSystem>().AsSingleton();
             container.Register<StateMachine>();
 
             container.BuildUp(container.Resolve<GamePlayState>());
@@ -65,6 +66,7 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<DoTurn>());
             container.BuildUp(container.Resolve<ApplicationContext>());
             container.BuildUp(container.Resolve<PlayerController>());
+            container.BuildUp(container.Resolve<CombatSystem>());
             container.BuildUp(this);
             StateMachine.ChangeState(MainMenuState);
         }
@@ -112,17 +114,17 @@ namespace Gamepackage
             if (GUI.Button(new Rect(10, 350, 100, 50), "Reveal"))
             {
                 var newVis = new bool[40, 40];
-                for(var x = 0; x < 40; x++)
+                for (var x = 0; x < 40; x++)
                 {
-                    for(var y = 0; y < 40; y++)
+                    for (var y = 0; y < 40; y++)
                     {
-                        newVis[x,y] = true;
+                        newVis[x, y] = true;
                     }
                 }
                 VisibilitySystem.UpdateVisibility(newVis);
             }
 
-            if(Camera.main != null)
+            if (Camera.main != null)
             {
                 var mouseMapPosition = MathUtil.GetMousePositionOnMap(Camera.main);
                 if (GUI.Button(new Rect(150, 10, 100, 50), mouseMapPosition.ToString()))

@@ -30,6 +30,7 @@ namespace Gamepackage
             Context.MovementSystem.Process();
             Context.SpriteSortingSystem.Process();
             Context.VisibilitySystem.Process();
+            Context.CombatSystem.Process();
             CameraDriver.MoveCamera();
         }
 

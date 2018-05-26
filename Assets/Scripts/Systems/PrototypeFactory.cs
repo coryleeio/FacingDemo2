@@ -62,6 +62,8 @@ namespace Gamepackage
             var token = new Token
             {
                 Position = new Point(0, 0),
+                CurrentHealth = prototype.StartingMaxHealth,
+                MaxHealth = prototype.StartingMaxHealth,
                 PrototypeIdentifier = identifier,
                 BehaviorIdentifier = prototype.BehaviorIdentifier,
                 ViewType = prototype.ViewType,

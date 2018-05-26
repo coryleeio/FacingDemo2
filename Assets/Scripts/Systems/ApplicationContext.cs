@@ -17,6 +17,7 @@ namespace Gamepackage
         public SpriteSortingSystem SpriteSortingSystem { get; set; }
         public OverlaySystem OverlaySystem { get; set; }
         public PathFinder PathFinder { get; set; }
+        public CombatSystem CombatSystem { get; set; }
         public GameScene GameScene { get; set; }
         public LoadingScene LoadingScene { get; set; }
         public MainMenuScene MainMenuScene { get; set; }
