@@ -130,6 +130,12 @@ namespace Gamepackage
         {
             return IsOrthogonal(this, p2);
         }
+
+        public bool IsAdjacentTo(Point p2)
+        {
+            return IsAdjacentTo(this, p2);
+        }
+
         public bool IsDiagonalTo(Point p2)
         {
             return IsDiagonalTo(this, p2);

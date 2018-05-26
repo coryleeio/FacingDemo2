@@ -52,7 +52,7 @@ namespace Gamepackage
                     MouseHoverOverlayConfig.DefaultColor = EnemyHoverColor;
                     if (Input.GetMouseButtonDown(0))
                     {
-                        if(player.Position.IsOrthogonalTo(mousePos))
+                        if(player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos))
                         {
                             var attack = Context.PrototypeFactory.BuildTokenAction<Attack>(player);
                             attack.TargetTokenId = level.TokenGrid[mousePos][0].Id;
