@@ -17,6 +17,9 @@ namespace Gamepackage
 
         public void Init()
         {
+            CurrentPath = null;
+            waitingForPath = false;
+
             MouseHoverOverlayConfig = new OverlayConfig
             {
                 Name = "MouseHover",
@@ -114,7 +117,10 @@ namespace Gamepackage
                 }
                 else
                 {
-                    OnPathComplete(CurrentPath);
+                    if(CurrentPath != null)
+                    {
+                        OnPathComplete(CurrentPath);
+                    }
                 }
             }
         }

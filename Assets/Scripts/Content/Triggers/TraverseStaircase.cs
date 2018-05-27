@@ -27,6 +27,7 @@ namespace Gamepackage
                 Context.TokenSystem.Register(target, newLevel);
                 target.ActionQueue.Clear();
             }
+            Context.PlayerController.Init();
             Context.GameStateManager.Game.CurrentLevelIndex = levelId;
             Context.GameStateManager.Game.FurthestLevelReached = levelId;
            Context.Application.StateMachine.ChangeState(Context.GamePlayState);

@@ -46,7 +46,7 @@ namespace Gamepackage
         {
             get
             {
-                return true;
+                return TargetLocation.IsAdjacentTo(Token.Position);
             }
         }
     }
