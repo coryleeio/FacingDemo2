@@ -87,6 +87,18 @@ namespace Gamepackage
             }
         }
 
+        public void SetActivated(Overlay overlay, bool input)
+        {
+            if(input)
+            {
+                Activate(overlay);
+            }
+            else
+            {
+                Deactivate(overlay);
+            }
+        }
+
         public void Deactivate(Overlay overlay)
         {
             if (_overlays.Contains(overlay))

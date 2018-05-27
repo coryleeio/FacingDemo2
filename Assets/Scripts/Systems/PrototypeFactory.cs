@@ -95,6 +95,18 @@ namespace Gamepackage
                 spriteRenderer.sprite = Resources.Load<Sprite>("GreenMarker");
                 spriteRenderer.material = defaultMaterial;
             }
+            else if (tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_YELLOW)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("YellowMarker");
+                spriteRenderer.material = defaultMaterial;
+            }
+            else if (tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_BLUE)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("BlueMarker");
+                spriteRenderer.material = defaultMaterial;
+            }
             return go;
         }
 

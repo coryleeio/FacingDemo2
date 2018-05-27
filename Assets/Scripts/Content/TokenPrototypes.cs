@@ -15,7 +15,7 @@ namespace Gamepackage
                     StartingMaxHealth = 10,
                     BlocksPathing = true,
                     ViewType = ViewType.StaticSprite,
-                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
+                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
                     Traits = new List<Traits>(){ Traits.Combatant },
                 },
                 new TokenPrototype()

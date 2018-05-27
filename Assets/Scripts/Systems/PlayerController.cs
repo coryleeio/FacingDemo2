@@ -8,10 +8,12 @@ namespace Gamepackage
         public ApplicationContext Context { get; set; }
         private Overlay MouseHoverOverlay;
         private OverlayConfig MouseHoverOverlayConfig;
+        private OverlayConfig PathOverlayConfig;
         private bool waitingForPath = false;
 
         private Color DefaultHoverColor = new Color(0, 213, 255);
         private Color EnemyHoverColor = Color.red;
+        private Path CurrentPath;
 
         public void Init()
         {
@@ -21,16 +23,28 @@ namespace Gamepackage
                 Position = new Point(0, 0),
                 OffsetPoints = new List<Point>() { new Point(0, 0) },
                 DefaultColor = DefaultHoverColor,
-                RelativeSortOrder = 0,
+                RelativeSortOrder = 1,
                 WalkableTilesOnly = true,
                 ConstrainToLevel = true,
                 Sprite = Resources.Load<Sprite>("Overlay/Square"),
+            };
+            PathOverlayConfig = new OverlayConfig
+            {
+                Name = "PathHover",
+                Position = new Point(0, 0),
+                OffsetPoints = new List<Point>() { new Point(0, 0) },
+                DefaultColor = Color.green,
+                RelativeSortOrder = 0,
+                WalkableTilesOnly = true,
+                ConstrainToLevel = true,
+                Sprite = Resources.Load<Sprite>("Dot"),
             };
             MouseHoverOverlay = new Overlay()
             {
                 Configs = new List<OverlayConfig>()
                 {
                     MouseHoverOverlayConfig,
+                    PathOverlayConfig,
                 }
             };
         }
@@ -40,44 +54,78 @@ namespace Gamepackage
             var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
-            if (!waitingForPath && player.ActionQueue.Count == 0 && game.IsPlayerTurn)
+            var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
+            var isValidPoint = level.BoundingBox.Contains(mousePos);
+            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.TokenGrid[mousePos].Count > 0 && level.TokenGrid[mousePos][0].IsCombatant;
+            var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
+            Context.OverlaySystem.SetActivated(MouseHoverOverlay, true);
+            MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
+            MouseHoverOverlayConfig.Position = mousePos;
+            PathOverlayConfig.Position = mousePos;
+
+            var points = new List<Point>();
+            if(CurrentPath != null)
             {
-                Context.OverlaySystem.Activate(MouseHoverOverlay);
-                var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
-
-                MouseHoverOverlayConfig.Position = mousePos;
-
-                if (level.BoundingBox.Contains(mousePos) && mousePos != player.Position && level.TokenGrid[mousePos].Count > 0 && level.TokenGrid[mousePos][0].IsCombatant)
+                foreach (var node in CurrentPath.Nodes)
                 {
-                    MouseHoverOverlayConfig.DefaultColor = EnemyHoverColor;
-                    if (Input.GetMouseButtonDown(0))
+                    points.Add(node.Position);
+                }
+            }
+
+            PathOverlayConfig.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(mousePos, points);
+
+            if (!waitingForPath)
+            {
+                if (isHoveringOnEnemyCombatant && !isAbleToHitHoveringEnemyCombatant)
+                {
+                    var surroundingPositions = MathUtil.OrthogonalPoints(mousePos).FindAll((p) => { return level.TilesetGrid[p].Walkable; });
+
+                    if (surroundingPositions.Count > 0)
                     {
-                        if(player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos))
+                        surroundingPositions.Sort(delegate (Point p1, Point p2)
                         {
-                            var attack = Context.PrototypeFactory.BuildTokenAction<Attack>(player);
-                            attack.TargetTokenId = level.TokenGrid[mousePos][0].Id;
-                            player.ActionQueue.Enqueue(attack);
-                            var endTurn = Context.PrototypeFactory.BuildTokenAction<EndTurn>(player);
-                            player.ActionQueue.Enqueue(endTurn);
-                        }
-                        else
+                            return Point.Distance(player.Position, p1).CompareTo(Point.Distance(player.Position, p2));
+                        });
+                        waitingForPath = true;
+                        Context.PathFinder.StartPath(player.Position, surroundingPositions[0], level.TilesetGrid, (path) =>
                         {
-                            Context.PathFinder.StartPath(player.Position, mousePos, Context.GameStateManager.Game.CurrentLevel.TilesetGrid, OnPathComplete);
-                            waitingForPath = true;
-                        }
+                            CurrentPath = path;
+                            waitingForPath = false;
+                        });
                     }
                 }
                 else
                 {
-                    MouseHoverOverlayConfig.DefaultColor = DefaultHoverColor;
-                    if (Input.GetMouseButtonDown(0))
+                    waitingForPath = true;
+                    Context.PathFinder.StartPath(player.Position, mousePos, level.TilesetGrid, (path) =>
                     {
-                        Context.OverlaySystem.Deactivate(MouseHoverOverlay);
-                        Context.PathFinder.StartPath(player.Position, mousePos, Context.GameStateManager.Game.CurrentLevel.TilesetGrid, OnPathComplete);
-                        waitingForPath = true;
-                    }
+                        CurrentPath = path;
+                        waitingForPath = false;
+                    });
                 }
             }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                player.ActionQueue.Clear();
+                if (isHoveringOnEnemyCombatant && isAbleToHitHoveringEnemyCombatant)
+                {
+                    QueueAttack(level, player, mousePos);
+                }
+                else
+                {
+                    OnPathComplete(CurrentPath);
+                }
+            }
+        }
+
+        private void QueueAttack(Level level, Token player, Point mousePos)
+        {
+            var attack = Context.PrototypeFactory.BuildTokenAction<Attack>(player);
+            attack.TargetTokenId = level.TokenGrid[mousePos][0].Id;
+            player.ActionQueue.Enqueue(attack);
+            var endTurn = Context.PrototypeFactory.BuildTokenAction<EndTurn>(player);
+            player.ActionQueue.Enqueue(endTurn);
         }
 
         private void OnPathComplete(Path path)
