@@ -27,16 +27,15 @@ namespace Gamepackage
                         if(token.ViewType == ViewType.StaticSprite)
                         {
                             var spriteRenderer = token.View.GetComponent<SpriteRenderer>();
-
                             var firstPhasePercentage = (token.ElapsedTimeDead - 1.0f) / 1f;
+                            var secondPhasePErcentage = (token.ElapsedTimeDead - 2f) / 1f;
 
-                            if(firstPhasePercentage < 1.0f)
+                            if (firstPhasePercentage < 1.0f)
                             {
                                 spriteRenderer.color = Color.Lerp(Color.white, Color.black, firstPhasePercentage);
                             }
-                            else
+                            else if(secondPhasePErcentage < 1.0f)
                             {
-                                var secondPhasePErcentage = (token.ElapsedTimeDead - 2f) / 1f;
                                 spriteRenderer.color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
                             }
                         }
@@ -47,7 +46,16 @@ namespace Gamepackage
                     }
                 }
             }
-            DyingTokens.RemoveAll((t) => { return t.ElapsedTimeDead > 9.0f; });
+
+            foreach(var token in DyingTokens)
+            {
+
+            }
+
+            var removed = DyingTokens.RemoveAll((t) => {
+                return t.ElapsedTimeDead > 9.0f;
+            }
+            );
         }
 
         public void DealDamage(Token source, Token target, int damage)

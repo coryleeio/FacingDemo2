@@ -120,7 +120,7 @@ namespace Gamepackage
                     ConnectTwoRooms(level, pair.Key, pair.Value);
                 }
 
-                var numberOfSpawnTablesToSpawn = 1;
+                var numberOfSpawnTablesToSpawn = 7;
                 var spawnTablesOnLevel = spawnTablesByLevel[level.LevelIndex];
                 var spawnTablesToSpawn = new List<EncounterPrototype>();
 

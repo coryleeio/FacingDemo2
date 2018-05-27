@@ -83,6 +83,16 @@ namespace Gamepackage
             var go = new GameObject();
             go.name = tokenPrototype.UniqueIdentifier.ToString();
             go.transform.position = MathUtil.MapToWorld(token.Position);
+
+            if(token.IsCombatant)
+            {
+                var healthbarPrefab = Resources.Load<GameObject>("UI/Healthbar/Healthbar");
+                var healthbarGameObject = GameObject.Instantiate(healthbarPrefab);
+                healthbarGameObject.transform.SetParent(go.transform);
+                healthbarGameObject.transform.localPosition = Vector3.zero;
+                healthbarGameObject.GetComponent<HealthBar>().Token = token;
+            }
+
             if(tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
