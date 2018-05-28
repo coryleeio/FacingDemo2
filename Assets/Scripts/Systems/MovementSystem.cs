@@ -60,6 +60,7 @@ namespace Gamepackage
 
         private static void TokenArriveAtPosition(Level level, Token token)
         {
+            // when we arrive give up the lock on our current position
             if (token.TokenPrototype.BlocksPathing)
             {
                 level.TilesetGrid[token.Position].Walkable = true;
@@ -67,14 +68,17 @@ namespace Gamepackage
             level.UnindexToken(token, token.Position);
             token.Position = token.TargetPosition;
             level.IndexToken(token, token.Position);
-            if (token.TokenPrototype.BlocksPathing)
-            {
-                level.TilesetGrid[token.Position].Walkable = false;
-            }
         }
 
         public void MoveTo(Token token, Point newPosition)
         {
+            var level = Context.GameStateManager.Game.CurrentLevel;
+            // Reserve the new position as soon as I start walking so nobody else uses it
+            // Later when we arrive we will release the lock on our OLD position.
+            if (token.TokenPrototype.BlocksPathing)
+            {
+                level.TilesetGrid[newPosition].Walkable = false;
+            }
             token.TargetPosition = newPosition;
             token.LerpCurrentPosition = MathUtil.MapToWorld(token.Position).ToPointf();
             token.LerpTargetPosition = MathUtil.MapToWorld(newPosition).ToPointf();

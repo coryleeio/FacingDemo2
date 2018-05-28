@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -47,6 +48,13 @@ namespace Gamepackage
         public abstract bool IsAMovementAction
         {
             get;
+        }
+
+        public override void FailToStart()
+        {
+            Debug.Log("Fail to start!!");
+            base.FailToStart();
+            Token.ActionQueue.Clear();
         }
     }
 }

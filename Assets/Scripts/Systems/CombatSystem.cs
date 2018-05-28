@@ -17,14 +17,14 @@ namespace Gamepackage
 
         public void Process()
         {
-            foreach(var token in DyingTokens)
+            foreach (var token in DyingTokens)
             {
-                if(token.View != null)
+                if (token.View != null)
                 {
                     token.ElapsedTimeDead = token.ElapsedTimeDead += Time.deltaTime;
-                    if(token.ElapsedTimeDead > 1.0f)
+                    if (token.ElapsedTimeDead > 1.0f)
                     {
-                        if(token.ViewType == ViewType.StaticSprite)
+                        if (token.ViewType == ViewType.StaticSprite)
                         {
                             var spriteRenderer = token.View.GetComponent<SpriteRenderer>();
                             var firstPhasePercentage = (token.ElapsedTimeDead - 1.0f) / 1f;
@@ -34,9 +34,13 @@ namespace Gamepackage
                             {
                                 spriteRenderer.color = Color.Lerp(Color.white, Color.black, firstPhasePercentage);
                             }
-                            else if(secondPhasePErcentage < 1.0f)
+                            else if (secondPhasePErcentage < 1.0f)
                             {
                                 spriteRenderer.color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
+                            }
+                            else if (token.View != null)
+                            {
+                                GameObject.Destroy(token.View);
                             }
                         }
                         else
@@ -47,12 +51,8 @@ namespace Gamepackage
                 }
             }
 
-            foreach(var token in DyingTokens)
+            var removed = DyingTokens.RemoveAll((t) =>
             {
-
-            }
-
-            var removed = DyingTokens.RemoveAll((t) => {
                 return t.ElapsedTimeDead > 9.0f;
             }
             );
@@ -60,16 +60,16 @@ namespace Gamepackage
 
         public void DealDamage(Token source, Token target, int damage)
         {
-            if(!target.IsCombatant)
+            if (!target.IsCombatant)
             {
                 return;
             }
             target.CurrentHealth = target.CurrentHealth - damage;
-            if(target.CurrentHealth <= 0)
+            if (target.CurrentHealth <= 0)
             {
                 var level = Context.GameStateManager.Game.CurrentLevel;
                 Context.TokenSystem.Deregister(target, level);
-                if(target.TokenPrototype.BlocksPathing)
+                if (target.TokenPrototype.BlocksPathing)
                 {
                     Context.GameStateManager.Game.CurrentLevel.TilesetGrid[target.Position].Walkable = true;
                 }

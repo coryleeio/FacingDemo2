@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TinyIoC;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Gamepackage
     public class DoTurn : IStateMachineState
     {
         public ApplicationContext Context { get; set; }
+        private List<Token> TokensThatNeedToAct = new List<Token>(0);
 
         public void Enter()
         {
@@ -15,32 +17,43 @@ namespace Gamepackage
 
         public void Process()
         {
-            Token currentActor = GetCurrentToken();
-            
+            TokensThatNeedToAct.Clear();
+
+            var game = Context.GameStateManager.Game;
+            var level = game.CurrentLevel;
+            var player = level.Player;
+
+            TokensThatNeedToAct.AddRange(Context.GameStateManager.Game.CurrentLevel.Tokens.FindAll((tok) =>
+            {
+                var isPlayerThatNeedsToAct = (game.IsPlayerTurn && tok.IsPlayer && !tok.IsDoneThisTurn);
+                var isNpcThatNeedsToAct = (!game.IsPlayerTurn && !tok.IsPlayer && !tok.IsDoneThisTurn);
+                return isPlayerThatNeedsToAct || isNpcThatNeedsToAct;
+            }));
+
             // All tokens have acted, so end this turn
-            if (currentActor == null)
+            if (TokensThatNeedToAct.Count == 0)
             {
                 EndTurn();
             }
             else
             {
-                if (!currentActor.IsPlayer && currentActor.ActionQueue.Count == 0)
+                foreach (var token in TokensThatNeedToAct)
                 {
-                    // Simulating user and AI input...
-                    currentActor.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<Wait>(currentActor));
-                    currentActor.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<EndTurn>(currentActor));
-                }
-
-                if (currentActor.ActionQueue.Count != 0)
-                {
-
-                    var action = currentActor.ActionQueue.Peek();
-                    action.Do();
-                    // TokenActions dequeue themselves on exit.
-                    // so it may have been dequeued by this point.
-                    if (action.Completed && action.IsAMovementAction)
+                    if (!token.IsPlayer && token.ActionQueue.Count == 0)
                     {
-                        Context.FlowSystem.StateMachine.ChangeState(Context.DoTriggers);
+                        token.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<Wait>(token));
+                        token.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<EndTurn>(token));
+                    }
+                    if(token.ActionQueue.Count > 0)
+                    {
+                        var action = token.ActionQueue.Peek();
+                        action.Do();
+                        // TokenActions dequeue themselves on exit.
+                        // so it may have been dequeued by this point.
+                        if (action.Completed && action.IsAMovementAction)
+                        {
+                            Context.FlowSystem.StateMachine.ChangeState(Context.DoTriggers);
+                        }
                     }
                 }
             }
@@ -78,9 +91,9 @@ namespace Gamepackage
             game.CurrentTurn += 1;
             Debug.Log("Turn is now: " + game.CurrentTurn);
             game.IsPlayerTurn = true;
-            foreach(var token in game.CurrentLevel.Tokens)
+            foreach (var token in game.CurrentLevel.Tokens)
             {
-                if(token.IsPlayer)
+                if (token.IsPlayer)
                 {
                     token.TimeAccrued = 0;
                 }

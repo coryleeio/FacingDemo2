@@ -19,6 +19,11 @@ namespace Gamepackage
             get;
         }
 
+        public virtual void FailToStart()
+        {
+
+        }
+
         public virtual void Enter()
         {
             HasStarted = true;
@@ -51,11 +56,15 @@ namespace Gamepackage
             Context = context;
         }
 
-
         public virtual void Do()
         {
             if (!HasStarted)
             {
+                if(!IsStartable)
+                {
+                    FailToStart();
+                    return;
+                }
                 Enter();
             }
             Process();
