@@ -1,6 +1,6 @@
 ﻿using Gamepackage;
 
-public class Wait : TokenAction
+public class Wait : EntityAction
 {
     public override int TimeCost
     {

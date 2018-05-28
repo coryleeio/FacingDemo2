@@ -31,7 +31,7 @@ namespace Gamepackage
 
         public void Clear()
         {
-            Context.TokenSystem.Clear();
+            Context.EntitySystem.Clear();
             Debug.Log("Clearing game state");
             Game = null;
         }
@@ -55,10 +55,10 @@ namespace Gamepackage
             {
                 if(level != null)
                 {
-                    level.TokenGrid = new ListGrid<Token>(level.TilesetGrid.Width, level.TilesetGrid.Height);
-                    foreach (var token in level.Tokens)
+                    level.EntityGrid = new ListGrid<Entity>(level.TilesetGrid.Width, level.TilesetGrid.Height);
+                    foreach (var entity in level.Entitys)
                     {
-                        Context.TokenSystem.Register(token, level);
+                        Context.EntitySystem.Register(entity, level);
                     }
                 }
             }

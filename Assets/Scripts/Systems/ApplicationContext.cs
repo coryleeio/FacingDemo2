@@ -12,7 +12,7 @@ namespace Gamepackage
         public VisibilitySystem VisibilitySystem { get; set; }
         public ResourceManager ResourceManager { get; set; }
         public PrototypeFactory PrototypeFactory { get; set; }
-        public TokenSystem TokenSystem { get; set; }
+        public EntityManager EntitySystem { get; set; }
         public DungeonGenerator DungeonGenerator { get; set; }
         public SpriteSortingSystem SpriteSortingSystem { get; set; }
         public OverlaySystem OverlaySystem { get; set; }

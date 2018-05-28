@@ -7,7 +7,7 @@ namespace Gamepackage
     public class CombatSystem
     {
         public ApplicationContext Context { get; set; }
-        private List<Token> DyingTokens = new List<Token>(0);
+        private List<Entity> DyingEntitys = new List<Entity>(0);
         private Color DeathColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0f);
 
         public CombatSystem()
@@ -17,18 +17,18 @@ namespace Gamepackage
 
         public void Process()
         {
-            foreach (var token in DyingTokens)
+            foreach (var entity in DyingEntitys)
             {
-                if (token.View != null)
+                if (entity.View != null)
                 {
-                    token.ElapsedTimeDead = token.ElapsedTimeDead += Time.deltaTime;
-                    if (token.ElapsedTimeDead > 1.0f)
+                    entity.ElapsedTimeDead = entity.ElapsedTimeDead += Time.deltaTime;
+                    if (entity.ElapsedTimeDead > 1.0f)
                     {
-                        if (token.ViewType == ViewType.StaticSprite)
+                        if (entity.ViewType == ViewType.StaticSprite)
                         {
-                            var spriteRenderer = token.View.GetComponent<SpriteRenderer>();
-                            var firstPhasePercentage = (token.ElapsedTimeDead - 1.0f) / 1f;
-                            var secondPhasePErcentage = (token.ElapsedTimeDead - 2f) / 1f;
+                            var spriteRenderer = entity.View.GetComponent<SpriteRenderer>();
+                            var firstPhasePercentage = (entity.ElapsedTimeDead - 1.0f) / 1f;
+                            var secondPhasePErcentage = (entity.ElapsedTimeDead - 2f) / 1f;
 
                             if (firstPhasePercentage < 1.0f)
                             {
@@ -38,9 +38,9 @@ namespace Gamepackage
                             {
                                 spriteRenderer.color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
                             }
-                            else if (token.View != null)
+                            else if (entity.View != null)
                             {
-                                GameObject.Destroy(token.View);
+                                GameObject.Destroy(entity.View);
                             }
                         }
                         else
@@ -51,14 +51,14 @@ namespace Gamepackage
                 }
             }
 
-            var removed = DyingTokens.RemoveAll((t) =>
+            var removed = DyingEntitys.RemoveAll((t) =>
             {
                 return t.ElapsedTimeDead > 9.0f;
             }
             );
         }
 
-        public void DealDamage(Token source, Token target, int damage)
+        public void DealDamage(Entity source, Entity target, int damage)
         {
             if (!target.IsCombatant)
             {
@@ -68,12 +68,12 @@ namespace Gamepackage
             if (target.CurrentHealth <= 0)
             {
                 var level = Context.GameStateManager.Game.CurrentLevel;
-                Context.TokenSystem.Deregister(target, level);
-                if (target.TokenPrototype.BlocksPathing)
+                Context.EntitySystem.Deregister(target, level);
+                if (target.EntityPrototype.BlocksPathing)
                 {
                     Context.GameStateManager.Game.CurrentLevel.TilesetGrid[target.Position].Walkable = true;
                 }
-                DyingTokens.Add(target);
+                DyingEntitys.Add(target);
             }
         }
     }

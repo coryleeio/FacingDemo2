@@ -29,9 +29,9 @@ namespace Gamepackage
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
 
             PrototypeFactory.BuildMapTiles(GameStateManager.Game.CurrentLevel);
-            foreach (var token in GameStateManager.Game.CurrentLevel.Tokens)
+            foreach (var entity in GameStateManager.Game.CurrentLevel.Entitys)
             {
-                token.View = PrototypeFactory.BuildView(token);
+                entity.View = PrototypeFactory.BuildView(entity);
             }
             gameSceneCameraDriver.target = GameStateManager.Game.CurrentLevel.Player.View;
             CameraDriver = gameSceneCameraDriver;

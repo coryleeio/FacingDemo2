@@ -8,25 +8,25 @@ namespace Gamepackage
     {
         public int LevelIndex;
         public Rectangle BoundingBox;
-        public List<Token> Tokens;
+        public List<Entity> Entitys;
         public List<Room> Rooms = new List<Room>(0);
         public Grid<MapVisibilityState> VisibilityGrid;
         public Grid<Tile> TilesetGrid;
 
         [JsonIgnore]
-        public ListGrid<Token> TokenGrid;
+        public ListGrid<Entity> EntityGrid;
 
         [JsonIgnore]
-        private Token _player;
+        private Entity _player;
 
         [JsonIgnore]
-        public Token Player
+        public Entity Player
         {
             get
             {
                 if (_player == null)
                 {
-                    _player = Tokens.Find((t) => t.IsPlayer);
+                    _player = Entitys.Find((t) => t.IsPlayer);
                 }
                 return _player;
             }
@@ -43,19 +43,19 @@ namespace Gamepackage
         }
 
 
-        public void UnindexToken(Token token, Point oldPosition)
+        public void UnindexEntity(Entity entity, Point oldPosition)
         {
-            if(TokenGrid[oldPosition.X, oldPosition.Y].Contains(token))
+            if(EntityGrid[oldPosition.X, oldPosition.Y].Contains(entity))
             {
-                TokenGrid[oldPosition.X, oldPosition.Y].Remove(token);
+                EntityGrid[oldPosition.X, oldPosition.Y].Remove(entity);
             }
         }
 
-        public void IndexToken(Token token, Point newPosition)
+        public void IndexEntity(Entity entity, Point newPosition)
         {
-            if (!TokenGrid[newPosition.X, newPosition.Y].Contains(token))
+            if (!EntityGrid[newPosition.X, newPosition.Y].Contains(entity))
             {
-                TokenGrid[newPosition.X, newPosition.Y].Add(token);
+                EntityGrid[newPosition.X, newPosition.Y].Add(entity);
             }
         }
 
@@ -63,9 +63,9 @@ namespace Gamepackage
         public void InjectContext(ApplicationContext context)
         {
             Context = context;
-            foreach(var token in Tokens)
+            foreach(var entity in Entitys)
             {
-                token.InjectContext(context);
+                entity.InjectContext(context);
             }
         }
     }

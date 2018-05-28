@@ -9,8 +9,8 @@ namespace Gamepackage
         private SpriteRenderer[,] Tiles;
         private static List<Direction> HigherSortingPositions = new List<Direction>() { Direction.East, Direction.SouthEast, Direction.South, Direction.SouthWest };
         private static List<Direction> LowerSortingPositions = new List<Direction>() { Direction.West, Direction.NorthWest, Direction.North, Direction.NorthEast };
-        private ListGrid<Token> NotMovingTokens;
-        private ListGrid<Token> MovingTokens;
+        private ListGrid<Entity> NotMovingEntitys;
+        private ListGrid<Entity> MovingEntitys;
         public SpriteSortingSystem()
         {
 
@@ -20,8 +20,8 @@ namespace Gamepackage
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
             Tiles = new SpriteRenderer[level.BoundingBox.Width, level.BoundingBox.Height];
-            MovingTokens = new ListGrid<Token>(level.BoundingBox.Width, level.BoundingBox.Height);
-            NotMovingTokens = new ListGrid<Token>(level.BoundingBox.Width, level.BoundingBox.Height);
+            MovingEntitys = new ListGrid<Entity>(level.BoundingBox.Width, level.BoundingBox.Height);
+            NotMovingEntitys = new ListGrid<Entity>(level.BoundingBox.Width, level.BoundingBox.Height);
         }
 
         public void RegisterTile(SpriteRenderer tileSpriteRenderer, Point position)
@@ -32,16 +32,16 @@ namespace Gamepackage
         public void Process()
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
-            foreach (var token in level.Tokens)
+            foreach (var entity in level.Entitys)
             {
-                if (token.TargetPosition != token.Position &&
-                                token.TargetPosition != null)
+                if (entity.TargetPosition != entity.Position &&
+                                entity.TargetPosition != null)
                 {
-                    MovingTokens[token.Position].Add(token);
+                    MovingEntitys[entity.Position].Add(entity);
                 }
                 else
                 {
-                    NotMovingTokens[token.Position].Add(token);
+                    NotMovingEntitys[entity.Position].Add(entity);
                 }
             }
 
@@ -68,29 +68,29 @@ namespace Gamepackage
                         }
                     }
                     sortOrder++;
-                    if (level.TokenGrid != null)
+                    if (level.EntityGrid != null)
                     {
-                        foreach (var token in NotMovingTokens[x,y])
+                        foreach (var entity in NotMovingEntitys[x,y])
                         {
-                            sortOrder = sortToken(sortOrder, token);
+                            sortOrder = sortEntity(sortOrder, entity);
                         }
 
-                        foreach (var token in MovingTokens[x,y])
+                        foreach (var entity in MovingEntitys[x,y])
                         {
-                            sortOrder = sortToken(sortOrder, token);
+                            sortOrder = sortEntity(sortOrder, entity);
                         }
                     }
-                    NotMovingTokens[x,y].Clear();
-                    MovingTokens[x,y].Clear();
+                    NotMovingEntitys[x,y].Clear();
+                    MovingEntitys[x,y].Clear();
                 }
             }
         }
 
-        private static int sortToken(int sortOrder, Token token)
+        private static int sortEntity(int sortOrder, Entity entity)
         {
-            if (token.ViewType == ViewType.StaticSprite)
+            if (entity.ViewType == ViewType.StaticSprite)
             {
-                var spriteRenderer = token.View.GetComponent<SpriteRenderer>();
+                var spriteRenderer = entity.View.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingOrder = sortOrder;
                 return sortOrder + 1;
             }

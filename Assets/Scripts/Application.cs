@@ -8,7 +8,7 @@ namespace Gamepackage
         public StateMachine StateMachine = new StateMachine();
         public GameStateManager GameStateManager { get; set; }
         public VisibilitySystem VisibilitySystem { get; set; }
-        public TokenSystem TokenSystem { get; set; }
+        public EntityManager EntityManager { get; set; }
         public PathFinder PathFinder { get; set; }
         public LoadingResourcesState LoadingResourcesState { get; set; }
         public MainMenuState MainMenuState { get; set; }
@@ -29,7 +29,7 @@ namespace Gamepackage
             container.Register<VisibilitySystem, VisibilitySystem>().AsSingleton();
             container.Register<ResourceManager, ResourceManager>().AsSingleton();
             container.Register<PrototypeFactory, PrototypeFactory>().AsSingleton();
-            container.Register<TokenSystem, TokenSystem>().AsSingleton();
+            container.Register<EntityManager, EntityManager>().AsSingleton();
             container.Register<DungeonGenerator, DungeonGenerator>().AsSingleton();
             container.Register<SpriteSortingSystem, SpriteSortingSystem>().AsSingleton();
             container.Register<OverlaySystem, OverlaySystem>().AsSingleton();
@@ -52,7 +52,7 @@ namespace Gamepackage
             container.BuildUp(container.Resolve<VisibilitySystem>());
             container.BuildUp(container.Resolve<ResourceManager>());
             container.BuildUp(container.Resolve<PrototypeFactory>());
-            container.BuildUp(container.Resolve<TokenSystem>());
+            container.BuildUp(container.Resolve<EntityManager>());
             container.BuildUp(container.Resolve<DungeonGenerator>());
             container.BuildUp(container.Resolve<SpriteSortingSystem>());
             container.BuildUp(container.Resolve<OverlaySystem>());

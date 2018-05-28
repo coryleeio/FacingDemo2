@@ -2,18 +2,18 @@
 
 namespace Gamepackage
 {
-    public class Attack : TokenAction
+    public class Attack : EntityAction
     {
         private float TimeStart;
         private float Duration = 0.5f;
 
-        public int TargetTokenId;
+        public int TargetEntityId;
         [JsonIgnore]
-        public Token TargetToken
+        public Entity TargetEntity
         {
             get
             {
-                return Context.TokenSystem.GetTokenById(TargetTokenId);
+                return Context.EntitySystem.GetEntityById(TargetEntityId);
             }
         }
 
@@ -34,7 +34,7 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            Context.CombatSystem.DealDamage(Token, TargetToken, 1);
+            Context.CombatSystem.DealDamage(Entity, TargetEntity, 1);
         }
 
         public override bool IsEndable
@@ -57,7 +57,7 @@ namespace Gamepackage
         {
             get
             {
-                return Token.Position.IsOrthogonalTo(TargetToken.Position);
+                return Entity.Position.IsOrthogonalTo(TargetEntity.Position);
             }
         }
     }

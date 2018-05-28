@@ -8,7 +8,7 @@ namespace Gamepackage
     public class DoTurn : IStateMachineState
     {
         public ApplicationContext Context { get; set; }
-        private List<Token> TokensThatNeedToAct = new List<Token>(0);
+        private List<Entity> EntitysThatNeedToAct = new List<Entity>(0);
 
         public void Enter()
         {
@@ -17,38 +17,38 @@ namespace Gamepackage
 
         public void Process()
         {
-            TokensThatNeedToAct.Clear();
+            EntitysThatNeedToAct.Clear();
 
             var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
 
-            TokensThatNeedToAct.AddRange(Context.GameStateManager.Game.CurrentLevel.Tokens.FindAll((tok) =>
+            EntitysThatNeedToAct.AddRange(Context.GameStateManager.Game.CurrentLevel.Entitys.FindAll((tok) =>
             {
                 var isPlayerThatNeedsToAct = (game.IsPlayerTurn && tok.IsPlayer && !tok.IsDoneThisTurn);
                 var isNpcThatNeedsToAct = (!game.IsPlayerTurn && !tok.IsPlayer && !tok.IsDoneThisTurn);
                 return isPlayerThatNeedsToAct || isNpcThatNeedsToAct;
             }));
 
-            // All tokens have acted, so end this turn
-            if (TokensThatNeedToAct.Count == 0)
+            // All entities have acted, so end this turn
+            if (EntitysThatNeedToAct.Count == 0)
             {
                 EndTurn();
             }
             else
             {
-                foreach (var token in TokensThatNeedToAct)
+                foreach (var entity in EntitysThatNeedToAct)
                 {
-                    if (!token.IsPlayer && token.ActionQueue.Count == 0)
+                    if (!entity.IsPlayer && entity.ActionQueue.Count == 0)
                     {
-                        token.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<Wait>(token));
-                        token.ActionQueue.Enqueue(Context.PrototypeFactory.BuildTokenAction<EndTurn>(token));
+                        entity.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<Wait>(entity));
+                        entity.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity));
                     }
-                    if(token.ActionQueue.Count > 0)
+                    if(entity.ActionQueue.Count > 0)
                     {
-                        var action = token.ActionQueue.Peek();
+                        var action = entity.ActionQueue.Peek();
                         action.Do();
-                        // TokenActions dequeue themselves on exit.
+                        // EntityActions dequeue themselves on exit.
                         // so it may have been dequeued by this point.
                         if (action.Completed && action.IsAMovementAction)
                         {
@@ -64,22 +64,22 @@ namespace Gamepackage
 
         }
 
-        private Token GetCurrentToken()
+        private Entity GetCurrentEntity()
         {
             Game game = Context.GameStateManager.Game;
             Level level = game.CurrentLevel;
-            foreach (var token in level.Tokens)
+            foreach (var entity in level.Entitys)
             {
-                if (token.IsDoneThisTurn)
+                if (entity.IsDoneThisTurn)
                 {
                     continue;
                 }
-                var isPlayerThatNeedsToAct = game.IsPlayerTurn && token.IsPlayer;
-                var isNPCThatNeedsToAct = !game.IsPlayerTurn && !token.IsPlayer;
+                var isPlayerThatNeedsToAct = game.IsPlayerTurn && entity.IsPlayer;
+                var isNPCThatNeedsToAct = !game.IsPlayerTurn && !entity.IsPlayer;
                 if (isPlayerThatNeedsToAct || isNPCThatNeedsToAct)
                 {
-                    Debug.Log("NextActor set to " + token.Id + " " + token.View.gameObject.name);
-                    return token;
+                    Debug.Log("NextActor set to " + entity.Id + " " + entity.View.gameObject.name);
+                    return entity;
                 }
             }
             return null;
@@ -91,13 +91,13 @@ namespace Gamepackage
             game.CurrentTurn += 1;
             Debug.Log("Turn is now: " + game.CurrentTurn);
             game.IsPlayerTurn = true;
-            foreach (var token in game.CurrentLevel.Tokens)
+            foreach (var entity in game.CurrentLevel.Entitys)
             {
-                if (token.IsPlayer)
+                if (entity.IsPlayer)
                 {
-                    token.TimeAccrued = 0;
+                    entity.TimeAccrued = 0;
                 }
-                token.IsDoneThisTurn = false;
+                entity.IsDoneThisTurn = false;
             }
         }
     }

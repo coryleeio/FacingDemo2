@@ -243,17 +243,17 @@ namespace Gamepackage
                     _updatedVisibilityGrid[tile.X, tile.Y] = true;
                 }
 
-                foreach (var token in level.Tokens)
+                foreach (var entity in level.Entitys)
                 {
-                    if (token.IsPlayer)
+                    if (entity.IsPlayer)
                     {
-                        token.IsVisible = true;
+                        entity.IsVisible = true;
                     }
                     else
                     {
-                        token.IsVisible = _updatedVisibilityGrid[token.Position.X, token.Position.Y];
+                        entity.IsVisible = _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
                     }
-                    token.View.SetActive(token.IsVisible);
+                    entity.View.SetActive(entity.IsVisible);
                 }
 
                 UpdateVisibility(_updatedVisibilityGrid);

@@ -9,7 +9,7 @@ namespace Gamepackage
         public void Enter()
         {
             Context.GameStateManager.Clear();
-            Context.TokenSystem.Clear();
+            Context.EntitySystem.Clear();
             Context.MainMenuScene.Load();
         }
 

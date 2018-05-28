@@ -24,10 +24,10 @@ namespace Gamepackage
             }
         }
 
-        public TAction BuildTokenAction<TAction> (Token token) where TAction : TokenAction
+        public TAction BuildEntityAction<TAction> (Entity entity) where TAction : EntityAction
         {
             var action = Activator.CreateInstance<TAction>();
-            action.TokenId = token.Id;
+            action.EntityId = entity.Id;
             Assert.IsNotNull(action, string.Format("Failed to create {0}", typeof(TAction)));
             action.InjectContext(Context);
             return action;
@@ -56,10 +56,10 @@ namespace Gamepackage
             return ret;
         }
 
-        public Token BuildToken(UniqueIdentifier identifier)
+        public Entity BuildEntity(UniqueIdentifier identifier)
         {
-            var prototype = Context.ResourceManager.GetPrototype<TokenPrototype>(identifier);
-            var token = new Token
+            var prototype = Context.ResourceManager.GetPrototype<EntityPrototype>(identifier);
+            var entity = new Entity
             {
                 Position = new Point(0, 0),
                 CurrentHealth = prototype.StartingMaxHealth,
@@ -71,47 +71,47 @@ namespace Gamepackage
                 Trigger = BuildTrigger(prototype.TriggerUniqueIdentifier),
                 TriggerPrototypeUniqueIdentifier = prototype.TriggerUniqueIdentifier,
             };
-            token.Traits.AddRange(prototype.Traits);
-            token.InjectContext(Context);
-            return token;
+            entity.Traits.AddRange(prototype.Traits);
+            entity.InjectContext(Context);
+            return entity;
         }
 
-        public GameObject BuildView(Token token)
+        public GameObject BuildView(Entity entity)
         {
-            var tokenPrototype = Context.ResourceManager.GetPrototype<TokenPrototype>(token.PrototypeIdentifier);
+            var entityPrototype = Context.ResourceManager.GetPrototype<EntityPrototype>(entity.PrototypeIdentifier);
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var go = new GameObject();
-            go.name = tokenPrototype.UniqueIdentifier.ToString();
-            go.transform.position = MathUtil.MapToWorld(token.Position);
+            go.name = entityPrototype.UniqueIdentifier.ToString();
+            go.transform.position = MathUtil.MapToWorld(entity.Position);
 
-            if(token.IsCombatant)
+            if(entity.IsCombatant)
             {
                 var healthbarPrefab = Resources.Load<GameObject>("UI/Healthbar/Healthbar");
                 var healthbarGameObject = GameObject.Instantiate(healthbarPrefab);
                 healthbarGameObject.transform.SetParent(go.transform);
                 healthbarGameObject.transform.localPosition = Vector3.zero;
-                healthbarGameObject.GetComponent<HealthBar>().Token = token;
+                healthbarGameObject.GetComponent<HealthBar>().Entity = entity;
             }
 
-            if(tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
+            if(entityPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("RedMarker");
                 spriteRenderer.material = defaultMaterial;
             }
-            else if (tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_GREEN)
+            else if (entityPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_GREEN)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("GreenMarker");
                 spriteRenderer.material = defaultMaterial;
             }
-            else if (tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_YELLOW)
+            else if (entityPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_YELLOW)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("YellowMarker");
                 spriteRenderer.material = defaultMaterial;
             }
-            else if (tokenPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_BLUE)
+            else if (entityPrototype.ViewUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_BLUE)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("BlueMarker");

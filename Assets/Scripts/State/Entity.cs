@@ -7,9 +7,9 @@ using UnityEngine;
 namespace Gamepackage
 {
     [Serializable]
-    public class Token : IHasApplicationContext
+    public class Entity : IHasApplicationContext
     {
-        public Token() {}
+        public Entity() {}
 
         public int CurrentHealth;
         public int MaxHealth;
@@ -29,7 +29,7 @@ namespace Gamepackage
 
         public float ElapsedMovementTime;
 
-        public Queue<TokenAction> ActionQueue = new Queue<TokenAction>(0);
+        public Queue<EntityAction> ActionQueue = new Queue<EntityAction>(0);
 
         public bool IsMoving;
 
@@ -42,18 +42,18 @@ namespace Gamepackage
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 
         [JsonIgnore]
-        private TokenPrototype _tokenPrototype;
+        private EntityPrototype _entityPrototype;
 
         [JsonIgnore]
-        public TokenPrototype TokenPrototype
+        public EntityPrototype EntityPrototype
         {
             get
             {
-                if(_tokenPrototype == null)
+                if(_entityPrototype == null)
                 {
-                    _tokenPrototype = Context.ResourceManager.GetPrototype<TokenPrototype>(PrototypeIdentifier);
+                    _entityPrototype = Context.ResourceManager.GetPrototype<EntityPrototype>(PrototypeIdentifier);
                 }
-                return _tokenPrototype;
+                return _entityPrototype;
             }
         }
 

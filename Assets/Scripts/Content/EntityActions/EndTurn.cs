@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public class EndTurn : TokenAction
+    public class EndTurn : EntityAction
     {
         public override int TimeCost
         {
@@ -37,16 +37,16 @@
         public override void Exit()
         {
             base.Exit();
-            Token.IsDoneThisTurn = true;
-            if (Token.IsPlayer)
+            Entity.IsDoneThisTurn = true;
+            if (Entity.IsPlayer)
             {
-                // If the token who ended their turn is the player we need to push the time accrued by
+                // If the entity who ended their turn is the player we need to push the time accrued by
                 // our actions to them, and change to the NPC turn.
-                foreach (var tokenToPushTime in Game.CurrentLevel.Tokens)
+                foreach (var entityToPushTime in Game.CurrentLevel.Entitys)
                 {
-                    if (!tokenToPushTime.IsPlayer)
+                    if (!entityToPushTime.IsPlayer)
                     {
-                        tokenToPushTime.TimeAccrued = Token.TimeAccrued;
+                        entityToPushTime.TimeAccrued = Entity.TimeAccrued;
                     }
                 }
                 Game.IsPlayerTurn = !Game.IsPlayerTurn;

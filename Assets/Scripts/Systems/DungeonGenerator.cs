@@ -62,7 +62,7 @@ namespace Gamepackage
                     Width = size,
                     Height = size
                 };
-                level.Tokens = new List<Token>();
+                level.Entitys = new List<Entity>();
                 levels[levelPrototype.LevelIndex] = level;
                 level.TilesetGrid = new Grid<Tile>(size, size);
                 level.TilesetGrid.Each((x, y, v) =>
@@ -73,7 +73,7 @@ namespace Gamepackage
                         TileType = TileType.Empty,
                     };
                 });
-                level.TokenGrid = new ListGrid<Token>(size, size);
+                level.EntityGrid = new ListGrid<Entity>(size, size);
 
                 var numberOfRoomsToSpawn = levelPrototype.NumberOfRooms;
                 var roomPrototypesOnLevel = roomPrototypesByLevel[level.LevelIndex];
@@ -167,9 +167,9 @@ namespace Gamepackage
                         List<Point> spawnPoints = new List<Point>();
                         MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq) => { return level.TilesetGrid[piq.X, piq.Y].TileType == TileType.Floor; });
 
-                        foreach (var alreadyExistingToken in level.Tokens)
+                        foreach (var alreadyExistingEntity in level.Entitys)
                         {
-                            spawnPoints.RemoveAll((poi) => alreadyExistingToken.Position == poi);
+                            spawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
                         }
 
                         if (spawnPoints.Count >= thingsToSpawn.Count)
@@ -178,9 +178,9 @@ namespace Gamepackage
                             {
                                 var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
                                 spawnPoints.Remove(spawnPoint);
-                                var thingSpawned = Context.PrototypeFactory.BuildToken(thingToSpawn);
+                                var thingSpawned = Context.PrototypeFactory.BuildEntity(thingToSpawn);
                                 thingSpawned.Position = spawnPoint;
-                                Context.TokenSystem.Register(thingSpawned, level);
+                                Context.EntitySystem.Register(thingSpawned, level);
                             }
                             break;
                         }
@@ -216,18 +216,18 @@ namespace Gamepackage
             upStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
         }
 
-        private Token SpawnOnLevel(UniqueIdentifier identifier, List<Traits> traits, Level level)
+        private Entity SpawnOnLevel(UniqueIdentifier identifier, List<Traits> traits, Level level)
         {
             var possiblePlayerSpawnPoints = FloorTilesInRect(level, level.BoundingBox);
-            foreach (var alreadyExistingToken in level.Tokens)
+            foreach (var alreadyExistingEntity in level.Entitys)
             {
-                possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingToken.Position == poi);
+                possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
             }
             var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
-            var thing = Context.PrototypeFactory.BuildToken(identifier);
+            var thing = Context.PrototypeFactory.BuildEntity(identifier);
             thing.Traits.AddRange(traits);
             thing.Position = spawnPoint;
-            Context.TokenSystem.Register(thing, level);
+            Context.EntitySystem.Register(thing, level);
             return thing;
         }
 
@@ -240,7 +240,7 @@ namespace Gamepackage
                 {
                     level.TilesetGrid.Each((x, y, v) =>
                     {
-                        var occupied = level.TokenGrid[x, y].FindAll((token) => { return token.TokenPrototype.BlocksPathing; }).Count > 0;
+                        var occupied = level.EntityGrid[x, y].FindAll((entity) => { return entity.EntityPrototype.BlocksPathing; }).Count > 0;
                         v.Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied;
                         v.Weight = 1;
                     });

@@ -27,7 +27,7 @@ namespace Gamepackage
                 CacheResources<ItemPrototype>(ItemPrototypes.LoadAll());
                 CacheResources<LevelPrototype>(LevelPrototypes.LoadAll());
                 CacheResources<RoomPrototype>(RoomPrototypes.LoadAll());
-                CacheResources<TokenPrototype>(TokenPrototypes.LoadAll());
+                CacheResources<EntityPrototype>(EntityPrototypes.LoadAll());
                 CacheResources<EffectPrototype>(EffectPrototypes.LoadAll());
             }
             hasInit = true;

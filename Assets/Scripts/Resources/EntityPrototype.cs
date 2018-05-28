@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public class TokenPrototype : IResource
+    public class EntityPrototype : IResource
     {
         public UniqueIdentifier UniqueIdentifier { get; set; }
         public bool BlocksPathing { get; set; }

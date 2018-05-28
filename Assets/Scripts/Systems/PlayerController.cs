@@ -59,7 +59,7 @@ namespace Gamepackage
             var player = level.Player;
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
             var isValidPoint = level.BoundingBox.Contains(mousePos);
-            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.TokenGrid[mousePos].Count > 0 && level.TokenGrid[mousePos][0].IsCombatant;
+            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.EntityGrid[mousePos].Count > 0 && level.EntityGrid[mousePos][0].IsCombatant;
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             Context.OverlaySystem.SetActivated(MouseHoverOverlay, true);
             MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
@@ -125,12 +125,12 @@ namespace Gamepackage
             }
         }
 
-        private void QueueAttack(Level level, Token player, Point mousePos)
+        private void QueueAttack(Level level, Entity player, Point mousePos)
         {
-            var attack = Context.PrototypeFactory.BuildTokenAction<Attack>(player);
-            attack.TargetTokenId = level.TokenGrid[mousePos][0].Id;
+            var attack = Context.PrototypeFactory.BuildEntityAction<Attack>(player);
+            attack.TargetEntityId = level.EntityGrid[mousePos][0].Id;
             player.ActionQueue.Enqueue(attack);
-            var endTurn = Context.PrototypeFactory.BuildTokenAction<EndTurn>(player);
+            var endTurn = Context.PrototypeFactory.BuildEntityAction<EndTurn>(player);
             player.ActionQueue.Enqueue(endTurn);
         }
 
@@ -141,11 +141,11 @@ namespace Gamepackage
             var player = level.Player;
             foreach (var node in path.Nodes)
             {
-                var move = Context.PrototypeFactory.BuildTokenAction<Move>(player);
+                var move = Context.PrototypeFactory.BuildEntityAction<Move>(player);
                 move.TargetLocation = new Point(node.Position.X, node.Position.Y);
                 player.ActionQueue.Enqueue(move);
 
-                var endTurn = Context.PrototypeFactory.BuildTokenAction<EndTurn>(player);
+                var endTurn = Context.PrototypeFactory.BuildEntityAction<EndTurn>(player);
                 player.ActionQueue.Enqueue(endTurn);
             }
             waitingForPath = false;

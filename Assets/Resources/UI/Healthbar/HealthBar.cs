@@ -5,7 +5,7 @@ namespace Gamepackage
     public class HealthBar : MonoBehaviour
     {
         public Slider Slider;
-        public Token Token;
+        public Entity Entity;
 
         private void Start()
         {
@@ -15,11 +15,11 @@ namespace Gamepackage
         // Update is called once per frame
         public void Update()
         {
-            if (Slider != null && Token != null)
+            if (Slider != null && Entity != null)
             {
                 Slider.minValue = 0;
-                Slider.maxValue = Token.MaxHealth;
-                Slider.value = Token.CurrentHealth;
+                Slider.maxValue = Entity.MaxHealth;
+                Slider.value = Entity.CurrentHealth;
             }
         }
     }

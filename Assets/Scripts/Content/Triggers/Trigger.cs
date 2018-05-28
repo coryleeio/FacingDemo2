@@ -13,15 +13,15 @@ namespace Gamepackage
         public Dictionary<string, string> Parameters = new Dictionary<string, string>(0);
 
         [JsonIgnore]
-        public List<Token> Targets
+        public List<Entity> Targets
         {
             get
             {
-                var list = new List<Token>(TargetIds.Count);
+                var list = new List<Entity>(TargetIds.Count);
                 foreach(var id in TargetIds)
                 {
-                    var token = Context.TokenSystem.GetTokenById(id);
-                    list.Add(token);
+                    var entity = Context.EntitySystem.GetEntityById(id);
+                    list.Add(entity);
                 }
                 return list;
             }

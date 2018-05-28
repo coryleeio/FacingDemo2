@@ -1,23 +1,21 @@
-﻿using System;
-using Newtonsoft.Json;
-using UnityEngine;
+﻿using Newtonsoft.Json;
 
 namespace Gamepackage
 {
-    public abstract class TokenAction : ASyncAction
+    public abstract class EntityAction : ASyncAction
     {
         public abstract int TimeCost
         {
             get;
         }
 
-        public int TokenId;
+        public int EntityId;
         [JsonIgnore]
-        public Token Token
+        public Entity Entity
         {
             get
             {
-                return Context.TokenSystem.GetTokenById(TokenId);
+                return Context.EntitySystem.GetEntityById(EntityId);
             }
         }
 
@@ -38,10 +36,10 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            Token.TimeAccrued += TimeCost;
-            if(Token.ActionQueue.Contains(this))
+            Entity.TimeAccrued += TimeCost;
+            if(Entity.ActionQueue.Contains(this))
             {
-                Token.ActionQueue.Dequeue();
+                Entity.ActionQueue.Dequeue();
             }
         }
 
@@ -53,7 +51,7 @@ namespace Gamepackage
         public override void FailToStart()
         {
             base.FailToStart();
-            Token.ActionQueue.Clear();
+            Entity.ActionQueue.Clear();
         }
     }
 }

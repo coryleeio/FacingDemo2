@@ -11,87 +11,87 @@ namespace Gamepackage
         public void Process()
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
-            var tokens = level.Tokens;
+            var entities = level.Entitys;
 
-            foreach (var token in tokens)
+            foreach (var entity in entities)
             {
-                if(!token.IsMoving && token.CurrentPath.Count > 0)
+                if(!entity.IsMoving && entity.CurrentPath.Count > 0)
                 {
-                    var nextPos = token.CurrentPath.Peek();
-                    MoveTo(token, nextPos);
+                    var nextPos = entity.CurrentPath.Peek();
+                    MoveTo(entity, nextPos);
                 }
-                if (token.IsMoving)
+                if (entity.IsMoving)
                 {
-                    token.ElapsedMovementTime += Time.deltaTime;
-                    if (token.ElapsedMovementTime > TimeBetweenTiles)
+                    entity.ElapsedMovementTime += Time.deltaTime;
+                    if (entity.ElapsedMovementTime > TimeBetweenTiles)
                     {
-                        token.ElapsedMovementTime = TimeBetweenTiles;
+                        entity.ElapsedMovementTime = TimeBetweenTiles;
                     }
-                    var lerpPercentarge = token.ElapsedMovementTime / TimeBetweenTiles;
-                    var targetVectorPos = token.LerpTargetPosition;
-                    var _lerpPos = Vector2.Lerp(token.LerpCurrentPosition.ToVector2(), targetVectorPos.ToVector2(), lerpPercentarge);
+                    var lerpPercentarge = entity.ElapsedMovementTime / TimeBetweenTiles;
+                    var targetVectorPos = entity.LerpTargetPosition;
+                    var _lerpPos = Vector2.Lerp(entity.LerpCurrentPosition.ToVector2(), targetVectorPos.ToVector2(), lerpPercentarge);
 
-                    if (token.View != null)
+                    if (entity.View != null)
                     {
-                        token.View.transform.position = _lerpPos;
+                        entity.View.transform.position = _lerpPos;
                     }
                     if (Vector2.Distance(_lerpPos, targetVectorPos.ToVector2()) < 0.005f)
                     {
-                        TokenArriveAtPosition(level, token);
+                        EntityArriveAtPosition(level, entity);
 
-                        if (token.CurrentPath.Count > 0)
+                        if (entity.CurrentPath.Count > 0)
                         {
-                            var oldPos = token.CurrentPath.Dequeue();
-                            var nextPos = token.CurrentPath.Peek();
-                            MoveTo(token, nextPos);
+                            var oldPos = entity.CurrentPath.Dequeue();
+                            var nextPos = entity.CurrentPath.Peek();
+                            MoveTo(entity, nextPos);
                         }
                         else
                         {
-                            if (token.View != null)
+                            if (entity.View != null)
                             {
-                                token.View.transform.position = MathUtil.MapToWorld(token.TargetPosition);
+                                entity.View.transform.position = MathUtil.MapToWorld(entity.TargetPosition);
                             }
-                            token.IsMoving = false;
+                            entity.IsMoving = false;
                         }
                     }
                 }
             }
         }
 
-        private static void TokenArriveAtPosition(Level level, Token token)
+        private static void EntityArriveAtPosition(Level level, Entity entity)
         {
             // when we arrive give up the lock on our current position
-            if (token.TokenPrototype.BlocksPathing)
+            if (entity.EntityPrototype.BlocksPathing)
             {
-                level.TilesetGrid[token.Position].Walkable = true;
+                level.TilesetGrid[entity.Position].Walkable = true;
             }
-            level.UnindexToken(token, token.Position);
-            token.Position = token.TargetPosition;
-            level.IndexToken(token, token.Position);
+            level.UnindexEntity(entity, entity.Position);
+            entity.Position = entity.TargetPosition;
+            level.IndexEntity(entity, entity.Position);
         }
 
-        public void MoveTo(Token token, Point newPosition)
+        public void MoveTo(Entity entity, Point newPosition)
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
             // Reserve the new position as soon as I start walking so nobody else uses it
             // Later when we arrive we will release the lock on our OLD position.
-            if (token.TokenPrototype.BlocksPathing)
+            if (entity.EntityPrototype.BlocksPathing)
             {
                 level.TilesetGrid[newPosition].Walkable = false;
             }
-            token.TargetPosition = newPosition;
-            token.LerpCurrentPosition = MathUtil.MapToWorld(token.Position).ToPointf();
-            token.LerpTargetPosition = MathUtil.MapToWorld(newPosition).ToPointf();
-            token.ElapsedMovementTime = 0.0f;
-            token.IsMoving = true;
+            entity.TargetPosition = newPosition;
+            entity.LerpCurrentPosition = MathUtil.MapToWorld(entity.Position).ToPointf();
+            entity.LerpTargetPosition = MathUtil.MapToWorld(newPosition).ToPointf();
+            entity.ElapsedMovementTime = 0.0f;
+            entity.IsMoving = true;
         }
 
-        public void FollowPath(Token token, List<Point> path)
+        public void FollowPath(Entity entity, List<Point> path)
         {
-            token.CurrentPath.Clear();
+            entity.CurrentPath.Clear();
             foreach(var point in path)
             {
-                token.CurrentPath.Enqueue(point);
+                entity.CurrentPath.Enqueue(point);
             }
         }
     }

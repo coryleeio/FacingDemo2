@@ -22,9 +22,9 @@ namespace Gamepackage
             {
                 var newLevel = Context.GameStateManager.Game.Dungeon.Levels[levelId];
                 var pos = new Point(posX, posY);
-                Context.TokenSystem.Deregister(target, Context.GameStateManager.Game.CurrentLevel);
+                Context.EntitySystem.Deregister(target, Context.GameStateManager.Game.CurrentLevel);
                 target.Position = pos;
-                Context.TokenSystem.Register(target, newLevel);
+                Context.EntitySystem.Register(target, newLevel);
                 target.ActionQueue.Clear();
             }
             Context.GameStateManager.Game.CurrentLevelIndex = levelId;

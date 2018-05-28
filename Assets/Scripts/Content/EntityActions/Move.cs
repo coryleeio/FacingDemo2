@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public class Move : TokenAction
+    public class Move : EntityAction
     {
         public Point TargetLocation;
 
@@ -17,20 +17,20 @@ namespace Gamepackage
         public override void Enter()
         {
             base.Enter();
-            Context.MovementSystem.MoveTo(Token, TargetLocation);
+            Context.MovementSystem.MoveTo(Entity, TargetLocation);
         }
 
         public override void Exit()
         {
             base.Exit();
-            Token.HasMovedSinceLastTriggerCheck = true;
+            Entity.HasMovedSinceLastTriggerCheck = true;
         }
 
         public override bool IsEndable
         {
             get
             {
-                return Token.Position == TargetLocation;
+                return Entity.Position == TargetLocation;
             }
         }
 
@@ -46,7 +46,7 @@ namespace Gamepackage
         {
             get
             {
-                return TargetLocation.IsAdjacentTo(Token.Position);
+                return TargetLocation.IsAdjacentTo(Entity.Position);
             }
         }
     }

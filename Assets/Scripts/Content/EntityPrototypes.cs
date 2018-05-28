@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public static class TokenPrototypes 
+    public static class EntityPrototypes 
     {
-        public static List<TokenPrototype> LoadAll()
+        public static List<EntityPrototype> LoadAll()
         {
-            return new List<TokenPrototype>()
+            return new List<EntityPrototype>()
             {
-                new TokenPrototype()
+                new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_PONCY,
                     StartingMaxHealth = 10,
@@ -18,7 +18,7 @@ namespace Gamepackage
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
                     Traits = new List<Traits>(){ Traits.Combatant },
                 },
-                new TokenPrototype()
+                new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_GIANT_BEE,
                     StartingMaxHealth = 1,
@@ -27,7 +27,7 @@ namespace Gamepackage
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
                     Traits = new List<Traits>(){ Traits.Combatant },
                 },
-                new TokenPrototype()
+                new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_QUEEN_BEE,
                     StartingMaxHealth = 3,
@@ -36,7 +36,7 @@ namespace Gamepackage
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
                     Traits = new List<Traits>(){ Traits.Combatant },
                 },
-                new TokenPrototype()
+                new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_UP,
                     StartingMaxHealth = 1,
@@ -45,7 +45,7 @@ namespace Gamepackage
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
                     TriggerUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE
                 },
-                new TokenPrototype()
+                new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_DOWN,
                     StartingMaxHealth = 1,
