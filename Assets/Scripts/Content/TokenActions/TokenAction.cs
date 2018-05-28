@@ -52,7 +52,6 @@ namespace Gamepackage
 
         public override void FailToStart()
         {
-            Debug.Log("Fail to start!!");
             base.FailToStart();
             Token.ActionQueue.Clear();
         }
