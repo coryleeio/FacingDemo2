@@ -21,14 +21,14 @@ namespace Gamepackage
             {
                 if (entity.View != null)
                 {
-                    entity.ElapsedTimeDead = entity.ElapsedTimeDead += Time.deltaTime;
-                    if (entity.ElapsedTimeDead > 1.0f)
+                    entity.CombatantComponent.ElapsedTimeDead = entity.CombatantComponent.ElapsedTimeDead += Time.deltaTime;
+                    if (entity.CombatantComponent.ElapsedTimeDead > 1.0f)
                     {
                         if (entity.ViewType == ViewType.StaticSprite)
                         {
                             var spriteRenderer = entity.View.GetComponent<SpriteRenderer>();
-                            var firstPhasePercentage = (entity.ElapsedTimeDead - 1.0f) / 1f;
-                            var secondPhasePErcentage = (entity.ElapsedTimeDead - 2f) / 1f;
+                            var firstPhasePercentage = (entity.CombatantComponent.ElapsedTimeDead - 1.0f) / 1f;
+                            var secondPhasePErcentage = (entity.CombatantComponent.ElapsedTimeDead - 2f) / 1f;
 
                             if (firstPhasePercentage < 1.0f)
                             {
@@ -51,9 +51,9 @@ namespace Gamepackage
                 }
             }
 
-            var removed = DyingEntitys.RemoveAll((t) =>
+            var removed = DyingEntitys.RemoveAll((ent) =>
             {
-                return t.ElapsedTimeDead > 9.0f;
+                return ent.CombatantComponent.ElapsedTimeDead > 9.0f;
             }
             );
         }
@@ -64,8 +64,8 @@ namespace Gamepackage
             {
                 return;
             }
-            target.CurrentHealth = target.CurrentHealth - damage;
-            if (target.CurrentHealth <= 0)
+            target.CombatantComponent.CurrentHealth = target.CombatantComponent.CurrentHealth - damage;
+            if (target.CombatantComponent.CurrentHealth <= 0)
             {
                 var level = Context.GameStateManager.Game.CurrentLevel;
                 Context.EntitySystem.Deregister(target, level);

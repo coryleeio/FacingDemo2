@@ -12,7 +12,11 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_PONCY,
-                    StartingMaxHealth = 10,
+                    CombatantComponent = new CombatantComponent()
+                    {
+                        CurrentHealth = 10,
+                        MaxHealth = 10,
+                    },
                     BlocksPathing = true,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
@@ -21,7 +25,11 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_GIANT_BEE,
-                    StartingMaxHealth = 1,
+                    CombatantComponent = new CombatantComponent()
+                    {
+                        CurrentHealth = 1,
+                        MaxHealth = 1,
+                    },
                     BlocksPathing = true,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
@@ -30,7 +38,11 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_QUEEN_BEE,
-                    StartingMaxHealth = 3,
+                    CombatantComponent = new CombatantComponent()
+                    {
+                        CurrentHealth = 3,
+                        MaxHealth = 3,
+                    },
                     BlocksPathing = true,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
@@ -39,7 +51,11 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_UP,
-                    StartingMaxHealth = 1,
+                    CombatantComponent = new CombatantComponent()
+                    {
+                        CurrentHealth = 1,
+                        MaxHealth = 1,
+                    },
                     BlocksPathing = false,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
@@ -48,7 +64,11 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_DOWN,
-                    StartingMaxHealth = 1,
+                    CombatantComponent = new CombatantComponent()
+                    {
+                        CurrentHealth = 1,
+                        MaxHealth = 1,
+                    },
                     BlocksPathing = false,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,

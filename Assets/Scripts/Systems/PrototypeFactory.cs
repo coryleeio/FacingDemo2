@@ -62,8 +62,6 @@ namespace Gamepackage
             var entity = new Entity
             {
                 Position = new Point(0, 0),
-                CurrentHealth = prototype.StartingMaxHealth,
-                MaxHealth = prototype.StartingMaxHealth,
                 PrototypeIdentifier = identifier,
                 BehaviorIdentifier = prototype.BehaviorIdentifier,
                 ViewType = prototype.ViewType,
@@ -71,6 +69,12 @@ namespace Gamepackage
                 Trigger = BuildTrigger(prototype.TriggerUniqueIdentifier),
                 TriggerPrototypeUniqueIdentifier = prototype.TriggerUniqueIdentifier,
             };
+
+            if(prototype.CombatantComponent != null)
+            {
+                entity.CombatantComponent = new CombatantComponent(prototype.CombatantComponent);
+            }
+
             entity.Traits.AddRange(prototype.Traits);
             entity.InjectContext(Context);
             return entity;

@@ -46,7 +46,7 @@
                 {
                     if (!entityToPushTime.IsPlayer)
                     {
-                        entityToPushTime.TimeAccrued = Entity.TimeAccrued;
+                        entityToPushTime.CombatantComponent.TimeAccrued = Entity.CombatantComponent.TimeAccrued;
                     }
                 }
                 Game.IsPlayerTurn = !Game.IsPlayerTurn;

@@ -39,14 +39,15 @@ namespace Gamepackage
             {
                 foreach (var entity in EntitysThatNeedToAct)
                 {
-                    if (!entity.IsPlayer && entity.ActionQueue.Count == 0)
+                    
+                    if (!entity.IsPlayer && entity.CombatantComponent.ActionQueue.Count == 0)
                     {
-                        entity.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<Wait>(entity));
-                        entity.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity));
+                        entity.CombatantComponent.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<Wait>(entity));
+                        entity.CombatantComponent.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity));
                     }
-                    if(entity.ActionQueue.Count > 0)
+                    if(entity.CombatantComponent.ActionQueue.Count > 0)
                     {
-                        var action = entity.ActionQueue.Peek();
+                        var action = entity.CombatantComponent.ActionQueue.Peek();
                         action.Do();
                         // EntityActions dequeue themselves on exit.
                         // so it may have been dequeued by this point.
@@ -95,7 +96,7 @@ namespace Gamepackage
             {
                 if (entity.IsPlayer)
                 {
-                    entity.TimeAccrued = 0;
+                    entity.CombatantComponent.TimeAccrued = 0;
                 }
                 entity.IsDoneThisTurn = false;
             }

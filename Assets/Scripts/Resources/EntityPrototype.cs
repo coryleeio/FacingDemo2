@@ -12,6 +12,7 @@ namespace Gamepackage
         public ViewType ViewType;
         public UniqueIdentifier ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED;
         public UniqueIdentifier TriggerUniqueIdentifier = UniqueIdentifier.TRIGGER_NONE;
-        public int StartingMaxHealth;
+
+        public CombatantComponent CombatantComponent;
     }
 }

@@ -9,27 +9,21 @@ namespace Gamepackage
     [Serializable]
     public class Entity : IHasApplicationContext
     {
-        public Entity() {}
+        public Entity() { }
 
-        public int CurrentHealth;
-        public int MaxHealth;
+        public int Id { get; set; }
 
-        public bool IsDead = false;
-        public float ElapsedTimeDead = 0.0f;
+        public CombatantComponent CombatantComponent;
 
         public Point Position;
 
         public Point SortingPosition;
-
-        public int TimeAccrued = 0;
 
         public Pointf LerpCurrentPosition;
 
         public Pointf LerpTargetPosition;
 
         public float ElapsedMovementTime;
-
-        public Queue<EntityAction> ActionQueue = new Queue<EntityAction>(0);
 
         public bool IsMoving;
 
@@ -56,8 +50,6 @@ namespace Gamepackage
                 return _entityPrototype;
             }
         }
-
-        public int Id { get; set; }
 
         public List<Traits> Traits = new List<Traits>();
 
@@ -108,9 +100,9 @@ namespace Gamepackage
             {
                 Trigger.InjectContext(context);
             }
-            foreach(var action in ActionQueue)
+            if(CombatantComponent != null)
             {
-                action.InjectContext(Context);
+                CombatantComponent.InjectContext(context);
             }
         }
     }
