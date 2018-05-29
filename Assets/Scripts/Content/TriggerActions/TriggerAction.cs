@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public abstract class Trigger : ASyncAction
+    public abstract class TriggerAction : ASyncAction
     {
         public abstract List<Point> Offsets
         {
             get;
         }
         public List<int> TargetIds = new List<int>(0);
-        public Dictionary<string, string> Parameters = new Dictionary<string, string>(0);
 
         [JsonIgnore]
         public List<Entity> Targets

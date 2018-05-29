@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public class PoisonDart : Trigger
+    public class PoisonDart : TriggerAction
     {
         public UniqueIdentifier EffectToApply;
 

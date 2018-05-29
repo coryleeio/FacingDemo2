@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public class TraverseStaircase : Trigger
+    public class TraverseStaircase : TriggerAction
     {
         public enum Params
         {
@@ -11,6 +11,8 @@ namespace Gamepackage
             TARGET_POSY,
             TARGET_LEVEL_ID,
         }
+
+        public Dictionary<string, string> Parameters = new Dictionary<string, string>(0);
 
         public override void Enter()
         {

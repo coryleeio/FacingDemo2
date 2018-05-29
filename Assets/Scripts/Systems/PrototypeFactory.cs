@@ -33,9 +33,9 @@ namespace Gamepackage
             return action;
         }
 
-        public Trigger BuildTrigger(UniqueIdentifier identifier)
+        public TriggerAction BuildTriggerAction(UniqueIdentifier identifier)
         {
-            Trigger ret;
+            TriggerAction ret;
             if(identifier == UniqueIdentifier.TRIGGER_NONE)
             {
                 return null;
@@ -66,8 +66,6 @@ namespace Gamepackage
                 BehaviorIdentifier = prototype.BehaviorIdentifier,
                 ViewType = prototype.ViewType,
                 ViewUniqueIdentifier = prototype.ViewUniqueIdentifier,
-                Trigger = BuildTrigger(prototype.TriggerUniqueIdentifier),
-                TriggerPrototypeUniqueIdentifier = prototype.TriggerUniqueIdentifier,
             };
 
             if(prototype.CombatantComponent != null)
@@ -75,6 +73,15 @@ namespace Gamepackage
                 entity.CombatantComponent = new CombatantComponent(prototype.CombatantComponent);
             }
 
+            if(prototype.TriggerComponent != null)
+            {
+                entity.TriggerComponent = new TriggerComponent(prototype.TriggerComponent);
+                entity.TriggerComponent.TriggerAction = BuildTriggerAction(entity.TriggerComponent.TriggerActionPrototypeUniqueIdentifier);
+            }
+            if(prototype.MovementComponent != null)
+            {
+                entity.MovementComponent = new MovementComponent(prototype.MovementComponent);
+            }
             entity.Traits.AddRange(prototype.Traits);
             entity.InjectContext(Context);
             return entity;

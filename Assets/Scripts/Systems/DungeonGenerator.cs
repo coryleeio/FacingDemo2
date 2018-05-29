@@ -207,13 +207,15 @@ namespace Gamepackage
             var downStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_DOWN, new List<Traits>(0), Context.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
             var upStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_UP, new List<Traits>(0), Context.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
 
-            downStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
-            downStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), upStair.Position.X.ToString());
-            downStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), upStair.Position.Y.ToString());
+            var downStairTraverseAction = downStair.TriggerComponent.TriggerAction as TraverseStaircase;
+            downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
+            downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), upStair.Position.X.ToString());
+            downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), upStair.Position.Y.ToString());
 
-            upStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), lowerLevel.LevelIndex.ToString());
-            upStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), downStair.Position.X.ToString());
-            upStair.Trigger.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
+            var upStairTraverseAction = upStair.TriggerComponent.TriggerAction as TraverseStaircase;
+            upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), lowerLevel.LevelIndex.ToString());
+            upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), downStair.Position.X.ToString());
+            upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
         }
 
         private Entity SpawnOnLevel(UniqueIdentifier identifier, List<Traits> traits, Level level)

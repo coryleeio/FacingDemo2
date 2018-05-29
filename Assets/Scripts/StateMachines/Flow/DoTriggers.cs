@@ -19,7 +19,7 @@ namespace Gamepackage
             Entity trigger = GetNextTriggerWithTargets();
             if(trigger != null)
             {
-                trigger.Trigger.Do();
+                trigger.TriggerComponent.TriggerAction.Do();
             }
             else
             {
@@ -37,19 +37,23 @@ namespace Gamepackage
                 {
                     break;
                 }
-                if (triggerEntity.Trigger != null && triggerEntity.Trigger.IsStartable && !triggerEntity.Trigger.Completed)
+                if (triggerEntity.TriggerComponent != null && triggerEntity.TriggerComponent.TriggerAction.IsStartable && !triggerEntity.TriggerComponent.TriggerAction.Completed)
                 {
-                    var positionsToCheck = MathUtil.GetPointsByOffset(triggerEntity.Position, triggerEntity.Trigger.Offsets);
+                    var positionsToCheck = MathUtil.GetPointsByOffset(triggerEntity.Position, triggerEntity.TriggerComponent.TriggerAction.Offsets);
                     foreach (var pawnEntity in Context.GameStateManager.Game.CurrentLevel.Entitys)
                     {
+                        if(pawnEntity.MovementComponent == null)
+                        {
+                            continue;
+                        }
                         if (pawnEntity == triggerEntity)
                         {
                             continue;
                         }
-                        if (pawnEntity.HasMovedSinceLastTriggerCheck && positionsToCheck.Contains(pawnEntity.Position))
+                        if (pawnEntity.MovementComponent.HasMovedSinceLastTriggerCheck && positionsToCheck.Contains(pawnEntity.Position))
                         {
                             triggerToReturn = triggerEntity;
-                            triggerToReturn.Trigger.TargetIds.Add(pawnEntity.Id);
+                            triggerToReturn.TriggerComponent.TriggerAction.TargetIds.Add(pawnEntity.Id);
                         }
                     }
                 }
@@ -61,10 +65,14 @@ namespace Gamepackage
         {
             foreach(var entity in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
-                entity.HasMovedSinceLastTriggerCheck = false;
-                if(entity.Trigger != null)
+                if(entity.MovementComponent != null)
                 {
-                    entity.Trigger.Reset(); // Stop being completed for the next pass //  clear targets
+                    entity.MovementComponent.HasMovedSinceLastTriggerCheck = false;
+                }
+                
+                if(entity.TriggerComponent != null)
+                {
+                    entity.TriggerComponent.TriggerAction.Reset(); // Stop being completed for the next pass //  clear targets
                 }
             }
         }

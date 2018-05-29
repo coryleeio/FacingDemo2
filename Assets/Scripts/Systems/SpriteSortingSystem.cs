@@ -34,10 +34,10 @@ namespace Gamepackage
             var level = Context.GameStateManager.Game.CurrentLevel;
             foreach (var entity in level.Entitys)
             {
-                if (entity.TargetPosition != entity.Position &&
-                                entity.TargetPosition != null)
+                if (entity.MovementComponent != null && entity.MovementComponent.TargetPosition != entity.Position &&
+                                entity.MovementComponent.TargetPosition != null)
                 {
-                    MovingEntitys[entity.Position].Add(entity);
+                    MovingEntitys[entity.MovementComponent.TargetPosition].Add(entity);
                 }
                 else
                 {

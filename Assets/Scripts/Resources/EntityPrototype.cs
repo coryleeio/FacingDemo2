@@ -11,8 +11,9 @@ namespace Gamepackage
         public AIBehaviourType BehaviorIdentifier;
         public ViewType ViewType;
         public UniqueIdentifier ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED;
-        public UniqueIdentifier TriggerUniqueIdentifier = UniqueIdentifier.TRIGGER_NONE;
 
         public CombatantComponent CombatantComponent;
+        public TriggerComponent TriggerComponent;
+        public MovementComponent MovementComponent;
     }
 }

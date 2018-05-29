@@ -17,6 +17,7 @@ namespace Gamepackage
                         CurrentHealth = 10,
                         MaxHealth = 10,
                     },
+                    MovementComponent = new MovementComponent(),
                     BlocksPathing = true,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
@@ -30,6 +31,7 @@ namespace Gamepackage
                         CurrentHealth = 1,
                         MaxHealth = 1,
                     },
+                    MovementComponent = new MovementComponent(),
                     BlocksPathing = true,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
@@ -43,6 +45,7 @@ namespace Gamepackage
                         CurrentHealth = 3,
                         MaxHealth = 3,
                     },
+                    MovementComponent = new MovementComponent(),
                     BlocksPathing = true,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
@@ -59,7 +62,10 @@ namespace Gamepackage
                     BlocksPathing = false,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
-                    TriggerUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE
+                    TriggerComponent = new TriggerComponent()
+                    {
+                        TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
+                    },
                 },
                 new EntityPrototype()
                 {
@@ -72,7 +78,10 @@ namespace Gamepackage
                     BlocksPathing = false,
                     ViewType = ViewType.StaticSprite,
                     ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
-                    TriggerUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
+                    TriggerComponent = new TriggerComponent()
+                    {
+                        TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
+                    },
                 },
             };
         }

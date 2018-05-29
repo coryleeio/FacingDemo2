@@ -13,25 +13,15 @@ namespace Gamepackage
 
         public int Id { get; set; }
 
-        public CombatantComponent CombatantComponent;
-
         public Point Position;
 
-        public Point SortingPosition;
+        public CombatantComponent CombatantComponent;
 
-        public Pointf LerpCurrentPosition;
+        public TriggerComponent TriggerComponent;
 
-        public Pointf LerpTargetPosition;
-
-        public float ElapsedMovementTime;
-
-        public bool IsMoving;
-
-        public Queue<Point> CurrentPath = new Queue<Point>(0);
+        public MovementComponent MovementComponent;
 
         public bool IsDoneThisTurn = false;
-
-        public Point TargetPosition;
 
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 
@@ -63,12 +53,6 @@ namespace Gamepackage
 
         public UniqueIdentifier ViewUniqueIdentifier;
 
-        public UniqueIdentifier TriggerPrototypeUniqueIdentifier;
-
-        public Trigger Trigger;
-
-        public bool HasMovedSinceLastTriggerCheck = false;
-
         [JsonIgnore]
         public bool IsPlayer
         {
@@ -96,9 +80,9 @@ namespace Gamepackage
         public void InjectContext(ApplicationContext context)
         {
             Context = context;
-            if(Trigger != null)
+            if(TriggerComponent != null)
             {
-                Trigger.InjectContext(context);
+                TriggerComponent.InjectContext(context);
             }
             if(CombatantComponent != null)
             {
