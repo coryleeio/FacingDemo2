@@ -6,14 +6,13 @@ namespace Gamepackage
     public class EntityPrototype : IResource
     {
         public UniqueIdentifier UniqueIdentifier { get; set; }
+
         public bool BlocksPathing { get; set; }
         public List<Traits> Traits = new List<Traits>(0);
-        public AIBehaviourType BehaviorIdentifier;
-        public ViewType ViewType;
-        public UniqueIdentifier ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED;
 
         public CombatantComponent CombatantComponent;
         public TriggerComponent TriggerComponent;
         public MovementComponent MovementComponent;
+        public ViewComponent ViewComponent;
     }
 }

@@ -36,9 +36,9 @@ namespace Gamepackage
                     var targetVectorPos = entity.MovementComponent.LerpTargetPosition;
                     var _lerpPos = Vector2.Lerp(entity.MovementComponent.LerpCurrentPosition.ToVector2(), targetVectorPos.ToVector2(), lerpPercentarge);
 
-                    if (entity.View != null)
+                    if (entity.ViewComponent != null && entity.ViewComponent.View != null)
                     {
-                        entity.View.transform.position = _lerpPos;
+                        entity.ViewComponent.View.transform.position = _lerpPos;
                     }
                     if (Vector2.Distance(_lerpPos, targetVectorPos.ToVector2()) < 0.005f)
                     {
@@ -52,9 +52,9 @@ namespace Gamepackage
                         }
                         else
                         {
-                            if (entity.View != null)
+                            if (entity.ViewComponent != null && entity.ViewComponent.View != null)
                             {
-                                entity.View.transform.position = MathUtil.MapToWorld(entity.MovementComponent.TargetPosition);
+                                entity.ViewComponent.View.transform.position = MathUtil.MapToWorld(entity.MovementComponent.TargetPosition);
                             }
                             entity.MovementComponent.IsMoving = false;
                         }

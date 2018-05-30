@@ -19,14 +19,14 @@ namespace Gamepackage
         {
             foreach (var entity in DyingEntitys)
             {
-                if (entity.View != null)
+                if (entity.ViewComponent != null && entity.ViewComponent.View != null)
                 {
                     entity.CombatantComponent.ElapsedTimeDead = entity.CombatantComponent.ElapsedTimeDead += Time.deltaTime;
                     if (entity.CombatantComponent.ElapsedTimeDead > 1.0f)
                     {
-                        if (entity.ViewType == ViewType.StaticSprite)
+                        if (entity.ViewComponent.ViewType == ViewType.StaticSprite)
                         {
-                            var spriteRenderer = entity.View.GetComponent<SpriteRenderer>();
+                            var spriteRenderer = entity.ViewComponent.View.GetComponent<SpriteRenderer>();
                             var firstPhasePercentage = (entity.CombatantComponent.ElapsedTimeDead - 1.0f) / 1f;
                             var secondPhasePErcentage = (entity.CombatantComponent.ElapsedTimeDead - 2f) / 1f;
 
@@ -38,9 +38,9 @@ namespace Gamepackage
                             {
                                 spriteRenderer.color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
                             }
-                            else if (entity.View != null)
+                            else if (entity.ViewComponent != null && entity.ViewComponent.View != null)
                             {
-                                GameObject.Destroy(entity.View);
+                                GameObject.Destroy(entity.ViewComponent.View);
                             }
                         }
                         else

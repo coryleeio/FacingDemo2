@@ -21,37 +21,13 @@ namespace Gamepackage
 
         public MovementComponent MovementComponent;
 
-        public bool IsDoneThisTurn = false;
+        public ViewComponent ViewComponent;
 
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 
-        [JsonIgnore]
-        private EntityPrototype _entityPrototype;
-
-        [JsonIgnore]
-        public EntityPrototype EntityPrototype
-        {
-            get
-            {
-                if(_entityPrototype == null)
-                {
-                    _entityPrototype = Context.ResourceManager.GetPrototype<EntityPrototype>(PrototypeIdentifier);
-                }
-                return _entityPrototype;
-            }
-        }
+        public bool IsDoneThisTurn = false;
 
         public List<Traits> Traits = new List<Traits>();
-
-        public List<Inventory> Inventory = new List<Inventory>(0);
-
-        public Dictionary<ItemSlot, ItemPrototypes> Equipment = new Dictionary<ItemSlot, ItemPrototypes>();
-
-        public AIBehaviourType BehaviorIdentifier;
-
-        public ViewType ViewType;
-
-        public UniqueIdentifier ViewUniqueIdentifier;
 
         [JsonIgnore]
         public bool IsPlayer
@@ -71,11 +47,6 @@ namespace Gamepackage
             }
         }
 
-        [JsonIgnore]
-        public GameObject View;
-
-        public bool IsVisible;
-
         private ApplicationContext Context;
         public void InjectContext(ApplicationContext context)
         {
@@ -87,6 +58,26 @@ namespace Gamepackage
             if(CombatantComponent != null)
             {
                 CombatantComponent.InjectContext(context);
+            }
+            if(ViewComponent != null)
+            {
+                ViewComponent.InjectContext(context);
+            }
+        }
+
+        [JsonIgnore]
+        private EntityPrototype _entityPrototype;
+
+        [JsonIgnore]
+        public EntityPrototype EntityPrototype
+        {
+            get
+            {
+                if (_entityPrototype == null)
+                {
+                    _entityPrototype = Context.ResourceManager.GetPrototype<EntityPrototype>(PrototypeIdentifier);
+                }
+                return _entityPrototype;
             }
         }
     }

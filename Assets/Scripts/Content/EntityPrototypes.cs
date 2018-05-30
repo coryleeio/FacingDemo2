@@ -19,8 +19,11 @@ namespace Gamepackage
                     },
                     MovementComponent = new MovementComponent(),
                     BlocksPathing = true,
-                    ViewType = ViewType.StaticSprite,
-                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
+                    ViewComponent = new ViewComponent()
+                    {
+                        ViewType = ViewType.StaticSprite,
+                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
+                    },
                     Traits = new List<Traits>(){ Traits.Combatant },
                 },
                 new EntityPrototype()
@@ -33,8 +36,11 @@ namespace Gamepackage
                     },
                     MovementComponent = new MovementComponent(),
                     BlocksPathing = true,
-                    ViewType = ViewType.StaticSprite,
-                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
+                    ViewComponent = new ViewComponent()
+                    {
+                        ViewType = ViewType.StaticSprite,
+                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
+                    },
                     Traits = new List<Traits>(){ Traits.Combatant },
                 },
                 new EntityPrototype()
@@ -47,8 +53,11 @@ namespace Gamepackage
                     },
                     MovementComponent = new MovementComponent(),
                     BlocksPathing = true,
-                    ViewType = ViewType.StaticSprite,
-                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
+                    ViewComponent = new ViewComponent()
+                    {
+                        ViewType = ViewType.StaticSprite,
+                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
+                    },
                     Traits = new List<Traits>(){ Traits.Combatant },
                 },
                 new EntityPrototype()
@@ -60,8 +69,11 @@ namespace Gamepackage
                         MaxHealth = 1,
                     },
                     BlocksPathing = false,
-                    ViewType = ViewType.StaticSprite,
-                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
+                    ViewComponent = new ViewComponent()
+                    {
+                        ViewType = ViewType.StaticSprite,
+                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
+                    },
                     TriggerComponent = new TriggerComponent()
                     {
                         TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
@@ -76,8 +88,11 @@ namespace Gamepackage
                         MaxHealth = 1,
                     },
                     BlocksPathing = false,
-                    ViewType = ViewType.StaticSprite,
-                    ViewUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
+                    ViewComponent = new ViewComponent()
+                    {
+                        ViewType = ViewType.StaticSprite,
+                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
+                    },
                     TriggerComponent = new TriggerComponent()
                     {
                         TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,

@@ -88,9 +88,9 @@ namespace Gamepackage
 
         private static int sortEntity(int sortOrder, Entity entity)
         {
-            if (entity.ViewType == ViewType.StaticSprite)
+            if (entity.ViewComponent.ViewType == ViewType.StaticSprite)
             {
-                var spriteRenderer = entity.View.GetComponent<SpriteRenderer>();
+                var spriteRenderer = entity.ViewComponent.View.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingOrder = sortOrder;
                 return sortOrder + 1;
             }

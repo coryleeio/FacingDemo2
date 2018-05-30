@@ -79,7 +79,6 @@ namespace Gamepackage
                 var isNPCThatNeedsToAct = !game.IsPlayerTurn && !entity.IsPlayer;
                 if (isPlayerThatNeedsToAct || isNPCThatNeedsToAct)
                 {
-                    Debug.Log("NextActor set to " + entity.Id + " " + entity.View.gameObject.name);
                     return entity;
                 }
             }
