@@ -24,7 +24,10 @@ namespace Gamepackage
                         ViewType = ViewType.StaticSprite,
                         ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
                     },
-                    Traits = new List<Traits>(){ Traits.Combatant },
+                    TurnComponent = new TurnComponent()
+                    {
+                        BehaviourUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_PLAYER,
+                    }
                 },
                 new EntityPrototype()
                 {
@@ -41,7 +44,10 @@ namespace Gamepackage
                         ViewType = ViewType.StaticSprite,
                         ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
                     },
-                    Traits = new List<Traits>(){ Traits.Combatant },
+                    TurnComponent = new TurnComponent()
+                    {
+                        BehaviourUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
+                    }
                 },
                 new EntityPrototype()
                 {
@@ -58,16 +64,14 @@ namespace Gamepackage
                         ViewType = ViewType.StaticSprite,
                         ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
                     },
-                    Traits = new List<Traits>(){ Traits.Combatant },
+                    TurnComponent = new TurnComponent()
+                    {
+                        BehaviourUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
+                    }
                 },
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_UP,
-                    CombatantComponent = new CombatantComponent()
-                    {
-                        CurrentHealth = 1,
-                        MaxHealth = 1,
-                    },
                     BlocksPathing = false,
                     ViewComponent = new ViewComponent()
                     {
@@ -82,11 +86,6 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_DOWN,
-                    CombatantComponent = new CombatantComponent()
-                    {
-                        CurrentHealth = 1,
-                        MaxHealth = 1,
-                    },
                     BlocksPathing = false,
                     ViewComponent = new ViewComponent()
                     {

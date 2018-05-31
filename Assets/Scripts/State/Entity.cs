@@ -23,18 +23,25 @@ namespace Gamepackage
 
         public ViewComponent ViewComponent;
 
+        public TurnComponent TurnComponent;
+
         public UniqueIdentifier PrototypeIdentifier { get; set; }
-
-        public bool IsDoneThisTurn = false;
-
-        public List<Traits> Traits = new List<Traits>();
 
         [JsonIgnore]
         public bool IsPlayer
         {
             get
             {
-                return Traits.Contains(Gamepackage.Traits.Player);
+                return TurnComponent != null && TurnComponent.Behaviour != null && TurnComponent.Behaviour.IsPlayer;
+            }
+        }
+
+        [JsonIgnore]
+        public bool IsNPC
+        {
+            get
+            {
+                return TurnComponent != null && TurnComponent.Behaviour != null && !TurnComponent.Behaviour.IsPlayer;
             }
         }
 
@@ -43,7 +50,7 @@ namespace Gamepackage
         {
             get
             {
-                return Traits.Contains(Gamepackage.Traits.Combatant);
+                return CombatantComponent != null;
             }
         }
 
@@ -62,6 +69,14 @@ namespace Gamepackage
             if(ViewComponent != null)
             {
                 ViewComponent.InjectContext(context);
+            }
+            if(MovementComponent != null)
+            {
+                MovementComponent.InjectContext(context);
+            }
+            if(TurnComponent != null)
+            {
+                TurnComponent.InjectContext(context);
             }
         }
 

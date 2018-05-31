@@ -188,7 +188,7 @@ namespace Gamepackage
                 }
                 if (level.LevelIndex == 1)
                 {
-                    SpawnOnLevel(UniqueIdentifier.TOKEN_PONCY, new List<Traits>() { Traits.Player }, level);
+                    SpawnOnLevel(UniqueIdentifier.TOKEN_PONCY, level);
                 }
             }
 
@@ -204,8 +204,8 @@ namespace Gamepackage
             var lowerLevel = level1.LevelIndex < level2.LevelIndex ? level1 : level2;
             var higherLevel = lowerLevel == level1 ? level2 : level1;
 
-            var downStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_DOWN, new List<Traits>(0), Context.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
-            var upStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_UP, new List<Traits>(0), Context.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
+            var downStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_DOWN, Context.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
+            var upStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_UP, Context.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
 
             var downStairTraverseAction = downStair.TriggerComponent.TriggerAction as TraverseStaircase;
             downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
@@ -218,7 +218,7 @@ namespace Gamepackage
             upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
         }
 
-        private Entity SpawnOnLevel(UniqueIdentifier identifier, List<Traits> traits, Level level)
+        private Entity SpawnOnLevel(UniqueIdentifier identifier, Level level)
         {
             var possiblePlayerSpawnPoints = FloorTilesInRect(level, level.BoundingBox);
             foreach (var alreadyExistingEntity in level.Entitys)
@@ -227,7 +227,6 @@ namespace Gamepackage
             }
             var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
             var thing = Context.PrototypeFactory.BuildEntity(identifier);
-            thing.Traits.AddRange(traits);
             thing.Position = spawnPoint;
             Context.EntitySystem.Register(thing, level);
             return thing;

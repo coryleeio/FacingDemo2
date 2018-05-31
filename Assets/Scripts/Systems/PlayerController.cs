@@ -110,7 +110,7 @@ namespace Gamepackage
 
             if (Input.GetMouseButtonDown(0))
             {
-                player.CombatantComponent.ActionQueue.Clear();
+                player.TurnComponent.ActionQueue.Clear();
                 if (isHoveringOnEnemyCombatant && isAbleToHitHoveringEnemyCombatant)
                 {
                     QueueAttack(level, player, mousePos);
@@ -129,9 +129,9 @@ namespace Gamepackage
         {
             var attack = Context.PrototypeFactory.BuildEntityAction<Attack>(player);
             attack.TargetEntityId = level.EntityGrid[mousePos][0].Id;
-            player.CombatantComponent.ActionQueue.Enqueue(attack);
+            player.TurnComponent.ActionQueue.Enqueue(attack);
             var endTurn = Context.PrototypeFactory.BuildEntityAction<EndTurn>(player);
-            player.CombatantComponent.ActionQueue.Enqueue(endTurn);
+            player.TurnComponent.ActionQueue.Enqueue(endTurn);
         }
 
         private void OnPathComplete(Path path)
@@ -143,10 +143,10 @@ namespace Gamepackage
             {
                 var move = Context.PrototypeFactory.BuildEntityAction<Move>(player);
                 move.TargetLocation = new Point(node.Position.X, node.Position.Y);
-                player.CombatantComponent.ActionQueue.Enqueue(move);
+                player.TurnComponent.ActionQueue.Enqueue(move);
 
                 var endTurn = Context.PrototypeFactory.BuildEntityAction<EndTurn>(player);
-                player.CombatantComponent.ActionQueue.Enqueue(endTurn);
+                player.TurnComponent.ActionQueue.Enqueue(endTurn);
             }
             waitingForPath = false;
         }

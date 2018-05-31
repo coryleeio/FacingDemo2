@@ -37,21 +37,20 @@
         public override void Exit()
         {
             base.Exit();
-            Entity.IsDoneThisTurn = true;
+            Entity.TurnComponent.IsDoneThisTurn = true;
             if (Entity.IsPlayer)
             {
                 // If the entity who ended their turn is the player we need to push the time accrued by
                 // our actions to them, and change to the NPC turn.
                 foreach (var entityToPushTime in Game.CurrentLevel.Entitys)
                 {
-                    if (!entityToPushTime.IsPlayer)
+                    if (entityToPushTime.IsNPC)
                     {
-                        entityToPushTime.CombatantComponent.TimeAccrued = Entity.CombatantComponent.TimeAccrued;
+                        entityToPushTime.TurnComponent.TimeAccrued = Entity.TurnComponent.TimeAccrued;
                     }
                 }
                 Game.IsPlayerTurn = !Game.IsPlayerTurn;
             }
-
         }
     }
 }

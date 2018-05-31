@@ -2,6 +2,8 @@
 {
     public enum UniqueIdentifier
     {
+        BEHAVIOUR_BRUTE,
+        BEHAVIOUR_PLAYER,
         TILESET_STONE,
         TOKEN_PONCY,
         TOKEN_GIANT_BEE,
@@ -17,7 +19,6 @@
         VIEW_MARKER_BLUE,
         VIEW_MARKER_YELLOW,
         VIEW_MARKER_GREEN,
-        TRIGGER_NONE,
         TRIGGER_TRAVERSE_STAIRCASE,
         TRIGGER_POISON_DART,
     }

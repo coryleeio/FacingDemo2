@@ -27,7 +27,10 @@ namespace Gamepackage
                 Context.EntitySystem.Deregister(target, Context.GameStateManager.Game.CurrentLevel);
                 target.Position = pos;
                 Context.EntitySystem.Register(target, newLevel);
-                target.CombatantComponent.ActionQueue.Clear();
+                if(target.TurnComponent != null)
+                {
+                    target.TurnComponent.ActionQueue.Clear();
+                }
             }
             Context.GameStateManager.Game.CurrentLevelIndex = levelId;
             Context.GameStateManager.Game.FurthestLevelReached = levelId;

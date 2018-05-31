@@ -36,10 +36,10 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            Entity.CombatantComponent.TimeAccrued += TimeCost;
-            if(Entity.CombatantComponent.ActionQueue.Contains(this))
+            Entity.TurnComponent.TimeAccrued += TimeCost;
+            if(Entity.TurnComponent.ActionQueue.Contains(this))
             {
-                Entity.CombatantComponent.ActionQueue.Dequeue();
+                Entity.TurnComponent.ActionQueue.Dequeue();
             }
         }
 
@@ -51,7 +51,7 @@ namespace Gamepackage
         public override void FailToStart()
         {
             base.FailToStart();
-            Entity.CombatantComponent.ActionQueue.Clear();
+            Entity.TurnComponent.ActionQueue.Clear();
         }
     }
 }

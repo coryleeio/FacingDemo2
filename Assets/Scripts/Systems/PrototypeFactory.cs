@@ -35,25 +35,18 @@ namespace Gamepackage
 
         public TriggerAction BuildTriggerAction(UniqueIdentifier identifier)
         {
-            TriggerAction ret;
-            if(identifier == UniqueIdentifier.TRIGGER_NONE)
+            if(identifier == UniqueIdentifier.TRIGGER_POISON_DART)
             {
-                return null;
-            }
-            else if(identifier == UniqueIdentifier.TRIGGER_POISON_DART)
-            {
-                ret = new PoisonDart();
+                return new PoisonDart();
             }
             else if(identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
             {
-                ret = new TraverseStaircase();
+                return new TraverseStaircase();
             }
             else
             {
                 throw new NotImplementedException(string.Format("Tried to instantiate trigger: {0}, but it hasn't been implemented yet", identifier));
             }
-            ret.InjectContext(Context);
-            return ret;
         }
 
         public Entity BuildEntity(UniqueIdentifier identifier)
@@ -64,26 +57,59 @@ namespace Gamepackage
                 Position = new Point(0, 0),
                 PrototypeIdentifier = identifier,
             };
+
             if(prototype.CombatantComponent != null)
             {
                 entity.CombatantComponent = new CombatantComponent(prototype.CombatantComponent);
             }
+
             if(prototype.TriggerComponent != null)
             {
                 entity.TriggerComponent = new TriggerComponent(prototype.TriggerComponent);
-                entity.TriggerComponent.TriggerAction = BuildTriggerAction(entity.TriggerComponent.TriggerActionPrototypeUniqueIdentifier);
+                if (entity.TriggerComponent.TriggerAction == null)
+                {
+                    entity.TriggerComponent.TriggerAction = BuildTriggerAction(entity.TriggerComponent.TriggerActionPrototypeUniqueIdentifier);
+                }
             }
+
             if(prototype.MovementComponent != null)
             {
                 entity.MovementComponent = new MovementComponent(prototype.MovementComponent);
             }
+
             if(prototype.ViewComponent != null)
             {
                 entity.ViewComponent = new ViewComponent(prototype.ViewComponent);
             }
-            entity.Traits.AddRange(prototype.Traits);
+
+            if (prototype.TurnComponent != null)
+            {
+                entity.TurnComponent = new TurnComponent(prototype.TurnComponent);
+                if (entity.TurnComponent.Behaviour == null)
+                {
+                    entity.TurnComponent.Behaviour = BuildBehaviour(entity.TurnComponent.BehaviourUniqueIdentifier);
+                }
+            }
+
             entity.InjectContext(Context);
             return entity;
+        }
+
+
+        public Behaviour BuildBehaviour(UniqueIdentifier behaviourUniqueIdentifier)
+        {
+            if(behaviourUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_BRUTE)
+            {
+                return new Brute();
+            }
+            else if(behaviourUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_PLAYER)
+            {
+                return new Player();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public GameObject BuildView(Entity entity)

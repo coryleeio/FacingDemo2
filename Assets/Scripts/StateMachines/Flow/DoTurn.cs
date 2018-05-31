@@ -25,8 +25,8 @@ namespace Gamepackage
 
             EntitysThatNeedToAct.AddRange(Context.GameStateManager.Game.CurrentLevel.Entitys.FindAll((tok) =>
             {
-                var isPlayerThatNeedsToAct = (game.IsPlayerTurn && tok.IsPlayer && !tok.IsDoneThisTurn);
-                var isNpcThatNeedsToAct = (!game.IsPlayerTurn && !tok.IsPlayer && !tok.IsDoneThisTurn);
+                var isPlayerThatNeedsToAct = tok.IsPlayer && (game.IsPlayerTurn && !tok.TurnComponent.IsDoneThisTurn);
+                var isNpcThatNeedsToAct = tok.IsNPC && (!game.IsPlayerTurn && !tok.TurnComponent.IsDoneThisTurn);
                 return isPlayerThatNeedsToAct || isNpcThatNeedsToAct;
             }));
 
@@ -40,14 +40,14 @@ namespace Gamepackage
                 foreach (var entity in EntitysThatNeedToAct)
                 {
                     
-                    if (!entity.IsPlayer && entity.CombatantComponent.ActionQueue.Count == 0)
+                    if (!entity.IsPlayer && entity.TurnComponent.ActionQueue.Count == 0)
                     {
-                        entity.CombatantComponent.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<Wait>(entity));
-                        entity.CombatantComponent.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity));
+                        entity.TurnComponent.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<Wait>(entity));
+                        entity.TurnComponent.ActionQueue.Enqueue(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity));
                     }
-                    if(entity.CombatantComponent.ActionQueue.Count > 0)
+                    if(entity.TurnComponent.ActionQueue.Count > 0)
                     {
-                        var action = entity.CombatantComponent.ActionQueue.Peek();
+                        var action = entity.TurnComponent.ActionQueue.Peek();
                         action.Do();
                         // EntityActions dequeue themselves on exit.
                         // so it may have been dequeued by this point.
@@ -71,7 +71,7 @@ namespace Gamepackage
             Level level = game.CurrentLevel;
             foreach (var entity in level.Entitys)
             {
-                if (entity.IsDoneThisTurn)
+                if (entity.TurnComponent == null || entity.TurnComponent.IsDoneThisTurn)
                 {
                     continue;
                 }
@@ -93,11 +93,14 @@ namespace Gamepackage
             game.IsPlayerTurn = true;
             foreach (var entity in game.CurrentLevel.Entitys)
             {
-                if (entity.IsPlayer)
+                if(entity.TurnComponent != null)
                 {
-                    entity.CombatantComponent.TimeAccrued = 0;
+                    if (entity.IsPlayer)
+                    {
+                        entity.TurnComponent.TimeAccrued = 0;
+                    }
+                    entity.TurnComponent.IsDoneThisTurn = false;
                 }
-                entity.IsDoneThisTurn = false;
             }
         }
     }
