@@ -6,7 +6,7 @@ namespace Gamepackage
     public class MovementSystem
     {
         public ApplicationContext Context { get; set; }
-        private float TimeBetweenTiles = 0.01f;
+        private float TimeBetweenTiles = 0.5f;
 
         public void Process()
         {
@@ -15,48 +15,48 @@ namespace Gamepackage
 
             foreach (var entity in entities)
             {
-                if(entity.MovementComponent == null)
+                if(entity.Motor == null)
                 {
                     continue;
                 }
 
-                if(!entity.MovementComponent.IsMoving && entity.MovementComponent.CurrentPath.Count > 0)
+                if(!entity.Motor.IsMoving && entity.Motor.CurrentPath.Count > 0)
                 {
-                    var nextPos = entity.MovementComponent.CurrentPath.Peek();
+                    var nextPos = entity.Motor.CurrentPath.Peek();
                     MoveTo(entity, nextPos);
                 }
-                if (entity.MovementComponent.IsMoving)
+                if (entity.Motor.IsMoving)
                 {
-                    entity.MovementComponent.ElapsedMovementTime += Time.deltaTime;
-                    if (entity.MovementComponent.ElapsedMovementTime > TimeBetweenTiles)
+                    entity.Motor.ElapsedMovementTime += Time.deltaTime;
+                    if (entity.Motor.ElapsedMovementTime > TimeBetweenTiles)
                     {
-                        entity.MovementComponent.ElapsedMovementTime = TimeBetweenTiles;
+                        entity.Motor.ElapsedMovementTime = TimeBetweenTiles;
                     }
-                    var lerpPercentarge = entity.MovementComponent.ElapsedMovementTime / TimeBetweenTiles;
-                    var targetVectorPos = entity.MovementComponent.LerpTargetPosition;
-                    var _lerpPos = Vector2.Lerp(entity.MovementComponent.LerpCurrentPosition.ToVector2(), targetVectorPos.ToVector2(), lerpPercentarge);
+                    var lerpPercentarge = entity.Motor.ElapsedMovementTime / TimeBetweenTiles;
+                    var targetVectorPos = entity.Motor.LerpTargetPosition;
+                    var _lerpPos = Vector2.Lerp(entity.Motor.LerpCurrentPosition.ToVector2(), targetVectorPos.ToVector2(), lerpPercentarge);
 
-                    if (entity.ViewComponent != null && entity.ViewComponent.View != null)
+                    if (entity.View != null && entity.View.ViewGameObject != null)
                     {
-                        entity.ViewComponent.View.transform.position = _lerpPos;
+                        entity.View.ViewGameObject.transform.position = _lerpPos;
                     }
                     if (Vector2.Distance(_lerpPos, targetVectorPos.ToVector2()) < 0.005f)
                     {
                         EntityArriveAtPosition(level, entity);
 
-                        if (entity.MovementComponent.CurrentPath.Count > 0)
+                        if (entity.Motor.CurrentPath.Count > 0)
                         {
-                            var oldPos = entity.MovementComponent.CurrentPath.Dequeue();
-                            var nextPos = entity.MovementComponent.CurrentPath.Peek();
+                            var oldPos = entity.Motor.CurrentPath.Dequeue();
+                            var nextPos = entity.Motor.CurrentPath.Peek();
                             MoveTo(entity, nextPos);
                         }
                         else
                         {
-                            if (entity.ViewComponent != null && entity.ViewComponent.View != null)
+                            if (entity.View != null && entity.View.ViewGameObject != null)
                             {
-                                entity.ViewComponent.View.transform.position = MathUtil.MapToWorld(entity.MovementComponent.TargetPosition);
+                                entity.View.ViewGameObject.transform.position = MathUtil.MapToWorld(entity.Motor.MoveTargetPosition);
                             }
-                            entity.MovementComponent.IsMoving = false;
+                            entity.Motor.IsMoving = false;
                         }
                     }
                 }
@@ -71,7 +71,7 @@ namespace Gamepackage
                 level.TilesetGrid[entity.Position].Walkable = true;
             }
             level.UnindexEntity(entity, entity.Position);
-            entity.Position = entity.MovementComponent.TargetPosition;
+            entity.Position = entity.Motor.MoveTargetPosition;
             level.IndexEntity(entity, entity.Position);
         }
 
@@ -84,23 +84,23 @@ namespace Gamepackage
             {
                 level.TilesetGrid[newPosition].Walkable = false;
             }
-            if(entity.MovementComponent == null)
+            if(entity.Motor == null)
             {
                 throw new NotImplementedException("The thing you are trying to move does not have a movement component.  Check the prototype and see if you forgot to add it.");
             }
-            entity.MovementComponent.TargetPosition = newPosition;
-            entity.MovementComponent.LerpCurrentPosition = MathUtil.MapToWorld(entity.Position).ToPointf();
-            entity.MovementComponent.LerpTargetPosition = MathUtil.MapToWorld(newPosition).ToPointf();
-            entity.MovementComponent.ElapsedMovementTime = 0.0f;
-            entity.MovementComponent.IsMoving = true;
+            entity.Motor.MoveTargetPosition = newPosition;
+            entity.Motor.LerpCurrentPosition = MathUtil.MapToWorld(entity.Position).ToPointf();
+            entity.Motor.LerpTargetPosition = MathUtil.MapToWorld(newPosition).ToPointf();
+            entity.Motor.ElapsedMovementTime = 0.0f;
+            entity.Motor.IsMoving = true;
         }
 
         public void FollowPath(Entity entity, List<Point> path)
         {
-            entity.MovementComponent.CurrentPath.Clear();
+            entity.Motor.CurrentPath.Clear();
             foreach(var point in path)
             {
-                entity.MovementComponent.CurrentPath.Enqueue(point);
+                entity.Motor.CurrentPath.Enqueue(point);
             }
         }
     }

@@ -6,10 +6,7 @@ namespace Gamepackage
     {
         public ApplicationContext Context { get; set; }
 
-        public EntityManager()
-        {
-
-        }
+        public EntityManager() {}
 
         private Dictionary<int, Entity> EntityMap = new Dictionary<int, Entity>();
 
@@ -37,6 +34,10 @@ namespace Gamepackage
 
         public Entity GetEntityById(int id)
         {
+            if(!EntityMap.ContainsKey(id))
+            {
+                return null;
+            }
             return EntityMap[id];
         }
 

@@ -5,10 +5,7 @@ namespace Gamepackage
 {
     public class Dungeon : IHasApplicationContext
     {
-        public Dungeon()
-        {
-            
-        }
+        public Dungeon() {}
 
         public Level[] Levels;
 

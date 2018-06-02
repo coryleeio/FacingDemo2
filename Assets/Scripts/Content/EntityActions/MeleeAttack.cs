@@ -2,18 +2,25 @@
 
 namespace Gamepackage
 {
-    public class Attack : EntityAction
+    public class MeleeAttack : EntityAction
     {
         private float TimeStart;
         private float Duration = 0.5f;
 
-        public int TargetEntityId;
+        public int TargetId;
+
         [JsonIgnore]
-        public Entity TargetEntity
+        private Entity _target;
+        [JsonIgnore]
+        public Entity Target
         {
             get
             {
-                return Context.EntitySystem.GetEntityById(TargetEntityId);
+                if (_target == null)
+                {
+                    _target = Context.EntitySystem.GetEntityById(TargetId);
+                }
+                return _target;
             }
         }
 
@@ -34,7 +41,7 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            Context.CombatSystem.DealDamage(Entity, TargetEntity, 1);
+            Context.CombatSystem.DealDamage(Entity, Target, 1);
         }
 
         public override bool IsEndable
@@ -57,7 +64,11 @@ namespace Gamepackage
         {
             get
             {
-                return Entity.Position.IsOrthogonalTo(TargetEntity.Position);
+                if(Entity == null && Target == null)
+                {
+                    return false;
+                }
+                return Context.CombatSystem.CanMelee(Entity, Target);
             }
         }
     }

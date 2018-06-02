@@ -36,9 +36,7 @@ namespace Gamepackage
         private ListGrid<SpriteRenderer> AllOverlayTilesInUse;
         private Rectangle BoundingBox;
 
-        public OverlaySystem()
-        {
-        }
+        public OverlaySystem() {}
 
         public void Init(int mapWidth, int mapHeight)
         {

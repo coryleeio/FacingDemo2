@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -139,6 +140,23 @@ namespace Gamepackage
         public bool IsDiagonalTo(Point p2)
         {
             return IsDiagonalTo(this, p2);
+        }
+    }
+
+    public class PointDistanceComparer : IComparer<Point>
+    {
+        public Point Source;
+
+        public int Compare(Point x, Point y)
+        {
+            if(Source == null)
+            {
+                return -1;
+            }
+            else
+            {
+                return Point.DistanceSquared(Source, x).CompareTo(Point.DistanceSquared(Source, y));
+            }
         }
     }
 }

@@ -2,18 +2,15 @@
 
 namespace Gamepackage
 {
-    public class TriggerComponent : Component
+    public class Trigger : Component
     {
         public UniqueIdentifier TriggerActionPrototypeUniqueIdentifier;
 
         public TriggerAction TriggerAction;
 
-        public TriggerComponent()
-        {
+        public Trigger() {}
 
-        }
-
-        public TriggerComponent(TriggerComponent other)
+        public Trigger(Trigger other)
         {
             TriggerActionPrototypeUniqueIdentifier = other.TriggerActionPrototypeUniqueIdentifier;
         }
@@ -23,6 +20,7 @@ namespace Gamepackage
             base.InjectContext(context);
             if(TriggerAction != null)
             {
+                TriggerAction.Entity = Entity;
                 TriggerAction.InjectContext(context);
             }
             else

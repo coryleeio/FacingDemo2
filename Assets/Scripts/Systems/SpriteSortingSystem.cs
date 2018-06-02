@@ -11,10 +11,8 @@ namespace Gamepackage
         private static List<Direction> LowerSortingPositions = new List<Direction>() { Direction.West, Direction.NorthWest, Direction.North, Direction.NorthEast };
         private ListGrid<Entity> NotMovingEntitys;
         private ListGrid<Entity> MovingEntitys;
-        public SpriteSortingSystem()
-        {
 
-        }
+        public SpriteSortingSystem() {}
 
         public void Init()
         {
@@ -34,10 +32,10 @@ namespace Gamepackage
             var level = Context.GameStateManager.Game.CurrentLevel;
             foreach (var entity in level.Entitys)
             {
-                if (entity.MovementComponent != null && entity.MovementComponent.TargetPosition != entity.Position &&
-                                entity.MovementComponent.TargetPosition != null)
+                if (entity.Motor != null && entity.Motor.MoveTargetPosition != entity.Position &&
+                                entity.Motor.MoveTargetPosition != null)
                 {
-                    MovingEntitys[entity.MovementComponent.TargetPosition].Add(entity);
+                    MovingEntitys[entity.Motor.MoveTargetPosition].Add(entity);
                 }
                 else
                 {
@@ -88,9 +86,9 @@ namespace Gamepackage
 
         private static int sortEntity(int sortOrder, Entity entity)
         {
-            if (entity.ViewComponent.ViewType == ViewType.StaticSprite)
+            if (entity.View.ViewType == ViewType.StaticSprite)
             {
-                var spriteRenderer = entity.ViewComponent.View.GetComponent<SpriteRenderer>();
+                var spriteRenderer = entity.View.ViewGameObject.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingOrder = sortOrder;
                 return sortOrder + 1;
             }

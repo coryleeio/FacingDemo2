@@ -31,15 +31,15 @@ namespace Gamepackage
             PrototypeFactory.BuildMapTiles(GameStateManager.Game.CurrentLevel);
             foreach (var entity in GameStateManager.Game.CurrentLevel.Entitys)
             {
-                if(entity.ViewComponent != null)
+                if(entity.View != null)
                 {
-                    entity.ViewComponent.View = PrototypeFactory.BuildView(entity);
+                    entity.View.ViewGameObject = PrototypeFactory.BuildView(entity);
                 }
             }
             var player = GameStateManager.Game.CurrentLevel.Player;
-            if(player.ViewComponent != null && player.ViewComponent.View != null)
+            if(player.View != null && player.View.ViewGameObject != null)
             {
-                gameSceneCameraDriver.target = player.ViewComponent.View;
+                gameSceneCameraDriver.target = player.View.ViewGameObject;
             }
             CameraDriver = gameSceneCameraDriver;
         }

@@ -15,15 +15,15 @@ namespace Gamepackage
 
         public Point Position;
 
-        public CombatantComponent CombatantComponent;
+        public Body Body;
 
-        public TriggerComponent TriggerComponent;
+        public Trigger Trigger;
 
-        public MovementComponent MovementComponent;
+        public Motor Motor;
 
-        public ViewComponent ViewComponent;
+        public View View;
 
-        public TurnComponent TurnComponent;
+        public Behaviour Behaviour;
 
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 
@@ -32,7 +32,7 @@ namespace Gamepackage
         {
             get
             {
-                return TurnComponent != null && TurnComponent.Behaviour != null && TurnComponent.Behaviour.IsPlayer;
+                return Behaviour != null && Behaviour.BehaviourImpl != null && Behaviour.BehaviourImpl.IsPlayer;
             }
         }
 
@@ -41,7 +41,7 @@ namespace Gamepackage
         {
             get
             {
-                return TurnComponent != null && TurnComponent.Behaviour != null && !TurnComponent.Behaviour.IsPlayer;
+                return Behaviour != null && Behaviour.BehaviourImpl != null && !Behaviour.BehaviourImpl.IsPlayer;
             }
         }
 
@@ -50,7 +50,7 @@ namespace Gamepackage
         {
             get
             {
-                return CombatantComponent != null;
+                return Body != null;
             }
         }
 
@@ -58,25 +58,30 @@ namespace Gamepackage
         public void InjectContext(ApplicationContext context)
         {
             Context = context;
-            if(TriggerComponent != null)
+            if(Trigger != null)
             {
-                TriggerComponent.InjectContext(context);
+                Trigger.Entity = this;
+                Trigger.InjectContext(context);
             }
-            if(CombatantComponent != null)
+            if(Body != null)
             {
-                CombatantComponent.InjectContext(context);
+                Body.Entity = this;
+                Body.InjectContext(context);
             }
-            if(ViewComponent != null)
+            if(View != null)
             {
-                ViewComponent.InjectContext(context);
+                View.Entity = this;
+                View.InjectContext(context);
             }
-            if(MovementComponent != null)
+            if(Motor != null)
             {
-                MovementComponent.InjectContext(context);
+                Motor.Entity = this;
+                Motor.InjectContext(context);
             }
-            if(TurnComponent != null)
+            if(Behaviour != null)
             {
-                TurnComponent.InjectContext(context);
+                Behaviour.Entity = this;
+                Behaviour.InjectContext(context);
             }
         }
 

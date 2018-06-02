@@ -3,9 +3,18 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public abstract class Behaviour : IHasApplicationContext
+    public abstract class BehaviourImpl : IHasApplicationContext
     {
-        public abstract List<EntityAction> GetNextActions();
+        public void GetActionsForTurn()
+        {
+            SetActionsForThisTurn();
+            Context.CombatSystem.EndTurn(Entity);
+        }
+
+        protected abstract void SetActionsForThisTurn();
+
+        [JsonIgnore]
+        public Entity Entity;
 
         public virtual bool IsPlayer
         {

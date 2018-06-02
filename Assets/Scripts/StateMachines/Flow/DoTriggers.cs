@@ -19,7 +19,7 @@ namespace Gamepackage
             Entity trigger = GetNextTriggerWithTargets();
             if(trigger != null)
             {
-                trigger.TriggerComponent.TriggerAction.Do();
+                trigger.Trigger.TriggerAction.Do();
             }
             else
             {
@@ -37,12 +37,12 @@ namespace Gamepackage
                 {
                     break;
                 }
-                if (triggerEntity.TriggerComponent != null && triggerEntity.TriggerComponent.TriggerAction.IsStartable && !triggerEntity.TriggerComponent.TriggerAction.Completed)
+                if (triggerEntity.Trigger != null && triggerEntity.Trigger.TriggerAction.IsStartable && !triggerEntity.Trigger.TriggerAction.Completed)
                 {
-                    var positionsToCheck = MathUtil.GetPointsByOffset(triggerEntity.Position, triggerEntity.TriggerComponent.TriggerAction.Offsets);
+                    var positionsToCheck = MathUtil.GetPointsByOffset(triggerEntity.Position, triggerEntity.Trigger.TriggerAction.Offsets);
                     foreach (var pawnEntity in Context.GameStateManager.Game.CurrentLevel.Entitys)
                     {
-                        if(pawnEntity.MovementComponent == null)
+                        if(pawnEntity.Motor == null)
                         {
                             continue;
                         }
@@ -50,10 +50,10 @@ namespace Gamepackage
                         {
                             continue;
                         }
-                        if (pawnEntity.MovementComponent.HasMovedSinceLastTriggerCheck && positionsToCheck.Contains(pawnEntity.Position))
+                        if (pawnEntity.Motor.HasMovedSinceLastTriggerCheck && positionsToCheck.Contains(pawnEntity.Position))
                         {
                             triggerToReturn = triggerEntity;
-                            triggerToReturn.TriggerComponent.TriggerAction.TargetIds.Add(pawnEntity.Id);
+                            triggerToReturn.Trigger.TriggerAction.TargetIds.Add(pawnEntity.Id);
                         }
                     }
                 }
@@ -65,14 +65,14 @@ namespace Gamepackage
         {
             foreach(var entity in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
-                if(entity.MovementComponent != null)
+                if(entity.Motor != null)
                 {
-                    entity.MovementComponent.HasMovedSinceLastTriggerCheck = false;
+                    entity.Motor.HasMovedSinceLastTriggerCheck = false;
                 }
                 
-                if(entity.TriggerComponent != null)
+                if(entity.Trigger != null)
                 {
-                    entity.TriggerComponent.TriggerAction.Reset(); // Stop being completed for the next pass //  clear targets
+                    entity.Trigger.TriggerAction.Reset(); // Stop being completed for the next pass //  clear targets
                 }
             }
         }

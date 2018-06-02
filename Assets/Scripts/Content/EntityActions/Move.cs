@@ -23,7 +23,7 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            Entity.MovementComponent.HasMovedSinceLastTriggerCheck = true;
+            Entity.Motor.HasMovedSinceLastTriggerCheck = true;
         }
 
         public override bool IsEndable

@@ -4,19 +4,12 @@ namespace Gamepackage
 {
     public abstract class EntityAction : ASyncAction
     {
+        // Should this action be executed immediately on the current turn(Knockbacks etc)
+        public bool IsImmediate = false;
+
         public abstract int TimeCost
         {
             get;
-        }
-
-        public int EntityId;
-        [JsonIgnore]
-        public Entity Entity
-        {
-            get
-            {
-                return Context.EntitySystem.GetEntityById(EntityId);
-            }
         }
 
         [JsonIgnore]
@@ -36,10 +29,10 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            Entity.TurnComponent.TimeAccrued += TimeCost;
-            if(Entity.TurnComponent.ActionQueue.Contains(this))
+            Entity.Behaviour.TimeAccrued += TimeCost;
+            if(Entity.Behaviour.ActionList.Contains(this))
             {
-                Entity.TurnComponent.ActionQueue.Dequeue();
+                Entity.Behaviour.ActionList.Remove(this);
             }
         }
 
@@ -51,7 +44,7 @@ namespace Gamepackage
         public override void FailToStart()
         {
             base.FailToStart();
-            Entity.TurnComponent.ActionQueue.Clear();
+            Entity.Behaviour.ActionList.Clear();
         }
     }
 }

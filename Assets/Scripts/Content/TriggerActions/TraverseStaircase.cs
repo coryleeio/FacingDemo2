@@ -27,9 +27,9 @@ namespace Gamepackage
                 Context.EntitySystem.Deregister(target, Context.GameStateManager.Game.CurrentLevel);
                 target.Position = pos;
                 Context.EntitySystem.Register(target, newLevel);
-                if(target.TurnComponent != null)
+                if(target.Behaviour != null)
                 {
-                    target.TurnComponent.ActionQueue.Clear();
+                    target.Behaviour.ActionList.Clear();
                 }
             }
             Context.GameStateManager.Game.CurrentLevelIndex = levelId;

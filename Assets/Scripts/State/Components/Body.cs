@@ -2,19 +2,16 @@
 
 namespace Gamepackage
 {
-    public class CombatantComponent : Component
+    public class Body : Component
     {
         public int CurrentHealth;
         public int MaxHealth;
         public bool IsDead = false;
         public float ElapsedTimeDead = 0.0f;
 
-        public CombatantComponent()
-        {
+        public Body() {}
 
-        }
-
-        public CombatantComponent(CombatantComponent other)
+        public Body(Body other)
         {
             CurrentHealth = other.CurrentHealth;
             MaxHealth = other.MaxHealth;

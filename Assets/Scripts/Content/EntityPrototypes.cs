@@ -12,73 +12,73 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_PONCY,
-                    CombatantComponent = new CombatantComponent()
+                    Body = new Body()
                     {
                         CurrentHealth = 10,
                         MaxHealth = 10,
                     },
-                    MovementComponent = new MovementComponent(),
+                    Motor = new Motor(),
                     BlocksPathing = true,
-                    ViewComponent = new ViewComponent()
+                    ViewComponent = new View()
                     {
                         ViewType = ViewType.StaticSprite,
                         ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
                     },
-                    TurnComponent = new TurnComponent()
+                    TurnComponent = new Behaviour()
                     {
-                        BehaviourUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_PLAYER,
+                        BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_PLAYER,
                     }
                 },
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_GIANT_BEE,
-                    CombatantComponent = new CombatantComponent()
+                    Body = new Body()
                     {
                         CurrentHealth = 1,
                         MaxHealth = 1,
                     },
-                    MovementComponent = new MovementComponent(),
+                    Motor = new Motor(),
                     BlocksPathing = true,
-                    ViewComponent = new ViewComponent()
+                    ViewComponent = new View()
                     {
                         ViewType = ViewType.StaticSprite,
                         ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
                     },
-                    TurnComponent = new TurnComponent()
+                    TurnComponent = new Behaviour()
                     {
-                        BehaviourUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
+                        BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
                     }
                 },
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_QUEEN_BEE,
-                    CombatantComponent = new CombatantComponent()
+                    Body = new Body()
                     {
                         CurrentHealth = 3,
                         MaxHealth = 3,
                     },
-                    MovementComponent = new MovementComponent(),
+                    Motor = new Motor(),
                     BlocksPathing = true,
-                    ViewComponent = new ViewComponent()
+                    ViewComponent = new View()
                     {
                         ViewType = ViewType.StaticSprite,
                         ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
                     },
-                    TurnComponent = new TurnComponent()
+                    TurnComponent = new Behaviour()
                     {
-                        BehaviourUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
+                        BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
                     }
                 },
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_UP,
                     BlocksPathing = false,
-                    ViewComponent = new ViewComponent()
+                    ViewComponent = new View()
                     {
                         ViewType = ViewType.StaticSprite,
                         ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
                     },
-                    TriggerComponent = new TriggerComponent()
+                    Trigger = new Trigger()
                     {
                         TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
                     },
@@ -87,12 +87,12 @@ namespace Gamepackage
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_DOWN,
                     BlocksPathing = false,
-                    ViewComponent = new ViewComponent()
+                    ViewComponent = new View()
                     {
                         ViewType = ViewType.StaticSprite,
                         ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
                     },
-                    TriggerComponent = new TriggerComponent()
+                    Trigger = new Trigger()
                     {
                         TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
                     },

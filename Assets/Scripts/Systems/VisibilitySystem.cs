@@ -15,10 +15,7 @@ namespace Gamepackage
 
     public class VisibilitySystem
     {
-        public VisibilitySystem()
-        {
-
-        }
+        public VisibilitySystem() {}
 
         public ApplicationContext Context { get; set; }
 
@@ -220,6 +217,18 @@ namespace Gamepackage
             throw new NotImplementedException("Not implemented");
         }
 
+        public List<Point> PointsVisibleFrom(Level level, Point start)
+        {
+            var visiblePoints = new List<Point>();
+            MathUtil.FloodFill(start, 5, ref visiblePoints, MathUtil.FloodFillType.Orthogonal, (pointOnLevel) => { return level.BoundingBox.Contains(pointOnLevel) && level.TilesetGrid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; });
+            return visiblePoints;
+        }
+
+        public bool CanSee(Level level, Entity start, Entity end)
+        {
+            return PointsVisibleFrom(level, start.Position).Contains(end.Position);
+        }
+
         public void Process()
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
@@ -235,9 +244,7 @@ namespace Gamepackage
                     }
                 }
 
-                var visiblePoints = new List<Point>();
-                visiblePoints.AddRange(MathUtil.FloodFill(player.Position, 5, ref visiblePoints, MathUtil.FloodFillType.Orthogonal, (pointOnLevel) => { return level.BoundingBox.Contains(pointOnLevel) && level.TilesetGrid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; }));
-
+                var visiblePoints = PointsVisibleFrom(level, player.Position);
                 foreach (var tile in visiblePoints)
                 {
                     _updatedVisibilityGrid[tile.X, tile.Y] = true;
@@ -245,21 +252,21 @@ namespace Gamepackage
 
                 foreach (var entity in level.Entitys)
                 {
-                    if(entity.ViewComponent != null)
+                    if(entity.View != null)
                     {
                         if (entity.IsPlayer)
                         {
-                            entity.ViewComponent.IsVisible = true;
+                            entity.View.IsVisible = true;
                         }
                         else
                         {
-                            entity.ViewComponent.IsVisible = _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
+                            entity.View.IsVisible = _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
                         }
                     }
 
-                    if(entity.ViewComponent.View != null)
+                    if(entity.View.ViewGameObject != null)
                     {
-                        entity.ViewComponent.View.SetActive(entity.ViewComponent.IsVisible);
+                        entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
                     }
                 }
 

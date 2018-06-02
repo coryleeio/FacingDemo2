@@ -10,10 +10,7 @@ namespace Gamepackage
         public Game Game { get; private set; }
         public ApplicationContext Context { get; set; }
 
-        public GameStateManager()
-        {
-
-        }
+        public GameStateManager() {}
 
         public void NewGame()
         {

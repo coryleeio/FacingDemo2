@@ -9,6 +9,9 @@ namespace Gamepackage
         public bool IsRunning = false;
 
         [JsonIgnore]
+        public Entity Entity;
+
+        [JsonIgnore]
         public abstract bool IsEndable
         {
             get;

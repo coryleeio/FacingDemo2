@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,25 +11,22 @@ namespace Gamepackage
         private List<Entity> DyingEntitys = new List<Entity>(0);
         private Color DeathColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0f);
 
-        public CombatSystem()
-        {
-
-        }
+        public CombatSystem() {}
 
         public void Process()
         {
             foreach (var entity in DyingEntitys)
             {
-                if (entity.ViewComponent != null && entity.ViewComponent.View != null)
+                if (entity.View != null && entity.View.ViewGameObject != null)
                 {
-                    entity.CombatantComponent.ElapsedTimeDead = entity.CombatantComponent.ElapsedTimeDead += Time.deltaTime;
-                    if (entity.CombatantComponent.ElapsedTimeDead > 1.0f)
+                    entity.Body.ElapsedTimeDead = entity.Body.ElapsedTimeDead += Time.deltaTime;
+                    if (entity.Body.ElapsedTimeDead > 1.0f)
                     {
-                        if (entity.ViewComponent.ViewType == ViewType.StaticSprite)
+                        if (entity.View.ViewType == ViewType.StaticSprite)
                         {
-                            var spriteRenderer = entity.ViewComponent.View.GetComponent<SpriteRenderer>();
-                            var firstPhasePercentage = (entity.CombatantComponent.ElapsedTimeDead - 1.0f) / 1f;
-                            var secondPhasePErcentage = (entity.CombatantComponent.ElapsedTimeDead - 2f) / 1f;
+                            var spriteRenderer = entity.View.ViewGameObject.GetComponent<SpriteRenderer>();
+                            var firstPhasePercentage = (entity.Body.ElapsedTimeDead - 1.0f) / 1f;
+                            var secondPhasePErcentage = (entity.Body.ElapsedTimeDead - 2f) / 1f;
 
                             if (firstPhasePercentage < 1.0f)
                             {
@@ -38,9 +36,9 @@ namespace Gamepackage
                             {
                                 spriteRenderer.color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
                             }
-                            else if (entity.ViewComponent != null && entity.ViewComponent.View != null)
+                            else if (entity.View != null && entity.View.ViewGameObject != null)
                             {
-                                GameObject.Destroy(entity.ViewComponent.View);
+                                GameObject.Destroy(entity.View.ViewGameObject);
                             }
                         }
                         else
@@ -53,19 +51,54 @@ namespace Gamepackage
 
             var removed = DyingEntitys.RemoveAll((ent) =>
             {
-                return ent.CombatantComponent.ElapsedTimeDead > 9.0f;
+                return ent.Body.ElapsedTimeDead > 9.0f;
             }
             );
+        }
+
+        public void TryToMoveToward(Entity entity, Entity player)
+        {
+            var moveToward = Context.PrototypeFactory.BuildEntityAction<TryMoveToward>(entity);
+            moveToward.TargetId = player.Id;
+            entity.Behaviour.ActionList.AddLast(moveToward);
+        }
+
+        public void EndTurn(Entity entity)
+        {
+            var endTurn = Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity);
+            entity.Behaviour.ActionList.AddLast(endTurn);
+        }
+
+        public void Wait(Entity entity)
+        {
+            var wait = Context.PrototypeFactory.BuildEntityAction<Wait>(entity);
+            entity.Behaviour.ActionList.AddLast(wait);
+        }
+
+        public void AttackInMelee(Entity entity, Entity player)
+        {
+            var attack = Context.PrototypeFactory.BuildEntityAction<MeleeAttack>(entity);
+            attack.TargetId = player.Id;
+            entity.Behaviour.ActionList.AddLast(attack);
+        }
+
+        public bool CanMelee(Entity a, Entity b)
+        {
+            if(a == null || b == null)
+            {
+                return false;
+            }
+            return a.Position.IsAdjacentTo(b.Position) && a.Position.IsOrthogonalTo(b.Position);
         }
 
         public void DealDamage(Entity source, Entity target, int damage)
         {
             if (!target.IsCombatant)
             {
-                return;
+                throw new NotImplementedException("Cannot deal damage to non combatants");
             }
-            target.CombatantComponent.CurrentHealth = target.CombatantComponent.CurrentHealth - damage;
-            if (target.CombatantComponent.CurrentHealth <= 0)
+            target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
+            if (target.Body.CurrentHealth <= 0)
             {
                 var level = Context.GameStateManager.Game.CurrentLevel;
                 Context.EntitySystem.Deregister(target, level);

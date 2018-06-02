@@ -27,8 +27,8 @@ namespace Gamepackage
         public TAction BuildEntityAction<TAction> (Entity entity) where TAction : EntityAction
         {
             var action = Activator.CreateInstance<TAction>();
-            action.EntityId = entity.Id;
             Assert.IsNotNull(action, string.Format("Failed to create {0}", typeof(TAction)));
+            action.Entity = entity;
             action.InjectContext(Context);
             return action;
         }
@@ -58,36 +58,36 @@ namespace Gamepackage
                 PrototypeIdentifier = identifier,
             };
 
-            if(prototype.CombatantComponent != null)
+            if(prototype.Body != null)
             {
-                entity.CombatantComponent = new CombatantComponent(prototype.CombatantComponent);
+                entity.Body = new Body(prototype.Body);
             }
 
-            if(prototype.TriggerComponent != null)
+            if(prototype.Trigger != null)
             {
-                entity.TriggerComponent = new TriggerComponent(prototype.TriggerComponent);
-                if (entity.TriggerComponent.TriggerAction == null)
+                entity.Trigger = new Trigger(prototype.Trigger);
+                if (entity.Trigger.TriggerAction == null)
                 {
-                    entity.TriggerComponent.TriggerAction = BuildTriggerAction(entity.TriggerComponent.TriggerActionPrototypeUniqueIdentifier);
+                    entity.Trigger.TriggerAction = BuildTriggerAction(entity.Trigger.TriggerActionPrototypeUniqueIdentifier);
                 }
             }
 
-            if(prototype.MovementComponent != null)
+            if(prototype.Motor != null)
             {
-                entity.MovementComponent = new MovementComponent(prototype.MovementComponent);
+                entity.Motor = new Motor(prototype.Motor);
             }
 
             if(prototype.ViewComponent != null)
             {
-                entity.ViewComponent = new ViewComponent(prototype.ViewComponent);
+                entity.View = new View(prototype.ViewComponent);
             }
 
             if (prototype.TurnComponent != null)
             {
-                entity.TurnComponent = new TurnComponent(prototype.TurnComponent);
-                if (entity.TurnComponent.Behaviour == null)
+                entity.Behaviour = new Behaviour(prototype.TurnComponent);
+                if (entity.Behaviour.BehaviourImpl == null)
                 {
-                    entity.TurnComponent.Behaviour = BuildBehaviour(entity.TurnComponent.BehaviourUniqueIdentifier);
+                    entity.Behaviour.BehaviourImpl = BuildBehaviour(entity.Behaviour.BehaviourImplUniqueIdentifier);
                 }
             }
 
@@ -96,7 +96,7 @@ namespace Gamepackage
         }
 
 
-        public Behaviour BuildBehaviour(UniqueIdentifier behaviourUniqueIdentifier)
+        public BehaviourImpl BuildBehaviour(UniqueIdentifier behaviourUniqueIdentifier)
         {
             if(behaviourUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_BRUTE)
             {

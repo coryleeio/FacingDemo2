@@ -9,10 +9,7 @@ namespace Gamepackage
     {
         public ApplicationContext Context { get; set; }
 
-        public DungeonGenerator()
-        {
-
-        }
+        public DungeonGenerator() {}
 
         public void GenerateDungeon()
         {
@@ -207,12 +204,12 @@ namespace Gamepackage
             var downStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_DOWN, Context.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
             var upStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_UP, Context.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
 
-            var downStairTraverseAction = downStair.TriggerComponent.TriggerAction as TraverseStaircase;
+            var downStairTraverseAction = downStair.Trigger.TriggerAction as TraverseStaircase;
             downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
             downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), upStair.Position.X.ToString());
             downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), upStair.Position.Y.ToString());
 
-            var upStairTraverseAction = upStair.TriggerComponent.TriggerAction as TraverseStaircase;
+            var upStairTraverseAction = upStair.Trigger.TriggerAction as TraverseStaircase;
             upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), lowerLevel.LevelIndex.ToString());
             upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), downStair.Position.X.ToString());
             upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());

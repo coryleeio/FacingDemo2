@@ -2,14 +2,11 @@
 
 namespace Gamepackage
 {
-    public class MovementComponent : Component
+    public class Motor : Component
     {
-        public MovementComponent()
-        {
+        public Motor() {}
 
-        }
-
-        public MovementComponent(MovementComponent other)
+        public Motor(Motor other)
         {
 
         }
@@ -26,7 +23,7 @@ namespace Gamepackage
 
         public Queue<Point> CurrentPath = new Queue<Point>(0);
 
-        public Point TargetPosition;
+        public Point MoveTargetPosition;
 
         public override void InjectContext(ApplicationContext context)
         {

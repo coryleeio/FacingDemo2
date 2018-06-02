@@ -3,21 +3,18 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class ViewComponent : Component
+    public class View : Component
     {
         public ViewType ViewType;
         public UniqueIdentifier ViewPrototypeUniqueIdentifier;
         public bool IsVisible;
 
         [JsonIgnore]
-        public GameObject View;
+        public GameObject ViewGameObject;
 
-        public ViewComponent()
-        {
+        public View() {}
 
-        }
-
-        public ViewComponent(ViewComponent other)
+        public View(View other)
         {
             ViewType = other.ViewType;
             ViewPrototypeUniqueIdentifier = other.ViewPrototypeUniqueIdentifier;

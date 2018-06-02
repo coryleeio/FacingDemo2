@@ -2,11 +2,11 @@
 
 namespace Gamepackage
 {
-    public class Player : Behaviour
+    public class Player : BehaviourImpl
     {
-        public override List<EntityAction> GetNextActions()
+        protected override void SetActionsForThisTurn()
         {
-            return new List<EntityAction>(0);
+            throw new NotImplementedException("Player should not try to calculate next move, it should be filled in by player controller.");
         }
 
         public override bool IsPlayer
