@@ -12,7 +12,7 @@ namespace Gamepackage
         private ListGrid<Entity> NotMovingEntitys;
         private ListGrid<Entity> MovingEntitys;
 
-        public SpriteSortingSystem() {}
+        public SpriteSortingSystem() { }
 
         public void Init()
         {
@@ -68,18 +68,18 @@ namespace Gamepackage
                     sortOrder++;
                     if (level.EntityGrid != null)
                     {
-                        foreach (var entity in NotMovingEntitys[x,y])
+                        foreach (var entity in NotMovingEntitys[x, y])
                         {
                             sortOrder = sortEntity(sortOrder, entity);
                         }
 
-                        foreach (var entity in MovingEntitys[x,y])
+                        foreach (var entity in MovingEntitys[x, y])
                         {
                             sortOrder = sortEntity(sortOrder, entity);
                         }
                     }
-                    NotMovingEntitys[x,y].Clear();
-                    MovingEntitys[x,y].Clear();
+                    NotMovingEntitys[x, y].Clear();
+                    MovingEntitys[x, y].Clear();
                 }
             }
         }
@@ -88,9 +88,13 @@ namespace Gamepackage
         {
             if (entity.View.ViewType == ViewType.StaticSprite)
             {
-                var spriteRenderer = entity.View.ViewGameObject.GetComponent<SpriteRenderer>();
-                spriteRenderer.sortingOrder = sortOrder;
-                return sortOrder + 1;
+                if (entity.View != null&& entity.View.ViewGameObject != null)
+                {
+                    var spriteRenderer = entity.View.ViewGameObject.GetComponent<SpriteRenderer>();
+                    spriteRenderer.sortingOrder = sortOrder;
+                    return sortOrder + 1;
+                }
+                return sortOrder;
             }
             else
             {

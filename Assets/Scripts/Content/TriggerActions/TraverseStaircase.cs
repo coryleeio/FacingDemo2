@@ -20,8 +20,13 @@ namespace Gamepackage
             var levelId = Convert.ToInt32(Parameters[Params.TARGET_LEVEL_ID.ToString()]);
             var posX = Convert.ToInt32(Parameters[Params.TARGET_POSX.ToString()]);
             var posY = Convert.ToInt32(Parameters[Params.TARGET_POSY.ToString()]);
+            var targetIncludesPlayer = false;
             foreach (var target in Targets)
             {
+                if(target.IsPlayer)
+                {
+                    targetIncludesPlayer = true;
+                }
                 var newLevel = Context.GameStateManager.Game.Dungeon.Levels[levelId];
                 var pos = new Point(posX, posY);
                 Context.EntitySystem.Deregister(target, Context.GameStateManager.Game.CurrentLevel);
@@ -32,9 +37,12 @@ namespace Gamepackage
                     target.Behaviour.ActionList.Clear();
                 }
             }
-            Context.GameStateManager.Game.CurrentLevelIndex = levelId;
-            Context.GameStateManager.Game.FurthestLevelReached = levelId;
-           Context.Application.StateMachine.ChangeState(Context.GamePlayState);
+            if(targetIncludesPlayer)
+            {
+                Context.GameStateManager.Game.CurrentLevelIndex = levelId;
+                Context.GameStateManager.Game.FurthestLevelReached = levelId;
+                Context.Application.StateMachine.ChangeState(Context.GamePlayState);
+            }
         }
 
         public override bool IsEndable

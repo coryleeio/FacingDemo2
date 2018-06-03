@@ -100,8 +100,13 @@ namespace Gamepackage
             target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
             if (target.Body.CurrentHealth <= 0)
             {
+                target.Body.IsDead = true;
                 var level = Context.GameStateManager.Game.CurrentLevel;
-                Context.EntitySystem.Deregister(target, level);
+                if(!target.IsPlayer)
+                {
+                    Context.EntitySystem.Deregister(target, level);
+                }
+
                 if (target.EntityPrototype.BlocksPathing)
                 {
                     Context.GameStateManager.Game.CurrentLevel.TilesetGrid[target.Position].Walkable = true;

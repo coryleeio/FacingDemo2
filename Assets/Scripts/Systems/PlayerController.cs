@@ -61,10 +61,17 @@ namespace Gamepackage
             var isValidPoint = level.BoundingBox.Contains(mousePos);
             var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.EntityGrid[mousePos].Count > 0 && level.EntityGrid[mousePos][0].IsCombatant;
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
+
+
             Context.OverlaySystem.SetActivated(MouseHoverOverlay, true);
             MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
             MouseHoverOverlayConfig.Position = mousePos;
             PathOverlayConfig.Position = mousePos;
+
+            if (player.Body.IsDead)
+            {
+                return;
+            }
 
             var points = new List<Point>();
             if(CurrentPath != null)
