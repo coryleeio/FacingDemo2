@@ -26,5 +26,6 @@ namespace Gamepackage
         public DoTurn DoTurn { get; set; }
         public DoTriggers DoTriggers { get; set; }
         public PlayerController PlayerController { get; set; }
+        public UIController UIController { get; set; }
     }
 }

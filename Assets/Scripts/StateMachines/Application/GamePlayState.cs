@@ -19,6 +19,17 @@ namespace Gamepackage
             Context.PlayerController.Init();
             CameraDriver = Context.GameScene.GetCamera();
             CameraDriver.JumpToTarget();
+
+            var EventSystemPrefab = Resources.Load<GameObject>("UI/EventSystem");
+            var eventSYstem = GameObject.Instantiate(EventSystemPrefab);
+            eventSYstem.name = "EventSystem";
+
+            var UICanvasPrefab = Resources.Load<GameObject>("UI/UICanvas");
+            var UICanvas = GameObject.Instantiate(UICanvasPrefab);
+            UICanvas.name = "UICanvas";
+            var uiController = UICanvas.GetComponent<UIController>();
+            uiController.InjectContext(Context);
+            Context.UIController = uiController;
         }
 
         public void Process()
@@ -40,6 +51,7 @@ namespace Gamepackage
             Context.VisibilitySystem.Clear();
             Context.GameScene.Unload();
             Context.PathFinder.Cleanup();
+            Context.UIController = null;
         }
     }
 }

@@ -70,6 +70,7 @@ namespace Gamepackage
 
             if (player.Body.IsDead)
             {
+                Context.UIController.ShowDeathNotification();
                 return;
             }
 
