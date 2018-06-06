@@ -13,7 +13,7 @@ namespace Gamepackage
         {
             if(entity.Id == 0)
             {
-                entity.Id = Context.GameStateManager.Game.NextId;
+                entity.Id = ServiceLocator.GameStateManager.Game.NextId;
             }
             if(!EntityMap.ContainsKey(entity.Id))
             {

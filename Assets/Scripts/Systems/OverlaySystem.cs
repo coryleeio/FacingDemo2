@@ -117,12 +117,12 @@ namespace Gamepackage
                 var points = MathUtil.GetPointsByOffset(config.Position, config.OffsetPoints);
                 foreach (var point in points)
                 {
-                    if (config.ConstrainToLevel && !Context.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point))
+                    if (config.ConstrainToLevel && !ServiceLocator.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point))
                     {
                         continue;
                     }
                     // This duplication of the contains check is necessary 
-                    if (config.WalkableTilesOnly && Context.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point) && Context.GameStateManager.Game.CurrentLevel.TilesetGrid[point.X, point.Y].TileType != TileType.Floor)
+                    if (config.WalkableTilesOnly && ServiceLocator.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point) && ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid[point.X, point.Y].TileType != TileType.Floor)
                     {
                         continue;
                     }

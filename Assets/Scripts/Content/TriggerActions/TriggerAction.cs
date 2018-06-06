@@ -19,7 +19,7 @@ namespace Gamepackage
                 var list = new List<Entity>(TargetIds.Count);
                 foreach(var id in TargetIds)
                 {
-                    var entity = Context.EntitySystem.GetEntityById(id);
+                    var entity = ServiceLocator.EntitySystem.GetEntityById(id);
                     list.Add(entity);
                 }
                 return list;
@@ -32,7 +32,7 @@ namespace Gamepackage
             TargetIds.Clear();
         }
 
-        public void InjectContext(Entity entity)
+        public void Rereference(Entity entity)
         {
             Entity = entity;
         }

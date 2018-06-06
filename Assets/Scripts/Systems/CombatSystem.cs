@@ -57,26 +57,26 @@ namespace Gamepackage
 
         public void TryToMoveToward(Entity entity, Entity player)
         {
-            var moveToward = Context.PrototypeFactory.BuildEntityAction<TryMoveToward>(entity);
+            var moveToward = ServiceLocator.PrototypeFactory.BuildEntityAction<TryMoveToward>(entity);
             moveToward.TargetId = player.Id;
             entity.Behaviour.ActionList.AddLast(moveToward);
         }
 
         public void EndTurn(Entity entity)
         {
-            var endTurn = Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity);
+            var endTurn = ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(entity);
             entity.Behaviour.ActionList.AddLast(endTurn);
         }
 
         public void Wait(Entity entity)
         {
-            var wait = Context.PrototypeFactory.BuildEntityAction<Wait>(entity);
+            var wait = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(entity);
             entity.Behaviour.ActionList.AddLast(wait);
         }
 
         public void AttackInMelee(Entity entity, Entity player)
         {
-            var attack = Context.PrototypeFactory.BuildEntityAction<MeleeAttack>(entity);
+            var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(entity);
             attack.TargetId = player.Id;
             entity.Behaviour.ActionList.AddLast(attack);
         }
@@ -100,15 +100,15 @@ namespace Gamepackage
             if (target.Body.CurrentHealth <= 0)
             {
                 target.Body.IsDead = true;
-                var level = Context.GameStateManager.Game.CurrentLevel;
+                var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
                 if(!target.IsPlayer)
                 {
-                    Context.EntitySystem.Deregister(target, level);
+                    ServiceLocator.EntitySystem.Deregister(target, level);
                 }
 
                 if (target.EntityPrototype.BlocksPathing)
                 {
-                    Context.GameStateManager.Game.CurrentLevel.TilesetGrid[target.Position].Walkable = true;
+                    ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid[target.Position].Walkable = true;
                 }
                 DyingEntitys.Add(target);
             }

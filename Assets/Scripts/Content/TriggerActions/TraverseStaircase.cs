@@ -27,11 +27,11 @@ namespace Gamepackage
                 {
                     targetIncludesPlayer = true;
                 }
-                var newLevel = Context.GameStateManager.Game.Dungeon.Levels[levelId];
+                var newLevel = ServiceLocator.GameStateManager.Game.Dungeon.Levels[levelId];
                 var pos = new Point(posX, posY);
-                Context.EntitySystem.Deregister(target, Context.GameStateManager.Game.CurrentLevel);
+                ServiceLocator.EntitySystem.Deregister(target, ServiceLocator.GameStateManager.Game.CurrentLevel);
                 target.Position = pos;
-                Context.EntitySystem.Register(target, newLevel);
+                ServiceLocator.EntitySystem.Register(target, newLevel);
                 if(target.Behaviour != null)
                 {
                     target.Behaviour.ActionList.Clear();
@@ -39,9 +39,9 @@ namespace Gamepackage
             }
             if(targetIncludesPlayer)
             {
-                Context.GameStateManager.Game.CurrentLevelIndex = levelId;
-                Context.GameStateManager.Game.FurthestLevelReached = levelId;
-                Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
+                ServiceLocator.GameStateManager.Game.CurrentLevelIndex = levelId;
+                ServiceLocator.GameStateManager.Game.FurthestLevelReached = levelId;
+                ServiceLocator.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             }
         }
 

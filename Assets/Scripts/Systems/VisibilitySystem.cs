@@ -45,7 +45,7 @@ namespace Gamepackage
                 RevealMask = Resources.Load<Texture2D>("Fog/CubeMask");
             }
 
-            _mapSize = Context.GameStateManager.Game.CurrentLevel.BoundingBox.Width;
+            _mapSize = ServiceLocator.GameStateManager.Game.CurrentLevel.BoundingBox.Width;
 
             _updatedVisibilityGrid = new bool[_mapSize, _mapSize];
             var textureX = _mapSize * _numberOfPixelsPerTile;
@@ -74,11 +74,11 @@ namespace Gamepackage
             {
                 for (var y = 0; y < _mapSize; y++)
                 {
-                    if (Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Obfuscated)
+                    if (ServiceLocator.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Obfuscated)
                     {
                         obfuscated.Add(new Point(x, y));
                     }
-                    else if (Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed)
+                    else if (ServiceLocator.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed)
                     {
                         revealed.Add(new Point(x, y));
                     }
@@ -100,16 +100,16 @@ namespace Gamepackage
             {
                 for (var y = 0; y < _mapSize; y++)
                 {
-                    var changedToObfuscated = !newVisibility[x, y] && Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed;
+                    var changedToObfuscated = !newVisibility[x, y] && ServiceLocator.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] == MapVisibilityState.Revealed;
                     if (newVisibility[x, y])
                     {
-                        Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Revealed;
+                        ServiceLocator.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Revealed;
                         revealed.Add(new Point(x, y));
                     }
                     else if (changedToObfuscated)
                     {
 
-                        Context.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Obfuscated;
+                        ServiceLocator.GameStateManager.Game.CurrentLevel.VisibilityGrid[x, y] = MapVisibilityState.Obfuscated;
                         obfuscated.Add(new Point(x, y));
                     }
                 }
@@ -122,9 +122,9 @@ namespace Gamepackage
         private void BuildIndexes()
         {
             _tileCenterPointForCoordinates = new Point[_mapSize, _mapSize];
-            if (Context.GameStateManager.Game.CurrentLevel.VisibilityGrid == null)
+            if (ServiceLocator.GameStateManager.Game.CurrentLevel.VisibilityGrid == null)
             {
-                Context.GameStateManager.Game.CurrentLevel.VisibilityGrid = new Grid<MapVisibilityState>(_mapSize, _mapSize);
+                ServiceLocator.GameStateManager.Game.CurrentLevel.VisibilityGrid = new Grid<MapVisibilityState>(_mapSize, _mapSize);
             }
             for (var x = 0; x < _mapSize; x++)
             {
@@ -229,7 +229,7 @@ namespace Gamepackage
 
         public void Process()
         {
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
             var player = level.Player;
 
             if (LastPlayerPosition == null || (player != null && player.Position != LastPlayerPosition))

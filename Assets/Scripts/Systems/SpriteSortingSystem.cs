@@ -15,7 +15,7 @@ namespace Gamepackage
 
         public void Init()
         {
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
             Tiles = new SpriteRenderer[level.BoundingBox.Width, level.BoundingBox.Height];
             MovingEntitys = new ListGrid<Entity>(level.BoundingBox.Width, level.BoundingBox.Height);
             NotMovingEntitys = new ListGrid<Entity>(level.BoundingBox.Width, level.BoundingBox.Height);
@@ -28,7 +28,7 @@ namespace Gamepackage
 
         public void Process()
         {
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
             foreach (var entity in level.Entitys)
             {
                 if (entity.Motor != null && entity.Motor.MoveTargetPosition != entity.Position &&
@@ -55,9 +55,9 @@ namespace Gamepackage
                         tileSpriteRenderer.sortingOrder = sortOrder;
                         sortOrder++;
                     }
-                    if (Context.OverlaySystem != null)
+                    if (ServiceLocator.OverlaySystem != null)
                     {
-                        var tiles = Context.OverlaySystem.GetTilesInPosition(x, y);
+                        var tiles = ServiceLocator.OverlaySystem.GetTilesInPosition(x, y);
                         foreach (var tile in tiles)
                         {
                             tile.sortingOrder = sortOrder;

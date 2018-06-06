@@ -7,7 +7,7 @@ namespace Gamepackage
         [JsonIgnore]
         public Entity Entity;
 
-        public virtual void InjectContext(Entity entity)
+        public virtual void Rereference(Entity entity)
         {
             Entity = entity;
         }

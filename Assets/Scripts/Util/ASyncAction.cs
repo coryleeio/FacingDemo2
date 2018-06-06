@@ -70,7 +70,7 @@ namespace Gamepackage
             }
         }
 
-        public void InjectContext(Entity entity)
+        public void Rereference(Entity entity)
         {
             Entity = entity;
         }

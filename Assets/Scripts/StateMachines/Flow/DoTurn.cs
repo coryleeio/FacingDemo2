@@ -19,7 +19,7 @@ namespace Gamepackage
             EntityListCopy.Clear();
             NotDoneList.Clear();
 
-            var game = Context.GameStateManager.Game;
+            var game = ServiceLocator.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
 
@@ -67,7 +67,7 @@ namespace Gamepackage
                         // so it may have been dequeued by this point.
                         if (action.Completed && action.IsAMovementAction)
                         {
-                            Context.FlowSystem.StateMachine.ChangeState(FlowStateMachine.DoTriggers);
+                            ServiceLocator.FlowSystem.StateMachine.ChangeState(FlowStateMachine.DoTriggers);
                         }
                     }
                 }
@@ -81,7 +81,7 @@ namespace Gamepackage
 
         private void EndTurn()
         {
-            var game = Context.GameStateManager.Game;
+            var game = ServiceLocator.GameStateManager.Game;
             game.CurrentTurn += 1;
             Debug.Log("Turn is now: " + game.CurrentTurn);
             game.IsPlayerTurn = true;

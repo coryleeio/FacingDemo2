@@ -53,7 +53,7 @@ namespace Gamepackage
 
         public void Process()
         {
-            var game = Context.GameStateManager.Game;
+            var game = ServiceLocator.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
@@ -62,14 +62,14 @@ namespace Gamepackage
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
 
-            Context.OverlaySystem.SetActivated(MouseHoverOverlay, true);
+            ServiceLocator.OverlaySystem.SetActivated(MouseHoverOverlay, true);
             MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
             MouseHoverOverlayConfig.Position = mousePos;
             PathOverlayConfig.Position = mousePos;
 
             if (player.Body.IsDead)
             {
-                Context.UIController.ShowDeathNotification();
+                ServiceLocator.UIController.ShowDeathNotification();
                 return;
             }
 
@@ -97,7 +97,7 @@ namespace Gamepackage
                             return Point.Distance(player.Position, p1).CompareTo(Point.Distance(player.Position, p2));
                         });
                         waitingForPath = true;
-                        Context.PathFinder.StartPath(player.Position, surroundingPositions[0], level.TilesetGrid, (path) =>
+                        ServiceLocator.PathFinder.StartPath(player.Position, surroundingPositions[0], level.TilesetGrid, (path) =>
                         {
                             CurrentPath = path;
                             waitingForPath = false;
@@ -107,7 +107,7 @@ namespace Gamepackage
                 else
                 {
                     waitingForPath = true;
-                    Context.PathFinder.StartPath(player.Position, mousePos, level.TilesetGrid, (path) =>
+                    ServiceLocator.PathFinder.StartPath(player.Position, mousePos, level.TilesetGrid, (path) =>
                     {
                         CurrentPath = path;
                         waitingForPath = false;
@@ -134,25 +134,25 @@ namespace Gamepackage
 
         private void QueueAttack(Level level, Entity player, Point mousePos)
         {
-            var attack = Context.PrototypeFactory.BuildEntityAction<MeleeAttack>(player);
+            var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(player);
             attack.TargetId = level.EntityGrid[mousePos][0].Id;
             player.Behaviour.ActionList.AddLast(attack);
-            var endTurn = Context.PrototypeFactory.BuildEntityAction<EndTurn>(player);
+            var endTurn = ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(player);
             player.Behaviour.ActionList.AddLast(endTurn);
         }
 
         private void OnPathComplete(Path path)
         {
-            var game = Context.GameStateManager.Game;
+            var game = ServiceLocator.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
             foreach (var node in path.Nodes)
             {
-                var move = Context.PrototypeFactory.BuildEntityAction<Move>(player);
+                var move = ServiceLocator.PrototypeFactory.BuildEntityAction<Move>(player);
                 move.TargetLocation = new Point(node.Position.X, node.Position.Y);
                 player.Behaviour.ActionList.AddLast(move);
 
-                var endTurn = Context.PrototypeFactory.BuildEntityAction<EndTurn>(player);
+                var endTurn = ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(player);
                 player.Behaviour.ActionList.AddLast(endTurn);
             }
             waitingForPath = false;

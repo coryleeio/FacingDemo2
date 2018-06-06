@@ -9,7 +9,7 @@ namespace Gamepackage
         void Start()
         {
             DontDestroyOnLoad(this);
-            Context.Application = this;
+            ServiceLocator.Application = this;
             StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
         }
 
@@ -20,20 +20,20 @@ namespace Gamepackage
 
         void OnDisable()
         {
-            Context.PathFinder.Cleanup();
+            ServiceLocator.PathFinder.Cleanup();
         }
 
         void OnGUI()
         {
             if (GUI.Button(new Rect(10, 10, 100, 50), "Start New game"))
             {
-                Context.GameStateManager.Clear();
+                ServiceLocator.GameStateManager.Clear();
                 StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
             }
 
             if (GUI.Button(new Rect(10, 75, 100, 50), "Exit game"))
             {
-                Context.GameStateManager.Clear();
+                ServiceLocator.GameStateManager.Clear();
                 StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
             }
 
@@ -44,12 +44,12 @@ namespace Gamepackage
 
             if (GUI.Button(new Rect(10, 215, 100, 50), "Save"))
             {
-                Context.GameStateManager.SaveGame();
+                ServiceLocator.GameStateManager.SaveGame();
             }
 
             if (GUI.Button(new Rect(10, 290, 100, 50), "Load"))
             {
-                Context.GameStateManager.LoadGame();
+                ServiceLocator.GameStateManager.LoadGame();
                 StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
             }
 
@@ -63,7 +63,7 @@ namespace Gamepackage
                         newVis[x, y] = true;
                     }
                 }
-                Context.VisibilitySystem.UpdateVisibility(newVis);
+                ServiceLocator.VisibilitySystem.UpdateVisibility(newVis);
             }
 
             if (Camera.main != null)

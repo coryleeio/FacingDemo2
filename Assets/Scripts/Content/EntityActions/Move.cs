@@ -17,7 +17,7 @@ namespace Gamepackage
         public override void Enter()
         {
             base.Enter();
-            Context.MovementSystem.MoveTo(Entity, TargetLocation);
+            ServiceLocator.MovementSystem.MoveTo(Entity, TargetLocation);
         }
 
         public override void Exit()
@@ -46,7 +46,7 @@ namespace Gamepackage
         {
             get
             {
-                return TargetLocation.IsAdjacentTo(Entity.Position);
+                return ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid[TargetLocation].Walkable && TargetLocation.IsAdjacentTo(Entity.Position);
             }
         }
     }

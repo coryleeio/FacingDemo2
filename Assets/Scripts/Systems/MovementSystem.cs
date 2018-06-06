@@ -9,7 +9,7 @@ namespace Gamepackage
 
         public void Process()
         {
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
             var entities = level.Entitys;
 
             foreach (var entity in entities)
@@ -76,7 +76,7 @@ namespace Gamepackage
 
         public void MoveTo(Entity entity, Point newPosition)
         {
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
             // Reserve the new position as soon as I start walking so nobody else uses it
             // Later when we arrive we will release the lock on our OLD position.
             if (entity.EntityPrototype.BlocksPathing)

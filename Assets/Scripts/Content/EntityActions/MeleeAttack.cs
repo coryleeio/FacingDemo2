@@ -18,7 +18,7 @@ namespace Gamepackage
             {
                 if (_target == null)
                 {
-                    _target = Context.EntitySystem.GetEntityById(TargetId);
+                    _target = ServiceLocator.EntitySystem.GetEntityById(TargetId);
                 }
                 return _target;
             }
@@ -41,7 +41,7 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            Context.CombatSystem.DealDamage(Entity, Target, 1);
+            ServiceLocator.CombatSystem.DealDamage(Entity, Target, 1);
         }
 
         public override bool IsEndable
@@ -68,7 +68,7 @@ namespace Gamepackage
                 {
                     return false;
                 }
-                return Context.CombatSystem.CanMelee(Entity, Target);
+                return ServiceLocator.CombatSystem.CanMelee(Entity, Target);
             }
         }
     }

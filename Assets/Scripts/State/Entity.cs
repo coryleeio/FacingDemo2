@@ -1,8 +1,6 @@
 
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace Gamepackage
 {
@@ -54,27 +52,27 @@ namespace Gamepackage
             }
         }
 
-        public void InjectContext()
+        public void Rereference()
         {
             if(Trigger != null)
             {
-                Trigger.InjectContext(this);
+                Trigger.Rereference(this);
             }
             if(Body != null)
             {
-                Body.InjectContext(this);
+                Body.Rereference(this);
             }
             if(View != null)
             {
-                View.InjectContext(this);
+                View.Rereference(this);
             }
             if(Motor != null)
             {
-                Motor.InjectContext(this);
+                Motor.Rereference(this);
             }
             if(Behaviour != null)
             {
-                Behaviour.InjectContext(this);
+                Behaviour.Rereference(this);
             }
         }
 
@@ -88,7 +86,7 @@ namespace Gamepackage
             {
                 if (_entityPrototype == null)
                 {
-                    _entityPrototype = Context.ResourceManager.GetPrototype<EntityPrototype>(PrototypeIdentifier);
+                    _entityPrototype = ServiceLocator.ResourceManager.GetPrototype<EntityPrototype>(PrototypeIdentifier);
                 }
                 return _entityPrototype;
             }

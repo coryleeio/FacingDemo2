@@ -20,7 +20,7 @@ public class TryMoveToward : EntityAction
         {
             if (_target == null)
             {
-                _target = Context.EntitySystem.GetEntityById(TargetId);
+                _target = ServiceLocator.EntitySystem.GetEntityById(TargetId);
             }
             return _target;
         }
@@ -62,7 +62,7 @@ public class TryMoveToward : EntityAction
     {
         if (Target != null)
         {
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
             PointsAroundTarget = MathUtil.OrthogonalPoints(Target.Position).FindAll((p) => { return level.TilesetGrid[p].Walkable; });
             PointsAroundMe = MathUtil.OrthogonalPoints(Entity.Position).FindAll((p) => { return level.TilesetGrid[p].Walkable && Point.DistanceSquared(p, Target.Position) < Point.DistanceSquared(Entity.Position, Target.Position); });
 
@@ -97,7 +97,7 @@ public class TryMoveToward : EntityAction
     {
         get
         {
-            return Context.GameStateManager.Game.CurrentLevel.TilesetGrid;
+            return ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid;
         }
     }
 
@@ -106,7 +106,7 @@ public class TryMoveToward : EntityAction
         base.Process();
         if (!waitingOnPath)
         {
-            Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
+            ServiceLocator.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
             waitingOnPath = true;
         }
     }
@@ -118,7 +118,7 @@ public class TryMoveToward : EntityAction
         var thisAction = Entity.Behaviour.ActionList.Find(this);
         if (thisAction == null)
         {
-            var wait = Context.PrototypeFactory.BuildEntityAction<Wait>(Entity);
+            var wait = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
             Entity.Behaviour.ActionList.AddFirst(wait);
             return;
         }
@@ -137,18 +137,18 @@ public class TryMoveToward : EntityAction
             if (PointsAroundTarget.Count > 0)
             {
                 TargetPoint = MathUtil.ChooseRandomElement<Point>(PointsAroundTarget);
-                Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
+                ServiceLocator.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
                 return;
             }
             else if(PointsAroundMe.Count > 0)
             {
                 TargetPoint = PointsAroundMe[0];
-                Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
+                ServiceLocator.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
                 return;
             }
             else
             {
-                var wait = Context.PrototypeFactory.BuildEntityAction<Wait>(Entity);
+                var wait = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
                 Entity.Behaviour.ActionList.AddAfter(thisAction, wait);
             }
         }
@@ -158,12 +158,13 @@ public class TryMoveToward : EntityAction
         }
         else
         {
-            var move = Context.PrototypeFactory.BuildEntityAction<Move>(Entity);
+            var move = ServiceLocator.PrototypeFactory.BuildEntityAction<Move>(Entity);
             move.TargetLocation = new Point(path.Nodes[0].Position.X, path.Nodes[0].Position.Y);
             thisAction = Entity.Behaviour.ActionList.Find(this);
-            Grid[move.TargetLocation].Walkable = false; // prereserve this bc move hasnt started yet and we dont want someone else
-            // to move there.
+
             Entity.Behaviour.ActionList.AddAfter(thisAction, move);
+            // Do a tick of the move so that we reserve the spot we want to move to.
+            move.Do();
         }
     }
 

@@ -8,7 +8,7 @@ namespace Gamepackage
         public void GetActionsForTurn()
         {
             SetActionsForThisTurn();
-            Context.CombatSystem.EndTurn(Entity);
+            ServiceLocator.CombatSystem.EndTurn(Entity);
         }
 
         protected abstract void SetActionsForThisTurn();
@@ -24,7 +24,7 @@ namespace Gamepackage
             }
         }
 
-        public void InjectContext(Entity entity)
+        public void Rereference(Entity entity)
         {
             Entity = entity;
         }

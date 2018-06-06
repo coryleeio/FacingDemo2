@@ -17,7 +17,7 @@ namespace Gamepackage
         {
             get
             {
-                return Context.GameStateManager.Game;
+                return ServiceLocator.GameStateManager.Game;
             }
         }
 

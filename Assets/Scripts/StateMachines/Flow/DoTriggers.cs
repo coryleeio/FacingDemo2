@@ -20,14 +20,14 @@ namespace Gamepackage
             else
             {
                 // done with triggers
-                Context.FlowSystem.StateMachine.ChangeState(FlowStateMachine.DoTurn);
+                ServiceLocator.FlowSystem.StateMachine.ChangeState(FlowStateMachine.DoTurn);
             }
         }
 
         public Entity GetNextTriggerWithTargets()
         {
             Entity triggerToReturn = null;
-            foreach (var triggerEntity in Context.GameStateManager.Game.CurrentLevel.Entitys)
+            foreach (var triggerEntity in ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys)
             {
                 if(triggerToReturn != null)
                 {
@@ -36,7 +36,7 @@ namespace Gamepackage
                 if (triggerEntity.Trigger != null && triggerEntity.Trigger.TriggerAction.IsStartable && !triggerEntity.Trigger.TriggerAction.Completed)
                 {
                     var positionsToCheck = MathUtil.GetPointsByOffset(triggerEntity.Position, triggerEntity.Trigger.TriggerAction.Offsets);
-                    foreach (var pawnEntity in Context.GameStateManager.Game.CurrentLevel.Entitys)
+                    foreach (var pawnEntity in ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys)
                     {
                         if(pawnEntity.Motor == null)
                         {
@@ -59,7 +59,7 @@ namespace Gamepackage
 
         public void Exit()
         {
-            foreach(var entity in Context.GameStateManager.Game.CurrentLevel.Entitys)
+            foreach(var entity in ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys)
             {
                 if(entity.Motor != null)
                 {

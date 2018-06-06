@@ -9,14 +9,14 @@ namespace Gamepackage
 
         public void Enter()
         {
-            Context.SpriteSortingSystem.Init();
-            Context.GameScene.Load();
-            Context.VisibilitySystem.Init();
-            Context.OverlaySystem.Init(Context.GameStateManager.Game.CurrentLevel.TilesetGrid.Width, Context.GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
-            Context.PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
-            Context.FlowSystem.Init();
-            Context.PlayerController.Init();
-            CameraDriver = Context.GameScene.GetCamera();
+            ServiceLocator.SpriteSortingSystem.Init();
+            ServiceLocator.GameScene.Load();
+            ServiceLocator.VisibilitySystem.Init();
+            ServiceLocator.OverlaySystem.Init(ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid.Width, ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
+            ServiceLocator.PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
+            ServiceLocator.FlowSystem.Init();
+            ServiceLocator.PlayerController.Init();
+            CameraDriver = ServiceLocator.GameScene.GetCamera();
             CameraDriver.JumpToTarget();
 
             var EventSystemPrefab = Resources.Load<GameObject>("UI/EventSystem");
@@ -27,30 +27,30 @@ namespace Gamepackage
             var UICanvas = GameObject.Instantiate(UICanvasPrefab);
             UICanvas.name = "UICanvas";
             var uiController = UICanvas.GetComponent<UIController>();
-            Context.UIController = uiController;
-            Context.UIController.Init();
+            ServiceLocator.UIController = uiController;
+            ServiceLocator.UIController.Init();
         }
 
         public void Process()
         {
-            Context.PlayerController.Process();
-            Context.OverlaySystem.Process();
-            Context.PathFinder.Process();
-            Context.FlowSystem.Process();
-            Context.MovementSystem.Process();
-            Context.SpriteSortingSystem.Process();
-            Context.VisibilitySystem.Process();
-            Context.CombatSystem.Process();
+            ServiceLocator.PlayerController.Process();
+            ServiceLocator.OverlaySystem.Process();
+            ServiceLocator.PathFinder.Process();
+            ServiceLocator.FlowSystem.Process();
+            ServiceLocator.MovementSystem.Process();
+            ServiceLocator.SpriteSortingSystem.Process();
+            ServiceLocator.VisibilitySystem.Process();
+            ServiceLocator.CombatSystem.Process();
             CameraDriver.MoveCamera();
         }
 
         public void Exit()
         {
-            Context.OverlaySystem.Clear();
-            Context.VisibilitySystem.Clear();
-            Context.GameScene.Unload();
-            Context.PathFinder.Cleanup();
-            Context.UIController = null;
+            ServiceLocator.OverlaySystem.Clear();
+            ServiceLocator.VisibilitySystem.Clear();
+            ServiceLocator.GameScene.Unload();
+            ServiceLocator.PathFinder.Cleanup();
+            ServiceLocator.UIController = null;
         }
     }
 }

@@ -39,9 +39,9 @@ namespace Gamepackage
             }
         }
 
-        public void InjectContext()
+        public void Rereference()
         {
-            Dungeon.InjectContext();
+            Dungeon.Rereferece();
         }
     }
 }

@@ -6,13 +6,13 @@ namespace Gamepackage
 
         public Level[] Levels;
 
-        public void InjectContext()
+        public void Rereferece()
         {
             foreach(var level in Levels)
             {
                 if(level != null)
                 {
-                    level.InjectContext();
+                    level.Rereference();
                 }
             }
         }

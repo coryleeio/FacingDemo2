@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public static class Context
+    public static class ServiceLocator
     {
         public static GameStateManager GameStateManager = new GameStateManager();
         public static VisibilitySystem VisibilitySystem = new VisibilitySystem();
@@ -18,6 +18,7 @@
         public static MovementSystem MovementSystem = new MovementSystem();
         public static FlowSystem FlowSystem = new FlowSystem();
         public static PlayerController PlayerController = new PlayerController();
+
         public static Application Application; // mono
         public static UIController UIController; // mono
     }

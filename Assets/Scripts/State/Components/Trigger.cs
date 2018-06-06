@@ -15,12 +15,12 @@ namespace Gamepackage
             TriggerActionPrototypeUniqueIdentifier = other.TriggerActionPrototypeUniqueIdentifier;
         }
 
-        public override void InjectContext(Entity entity)
+        public override void Rereference(Entity entity)
         {
-            base.InjectContext(entity);
+            base.Rereference(entity);
             if(TriggerAction != null)
             {
-                TriggerAction.InjectContext(entity);
+                TriggerAction.Rereference(entity);
             }
             else
             {

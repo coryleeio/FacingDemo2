@@ -26,7 +26,7 @@ namespace Gamepackage
 
         public void Clear()
         {
-            Context.EntitySystem.Clear();
+            ServiceLocator.EntitySystem.Clear();
             Debug.Log("Clearing game state");
             Game = null;
         }
@@ -45,7 +45,7 @@ namespace Gamepackage
             Debug.Log("Loading game");
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(UnityEngine.Application.persistentDataPath + "/dev.sav"), parameters);
-            Game.InjectContext();
+            Game.Rereference();
             foreach (var level in Game.Dungeon.Levels)
             {
                 if(level != null)
@@ -53,7 +53,7 @@ namespace Gamepackage
                     level.EntityGrid = new ListGrid<Entity>(level.TilesetGrid.Width, level.TilesetGrid.Height);
                     foreach (var entity in level.Entitys)
                     {
-                        Context.EntitySystem.Register(entity, level);
+                        ServiceLocator.EntitySystem.Register(entity, level);
                     }
                 }
             }

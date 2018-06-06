@@ -57,11 +57,11 @@ namespace Gamepackage
             }
         }
 
-        public void InjectContext()
+        public void Rereference()
         {
             foreach(var entity in Entitys)
             {
-                entity.InjectContext();
+                entity.Rereference();
             }
         }
     }

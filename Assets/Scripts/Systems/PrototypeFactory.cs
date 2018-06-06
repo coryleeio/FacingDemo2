@@ -42,7 +42,7 @@ namespace Gamepackage
             }
             if(ret != null)
             {
-                ret.InjectContext(entity);
+                ret.Rereference(entity);
                 return ret;
             }
             else
@@ -53,7 +53,7 @@ namespace Gamepackage
 
         public Entity BuildEntity(UniqueIdentifier identifier)
         {
-            var prototype = Context.ResourceManager.GetPrototype<EntityPrototype>(identifier);
+            var prototype = ServiceLocator.ResourceManager.GetPrototype<EntityPrototype>(identifier);
             var entity = new Entity
             {
                 Position = new Point(0, 0),
@@ -92,7 +92,7 @@ namespace Gamepackage
                     entity.Behaviour.BehaviourImpl = BuildBehaviour(entity, entity.Behaviour.BehaviourImplUniqueIdentifier);
                 }
             }
-            entity.InjectContext();
+            entity.Rereference();
             return entity;
         }
 
@@ -110,7 +110,7 @@ namespace Gamepackage
             }
             if(ret != null)
             {
-                ret.InjectContext(entity);
+                ret.Rereference(entity);
                 return ret;
             }
             else
@@ -121,7 +121,7 @@ namespace Gamepackage
 
         public GameObject BuildView(Entity entity)
         {
-            var entityPrototype = Context.ResourceManager.GetPrototype<EntityPrototype>(entity.PrototypeIdentifier);
+            var entityPrototype = ServiceLocator.ResourceManager.GetPrototype<EntityPrototype>(entity.PrototypeIdentifier);
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var go = new GameObject();
             go.name = entityPrototype.UniqueIdentifier.ToString();
@@ -172,7 +172,7 @@ namespace Gamepackage
                 {
                     var point = new Point(x, y);
                     var tileInfo = level.TilesetGrid[x, y];
-                    var tileSet = Context.ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
+                    var tileSet = ServiceLocator.ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
 
                     if (tileInfo.TileType == TileType.Floor)
                     {
@@ -337,7 +337,7 @@ namespace Gamepackage
             o.transform.SetParent(folder.transform);
             renderer.sprite = sprite;
             o.transform.localPosition = MathUtil.MapToWorld(position);
-            Context.SpriteSortingSystem.RegisterTile(renderer, position);
+            ServiceLocator.SpriteSortingSystem.RegisterTile(renderer, position);
             return renderer;
         }
     }

@@ -6,9 +6,9 @@ namespace Gamepackage
     {
         public void Enter()
         {
-            Context.GameStateManager.Clear();
-            Context.EntitySystem.Clear();
-            Context.MainMenuScene.Load();
+            ServiceLocator.GameStateManager.Clear();
+            ServiceLocator.EntitySystem.Clear();
+            ServiceLocator.MainMenuScene.Load();
         }
 
         public void Process()
@@ -18,7 +18,7 @@ namespace Gamepackage
 
         public void Exit()
         {
-            Context.MainMenuScene.Unload();
+            ServiceLocator.MainMenuScene.Unload();
         }
     }
 }

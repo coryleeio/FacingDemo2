@@ -9,7 +9,7 @@ namespace Gamepackage
 
         public void RestartGame()
         {
-            Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+            ServiceLocator.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
         }
     }
 }

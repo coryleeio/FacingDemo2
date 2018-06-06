@@ -11,10 +11,10 @@ namespace Gamepackage
 
         public void GenerateDungeon()
         {
-            var levelPrototypes = Context.ResourceManager.GetPrototypes<LevelPrototype>();
-            var roomPrototypes = Context.ResourceManager.GetPrototypes<RoomPrototype>();
+            var levelPrototypes = ServiceLocator.ResourceManager.GetPrototypes<LevelPrototype>();
+            var roomPrototypes = ServiceLocator.ResourceManager.GetPrototypes<RoomPrototype>();
             var roomPrototypesByLevel = new Dictionary<int, List<RoomPrototype>>();
-            var spawnTables = Context.ResourceManager.GetPrototypes<EncounterPrototype>();
+            var spawnTables = ServiceLocator.ResourceManager.GetPrototypes<EncounterPrototype>();
             var spawnTablesByLevel = new Dictionary<int, List<EncounterPrototype>>();
             int numberOfLevelsInArray = levelPrototypes.Count + 1;
 
@@ -44,8 +44,8 @@ namespace Gamepackage
                 }
             }
 
-            Context.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
-            var levels = Context.GameStateManager.Game.Dungeon.Levels;
+            ServiceLocator.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
+            var levels = ServiceLocator.GameStateManager.Game.Dungeon.Levels;
             foreach (var levelPrototype in levelPrototypes)
             {
                 var level = new Level();
@@ -173,9 +173,9 @@ namespace Gamepackage
                             {
                                 var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
                                 spawnPoints.Remove(spawnPoint);
-                                var thingSpawned = Context.PrototypeFactory.BuildEntity(thingToSpawn);
+                                var thingSpawned = ServiceLocator.PrototypeFactory.BuildEntity(thingToSpawn);
                                 thingSpawned.Position = spawnPoint;
-                                Context.EntitySystem.Register(thingSpawned, level);
+                                ServiceLocator.EntitySystem.Register(thingSpawned, level);
                             }
                             break;
                         }
@@ -189,7 +189,7 @@ namespace Gamepackage
 
             ConnectLevelsByStairway(levels[1], levels[2]);
 
-            var game = Context.GameStateManager.Game;
+            var game = ServiceLocator.GameStateManager.Game;
             BuildPathfindingGrid(game);
         }
 
@@ -199,8 +199,8 @@ namespace Gamepackage
             var lowerLevel = level1.LevelIndex < level2.LevelIndex ? level1 : level2;
             var higherLevel = lowerLevel == level1 ? level2 : level1;
 
-            var downStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_DOWN, Context.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
-            var upStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_UP, Context.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
+            var downStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_DOWN, ServiceLocator.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
+            var upStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_UP, ServiceLocator.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
 
             var downStairTraverseAction = downStair.Trigger.TriggerAction as TraverseStaircase;
             downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
@@ -221,9 +221,9 @@ namespace Gamepackage
                 possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
             }
             var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
-            var thing = Context.PrototypeFactory.BuildEntity(identifier);
+            var thing = ServiceLocator.PrototypeFactory.BuildEntity(identifier);
             thing.Position = spawnPoint;
-            Context.EntitySystem.Register(thing, level);
+            ServiceLocator.EntitySystem.Register(thing, level);
             return thing;
         }
 
