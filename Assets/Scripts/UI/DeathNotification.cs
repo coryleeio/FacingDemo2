@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathNotification : UIComponent {
-
-    public void RestartGame()
+namespace Gamepackage
+{
+    public class DeathNotification : UIComponent
     {
-        Context.Application.StateMachine.ChangeState(Context.MainMenuState);
+
+        public void RestartGame()
+        {
+            Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+        }
     }
 }
+

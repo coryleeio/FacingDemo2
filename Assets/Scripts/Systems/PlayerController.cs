@@ -5,7 +5,6 @@ namespace Gamepackage
 {
     public class PlayerController
     {
-        public ApplicationContext Context { get; set; }
         private Overlay MouseHoverOverlay;
         private OverlayConfig MouseHoverOverlayConfig;
         private OverlayConfig PathOverlayConfig;

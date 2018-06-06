@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using TinyIoC;
 using UnityEngine;
 
 namespace Gamepackage
 {
     public class DoTurn : IStateMachineState
     {
-        public ApplicationContext Context { get; set; }
         private List<Entity> EntityListCopy = new List<Entity>(0);
         private List<Entity> NotDoneList = new List<Entity>(0);
 
@@ -69,7 +67,7 @@ namespace Gamepackage
                         // so it may have been dequeued by this point.
                         if (action.Completed && action.IsAMovementAction)
                         {
-                            Context.FlowSystem.StateMachine.ChangeState(Context.DoTriggers);
+                            Context.FlowSystem.StateMachine.ChangeState(FlowStateMachine.DoTriggers);
                         }
                     }
                 }

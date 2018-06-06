@@ -14,7 +14,6 @@ namespace Gamepackage
             Off
         }
 
-        public ApplicationContext Context { get; set; }
 
         private bool _threadsRunning;
         private List<Thread> _threads = new List<Thread>();

@@ -2,16 +2,14 @@
 
 namespace Gamepackage
 {
-    public abstract class Component : IHasApplicationContext
+    public abstract class Component
     {
-        protected ApplicationContext Context;
-
         [JsonIgnore]
         public Entity Entity;
 
-        public virtual void InjectContext(ApplicationContext context)
+        public virtual void InjectContext(Entity entity)
         {
-            Context = context;
+            Entity = entity;
         }
     }
 }

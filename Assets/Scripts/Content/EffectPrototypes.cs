@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using TinyIoC;
-using UnityEngine;
 
 namespace Gamepackage
 {

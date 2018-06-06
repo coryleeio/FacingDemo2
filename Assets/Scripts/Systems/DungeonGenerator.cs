@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using TinyIoC;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
     public class DungeonGenerator
     {
-        public ApplicationContext Context { get; set; }
 
         public DungeonGenerator() {}
 

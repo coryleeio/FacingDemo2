@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIController : MonoBehaviour, IHasApplicationContext {
+public class UIController : MonoBehaviour {
 
-    public ApplicationContext Context { get; set; }
-
-    public void InjectContext(ApplicationContext context)
+    public void Init()
     {
-        Context = context;
         var childUIComponents = GetComponentsInChildren<UIComponent>(true);
-        foreach(var component in childUIComponents)
+        foreach (var component in childUIComponents)
         {
-            component.InjectContext(context);
             component.gameObject.SetActive(false);
         }
     }

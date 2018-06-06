@@ -24,10 +24,5 @@ namespace Gamepackage
         public Queue<Point> CurrentPath = new Queue<Point>(0);
 
         public Point MoveTargetPosition;
-
-        public override void InjectContext(ApplicationContext context)
-        {
-            base.InjectContext(context);
-        }
     }
 }

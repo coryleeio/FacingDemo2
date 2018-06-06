@@ -106,7 +106,7 @@ public class TryMoveToward : EntityAction
         base.Process();
         if (!waitingOnPath)
         {
-            Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, PathComplete);
+            Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
             waitingOnPath = true;
         }
     }
@@ -137,13 +137,13 @@ public class TryMoveToward : EntityAction
             if (PointsAroundTarget.Count > 0)
             {
                 TargetPoint = MathUtil.ChooseRandomElement<Point>(PointsAroundTarget);
-                Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, PathComplete);
+                Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
                 return;
             }
             else if(PointsAroundMe.Count > 0)
             {
                 TargetPoint = PointsAroundMe[0];
-                Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, PathComplete);
+                Context.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
                 return;
             }
             else

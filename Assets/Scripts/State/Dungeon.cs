@@ -1,23 +1,18 @@
-using System.Collections.Generic;
-using TinyIoC;
-
 namespace Gamepackage
 {
-    public class Dungeon : IHasApplicationContext
+    public class Dungeon
     {
         public Dungeon() {}
 
         public Level[] Levels;
 
-        private ApplicationContext Context;
-        public void InjectContext(ApplicationContext context)
+        public void InjectContext()
         {
-            Context = context;
             foreach(var level in Levels)
             {
                 if(level != null)
                 {
-                    level.InjectContext(context);
+                    level.InjectContext();
                 }
             }
         }

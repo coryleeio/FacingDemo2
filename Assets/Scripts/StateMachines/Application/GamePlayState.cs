@@ -5,7 +5,6 @@ namespace Gamepackage
 {
     public class GamePlayState : IStateMachineState
     {
-        public ApplicationContext Context { get; set; }
         private GameSceneCameraDriver CameraDriver;
 
         public void Enter()
@@ -28,8 +27,8 @@ namespace Gamepackage
             var UICanvas = GameObject.Instantiate(UICanvasPrefab);
             UICanvas.name = "UICanvas";
             var uiController = UICanvas.GetComponent<UIController>();
-            uiController.InjectContext(Context);
             Context.UIController = uiController;
+            Context.UIController.Init();
         }
 
         public void Process()

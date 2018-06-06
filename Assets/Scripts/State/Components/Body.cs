@@ -16,10 +16,5 @@ namespace Gamepackage
             CurrentHealth = other.CurrentHealth;
             MaxHealth = other.MaxHealth;
         }
-
-        public override void InjectContext(ApplicationContext context)
-        {
-            base.InjectContext(context);
-        }
     }
 }

@@ -41,7 +41,7 @@ namespace Gamepackage
             {
                 Context.GameStateManager.Game.CurrentLevelIndex = levelId;
                 Context.GameStateManager.Game.FurthestLevelReached = levelId;
-                Context.Application.StateMachine.ChangeState(Context.GamePlayState);
+                Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             }
         }
 

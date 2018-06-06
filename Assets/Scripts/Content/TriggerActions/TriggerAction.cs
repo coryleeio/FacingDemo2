@@ -31,5 +31,10 @@ namespace Gamepackage
             base.Reset();
             TargetIds.Clear();
         }
+
+        public void InjectContext(Entity entity)
+        {
+            Entity = entity;
+        }
     }
 }

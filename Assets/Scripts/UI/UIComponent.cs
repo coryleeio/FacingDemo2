@@ -1,11 +1,7 @@
 ﻿using Gamepackage;
 using UnityEngine;
 
-public class UIComponent : MonoBehaviour, IHasApplicationContext
+public class UIComponent : MonoBehaviour
 {
-    protected ApplicationContext Context { get; set; }
-    public void InjectContext(ApplicationContext context)
-    {
-        Context = context;
-    }
+
 }

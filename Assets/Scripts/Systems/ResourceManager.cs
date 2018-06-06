@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using TinyIoC;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -9,7 +7,6 @@ namespace Gamepackage
 {
     public class ResourceManager
     {
-        public ApplicationContext Context { get; set; }
         private Dictionary<UniqueIdentifier, IResource> _prototypesByUniqueIdentifier = new Dictionary<UniqueIdentifier, IResource>();
         private Dictionary<Type, List<IResource>> _prototypesByType = new Dictionary<Type, List<IResource>>();
         private bool hasInit = false;

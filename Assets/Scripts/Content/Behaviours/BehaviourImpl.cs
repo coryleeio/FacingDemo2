@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public abstract class BehaviourImpl : IHasApplicationContext
+    public abstract class BehaviourImpl
     {
         public void GetActionsForTurn()
         {
@@ -24,11 +24,10 @@ namespace Gamepackage
             }
         }
 
-        [JsonIgnore]
-        protected ApplicationContext Context;
-        public void InjectContext(ApplicationContext context)
+        public void InjectContext(Entity entity)
         {
-            Context = context;
+            Entity = entity;
         }
+
     }
 }

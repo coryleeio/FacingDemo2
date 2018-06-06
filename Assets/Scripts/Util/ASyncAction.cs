@@ -9,7 +9,7 @@ namespace Gamepackage
         public bool IsRunning = false;
 
         [JsonIgnore]
-        public Entity Entity;
+        public Entity Entity { get; set; }
 
         [JsonIgnore]
         public abstract bool IsEndable
@@ -52,13 +52,6 @@ namespace Gamepackage
 
         }
 
-        [JsonIgnore]
-        protected ApplicationContext Context;
-        public void InjectContext(ApplicationContext context)
-        {
-            Context = context;
-        }
-
         public virtual void Do()
         {
             if (!HasStarted)
@@ -75,6 +68,11 @@ namespace Gamepackage
             {
                 Exit();
             }
+        }
+
+        public void InjectContext(Entity entity)
+        {
+            Entity = entity;
         }
     }
 }

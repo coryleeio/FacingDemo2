@@ -19,18 +19,16 @@ namespace Gamepackage
             this.BehaviourImplUniqueIdentifier = other.BehaviourImplUniqueIdentifier;
         }
 
-        public override void InjectContext(ApplicationContext context)
+        public override void InjectContext(Entity entity)
         {
-            base.InjectContext(context);
+            base.InjectContext(entity);
             if(BehaviourImpl != null)
             {
-                BehaviourImpl.Entity = Entity;
-                BehaviourImpl.InjectContext(context);
+                BehaviourImpl.InjectContext(entity);
             }
             foreach (var action in ActionList)
             {
-                action.Entity = Entity;
-                action.InjectContext(Context);
+                action.InjectContext(entity);
             }
         }
     }

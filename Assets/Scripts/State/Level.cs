@@ -1,10 +1,8 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using TinyIoC;
-
 namespace Gamepackage
 {
-    public class Level : IHasApplicationContext
+    public class Level
     {
         public int LevelIndex;
         public Rectangle BoundingBox;
@@ -59,13 +57,11 @@ namespace Gamepackage
             }
         }
 
-        private ApplicationContext Context;
-        public void InjectContext(ApplicationContext context)
+        public void InjectContext()
         {
-            Context = context;
             foreach(var entity in Entitys)
             {
-                entity.InjectContext(context);
+                entity.InjectContext();
             }
         }
     }

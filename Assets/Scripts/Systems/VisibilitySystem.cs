@@ -17,8 +17,6 @@ namespace Gamepackage
     {
         public VisibilitySystem() {}
 
-        public ApplicationContext Context { get; set; }
-
         private Texture2D RevealMask;
         private LayerMask FogLayer;
         private const int _numberOfPixelsPerTile = 64;

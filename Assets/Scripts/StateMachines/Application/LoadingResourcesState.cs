@@ -5,8 +5,6 @@ namespace Gamepackage
 {
     public class LoadingResourcesState : IStateMachineState
     {
-        public ApplicationContext Context { get; set; }
-
         public void Enter()
         {
             Context.LoadingScene.Load();
@@ -21,7 +19,7 @@ namespace Gamepackage
                 Context.GameStateManager.NewGame();
                 Context.DungeonGenerator.GenerateDungeon();
             }
-            Context.Application.StateMachine.ChangeState(Context.GamePlayState);
+            Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             yield return new WaitForEndOfFrame();
         }
 

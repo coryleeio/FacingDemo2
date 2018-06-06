@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using TinyIoC;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Gamepackage
 {
     public class DoTriggers : IStateMachineState
     {
-        public ApplicationContext Context { get; set; }
-
         public void Enter()
         {
 
@@ -24,7 +20,7 @@ namespace Gamepackage
             else
             {
                 // done with triggers
-                Context.FlowSystem.StateMachine.ChangeState(Context.DoTurn);
+                Context.FlowSystem.StateMachine.ChangeState(FlowStateMachine.DoTurn);
             }
         }
 

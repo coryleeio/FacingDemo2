@@ -5,7 +5,6 @@ namespace Gamepackage
 {
     public class SpriteSortingSystem
     {
-        public ApplicationContext Context { get; set; }
         private SpriteRenderer[,] Tiles;
         private static List<Direction> HigherSortingPositions = new List<Direction>() { Direction.East, Direction.SouthEast, Direction.South, Direction.SouthWest };
         private static List<Direction> LowerSortingPositions = new List<Direction>() { Direction.West, Direction.NorthWest, Direction.North, Direction.NorthEast };

@@ -4,9 +4,6 @@ namespace Gamepackage
 {
     public class GameScene : Scene
     {
-        public Logger Logger { get; set; }
-        public PrototypeFactory PrototypeFactory { get; set; }
-        public GameStateManager GameStateManager { get; set; }
         public GameSceneCameraDriver CameraDriver { get; set; }
 
         public GameScene()
@@ -28,15 +25,15 @@ namespace Gamepackage
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
 
-            PrototypeFactory.BuildMapTiles(GameStateManager.Game.CurrentLevel);
-            foreach (var entity in GameStateManager.Game.CurrentLevel.Entitys)
+            Context.PrototypeFactory.BuildMapTiles(Context.GameStateManager.Game.CurrentLevel);
+            foreach (var entity in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
                 if(entity.View != null)
                 {
-                    entity.View.ViewGameObject = PrototypeFactory.BuildView(entity);
+                    entity.View.ViewGameObject = Context.PrototypeFactory.BuildView(entity);
                 }
             }
-            var player = GameStateManager.Game.CurrentLevel.Player;
+            var player = Context.GameStateManager.Game.CurrentLevel.Player;
             if(player.View != null && player.View.ViewGameObject != null)
             {
                 gameSceneCameraDriver.target = player.View.ViewGameObject;

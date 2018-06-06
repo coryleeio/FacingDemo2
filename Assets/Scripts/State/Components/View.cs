@@ -20,10 +20,5 @@ namespace Gamepackage
             ViewPrototypeUniqueIdentifier = other.ViewPrototypeUniqueIdentifier;
             IsVisible = other.IsVisible;
         }
-
-        public override void InjectContext(ApplicationContext context)
-        {
-            base.InjectContext(context);
-        }
     }
 }

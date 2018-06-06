@@ -5,7 +5,6 @@ namespace Gamepackage
 {
     public class MovementSystem
     {
-        public ApplicationContext Context { get; set; }
         private float TimeBetweenTiles = 0.5f;
 
         public void Process()

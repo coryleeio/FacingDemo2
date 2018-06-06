@@ -4,7 +4,6 @@ namespace Gamepackage
 {
     public class EntityManager
     {
-        public ApplicationContext Context { get; set; }
 
         public EntityManager() {}
 

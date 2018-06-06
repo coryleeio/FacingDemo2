@@ -7,7 +7,6 @@ namespace Gamepackage
 {
     public class CombatSystem
     {
-        public ApplicationContext Context { get; set; }
         private List<Entity> DyingEntitys = new List<Entity>(0);
         private Color DeathColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0f);
 

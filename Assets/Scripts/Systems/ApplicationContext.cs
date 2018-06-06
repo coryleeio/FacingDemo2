@@ -1,31 +1,24 @@
-﻿using TinyIoC;
-
-namespace Gamepackage
+﻿namespace Gamepackage
 {
-    public class ApplicationContext
+    public static class Context
     {
-        public Application Application { get; set; }
-        public GamePlayState GamePlayState { get; set; }
-        public MainMenuState MainMenuState { get; set; }
-        public LoadingResourcesState LoadingResourcesState { get; set; }
-        public GameStateManager GameStateManager { get; set; }
-        public VisibilitySystem VisibilitySystem { get; set; }
-        public ResourceManager ResourceManager { get; set; }
-        public PrototypeFactory PrototypeFactory { get; set; }
-        public EntityManager EntitySystem { get; set; }
-        public DungeonGenerator DungeonGenerator { get; set; }
-        public SpriteSortingSystem SpriteSortingSystem { get; set; }
-        public OverlaySystem OverlaySystem { get; set; }
-        public PathFinder PathFinder { get; set; }
-        public CombatSystem CombatSystem { get; set; }
-        public GameScene GameScene { get; set; }
-        public LoadingScene LoadingScene { get; set; }
-        public MainMenuScene MainMenuScene { get; set; }
-        public MovementSystem MovementSystem { get; set; }
-        public FlowSystem FlowSystem { get; set; }
-        public DoTurn DoTurn { get; set; }
-        public DoTriggers DoTriggers { get; set; }
-        public PlayerController PlayerController { get; set; }
-        public UIController UIController { get; set; }
+        public static GameStateManager GameStateManager = new GameStateManager();
+        public static VisibilitySystem VisibilitySystem = new VisibilitySystem();
+        public static ResourceManager ResourceManager = new ResourceManager();
+        public static PrototypeFactory PrototypeFactory = new PrototypeFactory();
+        public static EntityManager EntitySystem = new EntityManager();
+        public static DungeonGenerator DungeonGenerator = new DungeonGenerator();
+        public static SpriteSortingSystem SpriteSortingSystem = new SpriteSortingSystem();
+        public static OverlaySystem OverlaySystem = new OverlaySystem();
+        public static PathFinder PathFinder = new PathFinder();
+        public static CombatSystem CombatSystem = new CombatSystem();
+        public static GameScene GameScene = new GameScene();
+        public static LoadingScene LoadingScene = new LoadingScene();
+        public static MainMenuScene MainMenuScene = new MainMenuScene();
+        public static MovementSystem MovementSystem = new MovementSystem();
+        public static FlowSystem FlowSystem = new FlowSystem();
+        public static PlayerController PlayerController = new PlayerController();
+        public static Application Application; // mono
+        public static UIController UIController; // mono
     }
 }

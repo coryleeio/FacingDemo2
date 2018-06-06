@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using System.IO;
-using TinyIoC;
 using UnityEngine;
 
 namespace Gamepackage
@@ -8,7 +7,6 @@ namespace Gamepackage
     public class GameStateManager
     {
         public Game Game { get; private set; }
-        public ApplicationContext Context { get; set; }
 
         public GameStateManager() {}
 
@@ -47,7 +45,7 @@ namespace Gamepackage
             Debug.Log("Loading game");
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(UnityEngine.Application.persistentDataPath + "/dev.sav"), parameters);
-            Game.InjectContext(Context);
+            Game.InjectContext();
             foreach (var level in Game.Dungeon.Levels)
             {
                 if(level != null)

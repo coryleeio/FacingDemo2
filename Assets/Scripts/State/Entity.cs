@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Gamepackage
 {
     [Serializable]
-    public class Entity : IHasApplicationContext
+    public class Entity
     {
         public Entity() { }
 
@@ -54,34 +54,27 @@ namespace Gamepackage
             }
         }
 
-        private ApplicationContext Context;
-        public void InjectContext(ApplicationContext context)
+        public void InjectContext()
         {
-            Context = context;
             if(Trigger != null)
             {
-                Trigger.Entity = this;
-                Trigger.InjectContext(context);
+                Trigger.InjectContext(this);
             }
             if(Body != null)
             {
-                Body.Entity = this;
-                Body.InjectContext(context);
+                Body.InjectContext(this);
             }
             if(View != null)
             {
-                View.Entity = this;
-                View.InjectContext(context);
+                View.InjectContext(this);
             }
             if(Motor != null)
             {
-                Motor.Entity = this;
-                Motor.InjectContext(context);
+                Motor.InjectContext(this);
             }
             if(Behaviour != null)
             {
-                Behaviour.Entity = this;
-                Behaviour.InjectContext(context);
+                Behaviour.InjectContext(this);
             }
         }
 

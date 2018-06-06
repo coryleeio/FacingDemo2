@@ -4,8 +4,6 @@ namespace Gamepackage
 { 
     public class MainMenuState : IStateMachineState
     {
-        public ApplicationContext Context { get; set; }
-        
         public void Enter()
         {
             Context.GameStateManager.Clear();

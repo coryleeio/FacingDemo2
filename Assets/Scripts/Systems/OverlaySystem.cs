@@ -26,7 +26,6 @@ namespace Gamepackage
 
     public class OverlaySystem
     {
-        public ApplicationContext Context { get; set; }
 
         private Sprite _squareSprite;
         private Sprite _circleSprite;

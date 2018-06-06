@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using TinyIoC;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -8,7 +6,6 @@ namespace Gamepackage
 {
     public class PrototypeFactory
     {
-        public ApplicationContext Context { get; set; }
         private Material DefaultSpriteMaterial;
         private Sprite MissingSprite;
 
@@ -29,19 +26,24 @@ namespace Gamepackage
             var action = Activator.CreateInstance<TAction>();
             Assert.IsNotNull(action, string.Format("Failed to create {0}", typeof(TAction)));
             action.Entity = entity;
-            action.InjectContext(Context);
             return action;
         }
 
-        public TriggerAction BuildTriggerAction(UniqueIdentifier identifier)
+        public TriggerAction BuildTriggerAction(Entity entity, UniqueIdentifier identifier)
         {
+            TriggerAction ret = null;
             if(identifier == UniqueIdentifier.TRIGGER_POISON_DART)
             {
-                return new PoisonDart();
+                ret=  new PoisonDart();
             }
             else if(identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
             {
-                return new TraverseStaircase();
+                ret= new TraverseStaircase();
+            }
+            if(ret != null)
+            {
+                ret.InjectContext(entity);
+                return ret;
             }
             else
             {
@@ -68,7 +70,7 @@ namespace Gamepackage
                 entity.Trigger = new Trigger(prototype.Trigger);
                 if (entity.Trigger.TriggerAction == null)
                 {
-                    entity.Trigger.TriggerAction = BuildTriggerAction(entity.Trigger.TriggerActionPrototypeUniqueIdentifier);
+                    entity.Trigger.TriggerAction = BuildTriggerAction(entity, entity.Trigger.TriggerActionPrototypeUniqueIdentifier);
                 }
             }
 
@@ -87,24 +89,29 @@ namespace Gamepackage
                 entity.Behaviour = new Behaviour(prototype.TurnComponent);
                 if (entity.Behaviour.BehaviourImpl == null)
                 {
-                    entity.Behaviour.BehaviourImpl = BuildBehaviour(entity.Behaviour.BehaviourImplUniqueIdentifier);
+                    entity.Behaviour.BehaviourImpl = BuildBehaviour(entity, entity.Behaviour.BehaviourImplUniqueIdentifier);
                 }
             }
-
-            entity.InjectContext(Context);
+            entity.InjectContext();
             return entity;
         }
 
 
-        public BehaviourImpl BuildBehaviour(UniqueIdentifier behaviourUniqueIdentifier)
+        public BehaviourImpl BuildBehaviour(Entity entity, UniqueIdentifier behaviourUniqueIdentifier)
         {
+            BehaviourImpl ret = null;
             if(behaviourUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_BRUTE)
             {
-                return new Brute();
+                ret =  new Brute();
             }
             else if(behaviourUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_PLAYER)
             {
-                return new Player();
+                ret =  new Player();
+            }
+            if(ret != null)
+            {
+                ret.InjectContext(entity);
+                return ret;
             }
             else
             {
