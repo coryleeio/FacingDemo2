@@ -12,6 +12,7 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_PONCY,
+                    Name = "Poncy",
                     Body = new Body()
                     {
                         CurrentHealth = 10,
@@ -32,6 +33,7 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_GIANT_BEE,
+                    Name = "Giant Bee",
                     Body = new Body()
                     {
                         CurrentHealth = 1,
@@ -52,6 +54,7 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_QUEEN_BEE,
+                    Name = "Queen Bee",
                     Body = new Body()
                     {
                         CurrentHealth = 3,
@@ -72,6 +75,7 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_UP,
+                    Name = "Stairs (Up)",
                     BlocksPathing = false,
                     ViewComponent = new View()
                     {
@@ -86,6 +90,7 @@ namespace Gamepackage
                 new EntityPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_DOWN,
+                    Name = "Stairs (Down)",
                     BlocksPathing = false,
                     ViewComponent = new View()
                     {

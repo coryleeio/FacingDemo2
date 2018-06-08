@@ -97,8 +97,13 @@ namespace Gamepackage
                 throw new NotImplementedException("Cannot deal damage to non combatants");
             }
             target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
+            var sourceMessage = source.Name;
+            var targetMessage = target.Name;
+            ServiceLocator.UIController.TextLog.AddText(string.Format("{0} hit {1} for {2} points of damage!", sourceMessage, targetMessage, damage));
+
             if (target.Body.CurrentHealth <= 0)
             {
+                ServiceLocator.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetMessage));
                 target.Body.IsDead = true;
                 var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
                 if(!target.IsPlayer)

@@ -56,6 +56,7 @@ namespace Gamepackage
             var prototype = ServiceLocator.ResourceManager.GetPrototype<EntityPrototype>(identifier);
             var entity = new Entity
             {
+                Name = prototype.NameOptions.Next()[0],
                 Position = new Point(0, 0),
                 PrototypeIdentifier = identifier,
             };

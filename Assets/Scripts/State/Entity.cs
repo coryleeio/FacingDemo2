@@ -11,6 +11,8 @@ namespace Gamepackage
 
         public int Id { get; set; }
 
+        public string Name;
+
         public Point Position;
 
         public Body Body;

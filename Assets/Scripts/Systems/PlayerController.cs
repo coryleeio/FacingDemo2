@@ -69,7 +69,7 @@ namespace Gamepackage
 
             if (player.Body.IsDead)
             {
-                ServiceLocator.UIController.ShowDeathNotification();
+                ServiceLocator.UIController.DeathNotification.Show();
                 return;
             }
 
