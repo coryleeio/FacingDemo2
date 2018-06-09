@@ -1,10 +1,12 @@
 ﻿using Gamepackage;
 using UnityEngine;
 
-public class UIController : MonoBehaviour {
+public class UIController : MonoBehaviour
+{
 
     public DeathNotification DeathNotification;
     public TextLog TextLog;
+    public FloatingCombatTextManager FloatingCombatTextManager;
 
     public void Init()
     {
@@ -16,6 +18,8 @@ public class UIController : MonoBehaviour {
         }
         DeathNotification = GetComponentInChildren<DeathNotification>(true);
         TextLog = GetComponentInChildren<TextLog>(true);
+        FloatingCombatTextManager = GetComponentInChildren<FloatingCombatTextManager>(true);
+        FloatingCombatTextManager.Show();
         TextLog.ClearText();
         TextLog.Show();
     }

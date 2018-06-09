@@ -96,13 +96,20 @@ namespace Gamepackage
             {
                 throw new NotImplementedException("Cannot deal damage to non combatants");
             }
+            if(target.Body.CurrentHealth <= 0)
+            {
+                // if you keep hitting him he doesn't get dead-er..
+                return;
+            }
             target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
             var sourceMessage = source.Name;
             var targetMessage = target.Name;
+            ServiceLocator.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
             ServiceLocator.UIController.TextLog.AddText(string.Format("{0} hit {1} for {2} points of damage!", sourceMessage, targetMessage, damage));
 
             if (target.Body.CurrentHealth <= 0)
             {
+                ServiceLocator.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("Dead!", damage), Color.black, 35, MathUtil.MapToWorld(target.Position));
                 ServiceLocator.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetMessage));
                 target.Body.IsDead = true;
                 var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
