@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -13,7 +14,6 @@ namespace Gamepackage
         }
 
         public Dictionary<string, string> Parameters = new Dictionary<string, string>(0);
-
         public override void Enter()
         {
             base.Enter();
@@ -27,15 +27,24 @@ namespace Gamepackage
                 {
                     targetIncludesPlayer = true;
                 }
-                var newLevel = ServiceLocator.GameStateManager.Game.Dungeon.Levels[levelId];
-                var pos = new Point(posX, posY);
-                ServiceLocator.EntitySystem.Deregister(target, ServiceLocator.GameStateManager.Game.CurrentLevel);
-                target.Position = pos;
-                ServiceLocator.EntitySystem.Register(target, newLevel);
-                if(target.Behaviour != null)
+                var oldLevel = ServiceLocator.GameStateManager.Game.CurrentLevel;
+                if (target.Behaviour != null)
                 {
                     target.Behaviour.ActionList.Clear();
+                    if(target.EntityPrototype.BlocksPathing)
+                    {
+                        oldLevel.TilesetGrid[target.Position].Walkable = true;
+                    }
                 }
+                if(target.View.ViewGameObject != null)
+                {
+                    GameObject.Destroy(target.View.ViewGameObject);
+                }
+                var newLevel = ServiceLocator.GameStateManager.Game.Dungeon.Levels[levelId];
+                var pos = new Point(posX, posY);
+                ServiceLocator.EntitySystem.Deregister(target, oldLevel);
+                target.Position = pos;
+                ServiceLocator.EntitySystem.Register(target, newLevel);
             }
             if(targetIncludesPlayer)
             {
