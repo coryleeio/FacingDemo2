@@ -4,27 +4,13 @@ using System.Collections.Generic;
 
 public class TryMoveToward : EntityAction
 {
-    public int TargetId = -1;
-    public Point TargetPoint;
+    public Point InternalTargetPoint;
     public List<Point> PointsAroundTarget = new List<Point>();
     public List<Point> PointsAroundMe = new List<Point>();
     private bool waitingOnPath = false;
     public Path Path;
 
-    [JsonIgnore]
-    private Entity _target;
-    [JsonIgnore]
-    public Entity Target
-    {
-        get
-        {
-            if (_target == null)
-            {
-                _target = ServiceLocator.EntitySystem.GetEntityById(TargetId);
-            }
-            return _target;
-        }
-    }
+    public Point TargetPoint;
 
     public override int TimeCost
     {
@@ -38,7 +24,7 @@ public class TryMoveToward : EntityAction
     {
         get
         {
-            return Path != null || Target == null;
+            return Path != null;
         }
     }
 
@@ -54,17 +40,17 @@ public class TryMoveToward : EntityAction
     {
         get
         {
-            return TargetId != -1;
+            return TargetPoint != null;
         }
     }
 
     public override void Enter()
     {
-        if (Target != null)
+        if (TargetPoint != null)
         {
             var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
-            PointsAroundTarget = MathUtil.OrthogonalPoints(Target.Position).FindAll((p) => { return level.TilesetGrid[p].Walkable; });
-            PointsAroundMe = MathUtil.OrthogonalPoints(Entity.Position).FindAll((p) => { return level.TilesetGrid[p].Walkable && Point.DistanceSquared(p, Target.Position) < Point.DistanceSquared(Entity.Position, Target.Position); });
+            PointsAroundTarget = MathUtil.OrthogonalPoints(TargetPoint).FindAll((p) => { return level.TilesetGrid[p].Walkable; });
+            PointsAroundMe = MathUtil.OrthogonalPoints(Entity.Position).FindAll((p) => { return level.TilesetGrid[p].Walkable && Point.DistanceSquared(p, TargetPoint) < Point.DistanceSquared(Entity.Position, TargetPoint); });
 
             PointsAroundMe.Sort(new PointDistanceComparer()
             {
@@ -80,15 +66,15 @@ public class TryMoveToward : EntityAction
     {
         if (PointsAroundTarget.Count > 0)
         {
-            TargetPoint = MathUtil.ChooseRandomElement<Point>(PointsAroundTarget);
+            InternalTargetPoint = MathUtil.ChooseRandomElement<Point>(PointsAroundTarget);
         }
         else if (PointsAroundMe.Count > 0)
         {
-            TargetPoint = PointsAroundMe[0];
+            InternalTargetPoint = PointsAroundMe[0];
         }
         else
         {
-            TargetPoint = Target.Position;
+            InternalTargetPoint = TargetPoint;
         }
     }
 
@@ -106,7 +92,7 @@ public class TryMoveToward : EntityAction
         base.Process();
         if (!waitingOnPath)
         {
-            ServiceLocator.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
+            ServiceLocator.PathFinder.StartPath(Entity.Position, InternalTargetPoint, Grid, this.PathComplete);
             waitingOnPath = true;
         }
     }
@@ -124,26 +110,26 @@ public class TryMoveToward : EntityAction
         }
         if (path.Nodes.Count == 0)
         {
-            if (PointsAroundTarget.Contains(TargetPoint))
+            if (PointsAroundTarget.Contains(InternalTargetPoint))
             {
-                PointsAroundTarget.Remove(TargetPoint);
+                PointsAroundTarget.Remove(InternalTargetPoint);
             }
 
-            if(PointsAroundMe.Contains(TargetPoint))
+            if(PointsAroundMe.Contains(InternalTargetPoint))
             {
-                PointsAroundMe.Remove(TargetPoint);
+                PointsAroundMe.Remove(InternalTargetPoint);
             }
 
             if (PointsAroundTarget.Count > 0)
             {
-                TargetPoint = MathUtil.ChooseRandomElement<Point>(PointsAroundTarget);
-                ServiceLocator.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
+                InternalTargetPoint = MathUtil.ChooseRandomElement<Point>(PointsAroundTarget);
+                ServiceLocator.PathFinder.StartPath(Entity.Position, InternalTargetPoint, Grid, this.PathComplete);
                 return;
             }
             else if(PointsAroundMe.Count > 0)
             {
-                TargetPoint = PointsAroundMe[0];
-                ServiceLocator.PathFinder.StartPath(Entity.Position, TargetPoint, Grid, this.PathComplete);
+                InternalTargetPoint = PointsAroundMe[0];
+                ServiceLocator.PathFinder.StartPath(Entity.Position, InternalTargetPoint, Grid, this.PathComplete);
                 return;
             }
             else

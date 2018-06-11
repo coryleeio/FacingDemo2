@@ -55,10 +55,10 @@ namespace Gamepackage
             );
         }
 
-        public void TryToMoveToward(Entity entity, Entity player)
+        public void TryToMoveToward(Entity entity, Point Position)
         {
             var moveToward = ServiceLocator.PrototypeFactory.BuildEntityAction<TryMoveToward>(entity);
-            moveToward.TargetId = player.Id;
+            moveToward.TargetPoint = new Point(Position.X, Position.Y);
             entity.Behaviour.ActionList.AddLast(moveToward);
         }
 
