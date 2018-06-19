@@ -76,17 +76,39 @@ Abilities have their source and target list set by the action that caused them t
 to the flow controller queue if their condition is met, this allows them to go in the same step, the next step, etc.
 
 Trigger conditions:
-Will need some kind of event bus, because some of these require information on the incoming attack?
-On attack
-On hit by melee attack
-On hit by spell
-On received damage
-On will receive damage
+Will need some kind of event bus, because some of these require some context... possibly always just the ability that caused them? But an event would likely be easiest.
+
+On attack(When i am about to hit someone else)
+On hit by melee(On mutate function called, if cause is a melee attack)
+On hit by spell(On mutate function called, if cause is a spell)
+On received damage(fired after damage is received, to burn enemy, or something for example)
+On will receive damage(fired before the damage part of an attack, so that damage can be lowered/ removed in certain circumstances( a DR stat should deal with this in most normal cases, but if something protects vs orcs only for example, it would go here.))
 On equipped(this event will need equipped/unequipped bool)
 
 
 
+Dye sizes/ attacks / attack parameters:
 
+Attack parameters is
+dye number
+dye size
+interpolation string
+
+Items have a list of attack parameters, if that list is 0 you cant attack with it.
+Body has a list of attack parameters, if that list is 0 you cant attack without a weapon.
+If you attack, the attack action looks at your equipped weapon, and if not, falls back to your Body
+it gets its dye number and size from one of your attack parameters.
+
+
+
+
+
+
+YOU NEED TO FIGURE OUT HOW FLOOR TRIGGERS FIT INTO THIS, AS YOUR STAIRCASES REQUIRE A CONTEXTUAL INPUT PRESENTLY.
+
+opt1: stairs are their own thing
+opt2: stairs somehow use this new triggering system, which adds parameters to this new system.
+opt3: 
 
 
 
