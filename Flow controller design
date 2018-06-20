@@ -76,14 +76,15 @@ Abilities have their source and target list set by the action that caused them t
 to the flow controller queue if their condition is met, this allows them to go in the same step, the next step, etc.
 
 Trigger conditions:
-Will need some kind of event bus, because some of these require some context... possibly always just the ability that caused them? But an event would likely be easiest.
+Can use delegates to fire the events.  You need individual events, because some of these require some context... possibly always just the ability that caused them? But an event would likely be easiest.
+The abilities need to register for events, and deregister themselves when they go out of scope, only stuff on the current level should be registered to receive delegations
 
 On attack(When i am about to hit someone else)
 On hit by melee(On mutate function called, if cause is a melee attack)
 On hit by spell(On mutate function called, if cause is a spell)
 On received damage(fired after damage is received, to burn enemy, or something for example)
 On will receive damage(fired before the damage part of an attack, so that damage can be lowered/ removed in certain circumstances( a DR stat should deal with this in most normal cases, but if something protects vs orcs only for example, it would go here.))
-On equipped(this event will need equipped/unequipped bool)
+On equipped(this event will need equipped/unequipped bool, it will cause any worn effects to be added/removed)
 
 
 
