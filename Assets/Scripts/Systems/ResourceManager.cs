@@ -20,12 +20,7 @@ namespace Gamepackage
                 _prototypesByUniqueIdentifier.Clear();
                 CacheResources(Tilesets.LoadAll());
                 CacheResources<EncounterPrototype>(EncounterPrototypes.LoadAll());
-                CacheResources<ItemTable>(ItemTables.LoadAll());
-                CacheResources<ItemPrototype>(ItemPrototypes.LoadAll());
-                CacheResources<LevelPrototype>(LevelPrototypes.LoadAll());
-                CacheResources<RoomPrototype>(RoomPrototypes.LoadAll());
                 CacheResources<EntityPrototype>(EntityPrototypes.LoadAll());
-                CacheResources<EffectPrototype>(EffectPrototypes.LoadAll());
             }
             hasInit = true;
         }

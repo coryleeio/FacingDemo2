@@ -32,7 +32,7 @@ namespace Gamepackage
         {
             get
             {
-                return Behaviour != null && Behaviour.BehaviourImpl != null && Behaviour.BehaviourImpl.IsPlayer;
+                return Behaviour != null && Behaviour.IsPlayer;
             }
         }
 
@@ -41,7 +41,7 @@ namespace Gamepackage
         {
             get
             {
-                return Behaviour != null && Behaviour.BehaviourImpl != null && !Behaviour.BehaviourImpl.IsPlayer;
+                return Behaviour != null && !Behaviour.IsPlayer;
             }
         }
 

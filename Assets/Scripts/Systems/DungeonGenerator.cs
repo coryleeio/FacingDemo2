@@ -11,45 +11,17 @@ namespace Gamepackage
 
         public void GenerateDungeon()
         {
-            var levelPrototypes = ServiceLocator.ResourceManager.GetPrototypes<LevelPrototype>();
-            var roomPrototypes = ServiceLocator.ResourceManager.GetPrototypes<RoomPrototype>();
-            var roomPrototypesByLevel = new Dictionary<int, List<RoomPrototype>>();
+            var numberOfLevels = 2;
             var spawnTables = ServiceLocator.ResourceManager.GetPrototypes<EncounterPrototype>();
-            var spawnTablesByLevel = new Dictionary<int, List<EncounterPrototype>>();
-            int numberOfLevelsInArray = levelPrototypes.Count + 1;
 
-            for (var i = 1; i < numberOfLevelsInArray; i++)
-            {
-                foreach (var roomPrototype in roomPrototypes)
-                {
-                    if (roomPrototype.AvailableOnLevels.Contains(i))
-                    {
-                        if (!roomPrototypesByLevel.ContainsKey(i))
-                        {
-                            roomPrototypesByLevel[i] = new List<RoomPrototype>();
-                        }
-                        roomPrototypesByLevel[i].Add(roomPrototype);
-                    }
-                }
-                foreach (var spawnTable in spawnTables)
-                {
-                    if (spawnTable.AvailableOnLevels.Contains(i))
-                    {
-                        if (!spawnTablesByLevel.ContainsKey(i))
-                        {
-                            spawnTablesByLevel[i] = new List<EncounterPrototype>();
-                        }
-                        spawnTablesByLevel[i].Add(spawnTable);
-                    }
-                }
-            }
+            int numberOfLevelsInArray = numberOfLevels + 1;
 
             ServiceLocator.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
             var levels = ServiceLocator.GameStateManager.Game.Dungeon.Levels;
-            foreach (var levelPrototype in levelPrototypes)
+            for (int levelNumber = 1; levelNumber <= numberOfLevels; levelNumber++)
             {
                 var level = new Level();
-                level.LevelIndex = levelPrototype.LevelIndex;
+                level.LevelIndex = levelNumber;
                 int size = 40;
                 level.BoundingBox = new Rectangle
                 {
@@ -58,50 +30,26 @@ namespace Gamepackage
                     Height = size
                 };
                 level.Entitys = new List<Entity>();
-                levels[levelPrototype.LevelIndex] = level;
+                levels[levelNumber] = level;
                 level.TilesetGrid = new Grid<Tile>(size, size);
                 level.TilesetGrid.Each((x, y, v) =>
                 {
                     level.TilesetGrid[x, y] = new Tile()
                     {
-                        TilesetIdentifier = levelPrototype.DefaultTilesetUniqueIdentifier,
+                        TilesetIdentifier = UniqueIdentifier.TILESET_STONE,
                         TileType = TileType.Empty,
                     };
                 });
                 level.EntityGrid = new ListGrid<Entity>(size, size);
 
-                var numberOfRoomsToSpawn = levelPrototype.NumberOfRooms;
-                var roomPrototypesOnLevel = roomPrototypesByLevel[level.LevelIndex];
-                var roomPrototypesToSpawn = new List<RoomPrototype>();
-
-                roomPrototypesToSpawn.AddRange(roomPrototypesOnLevel.FindAll((x) => x.Mandatory));
-                numberOfRoomsToSpawn = numberOfRoomsToSpawn - roomPrototypesToSpawn.Count;
-                roomPrototypesToSpawn.ForEach((roomPrototypeBeingSpawned) =>
-                {
-                    // If it is unique, dont allow us to choose it for spawning.
-                    if (roomPrototypeBeingSpawned.Unique)
-                    {
-                        roomPrototypesOnLevel.Remove(roomPrototypeBeingSpawned);
-                    }
-                });
-
-                // If we have stuff we can spawn, and we need some more stuff to spawn
-                if (numberOfRoomsToSpawn > 0 && roomPrototypesOnLevel.Count > 0)
-                {
-                    for (var i = 0; i < numberOfRoomsToSpawn; i++)
-                    {
-                        roomPrototypesToSpawn.Add(MathUtil.ChooseRandomElement<RoomPrototype>(roomPrototypesOnLevel));
-                    }
-
-                }
+                var numberOfRoomsToSpawn = 3;
 
                 var roomConnections = new List<KeyValuePair<Room, Room>>();
-                foreach (var roomPrototypeToSpawn in roomPrototypesToSpawn)
+                for(var roomNumber = 0; roomNumber < numberOfRoomsToSpawn; roomNumber ++)
                 {
                     Room previousRoom;
-                    Rectangle rect = FindNextRoomRect(level, roomPrototypeToSpawn, out previousRoom);
-                    var newRoom = roomPrototypeToSpawn.RoomGenerator.Generate(level, rect);
-                    newRoom.Tags.AddRange(roomPrototypeToSpawn.Tags);
+                    Rectangle rect = FindNextRoomRect(level, out previousRoom);
+                    var newRoom = Generate(level, rect);
                     level.Rooms.Add(newRoom);
                     if (previousRoom != null)
                     {
@@ -116,45 +64,15 @@ namespace Gamepackage
                 }
 
                 var numberOfSpawnTablesToSpawn = 7;
-                var spawnTablesOnLevel = spawnTablesByLevel[level.LevelIndex];
-                var spawnTablesToSpawn = new List<EncounterPrototype>();
 
-                spawnTablesToSpawn.AddRange(spawnTablesOnLevel.FindAll((x) => x.Mandatory));
-                numberOfSpawnTablesToSpawn = numberOfSpawnTablesToSpawn - spawnTablesToSpawn.Count;
-                spawnTablesToSpawn.ForEach((spawnTableBeingSpawned) =>
+                for(var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber ++)
                 {
-                    // If it is unique, dont allow us to choose it for spawning.
-                    if (spawnTableBeingSpawned.Unique)
-                    {
-                        spawnTablesOnLevel.Remove(spawnTableBeingSpawned);
-                    }
-                });
-
-                // If we have stuff we can spawn, and we need some more stuff to spawn
-                if (numberOfSpawnTablesToSpawn > 0 && spawnTablesOnLevel.Count > 0)
-                {
-                    for (var i = 0; i < numberOfSpawnTablesToSpawn; i++)
-                    {
-                        spawnTablesToSpawn.Add(MathUtil.ChooseRandomElement<EncounterPrototype>(spawnTablesOnLevel));
-                    }
-                }
-
-                foreach (var spawnTableToSpawn in spawnTablesToSpawn)
-                {
+                    var spawnTableToSpawn = ServiceLocator.ResourceManager.GetPrototype<EncounterPrototype>(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
                     List<UniqueIdentifier> thingsToSpawn = spawnTableToSpawn.ProbabilityTable.Next();
 
                     Point floodFillStartPoint;
-                    if (spawnTableToSpawn.ConstraintSpawnToRoomWithTag != null)
-                    {
-                        var roomForSpawn = level.Rooms.Find((room) => room.Tags.Contains(spawnTableToSpawn.ConstraintSpawnToRoomWithTag));
-                        var floorTilesInRoom = FloorTilesInRect(level, roomForSpawn.BoundingBox);
-                        floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
-                    }
-                    else
-                    {
-                        var floorTilesInRoom = FloorTilesInRect(level, level.BoundingBox);
-                        floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
-                    }
+                    var floorTilesInRoom = FloorTilesInRect(level, level.BoundingBox);
+                    floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
 
                     var pointsInDomain = MathUtil.PointsInRect(level.BoundingBox);
                     for (int i = 2; i < 8; i = i + 2)
@@ -320,6 +238,33 @@ namespace Gamepackage
             return path;
         }
 
+        private static Room Generate(Level level, Rectangle rectangle)
+        {
+            for (var x = rectangle.Position.X; x < rectangle.Position.X + rectangle.Width; x++)
+            {
+                for (var y = rectangle.Position.Y; y < rectangle.Position.Y + rectangle.Height; y++)
+                {
+                    if (x == rectangle.Position.X || y == rectangle.Position.Y || x == rectangle.Position.X + rectangle.Width - 1 || y == rectangle.Position.Y + rectangle.Height - 1)
+                    {
+                        level.TilesetGrid[x, y].TileType = TileType.Wall;
+                    }
+                    else
+                    {
+                        level.TilesetGrid[x, y].TileType = TileType.Floor;
+                    }
+                }
+            }
+            return new Room()
+            {
+                BoundingBox = new Rectangle()
+                {
+                    Height = rectangle.Height,
+                    Width = rectangle.Width,
+                    Position = new Point(rectangle.Position.X, rectangle.Position.Y)
+                }
+            };
+        }
+
         private static List<Point> FloorTilesInRect(Level level, Rectangle rect)
         {
             var walkableTiles = new List<Point>();
@@ -336,10 +281,10 @@ namespace Gamepackage
             return walkableTiles;
         }
 
-        private static Rectangle FindNextRoomRect(Level level, RoomPrototype roomPrototypeToSpawn, out Room previousRoom)
+        private static Rectangle FindNextRoomRect(Level level, out Room previousRoom)
         {
-            var width = UnityEngine.Random.Range(roomPrototypeToSpawn.RoomGenerator.MinimumWidth, roomPrototypeToSpawn.RoomGenerator.MaximumWidth);
-            var height = UnityEngine.Random.Range(roomPrototypeToSpawn.RoomGenerator.MinimumHeight, roomPrototypeToSpawn.RoomGenerator.MaximumHeight);
+            var width = UnityEngine.Random.Range(5, 9);
+            var height = UnityEngine.Random.Range(5, 9);
 
             if (level.Rooms.Count == 0)
             {

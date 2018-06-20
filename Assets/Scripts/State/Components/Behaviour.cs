@@ -8,7 +8,7 @@ namespace Gamepackage
         public int TimeAccrued = 0;
         public LinkedList<EntityAction> ActionList = new LinkedList<EntityAction>();
         public UniqueIdentifier BehaviourImplUniqueIdentifier;
-        public BehaviourImpl BehaviourImpl;
+        public Point LastKnownPlayerPosition;
 
         public Behaviour() {}
 
@@ -22,13 +22,17 @@ namespace Gamepackage
         public override void Rereference(Entity entity)
         {
             base.Rereference(entity);
-            if(BehaviourImpl != null)
-            {
-                BehaviourImpl.Rereference(entity);
-            }
             foreach (var action in ActionList)
             {
                 action.Rereference(entity);
+            }
+        }
+
+        public bool IsPlayer
+        {
+            get
+            {
+                return BehaviourImplUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_PLAYER;
             }
         }
     }

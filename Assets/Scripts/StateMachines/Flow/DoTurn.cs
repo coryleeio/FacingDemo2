@@ -57,7 +57,8 @@ namespace Gamepackage
                     }
                     if (entity.IsNPC && entity.Behaviour.ActionList.Count == 0 && !entity.Behaviour.IsDoneThisTurn)
                     {
-                        entity.Behaviour.BehaviourImpl.GetActionsForTurn();
+                        ServiceLocator.AIController.GetActionsForTurn(entity);
+                        ServiceLocator.CombatSystem.EndTurn(entity);
                     }
                     if(entity.Behaviour.ActionList.Count > 0 && (!entity.Behaviour.IsDoneThisTurn || entity.Behaviour.ActionList.First.Value.IsImmediate))
                     {

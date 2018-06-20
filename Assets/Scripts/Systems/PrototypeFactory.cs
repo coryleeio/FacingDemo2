@@ -88,36 +88,9 @@ namespace Gamepackage
             if (prototype.TurnComponent != null)
             {
                 entity.Behaviour = new Behaviour(prototype.TurnComponent);
-                if (entity.Behaviour.BehaviourImpl == null)
-                {
-                    entity.Behaviour.BehaviourImpl = BuildBehaviour(entity, entity.Behaviour.BehaviourImplUniqueIdentifier);
-                }
             }
             entity.Rereference();
             return entity;
-        }
-
-
-        public BehaviourImpl BuildBehaviour(Entity entity, UniqueIdentifier behaviourUniqueIdentifier)
-        {
-            BehaviourImpl ret = null;
-            if(behaviourUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_BRUTE)
-            {
-                ret =  new Brute();
-            }
-            else if(behaviourUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_PLAYER)
-            {
-                ret =  new Player();
-            }
-            if(ret != null)
-            {
-                ret.Rereference(entity);
-                return ret;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
         }
 
         public GameObject BuildView(Entity entity)

@@ -11,10 +11,6 @@ namespace Gamepackage
                 new EncounterPrototype()
                 {
                     UniqueIdentifier = UniqueIdentifier.ENCOUNTER_BEE_SWARM,
-                    AvailableOnLevels = new List<int>(){1,2,3},
-                    ConstraintSpawnToRoomWithTag = null,
-                    Mandatory = false,
-                    Unique = false,
                     ProbabilityTable = new ProbabilityTable<UniqueIdentifier>()
                     {
                        Resolution = TableResolutionStrategy.AnyOf,
