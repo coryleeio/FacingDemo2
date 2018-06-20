@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Gamepackage
@@ -51,6 +52,17 @@ namespace Gamepackage
                 level.Entitys.Remove(entity);
             }
             level.UnindexEntity(entity, entity.Position);
+        }
+
+        public void Init()
+        {
+            EntityMap.Clear();
+            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
+            level.EntityGrid = new ListGrid<Entity>(level.TilesetGrid.Width, level.TilesetGrid.Height);
+            foreach (var entity in level.Entitys)
+            {
+                ServiceLocator.EntitySystem.Register(entity, level);
+            }
         }
     }
 }

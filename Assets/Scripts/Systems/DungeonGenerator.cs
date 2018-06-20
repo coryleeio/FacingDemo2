@@ -93,7 +93,7 @@ namespace Gamepackage
                                 spawnPoints.Remove(spawnPoint);
                                 var thingSpawned = ServiceLocator.PrototypeFactory.BuildEntity(thingToSpawn);
                                 thingSpawned.Position = spawnPoint;
-                                ServiceLocator.EntitySystem.Register(thingSpawned, level);
+                                level.Entitys.Add(thingSpawned);
                             }
                             break;
                         }
@@ -141,7 +141,7 @@ namespace Gamepackage
             var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
             var thing = ServiceLocator.PrototypeFactory.BuildEntity(identifier);
             thing.Position = spawnPoint;
-            ServiceLocator.EntitySystem.Register(thing, level);
+            level.Entitys.Add(thing);
             return thing;
         }
 

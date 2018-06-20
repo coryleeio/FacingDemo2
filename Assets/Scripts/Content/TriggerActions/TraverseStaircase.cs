@@ -44,7 +44,6 @@ namespace Gamepackage
                 var pos = new Point(posX, posY);
                 ServiceLocator.EntitySystem.Deregister(target, oldLevel);
                 target.Position = pos;
-                ServiceLocator.EntitySystem.Register(target, newLevel);
             }
             if(targetIncludesPlayer)
             {

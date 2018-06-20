@@ -9,6 +9,7 @@ namespace Gamepackage
 
         public void Enter()
         {
+            ServiceLocator.EntitySystem.Init();
             ServiceLocator.SpriteSortingSystem.Init();
             ServiceLocator.GameScene.Load();
             ServiceLocator.VisibilitySystem.Init();

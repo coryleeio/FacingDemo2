@@ -46,17 +46,6 @@ namespace Gamepackage
             var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
             Game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(UnityEngine.Application.persistentDataPath + "/dev.sav"), parameters);
             Game.Rereference();
-            foreach (var level in Game.Dungeon.Levels)
-            {
-                if(level != null)
-                {
-                    level.EntityGrid = new ListGrid<Entity>(level.TilesetGrid.Width, level.TilesetGrid.Height);
-                    foreach (var entity in level.Entitys)
-                    {
-                        ServiceLocator.EntitySystem.Register(entity, level);
-                    }
-                }
-            }
         }
     }
 }
