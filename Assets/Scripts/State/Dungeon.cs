@@ -10,10 +10,7 @@ namespace Gamepackage
         {
             foreach(var level in Levels)
             {
-                if(level != null)
-                {
-                    level.Rereference();
-                }
+                level.Rereference();
             }
         }
     }

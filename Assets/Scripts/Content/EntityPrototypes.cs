@@ -10,7 +10,7 @@ namespace Gamepackage
             var entity = new Entity();
             entity.PrototypeIdentifier = uniqueIdentifier;
 
-            if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_PONCY)
+            if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_PONCY)
             {
                 entity.Name = "Poncy";
                 entity.Body = new Body()
@@ -30,7 +30,7 @@ namespace Gamepackage
                     BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_PLAYER,
                 };
             }
-            else if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_GIANT_BEE)
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
             {
                 entity.Name = "Giant Bee";
                 entity.Body = new Body()
@@ -50,7 +50,7 @@ namespace Gamepackage
                     BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
                 };
             }
-            else if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_QUEEN_BEE)
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
             {
                 entity.Name = "Queen Bee";
                 entity.Body = new Body()
@@ -70,7 +70,7 @@ namespace Gamepackage
                     BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
                 };
             }
-            else if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_STAIRS_UP)
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_UP)
             {
                 entity.Name = "Stairs (Up)";
                 entity.BlocksPathing = false;
@@ -84,7 +84,7 @@ namespace Gamepackage
                     TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
                 };
             }
-            else if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_STAIRS_DOWN)
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN)
             {
                 entity.Name = "Stairs (Down)";
                 entity.BlocksPathing = false;

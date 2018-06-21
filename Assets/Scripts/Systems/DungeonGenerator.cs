@@ -12,11 +12,10 @@ namespace Gamepackage
         public void GenerateDungeon()
         {
             var numberOfLevels = 2;
-            int numberOfLevelsInArray = numberOfLevels + 1;
 
-            ServiceLocator.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
+            ServiceLocator.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevels];
             var levels = ServiceLocator.GameStateManager.Game.Dungeon.Levels;
-            for (int levelNumber = 1; levelNumber <= numberOfLevels; levelNumber++)
+            for (int levelNumber = 0; levelNumber < numberOfLevels; levelNumber++)
             {
                 var level = new Level();
                 level.LevelIndex = levelNumber;
@@ -96,11 +95,11 @@ namespace Gamepackage
                 }
                 if (level.LevelIndex == 1)
                 {
-                    SpawnOnLevel(UniqueIdentifier.TOKEN_PONCY, level);
+                    SpawnOnLevel(UniqueIdentifier.ENTITY_PONCY, level);
                 }
             }
 
-            ConnectLevelsByStairway(levels[1], levels[2]);
+            ConnectLevelsByStairway(levels[0], levels[1]);
 
             var game = ServiceLocator.GameStateManager.Game;
             BuildPathfindingGrid(game);
@@ -112,8 +111,8 @@ namespace Gamepackage
             var lowerLevel = level1.LevelIndex < level2.LevelIndex ? level1 : level2;
             var higherLevel = lowerLevel == level1 ? level2 : level1;
 
-            var downStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_DOWN, ServiceLocator.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
-            var upStair = SpawnOnLevel(UniqueIdentifier.TOKEN_STAIRS_UP, ServiceLocator.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
+            var downStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_DOWN, ServiceLocator.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
+            var upStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_UP, ServiceLocator.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
 
             var downStairTraverseAction = downStair.Trigger.TriggerAction as TraverseStaircase;
             downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
@@ -145,15 +144,12 @@ namespace Gamepackage
             var levels = game.Dungeon.Levels;
             foreach (var level in levels)
             {
-                if (level != null)
+                level.TilesetGrid.Each((x, y, v) =>
                 {
-                    level.TilesetGrid.Each((x, y, v) =>
-                    {
-                        var occupied = level.EntityGrid[x, y].FindAll((entity) => { return entity.BlocksPathing; }).Count > 0;
-                        v.Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied;
-                        v.Weight = 1;
-                    });
-                }
+                    var occupied = level.EntityGrid[x, y].FindAll((entity) => { return entity.BlocksPathing; }).Count > 0;
+                    v.Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied;
+                    v.Weight = 1;
+                });
             }
         }
 
