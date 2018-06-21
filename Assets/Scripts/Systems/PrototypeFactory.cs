@@ -33,11 +33,7 @@ namespace Gamepackage
         public TriggerAction BuildTriggerAction(Entity entity, UniqueIdentifier identifier)
         {
             TriggerAction ret = null;
-            if(identifier == UniqueIdentifier.TRIGGER_POISON_DART)
-            {
-                ret=  new PoisonDart();
-            }
-            else if(identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
+            if(identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
             {
                 ret= new TraverseStaircase();
             }
