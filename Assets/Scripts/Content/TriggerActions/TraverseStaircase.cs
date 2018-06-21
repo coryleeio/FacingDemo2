@@ -31,7 +31,7 @@ namespace Gamepackage
                 if (target.Behaviour != null)
                 {
                     target.Behaviour.ActionList.Clear();
-                    if(target.EntityPrototype.BlocksPathing)
+                    if(target.BlocksPathing)
                     {
                         oldLevel.TilesetGrid[target.Position].Walkable = true;
                     }
@@ -42,8 +42,9 @@ namespace Gamepackage
                 }
                 var newLevel = ServiceLocator.GameStateManager.Game.Dungeon.Levels[levelId];
                 var pos = new Point(posX, posY);
-                ServiceLocator.EntitySystem.Deregister(target, oldLevel);
+                oldLevel.Entitys.Remove(target);
                 target.Position = pos;
+                newLevel.Entitys.Add(target);
             }
             if(targetIncludesPlayer)
             {

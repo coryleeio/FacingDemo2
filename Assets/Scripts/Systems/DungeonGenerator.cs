@@ -12,8 +12,6 @@ namespace Gamepackage
         public void GenerateDungeon()
         {
             var numberOfLevels = 2;
-            var spawnTables = ServiceLocator.ResourceManager.GetPrototypes<EncounterPrototype>();
-
             int numberOfLevelsInArray = numberOfLevels + 1;
 
             ServiceLocator.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevelsInArray];
@@ -67,9 +65,7 @@ namespace Gamepackage
 
                 for(var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber ++)
                 {
-                    var spawnTableToSpawn = ServiceLocator.ResourceManager.GetPrototype<EncounterPrototype>(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
-                    List<UniqueIdentifier> thingsToSpawn = spawnTableToSpawn.ProbabilityTable.Next();
-
+                    var thingsSpawned = ServiceLocator.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
                     Point floodFillStartPoint;
                     var floorTilesInRoom = FloorTilesInRect(level, level.BoundingBox);
                     floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
@@ -85,13 +81,12 @@ namespace Gamepackage
                             spawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
                         }
 
-                        if (spawnPoints.Count >= thingsToSpawn.Count)
+                        if (spawnPoints.Count >= thingsSpawned.Count)
                         {
-                            foreach (var thingToSpawn in thingsToSpawn)
+                            foreach (var thingSpawned in thingsSpawned)
                             {
                                 var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
                                 spawnPoints.Remove(spawnPoint);
-                                var thingSpawned = ServiceLocator.PrototypeFactory.BuildEntity(thingToSpawn);
                                 thingSpawned.Position = spawnPoint;
                                 level.Entitys.Add(thingSpawned);
                             }
@@ -154,7 +149,7 @@ namespace Gamepackage
                 {
                     level.TilesetGrid.Each((x, y, v) =>
                     {
-                        var occupied = level.EntityGrid[x, y].FindAll((entity) => { return entity.EntityPrototype.BlocksPathing; }).Count > 0;
+                        var occupied = level.EntityGrid[x, y].FindAll((entity) => { return entity.BlocksPathing; }).Count > 0;
                         v.Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied;
                         v.Weight = 1;
                     });

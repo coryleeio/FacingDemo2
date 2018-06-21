@@ -27,6 +27,8 @@ namespace Gamepackage
 
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 
+        public bool BlocksPathing = false;
+
         [JsonIgnore]
         public bool IsPlayer
         {
@@ -75,22 +77,6 @@ namespace Gamepackage
             if(Behaviour != null)
             {
                 Behaviour.Rereference(this);
-            }
-        }
-
-        [JsonIgnore]
-        private EntityPrototype _entityPrototype;
-
-        [JsonIgnore]
-        public EntityPrototype EntityPrototype
-        {
-            get
-            {
-                if (_entityPrototype == null)
-                {
-                    _entityPrototype = ServiceLocator.ResourceManager.GetPrototype<EntityPrototype>(PrototypeIdentifier);
-                }
-                return _entityPrototype;
             }
         }
     }

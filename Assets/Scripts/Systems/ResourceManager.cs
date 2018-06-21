@@ -19,8 +19,6 @@ namespace Gamepackage
             {
                 _prototypesByUniqueIdentifier.Clear();
                 CacheResources(Tilesets.LoadAll());
-                CacheResources<EncounterPrototype>(EncounterPrototypes.LoadAll());
-                CacheResources<EntityPrototype>(EntityPrototypes.LoadAll());
             }
             hasInit = true;
         }

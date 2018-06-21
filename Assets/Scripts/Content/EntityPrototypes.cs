@@ -3,106 +3,106 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public static class EntityPrototypes 
+    public static class EntityPrototypes
     {
-        public static List<EntityPrototype> LoadAll()
+        public static Entity Build(UniqueIdentifier uniqueIdentifier)
         {
-            return new List<EntityPrototype>()
+            var entity = new Entity();
+            entity.PrototypeIdentifier = uniqueIdentifier;
+
+            if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_PONCY)
             {
-                new EntityPrototype()
+                entity.Name = "Poncy";
+                entity.Body = new Body()
                 {
-                    UniqueIdentifier = UniqueIdentifier.TOKEN_PONCY,
-                    Name = "Poncy",
-                    Body = new Body()
-                    {
-                        CurrentHealth = 10,
-                        MaxHealth = 10,
-                    },
-                    Motor = new Motor(),
-                    BlocksPathing = true,
-                    ViewComponent = new View()
-                    {
-                        ViewType = ViewType.StaticSprite,
-                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
-                    },
-                    TurnComponent = new Behaviour()
-                    {
-                        BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_PLAYER,
-                    }
-                },
-                new EntityPrototype()
+                    CurrentHealth = 10,
+                    MaxHealth = 10,
+                };
+                entity.Motor = new Motor();
+                entity.BlocksPathing = true;
+                entity.View = new View()
                 {
-                    UniqueIdentifier = UniqueIdentifier.TOKEN_GIANT_BEE,
-                    Name = "Giant Bee",
-                    Body = new Body()
-                    {
-                        CurrentHealth = 1,
-                        MaxHealth = 1,
-                    },
-                    Motor = new Motor(),
-                    BlocksPathing = true,
-                    ViewComponent = new View()
-                    {
-                        ViewType = ViewType.StaticSprite,
-                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
-                    },
-                    TurnComponent = new Behaviour()
-                    {
-                        BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
-                    }
-                },
-                new EntityPrototype()
+                    ViewType = ViewType.StaticSprite,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
+                };
+                entity.Behaviour = new Behaviour()
                 {
-                    UniqueIdentifier = UniqueIdentifier.TOKEN_QUEEN_BEE,
-                    Name = "Queen Bee",
-                    Body = new Body()
-                    {
-                        CurrentHealth = 3,
-                        MaxHealth = 3,
-                    },
-                    Motor = new Motor(),
-                    BlocksPathing = true,
-                    ViewComponent = new View()
-                    {
-                        ViewType = ViewType.StaticSprite,
-                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
-                    },
-                    TurnComponent = new Behaviour()
-                    {
-                        BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
-                    }
-                },
-                new EntityPrototype()
+                    BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_PLAYER,
+                };
+            }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_GIANT_BEE)
+            {
+                entity.Name = "Giant Bee";
+                entity.Body = new Body()
                 {
-                    UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_UP,
-                    Name = "Stairs (Up)",
-                    BlocksPathing = false,
-                    ViewComponent = new View()
-                    {
-                        ViewType = ViewType.StaticSprite,
-                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
-                    },
-                    Trigger = new Trigger()
-                    {
-                        TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
-                    },
-                },
-                new EntityPrototype()
+                    CurrentHealth = 1,
+                    MaxHealth = 1,
+                };
+                entity.Motor = new Motor();
+                entity.BlocksPathing = true;
+                entity.View = new View()
                 {
-                    UniqueIdentifier = UniqueIdentifier.TOKEN_STAIRS_DOWN,
-                    Name = "Stairs (Down)",
-                    BlocksPathing = false,
-                    ViewComponent = new View()
-                    {
-                        ViewType = ViewType.StaticSprite,
-                        ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
-                    },
-                    Trigger = new Trigger()
-                    {
-                        TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
-                    },
-                },
-            };
+                    ViewType = ViewType.StaticSprite,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
+                };
+                entity.Behaviour = new Behaviour()
+                {
+                    BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
+                };
+            }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_QUEEN_BEE)
+            {
+                entity.Name = "Queen Bee";
+                entity.Body = new Body()
+                {
+                    CurrentHealth = 3,
+                    MaxHealth = 3,
+                };
+                entity.Motor = new Motor();
+                entity.BlocksPathing = true;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.StaticSprite,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
+                };
+                entity.Behaviour = new Behaviour()
+                {
+                    BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
+                };
+            }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_STAIRS_UP)
+            {
+                entity.Name = "Stairs (Up)";
+                entity.BlocksPathing = false;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.StaticSprite,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
+                };
+                entity.Trigger = new Trigger()
+                {
+                    TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
+                };
+            }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.TOKEN_STAIRS_DOWN)
+            {
+                entity.Name = "Stairs (Down)";
+                entity.BlocksPathing = false;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.StaticSprite,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
+                };
+                entity.Trigger = new Trigger()
+                {
+                    TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
+                };
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            return entity;
         }
     }
 }

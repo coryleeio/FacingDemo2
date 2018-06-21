@@ -118,7 +118,7 @@ namespace Gamepackage
                     ServiceLocator.EntitySystem.Deregister(target, level);
                 }
 
-                if (target.EntityPrototype.BlocksPathing)
+                if (target.BlocksPathing)
                 {
                     ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid[target.Position].Walkable = true;
                 }

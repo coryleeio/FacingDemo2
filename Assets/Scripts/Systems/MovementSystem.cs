@@ -65,7 +65,7 @@ namespace Gamepackage
         private static void EntityArriveAtPosition(Level level, Entity entity)
         {
             // when we arrive give up the lock on our current position
-            if (entity.EntityPrototype.BlocksPathing)
+            if (entity.BlocksPathing)
             {
                 level.TilesetGrid[entity.Position].Walkable = true;
             }
@@ -79,7 +79,7 @@ namespace Gamepackage
             var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
             // Reserve the new position as soon as I start walking so nobody else uses it
             // Later when we arrive we will release the lock on our OLD position.
-            if (entity.EntityPrototype.BlocksPathing)
+            if (entity.BlocksPathing)
             {
                 level.TilesetGrid[newPosition].Walkable = false;
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -53,52 +54,30 @@ namespace Gamepackage
 
         public Entity BuildEntity(UniqueIdentifier identifier)
         {
-            var prototype = ServiceLocator.ResourceManager.GetPrototype<EntityPrototype>(identifier);
-            var entity = new Entity
-            {
-                Name = prototype.NameOptions.Next()[0],
-                Position = new Point(0, 0),
-                PrototypeIdentifier = identifier,
-            };
+            var entity = EntityPrototypes.Build(identifier);
+            entity.Position = new Point(0, 0);
 
-            if(prototype.Body != null)
+            if(entity.Trigger != null)
             {
-                entity.Body = new Body(prototype.Body);
-            }
-
-            if(prototype.Trigger != null)
-            {
-                entity.Trigger = new Trigger(prototype.Trigger);
                 if (entity.Trigger.TriggerAction == null)
                 {
                     entity.Trigger.TriggerAction = BuildTriggerAction(entity, entity.Trigger.TriggerActionPrototypeUniqueIdentifier);
                 }
             }
-
-            if(prototype.Motor != null)
-            {
-                entity.Motor = new Motor(prototype.Motor);
-            }
-
-            if(prototype.ViewComponent != null)
-            {
-                entity.View = new View(prototype.ViewComponent);
-            }
-
-            if (prototype.TurnComponent != null)
-            {
-                entity.Behaviour = new Behaviour(prototype.TurnComponent);
-            }
             entity.Rereference();
             return entity;
         }
 
+        public List<Entity> BuildEncounter(UniqueIdentifier identifier)
+        {
+             return EncounterPrototypes.Build(identifier);
+        }
+
         public GameObject BuildView(Entity entity)
         {
-            var entityPrototype = ServiceLocator.ResourceManager.GetPrototype<EntityPrototype>(entity.PrototypeIdentifier);
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var go = new GameObject();
-            go.name = entityPrototype.UniqueIdentifier.ToString();
+            go.name = entity.PrototypeIdentifier.ToString();
             go.transform.position = MathUtil.MapToWorld(entity.Position);
 
             if(entity.IsCombatant)
@@ -110,25 +89,25 @@ namespace Gamepackage
                 healthbarGameObject.GetComponent<HealthBar>().Entity = entity;
             }
 
-            if(entityPrototype.ViewComponent.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
+            if(entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("RedMarker");
                 spriteRenderer.material = defaultMaterial;
             }
-            else if (entityPrototype.ViewComponent.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_GREEN)
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_GREEN)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("GreenMarker");
                 spriteRenderer.material = defaultMaterial;
             }
-            else if (entityPrototype.ViewComponent.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_YELLOW)
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_YELLOW)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("YellowMarker");
                 spriteRenderer.material = defaultMaterial;
             }
-            else if (entityPrototype.ViewComponent.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_BLUE)
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_BLUE)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("BlueMarker");
