@@ -15,12 +15,12 @@ namespace Gamepackage
             TriggerActionPrototypeUniqueIdentifier = other.TriggerActionPrototypeUniqueIdentifier;
         }
 
-        public override void Rereference(Entity entity)
+        public override void Rewire(Entity entity)
         {
-            base.Rereference(entity);
+            base.Rewire(entity);
             if(TriggerAction != null)
             {
-                TriggerAction.Rereference(entity);
+                TriggerAction.Rewire(entity);
             }
             else
             {

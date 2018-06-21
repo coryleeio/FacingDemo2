@@ -39,7 +39,7 @@ namespace Gamepackage
             }
             if(ret != null)
             {
-                ret.Rereference(entity);
+                ret.Rewire(entity);
                 return ret;
             }
             else
@@ -60,7 +60,7 @@ namespace Gamepackage
                     entity.Trigger.TriggerAction = BuildTriggerAction(entity, entity.Trigger.TriggerActionPrototypeUniqueIdentifier);
                 }
             }
-            entity.Rereference();
+            entity.Rewire();
             return entity;
         }
 

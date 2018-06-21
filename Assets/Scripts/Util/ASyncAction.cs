@@ -70,7 +70,7 @@ namespace Gamepackage
             }
         }
 
-        public void Rereference(Entity entity)
+        public void Rewire(Entity entity)
         {
             Entity = entity;
         }

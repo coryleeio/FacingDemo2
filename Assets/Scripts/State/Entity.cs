@@ -56,27 +56,27 @@ namespace Gamepackage
             }
         }
 
-        public void Rereference()
+        public void Rewire()
         {
             if(Trigger != null)
             {
-                Trigger.Rereference(this);
+                Trigger.Rewire(this);
             }
             if(Body != null)
             {
-                Body.Rereference(this);
+                Body.Rewire(this);
             }
             if(View != null)
             {
-                View.Rereference(this);
+                View.Rewire(this);
             }
             if(Motor != null)
             {
-                Motor.Rereference(this);
+                Motor.Rewire(this);
             }
             if(Behaviour != null)
             {
-                Behaviour.Rereference(this);
+                Behaviour.Rewire(this);
             }
         }
     }

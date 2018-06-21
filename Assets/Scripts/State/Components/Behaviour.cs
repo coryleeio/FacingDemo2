@@ -19,12 +19,12 @@ namespace Gamepackage
             this.BehaviourImplUniqueIdentifier = other.BehaviourImplUniqueIdentifier;
         }
 
-        public override void Rereference(Entity entity)
+        public override void Rewire(Entity entity)
         {
-            base.Rereference(entity);
+            base.Rewire(entity);
             foreach (var action in ActionList)
             {
-                action.Rereference(entity);
+                action.Rewire(entity);
             }
         }
 

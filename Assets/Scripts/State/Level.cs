@@ -53,11 +53,11 @@ namespace Gamepackage
             }
         }
 
-        public void Rereference()
+        public void Rewire()
         {
             foreach(var entity in Entitys)
             {
-                entity.Rereference();
+                entity.Rewire();
             }
         }
     }

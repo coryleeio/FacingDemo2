@@ -39,7 +39,7 @@ namespace Gamepackage
             }
         }
 
-        public void Rereference()
+        public void Rewire()
         {
             Dungeon.Rereferece();
         }

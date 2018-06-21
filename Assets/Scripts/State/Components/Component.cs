@@ -7,7 +7,7 @@ namespace Gamepackage
         [JsonIgnore]
         public Entity Entity;
 
-        public virtual void Rereference(Entity entity)
+        public virtual void Rewire(Entity entity)
         {
             Entity = entity;
         }
