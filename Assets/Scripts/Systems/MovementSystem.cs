@@ -67,7 +67,7 @@ namespace Gamepackage
             // when we arrive give up the lock on our current position
             if (entity.BlocksPathing)
             {
-                level.TilesetGrid[entity.Position].Walkable = true;
+                level.Grid[entity.Position].Walkable = true;
             }
             level.UnindexEntity(entity, entity.Position);
             entity.Position = entity.Motor.MoveTargetPosition;
@@ -81,7 +81,7 @@ namespace Gamepackage
             // Later when we arrive we will release the lock on our OLD position.
             if (entity.BlocksPathing)
             {
-                level.TilesetGrid[newPosition].Walkable = false;
+                level.Grid[newPosition].Walkable = false;
             }
             if(entity.Motor == null)
             {

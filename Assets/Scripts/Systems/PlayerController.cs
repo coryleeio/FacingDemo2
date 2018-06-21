@@ -58,7 +58,7 @@ namespace Gamepackage
             var player = level.Player;
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
             var isValidPoint = level.BoundingBox.Contains(mousePos);
-            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.EntityGrid[mousePos].Count > 0 && level.EntityGrid[mousePos][0].IsCombatant;
+            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.Grid[mousePos].EntitiesInPosition.Count > 0 && level.Grid[mousePos].EntitiesInPosition[0].IsCombatant;
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
 
@@ -88,7 +88,7 @@ namespace Gamepackage
             {
                 if (isHoveringOnEnemyCombatant && !isAbleToHitHoveringEnemyCombatant)
                 {
-                    var surroundingPositions = MathUtil.OrthogonalPoints(mousePos).FindAll((p) => { return level.TilesetGrid[p].Walkable; });
+                    var surroundingPositions = MathUtil.OrthogonalPoints(mousePos).FindAll((p) => { return level.Grid[p].Walkable; });
 
                     if (surroundingPositions.Count > 0)
                     {
@@ -97,7 +97,7 @@ namespace Gamepackage
                             return Point.Distance(player.Position, p1).CompareTo(Point.Distance(player.Position, p2));
                         });
                         waitingForPath = true;
-                        ServiceLocator.PathFinder.StartPath(player.Position, surroundingPositions[0], level.TilesetGrid, (path) =>
+                        ServiceLocator.PathFinder.StartPath(player.Position, surroundingPositions[0], level.Grid, (path) =>
                         {
                             CurrentPath = path;
                             waitingForPath = false;
@@ -107,7 +107,7 @@ namespace Gamepackage
                 else
                 {
                     waitingForPath = true;
-                    ServiceLocator.PathFinder.StartPath(player.Position, mousePos, level.TilesetGrid, (path) =>
+                    ServiceLocator.PathFinder.StartPath(player.Position, mousePos, level.Grid, (path) =>
                     {
                         CurrentPath = path;
                         waitingForPath = false;
@@ -135,7 +135,7 @@ namespace Gamepackage
         private void QueueAttack(Level level, Entity player, Point mousePos)
         {
             var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(player);
-            attack.TargetId = level.EntityGrid[mousePos][0].Id;
+            attack.TargetId = level.Grid[mousePos].EntitiesInPosition[0].Id;
             player.Behaviour.ActionList.AddLast(attack);
             var endTurn = ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(player);
             player.Behaviour.ActionList.AddLast(endTurn);

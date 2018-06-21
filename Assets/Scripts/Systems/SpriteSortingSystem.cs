@@ -65,7 +65,7 @@ namespace Gamepackage
                         }
                     }
                     sortOrder++;
-                    if (level.EntityGrid != null)
+                    if (level.Grid != null)
                     {
                         foreach (var entity in NotMovingEntitys[x, y])
                         {

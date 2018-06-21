@@ -33,7 +33,7 @@ namespace Gamepackage
                     target.Behaviour.ActionList.Clear();
                     if(target.BlocksPathing)
                     {
-                        oldLevel.TilesetGrid[target.Position].Walkable = true;
+                        oldLevel.Grid[target.Position].Walkable = true;
                     }
                 }
                 if(target.View.ViewGameObject != null)

@@ -122,7 +122,7 @@ namespace Gamepackage
                         continue;
                     }
                     // This duplication of the contains check is necessary 
-                    if (config.WalkableTilesOnly && ServiceLocator.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point) && ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid[point.X, point.Y].TileType != TileType.Floor)
+                    if (config.WalkableTilesOnly && ServiceLocator.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(point) && ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[point.X, point.Y].TileType != TileType.Floor)
                     {
                         continue;
                     }

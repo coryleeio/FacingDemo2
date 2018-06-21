@@ -13,7 +13,7 @@ namespace Gamepackage
             ServiceLocator.SpriteSortingSystem.Init();
             ServiceLocator.GameScene.Load();
             ServiceLocator.VisibilitySystem.Init();
-            ServiceLocator.OverlaySystem.Init(ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid.Width, ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid.Height);
+            ServiceLocator.OverlaySystem.Init(ServiceLocator.GameStateManager.Game.CurrentLevel.Grid.Width, ServiceLocator.GameStateManager.Game.CurrentLevel.Grid.Height);
             ServiceLocator.PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
             ServiceLocator.FlowSystem.Init();
             ServiceLocator.PlayerController.Init();

@@ -46,7 +46,7 @@ namespace Gamepackage
         {
             get
             {
-                return ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid[TargetLocation].Walkable && TargetLocation.IsAdjacentTo(Entity.Position);
+                return ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[TargetLocation].Walkable && TargetLocation.IsAdjacentTo(Entity.Position);
             }
         }
     }

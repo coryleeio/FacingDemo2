@@ -124,7 +124,7 @@ namespace Gamepackage
                 for (var y = 0; y < level.BoundingBox.Height; y++)
                 {
                     var point = new Point(x, y);
-                    var tileInfo = level.TilesetGrid[x, y];
+                    var tileInfo = level.Grid[x, y];
                     var tileSet = ServiceLocator.ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
 
                     if (tileInfo.TileType == TileType.Floor)
@@ -278,7 +278,7 @@ namespace Gamepackage
             {
                 return TileType.Empty;
             }
-            return level.TilesetGrid[offsetPoint.X, offsetPoint.Y].TileType;
+            return level.Grid[offsetPoint.X, offsetPoint.Y].TileType;
         }
 
         private SpriteRenderer BuildTileSpriteRenderer(GameObject folder, Sprite sprite, Point position)

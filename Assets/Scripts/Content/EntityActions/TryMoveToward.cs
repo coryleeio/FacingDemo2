@@ -49,8 +49,8 @@ public class TryMoveToward : EntityAction
         if (TargetPoint != null)
         {
             var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
-            PointsAroundTarget = MathUtil.OrthogonalPoints(TargetPoint).FindAll((p) => { return level.TilesetGrid[p].Walkable; });
-            PointsAroundMe = MathUtil.OrthogonalPoints(Entity.Position).FindAll((p) => { return level.TilesetGrid[p].Walkable && Point.DistanceSquared(p, TargetPoint) < Point.DistanceSquared(Entity.Position, TargetPoint); });
+            PointsAroundTarget = MathUtil.OrthogonalPoints(TargetPoint).FindAll((p) => { return level.Grid[p].Walkable; });
+            PointsAroundMe = MathUtil.OrthogonalPoints(Entity.Position).FindAll((p) => { return level.Grid[p].Walkable && Point.DistanceSquared(p, TargetPoint) < Point.DistanceSquared(Entity.Position, TargetPoint); });
 
             PointsAroundMe.Sort(new PointDistanceComparer()
             {
@@ -83,7 +83,7 @@ public class TryMoveToward : EntityAction
     {
         get
         {
-            return ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid;
+            return ServiceLocator.GameStateManager.Game.CurrentLevel.Grid;
         }
     }
 

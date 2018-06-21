@@ -28,16 +28,15 @@ namespace Gamepackage
                 };
                 level.Entitys = new List<Entity>();
                 levels[levelNumber] = level;
-                level.TilesetGrid = new Grid<Tile>(size, size);
-                level.TilesetGrid.Each((x, y, v) =>
+                level.Grid = new Grid<Tile>(size, size);
+                level.Grid.Each((x, y, v) =>
                 {
-                    level.TilesetGrid[x, y] = new Tile()
+                    level.Grid[x, y] = new Tile()
                     {
                         TilesetIdentifier = UniqueIdentifier.TILESET_STONE,
                         TileType = TileType.Empty,
                     };
                 });
-                level.EntityGrid = new ListGrid<Entity>(size, size);
 
                 var numberOfRoomsToSpawn = 3;
 
@@ -73,7 +72,7 @@ namespace Gamepackage
                     for (int i = 2; i < 8; i = i + 2)
                     {
                         List<Point> spawnPoints = new List<Point>();
-                        MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq) => { return level.TilesetGrid[piq.X, piq.Y].TileType == TileType.Floor; });
+                        MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq) => { return level.Grid[piq.X, piq.Y].TileType == TileType.Floor; });
 
                         foreach (var alreadyExistingEntity in level.Entitys)
                         {
@@ -144,10 +143,10 @@ namespace Gamepackage
             var levels = game.Dungeon.Levels;
             foreach (var level in levels)
             {
-                level.TilesetGrid.Each((x, y, v) =>
+                level.Grid.Each((x, y, v) =>
                 {
-                    var occupied = level.EntityGrid[x, y].FindAll((entity) => { return entity.BlocksPathing; }).Count > 0;
-                    v.Walkable = level.TilesetGrid[x, y].TileType == TileType.Floor && !occupied;
+                    var occupied = level.Grid[x, y].EntitiesInPosition.FindAll((entity) => { return entity.BlocksPathing; }).Count > 0;
+                    v.Walkable = level.Grid[x, y].TileType == TileType.Floor && !occupied;
                     v.Weight = 1;
                 });
             }
@@ -186,12 +185,12 @@ namespace Gamepackage
 
         private void Carve(Level level, Point centerPoint)
         {
-            level.TilesetGrid[centerPoint.X, centerPoint.Y].TileType = TileType.Floor;
+            level.Grid[centerPoint.X, centerPoint.Y].TileType = TileType.Floor;
             foreach (var point in MathUtil.SurroundingPoints(centerPoint))
             {
-                if (level.TilesetGrid[point.X, point.Y].TileType == TileType.Empty)
+                if (level.Grid[point.X, point.Y].TileType == TileType.Empty)
                 {
-                    level.TilesetGrid[point.X, point.Y].TileType = TileType.Wall;
+                    level.Grid[point.X, point.Y].TileType = TileType.Wall;
                 }
             }
         }
@@ -237,11 +236,11 @@ namespace Gamepackage
                 {
                     if (x == rectangle.Position.X || y == rectangle.Position.Y || x == rectangle.Position.X + rectangle.Width - 1 || y == rectangle.Position.Y + rectangle.Height - 1)
                     {
-                        level.TilesetGrid[x, y].TileType = TileType.Wall;
+                        level.Grid[x, y].TileType = TileType.Wall;
                     }
                     else
                     {
-                        level.TilesetGrid[x, y].TileType = TileType.Floor;
+                        level.Grid[x, y].TileType = TileType.Floor;
                     }
                 }
             }
@@ -263,7 +262,7 @@ namespace Gamepackage
             {
                 for (var y = rect.Position.Y; y < rect.Position.Y + rect.Height; y++)
                 {
-                    if (level.TilesetGrid[x, y].TileType == TileType.Floor)
+                    if (level.Grid[x, y].TileType == TileType.Floor)
                     {
                         walkableTiles.Add(new Point(x, y));
                     }

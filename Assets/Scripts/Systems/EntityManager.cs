@@ -58,7 +58,6 @@ namespace Gamepackage
         {
             EntityMap.Clear();
             var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
-            level.EntityGrid = new ListGrid<Entity>(level.TilesetGrid.Width, level.TilesetGrid.Height);
             foreach (var entity in level.Entitys)
             {
                 ServiceLocator.EntitySystem.Register(entity, level);

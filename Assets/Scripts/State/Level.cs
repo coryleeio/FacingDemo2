@@ -8,11 +8,7 @@ namespace Gamepackage
         public Rectangle BoundingBox;
         public List<Entity> Entitys;
         public List<Room> Rooms = new List<Room>(0);
-        public Grid<MapVisibilityState> VisibilityGrid;
-        public Grid<Tile> TilesetGrid;
-
-        [JsonIgnore]
-        public ListGrid<Entity> EntityGrid;
+        public Grid<Tile> Grid;
 
         [JsonIgnore]
         private Entity _player;
@@ -37,23 +33,23 @@ namespace Gamepackage
 
         public Tile GetTileInfo(Point p)
         {
-            return TilesetGrid[p.X, p.Y];
+            return Grid[p.X, p.Y];
         }
 
 
         public void UnindexEntity(Entity entity, Point oldPosition)
         {
-            if(EntityGrid[oldPosition.X, oldPosition.Y].Contains(entity))
+            if(Grid[oldPosition.X, oldPosition.Y].EntitiesInPosition.Contains(entity))
             {
-                EntityGrid[oldPosition.X, oldPosition.Y].Remove(entity);
+                Grid[oldPosition.X, oldPosition.Y].EntitiesInPosition.Remove(entity);
             }
         }
 
         public void IndexEntity(Entity entity, Point newPosition)
         {
-            if (!EntityGrid[newPosition.X, newPosition.Y].Contains(entity))
+            if (!Grid[newPosition.X, newPosition.Y].EntitiesInPosition.Contains(entity))
             {
-                EntityGrid[newPosition.X, newPosition.Y].Add(entity);
+                Grid[newPosition.X, newPosition.Y].EntitiesInPosition.Add(entity);
             }
         }
 

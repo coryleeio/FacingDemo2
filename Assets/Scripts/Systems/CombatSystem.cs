@@ -120,7 +120,7 @@ namespace Gamepackage
 
                 if (target.BlocksPathing)
                 {
-                    ServiceLocator.GameStateManager.Game.CurrentLevel.TilesetGrid[target.Position].Walkable = true;
+                    ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
                 }
                 DyingEntitys.Add(target);
             }
