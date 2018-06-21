@@ -13,12 +13,5 @@ namespace Gamepackage
         public GameObject ViewGameObject;
 
         public View() {}
-
-        public View(View other)
-        {
-            ViewType = other.ViewType;
-            ViewPrototypeUniqueIdentifier = other.ViewPrototypeUniqueIdentifier;
-            IsVisible = other.IsVisible;
-        }
     }
 }

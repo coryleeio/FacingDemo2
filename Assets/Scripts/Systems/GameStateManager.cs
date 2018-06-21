@@ -15,8 +15,8 @@ namespace Gamepackage
             Debug.Log("New Game");
             Game = new Game
             {
-                FurthestLevelReached = 1,
-                CurrentLevelIndex = 1,
+                FurthestLevelReached = 0,
+                CurrentLevelIndex = 0,
                 MonstersKilled = 0,
                 CurrentTurn = 0,
                 IsPlayerTurn = true,

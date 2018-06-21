@@ -10,11 +10,5 @@ namespace Gamepackage
         public float ElapsedTimeDead = 0.0f;
 
         public Body() {}
-
-        public Body(Body other)
-        {
-            CurrentHealth = other.CurrentHealth;
-            MaxHealth = other.MaxHealth;
-        }
     }
 }

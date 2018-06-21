@@ -10,11 +10,6 @@ namespace Gamepackage
 
         public Trigger() {}
 
-        public Trigger(Trigger other)
-        {
-            TriggerActionPrototypeUniqueIdentifier = other.TriggerActionPrototypeUniqueIdentifier;
-        }
-
         public override void Rewire(Entity entity)
         {
             base.Rewire(entity);

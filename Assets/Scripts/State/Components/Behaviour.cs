@@ -12,13 +12,6 @@ namespace Gamepackage
 
         public Behaviour() {}
 
-        public Behaviour(Behaviour other)
-        {
-            this.IsDoneThisTurn = other.IsDoneThisTurn;
-            this.TimeAccrued = other.TimeAccrued;
-            this.BehaviourImplUniqueIdentifier = other.BehaviourImplUniqueIdentifier;
-        }
-
         public override void Rewire(Entity entity)
         {
             base.Rewire(entity);

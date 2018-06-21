@@ -7,7 +7,7 @@ namespace Gamepackage
     public class DungeonGenerator
     {
 
-        public DungeonGenerator() {}
+        public DungeonGenerator() { }
 
         public void GenerateDungeon()
         {
@@ -15,10 +15,10 @@ namespace Gamepackage
 
             ServiceLocator.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevels];
             var levels = ServiceLocator.GameStateManager.Game.Dungeon.Levels;
-            for (int levelNumber = 0; levelNumber < numberOfLevels; levelNumber++)
+            for (int levelIndex = 0; levelIndex < numberOfLevels; levelIndex++)
             {
                 var level = new Level();
-                level.LevelIndex = levelNumber;
+                level.LevelIndex = levelIndex;
                 int size = 40;
                 level.BoundingBox = new Rectangle
                 {
@@ -27,7 +27,7 @@ namespace Gamepackage
                     Height = size
                 };
                 level.Entitys = new List<Entity>();
-                levels[levelNumber] = level;
+                levels[levelIndex] = level;
                 level.Grid = new Grid<Tile>(size, size);
                 level.Grid.Each((x, y, v) =>
                 {
@@ -38,70 +38,88 @@ namespace Gamepackage
                     };
                 });
 
-                var numberOfRoomsToSpawn = 3;
-
-                var roomConnections = new List<KeyValuePair<Room, Room>>();
-                for(var roomNumber = 0; roomNumber < numberOfRoomsToSpawn; roomNumber ++)
+                if (levelIndex == 0)
                 {
-                    Room previousRoom;
-                    Rectangle rect = FindNextRoomRect(level, out previousRoom);
-                    var newRoom = Generate(level, rect);
-                    level.Rooms.Add(newRoom);
-                    if (previousRoom != null)
+                    SpawnConnectedStandardRoomsOnLevel(level, 2);
+                    var numberOfSpawnTablesToSpawn = 2;
+                    for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        roomConnections.Add(new KeyValuePair<Room, Room>(previousRoom, newRoom));
+                        var entitiesInEncounter = ServiceLocator.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
+                        PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
-
-                // Do this after creating rooms so that the walls dont cause pathing issues
-                foreach (var pair in roomConnections)
+                else if (levelIndex == 1)
                 {
-                    ConnectTwoRooms(level, pair.Key, pair.Value);
-                }
-
-                var numberOfSpawnTablesToSpawn = 7;
-
-                for(var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber ++)
-                {
-                    var thingsSpawned = ServiceLocator.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
-                    Point floodFillStartPoint;
-                    var floorTilesInRoom = FloorTilesInRect(level, level.BoundingBox);
-                    floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
-
-                    var pointsInDomain = MathUtil.PointsInRect(level.BoundingBox);
-                    for (int i = 2; i < 8; i = i + 2)
+                    SpawnConnectedStandardRoomsOnLevel(level, 4);
+                    var numberOfSpawnTablesToSpawn = 3;
+                    for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        List<Point> spawnPoints = new List<Point>();
-                        MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq) => { return level.Grid[piq.X, piq.Y].TileType == TileType.Floor; });
-
-                        foreach (var alreadyExistingEntity in level.Entitys)
-                        {
-                            spawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
-                        }
-
-                        if (spawnPoints.Count >= thingsSpawned.Count)
-                        {
-                            foreach (var thingSpawned in thingsSpawned)
-                            {
-                                var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
-                                spawnPoints.Remove(spawnPoint);
-                                thingSpawned.Position = spawnPoint;
-                                level.Entitys.Add(thingSpawned);
-                            }
-                            break;
-                        }
+                        var entitiesInEncounter = ServiceLocator.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
+                        PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
-                if (level.LevelIndex == 1)
+                else
                 {
-                    SpawnOnLevel(UniqueIdentifier.ENTITY_PONCY, level);
+                    throw new NotImplementedException();
                 }
             }
 
             ConnectLevelsByStairway(levels[0], levels[1]);
+            SpawnOnLevel(UniqueIdentifier.ENTITY_PONCY, levels[0]);
+            BuildPathfindingGrid(ServiceLocator.GameStateManager.Game);
+        }
 
-            var game = ServiceLocator.GameStateManager.Game;
-            BuildPathfindingGrid(game);
+        private void SpawnConnectedStandardRoomsOnLevel(Level level, int numberOfRoomsToSpawn)
+        {
+            var roomConnections = new List<KeyValuePair<Room, Room>>();
+            for (var roomNumber = 0; roomNumber < numberOfRoomsToSpawn; roomNumber++)
+            {
+                Room previousRoom;
+                Rectangle rect = FindNextRoomRect(level, out previousRoom);
+                var newRoom = Generate(level, rect);
+                level.Rooms.Add(newRoom);
+                if (previousRoom != null)
+                {
+                    roomConnections.Add(new KeyValuePair<Room, Room>(previousRoom, newRoom));
+                }
+            }
+
+            // Do this after creating rooms so that the walls dont cause pathing issues
+            foreach (var pair in roomConnections)
+            {
+                ConnectTwoRooms(level, pair.Key, pair.Value);
+            }
+        }
+
+        private static void PlaceEntitiesInLevel(List<Entity> entities, Level level)
+        {
+            Point floodFillStartPoint;
+            var floorTilesInRoom = FloorTilesInRect(level, level.BoundingBox);
+            floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
+
+            var pointsInDomain = MathUtil.PointsInRect(level.BoundingBox);
+            for (int i = 2; i < 8; i = i + 2)
+            {
+                List<Point> spawnPoints = new List<Point>();
+                MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq) => { return level.Grid[piq.X, piq.Y].TileType == TileType.Floor; });
+
+                foreach (var alreadyExistingEntity in level.Entitys)
+                {
+                    spawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
+                }
+
+                if (spawnPoints.Count >= entities.Count)
+                {
+                    foreach (var thingSpawned in entities)
+                    {
+                        var spawnPoint = MathUtil.ChooseRandomElement<Point>(spawnPoints);
+                        spawnPoints.Remove(spawnPoint);
+                        thingSpawned.Position = spawnPoint;
+                        level.Entitys.Add(thingSpawned);
+                    }
+                    break;
+                }
+            }
         }
 
         private void ConnectLevelsByStairway(Level level1, Level level2)

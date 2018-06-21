@@ -6,11 +6,6 @@ namespace Gamepackage
     {
         public Motor() {}
 
-        public Motor(Motor other)
-        {
-
-        }
-
         public Pointf LerpCurrentPosition;
 
         public Pointf LerpTargetPosition;
