@@ -52,13 +52,5 @@ namespace Gamepackage
                 Grid[newPosition.X, newPosition.Y].EntitiesInPosition.Add(entity);
             }
         }
-
-        public void Rewire()
-        {
-            foreach(var entity in Entitys)
-            {
-                entity.Rewire();
-            }
-        }
     }
 }

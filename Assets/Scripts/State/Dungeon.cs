@@ -5,13 +5,5 @@ namespace Gamepackage
         public Dungeon() {}
 
         public Level[] Levels;
-
-        public void Rereferece()
-        {
-            foreach(var level in Levels)
-            {
-                level.Rewire();
-            }
-        }
     }
 }

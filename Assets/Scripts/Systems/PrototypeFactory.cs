@@ -60,7 +60,6 @@ namespace Gamepackage
                     entity.Trigger.TriggerAction = BuildTriggerAction(entity, entity.Trigger.TriggerActionPrototypeUniqueIdentifier);
                 }
             }
-            entity.Rewire();
             return entity;
         }
 

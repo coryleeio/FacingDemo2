@@ -38,10 +38,5 @@ namespace Gamepackage
                 return Dungeon.Levels[CurrentLevelIndex];
             }
         }
-
-        public void Rewire()
-        {
-            Dungeon.Rereferece();
-        }
     }
 }
