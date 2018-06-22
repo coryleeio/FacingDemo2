@@ -13,6 +13,7 @@ namespace Gamepackage
         private Color DefaultHoverColor = new Color(0, 213, 255);
         private Color EnemyHoverColor = Color.red;
         private Path CurrentPath;
+        public Queue<Action> ActionList = new Queue<Action>();
 
         public void Init()
         {
@@ -73,6 +74,24 @@ namespace Gamepackage
                 return;
             }
 
+            if(ActionList.Count > 0 && player.Behaviour.NextAction == null && ServiceLocator.FlowSystem.CurrentPhase == FlowController.Phase.Player)
+            {
+                var nextAction = ActionList.Dequeue();
+
+                if(nextAction.GetType() == typeof(Move))
+                {
+                    var nextActionAsMove = nextAction as Move;
+
+                    if(!level.Grid[nextActionAsMove.TargetPosition].Walkable)
+                    {
+                        nextAction = null;
+                        ActionList.Clear();
+                    }
+                }
+
+                player.Behaviour.NextAction = nextAction;
+            }
+
             var points = new List<Point>();
             if(CurrentPath != null)
             {
@@ -107,17 +126,31 @@ namespace Gamepackage
                 else
                 {
                     waitingForPath = true;
-                    ServiceLocator.PathFinder.StartPath(player.Position, mousePos, level.Grid, (path) =>
+
+                    if(player.Behaviour.NextAction != null && player.Behaviour.NextAction.GetType() == typeof(Move))
                     {
-                        CurrentPath = path;
-                        waitingForPath = false;
-                    });
+                        ServiceLocator.PathFinder.StartPath(((Move)player.Behaviour.NextAction).TargetPosition, mousePos, level.Grid, (path) =>
+                        {
+                            CurrentPath = path;
+                            waitingForPath = false;
+                        });
+                    }
+                    else
+                    {
+                        ServiceLocator.PathFinder.StartPath(player.Position, mousePos, level.Grid, (path) =>
+                        {
+                            CurrentPath = path;
+                            waitingForPath = false;
+                        });
+                    }
+
+
                 }
             }
 
             if (Input.GetMouseButtonDown(0))
             {
-                player.Behaviour.ActionList.Clear();
+                ActionList.Clear();
                 if (isHoveringOnEnemyCombatant && isAbleToHitHoveringEnemyCombatant)
                 {
                     QueueAttack(level, player, mousePos);
@@ -135,10 +168,8 @@ namespace Gamepackage
         private void QueueAttack(Level level, Entity player, Point mousePos)
         {
             var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(player);
-            attack.TargetId = level.Grid[mousePos].EntitiesInPosition[0].Id;
-            player.Behaviour.ActionList.AddLast(attack);
-            var endTurn = ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(player);
-            player.Behaviour.ActionList.AddLast(endTurn);
+            attack.Targets.Add(level.Grid[mousePos].EntitiesInPosition[0]);
+            player.Behaviour.NextAction = attack;
         }
 
         private void OnPathComplete(Path path)
@@ -148,12 +179,9 @@ namespace Gamepackage
             var player = level.Player;
             foreach (var node in path.Nodes)
             {
-                var move = ServiceLocator.PrototypeFactory.BuildEntityAction<Move>(player);
-                move.TargetLocation = new Point(node.Position.X, node.Position.Y);
-                player.Behaviour.ActionList.AddLast(move);
-
-                var endTurn = ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(player);
-                player.Behaviour.ActionList.AddLast(endTurn);
+                var move = ServiceLocator.PrototypeFactory.BuildEntityAction<Move>(player) as Move;
+                move.TargetPosition = new Point(node.Position.X, node.Position.Y);
+                ActionList.Enqueue(move);
             }
             waitingForPath = false;
         }

@@ -55,32 +55,6 @@ namespace Gamepackage
             );
         }
 
-        public void TryToMoveToward(Entity entity, Point Position)
-        {
-            var moveToward = ServiceLocator.PrototypeFactory.BuildEntityAction<TryMoveToward>(entity);
-            moveToward.TargetPoint = new Point(Position.X, Position.Y);
-            entity.Behaviour.ActionList.AddLast(moveToward);
-        }
-
-        public void EndTurn(Entity entity)
-        {
-            var endTurn = ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(entity);
-            entity.Behaviour.ActionList.AddLast(endTurn);
-        }
-
-        public void Wait(Entity entity)
-        {
-            var wait = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(entity);
-            entity.Behaviour.ActionList.AddLast(wait);
-        }
-
-        public void AttackInMelee(Entity entity, Entity player)
-        {
-            var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(entity);
-            attack.TargetId = player.Id;
-            entity.Behaviour.ActionList.AddLast(attack);
-        }
-
         public bool CanMelee(Entity a, Entity b)
         {
             if(a == null || b == null)

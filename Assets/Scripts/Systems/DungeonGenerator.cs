@@ -131,15 +131,15 @@ namespace Gamepackage
             var downStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_DOWN, ServiceLocator.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
             var upStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_UP, ServiceLocator.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
 
-            var downStairTraverseAction = downStair.Trigger.TriggerAction as TraverseStaircase;
-            downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
-            downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), upStair.Position.X.ToString());
-            downStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), upStair.Position.Y.ToString());
+            var downStairTraverseAction = downStair.Trigger;
+            downStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
+            downStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), upStair.Position.X.ToString());
+            downStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), upStair.Position.Y.ToString());
 
-            var upStairTraverseAction = upStair.Trigger.TriggerAction as TraverseStaircase;
-            upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), lowerLevel.LevelIndex.ToString());
-            upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), downStair.Position.X.ToString());
-            upStairTraverseAction.Parameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
+            var upStairTraverseAction = upStair.Trigger;
+            upStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), lowerLevel.LevelIndex.ToString());
+            upStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_POSX.ToString(), downStair.Position.X.ToString());
+            upStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
         }
 
         private Entity SpawnOnLevel(UniqueIdentifier identifier, Level level)
@@ -161,6 +161,14 @@ namespace Gamepackage
             var levels = game.Dungeon.Levels;
             foreach (var level in levels)
             {
+                foreach(var entity in level.Entitys)
+                {
+                    if(!level.Grid[entity.Position].EntitiesInPosition.Contains(entity))
+                    {
+                        level.Grid[entity.Position].EntitiesInPosition.Add(entity);
+                    }
+                }
+
                 level.Grid.Each((x, y, v) =>
                 {
                     var occupied = level.Grid[x, y].EntitiesInPosition.FindAll((entity) => { return entity.BlocksPathing; }).Count > 0;

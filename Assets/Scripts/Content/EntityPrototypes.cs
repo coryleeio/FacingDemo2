@@ -25,9 +25,9 @@ namespace Gamepackage
                     ViewType = ViewType.StaticSprite,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
                 };
-                entity.Behaviour = new Behaviour()
+                entity.Behaviour = new PlayerBehaviour()
                 {
-                    BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_PLAYER,
+                    Phase = FlowController.Phase.Player
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
@@ -45,9 +45,9 @@ namespace Gamepackage
                     ViewType = ViewType.StaticSprite,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
                 };
-                entity.Behaviour = new Behaviour()
+                entity.Behaviour = new AIBehaviour()
                 {
-                    BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
+                    Phase = FlowController.Phase.Enemies
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
@@ -65,9 +65,9 @@ namespace Gamepackage
                     ViewType = ViewType.StaticSprite,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_RED,
                 };
-                entity.Behaviour = new Behaviour()
+                entity.Behaviour = new AIBehaviour()
                 {
-                    BehaviourImplUniqueIdentifier = UniqueIdentifier.BEHAVIOUR_BRUTE,
+                    Phase = FlowController.Phase.Enemies
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_UP)
@@ -81,7 +81,9 @@ namespace Gamepackage
                 };
                 entity.Trigger = new Trigger()
                 {
-                    TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
+                    // params filled out by dungeon generator
+                    Ability = new TraverseStaircase(),
+                    Offsets = new List<Point>() { new Point(0,0) }
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN)
@@ -95,7 +97,9 @@ namespace Gamepackage
                 };
                 entity.Trigger = new Trigger()
                 {
-                    TriggerActionPrototypeUniqueIdentifier = UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE,
+                    // params filled out by dungeon generator
+                    Ability = new TraverseStaircase(),
+                    Offsets = new List<Point>() { new Point(0, 0) }
                 };
             }
             else

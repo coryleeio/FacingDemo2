@@ -2,7 +2,7 @@
 {
     public enum UniqueIdentifier
     {
-        BEHAVIOUR_BRUTE,
+        BEHAVIOUR_STANDARD,
         BEHAVIOUR_PLAYER,
         ENTITY_PONCY,
         ENTITY_GIANT_BEE,

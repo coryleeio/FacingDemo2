@@ -1,32 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 
 namespace Gamepackage
 {
-    public class Behaviour : Component
+    public abstract class Behaviour : Component
     {
         public bool IsDoneThisTurn = false;
         public int TimeAccrued = 0;
-        public LinkedList<EntityAction> ActionList = new LinkedList<EntityAction>();
-        public UniqueIdentifier BehaviourImplUniqueIdentifier;
-        public Point LastKnownPlayerPosition;
+        public FlowController.Phase Phase;
+        public bool IsThinking = false;
 
-        public Behaviour() {}
+        [JsonIgnore]
+        public Action NextAction = null;
 
-        public override void Rewire(Entity entity)
+        public abstract bool IsPlayer
         {
-            base.Rewire(entity);
-            foreach (var action in ActionList)
-            {
-                action.Rewire(entity);
-            }
+            get;
         }
 
-        public bool IsPlayer
-        {
-            get
-            {
-                return BehaviourImplUniqueIdentifier == UniqueIdentifier.BEHAVIOUR_PLAYER;
-            }
-        }
+        public abstract void FigureOutNextAction();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Gamepackage;
 
-public class Wait : EntityAction
+public class Wait : Action
 {
     public override int TimeCost
     {
@@ -11,22 +11,6 @@ public class Wait : EntityAction
     }
 
     public override bool IsEndable
-    {
-        get
-        {
-            return true;
-        }
-    }
-
-    public override bool IsAMovementAction
-    {
-        get
-        {
-            return false;
-        }
-    }
-
-    public override bool IsStartable
     {
         get
         {

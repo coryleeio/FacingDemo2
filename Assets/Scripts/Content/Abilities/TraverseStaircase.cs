@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
 using UnityEngine;
 
 namespace Gamepackage
 {
-    public class TraverseStaircase : TriggerAction
+    public class TraverseStaircase : Ability
     {
         public enum Params
         {
@@ -13,30 +13,59 @@ namespace Gamepackage
             TARGET_LEVEL_ID,
         }
 
-        public Dictionary<string, string> Parameters = new Dictionary<string, string>(0);
-        public override void Enter()
+        public override int TimeCost
         {
-            base.Enter();
+            get
+            {
+                return 0;
+            }
+        }
+
+        [JsonIgnore]
+        public override bool IsEndable
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        [JsonIgnore]
+        public override bool CanPerform
+        {
+            get
+            {
+                foreach(var target in Targets)
+                {
+                    if(target.IsPlayer)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            var Parameters = Source.Trigger.TriggerParameters;
             var levelId = Convert.ToInt32(Parameters[Params.TARGET_LEVEL_ID.ToString()]);
             var posX = Convert.ToInt32(Parameters[Params.TARGET_POSX.ToString()]);
             var posY = Convert.ToInt32(Parameters[Params.TARGET_POSY.ToString()]);
             var targetIncludesPlayer = false;
             foreach (var target in Targets)
             {
-                if(target.IsPlayer)
+                if (target.IsPlayer)
                 {
                     targetIncludesPlayer = true;
                 }
                 var oldLevel = ServiceLocator.GameStateManager.Game.CurrentLevel;
-                if (target.Behaviour != null)
+                if (target.BlocksPathing)
                 {
-                    target.Behaviour.ActionList.Clear();
-                    if(target.BlocksPathing)
-                    {
-                        oldLevel.Grid[target.Position].Walkable = true;
-                    }
+                    oldLevel.Grid[target.Position].Walkable = true;
                 }
-                if(target.View.ViewGameObject != null)
+                if (target.View.ViewGameObject != null)
                 {
                     GameObject.Destroy(target.View.ViewGameObject);
                 }
@@ -46,37 +75,15 @@ namespace Gamepackage
                 target.Position = pos;
                 newLevel.Entitys.Add(target);
             }
-            if(targetIncludesPlayer)
+            if (targetIncludesPlayer)
             {
+                ServiceLocator.PlayerController.ActionList.Clear();
                 ServiceLocator.GameStateManager.Game.CurrentLevelIndex = levelId;
-                ServiceLocator.GameStateManager.Game.FurthestLevelReached = levelId;
+                if(levelId > ServiceLocator.GameStateManager.Game.FurthestLevelReached)
+                {
+                    ServiceLocator.GameStateManager.Game.FurthestLevelReached = levelId;
+                }
                 ServiceLocator.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
-            }
-        }
-
-        public override bool IsEndable
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        private List<Point> _offsets = new List<Point>() { new Point(0, 0) };
-        public override List<Point> Offsets
-        {
-            get
-            {
-                return _offsets;
-
-            }
-        }
-
-        public override bool IsStartable
-        {
-            get
-            {
-                return true;
             }
         }
     }

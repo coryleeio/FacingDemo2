@@ -15,10 +15,8 @@
         public static GameScene GameScene = new GameScene();
         public static LoadingScene LoadingScene = new LoadingScene();
         public static MainMenuScene MainMenuScene = new MainMenuScene();
-        public static MovementSystem MovementSystem = new MovementSystem();
-        public static FlowSystem FlowSystem = new FlowSystem();
+        public static FlowController FlowSystem = new FlowController();
         public static PlayerController PlayerController = new PlayerController();
-        public static AIController AIController = new AIController();
 
         public static Application Application; // mono
         public static UIController UIController; // mono

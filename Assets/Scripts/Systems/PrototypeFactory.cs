@@ -22,44 +22,32 @@ namespace Gamepackage
             }
         }
 
-        public TAction BuildEntityAction<TAction> (Entity entity) where TAction : EntityAction
+        public Action BuildEntityAction<TAction> (Entity entity) where TAction : Action
         {
             var action = Activator.CreateInstance<TAction>();
             Assert.IsNotNull(action, string.Format("Failed to create {0}", typeof(TAction)));
-            action.Entity = entity;
+            action.Source = entity;
             return action;
         }
 
-        public TriggerAction BuildTriggerAction(Entity entity, UniqueIdentifier identifier)
+        public Ability BuildAbility(Entity source, UniqueIdentifier identifier)
         {
-            TriggerAction ret = null;
-            if(identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
+            Ability ret = null;
+            if (identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
             {
-                ret= new TraverseStaircase();
-            }
-            if(ret != null)
-            {
-                ret.Rewire(entity);
-                return ret;
+                ret = new TraverseStaircase();
             }
             else
             {
                 throw new NotImplementedException(string.Format("Tried to instantiate trigger: {0}, but it hasn't been implemented yet", identifier));
             }
+            return ret;
         }
 
         public Entity BuildEntity(UniqueIdentifier identifier)
         {
             var entity = EntityPrototypes.Build(identifier);
             entity.Position = new Point(0, 0);
-
-            if(entity.Trigger != null)
-            {
-                if (entity.Trigger.TriggerAction == null)
-                {
-                    entity.Trigger.TriggerAction = BuildTriggerAction(entity, entity.Trigger.TriggerActionPrototypeUniqueIdentifier);
-                }
-            }
             return entity;
         }
 

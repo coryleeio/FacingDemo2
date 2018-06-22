@@ -4,22 +4,16 @@ namespace Gamepackage
 {
     public class Trigger : Component
     {
-        public UniqueIdentifier TriggerActionPrototypeUniqueIdentifier;
-
-        public TriggerAction TriggerAction;
-
-        public Trigger() {}
+        public Ability Ability;
+        public List<Point> Offsets = new List<Point>(0);
+        public Dictionary<string, string> TriggerParameters = new Dictionary<string, string>();
 
         public override void Rewire(Entity entity)
         {
             base.Rewire(entity);
-            if(TriggerAction != null)
+            if(Ability != null)
             {
-                TriggerAction.Rewire(entity);
-            }
-            else
-            {
-                throw new NotImplementedException("Something is wrong, you shouldn't have a trigger component without a trigger action.");
+                Ability.Source = entity;
             }
         }
     }

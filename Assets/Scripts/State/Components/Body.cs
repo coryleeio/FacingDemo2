@@ -8,7 +8,5 @@ namespace Gamepackage
         public int MaxHealth;
         public bool IsDead = false;
         public float ElapsedTimeDead = 0.0f;
-
-        public Body() {}
     }
 }

@@ -38,7 +38,6 @@ namespace Gamepackage
             ServiceLocator.OverlaySystem.Process();
             ServiceLocator.PathFinder.Process();
             ServiceLocator.FlowSystem.Process();
-            ServiceLocator.MovementSystem.Process();
             ServiceLocator.SpriteSortingSystem.Process();
             ServiceLocator.VisibilitySystem.Process();
             ServiceLocator.CombatSystem.Process();

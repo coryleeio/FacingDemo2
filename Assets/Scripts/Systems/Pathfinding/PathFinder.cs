@@ -19,7 +19,7 @@ namespace Gamepackage
         private List<Thread> _threads = new List<Thread>();
 
         private LogLevel PathLogging;
-        private DiagonalOptions DiagonalSetting;
+        public DiagonalOptions DiagonalSetting;
         private int _numberOfPathsToDrawInDebug = 5;
         private ConcurrentQueue<PathRequest> _incompletePaths = new ConcurrentQueue<PathRequest>();
         private ConcurrentQueue<PathRequest> _completePaths = new ConcurrentQueue<PathRequest>();
