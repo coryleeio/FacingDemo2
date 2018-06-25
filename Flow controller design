@@ -93,6 +93,7 @@ Dye sizes/ attacks / attack parameters:
 Attack parameters is
 dye number
 dye size
+damage type
 interpolation string
 
 Items have a list of attack parameters, if that list is 0 you cant attack with it.
@@ -111,13 +112,3 @@ opt1: stairs are their own thing
 opt2: stairs somehow use this new triggering system, which adds parameters to this new system.
 opt3: 
 
-
-
-
-
-
-
-
-
-
-Attacks are abilities????

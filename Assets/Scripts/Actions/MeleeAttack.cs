@@ -26,9 +26,14 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
+            if(Source.Body.Attacks.Count == 0)
+            {
+                throw new NotImplementedException("You don't have any attacks, but are trying to attack anyway?");
+            }
+            var attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
             foreach(var target in Targets)
             {
-                ServiceLocator.CombatSystem.DealDamage(Source, target, 1);
+                ServiceLocator.CombatSystem.DealDamage(Source, target, attackParameters);
             }
         }
 

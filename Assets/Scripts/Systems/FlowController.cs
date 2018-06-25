@@ -124,7 +124,6 @@ namespace Gamepackage
                         }
                         Steps.AddLast(step);
                         Steps.AddLast(endTurnStep);
-                        ForceAIsToRecalculateMoves(entities);
                     }
                     else if(movers.Count != 0)
                     {

@@ -46,6 +46,14 @@ namespace Gamepackage
             }
         }
 
+        public override TriggerType TriggeredBy
+        {
+            get
+            {
+                return TriggerType.OnTriggerStep;
+            }
+        }
+
         public override void Exit()
         {
             base.Exit();

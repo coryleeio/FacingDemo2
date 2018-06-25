@@ -40,7 +40,6 @@ namespace Gamepackage
             ServiceLocator.FlowSystem.Process();
             ServiceLocator.SpriteSortingSystem.Process();
             ServiceLocator.VisibilitySystem.Process();
-            ServiceLocator.CombatSystem.Process();
             CameraDriver.MoveCamera();
         }
 

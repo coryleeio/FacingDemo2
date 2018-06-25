@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Gamepackage
 {
@@ -16,17 +17,26 @@ namespace Gamepackage
 
         public void Do()
         {
+
             var completed = new List<Action>(0);
-            foreach (var action in Actions)
+            try
             {
-                if (!action.Done)
+                foreach (var action in Actions)
                 {
-                    action.Do();
+                    if (!action.Done)
+                    {
+                        action.Do();
+                    }
+                    else
+                    {
+                        completed.Add(action);
+                    }
                 }
-                else
-                {
-                    completed.Add(action);
-                }
+            }
+            catch(InvalidOperationException ex)
+            {
+                // List will be modified, by the actions themselves sometimes, if this happens just restart the loop.
+                Do();
             }
             foreach(var action in completed)
             {

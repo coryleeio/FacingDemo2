@@ -93,14 +93,14 @@ namespace Gamepackage
 
             foreach (var potentialTrigger in ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys)
             {
-                if(potentialTrigger.Trigger != null)
+                if(potentialTrigger.Trigger != null && potentialTrigger.Trigger.Ability.TriggeredBy == Ability.TriggerType.OnTriggerStep)
                 {
                     var points = MathUtil.GetPointsByOffset(potentialTrigger.Position, potentialTrigger.Trigger.Offsets);
                     if (points.Contains(Source.Position))
                     {
                         var ability = potentialTrigger.Trigger.Ability;
                         ability.Targets.Add(Source);
-                        if(ability.CanPerform)
+                        if (potentialTrigger.Trigger.Ability.CanPerform)
                         {
                             var step = new Step();
                             step.Actions.AddFirst(ability);

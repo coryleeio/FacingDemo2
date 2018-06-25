@@ -7,6 +7,6 @@ namespace Gamepackage
         public int CurrentHealth;
         public int MaxHealth;
         public bool IsDead = false;
-        public float ElapsedTimeDead = 0.0f;
+        public List<AttackParameters> Attacks = new List<AttackParameters>(0);
     }
 }

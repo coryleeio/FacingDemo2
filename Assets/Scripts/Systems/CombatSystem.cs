@@ -7,53 +7,7 @@ namespace Gamepackage
 {
     public class CombatSystem
     {
-        private List<Entity> DyingEntitys = new List<Entity>(0);
-        private Color DeathColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0f);
-
         public CombatSystem() {}
-
-        public void Process()
-        {
-            foreach (var entity in DyingEntitys)
-            {
-                if (entity.View != null && entity.View.ViewGameObject != null)
-                {
-                    entity.Body.ElapsedTimeDead = entity.Body.ElapsedTimeDead += Time.deltaTime;
-                    if (entity.Body.ElapsedTimeDead > 1.0f)
-                    {
-                        if (entity.View.ViewType == ViewType.StaticSprite)
-                        {
-                            var spriteRenderer = entity.View.ViewGameObject.GetComponent<SpriteRenderer>();
-                            var firstPhasePercentage = (entity.Body.ElapsedTimeDead - 1.0f) / 1f;
-                            var secondPhasePErcentage = (entity.Body.ElapsedTimeDead - 2f) / 1f;
-
-                            if (firstPhasePercentage < 1.0f)
-                            {
-                                spriteRenderer.color = Color.Lerp(Color.white, Color.black, firstPhasePercentage);
-                            }
-                            else if (secondPhasePErcentage < 1.0f)
-                            {
-                                spriteRenderer.color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
-                            }
-                            else if (entity.View != null && entity.View.ViewGameObject != null)
-                            {
-                                GameObject.Destroy(entity.View.ViewGameObject);
-                            }
-                        }
-                        else
-                        {
-                            throw new NotImplementedException();
-                        }
-                    }
-                }
-            }
-
-            var removed = DyingEntitys.RemoveAll((ent) =>
-            {
-                return ent.Body.ElapsedTimeDead > 9.0f;
-            }
-            );
-        }
 
         public bool CanMelee(Entity a, Entity b)
         {
@@ -64,30 +18,44 @@ namespace Gamepackage
             return a.Position.IsAdjacentTo(b.Position) && a.Position.IsOrthogonalTo(b.Position);
         }
 
-        public void DealDamage(Entity source, Entity target, int damage)
+        public void DealDamage(Entity source, Entity target, AttackParameters attackParameters)
         {
+            if (attackParameters.DamageType == DamageTypes.NOT_SET)
+            {
+                throw new NotImplementedException("You forgot to set the damage type on this attack");
+            }
+
             if (!target.IsCombatant)
             {
                 throw new NotImplementedException("Cannot deal damage to non combatants");
             }
-            if(target.Body.CurrentHealth <= 0)
+            if (target.Body.CurrentHealth <= 0)
             {
                 // if you keep hitting him he doesn't get dead-er..
                 return;
             }
+
+            var damage = 0;
+            for (var numDyeRolled = 0; numDyeRolled < attackParameters.DyeNumber; numDyeRolled++)
+            {
+                damage += UnityEngine.Random.Range(1, attackParameters.DyeSize + 1);
+            }
+            damage += attackParameters.Bonus;
+
             target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
-            var sourceMessage = source.Name;
-            var targetMessage = target.Name;
+            var sourceName = source.Name;
+            var targetName = target.Name;
             ServiceLocator.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
-            ServiceLocator.UIController.TextLog.AddText(string.Format("{0} hit {1} for {2} points of damage!", sourceMessage, targetMessage, damage));
+
+            ServiceLocator.UIController.TextLog.AddText(string.Format(attackParameters.AttackMessage, sourceName, targetName, damage, DamageTypeToDisplayString(attackParameters.DamageType)));
 
             if (target.Body.CurrentHealth <= 0)
             {
                 ServiceLocator.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("Dead!", damage), Color.black, 35, MathUtil.MapToWorld(target.Position));
-                ServiceLocator.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetMessage));
+                ServiceLocator.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetName));
                 target.Body.IsDead = true;
                 var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
-                if(!target.IsPlayer)
+                if (!target.IsPlayer)
                 {
                     ServiceLocator.EntitySystem.Deregister(target, level);
                 }
@@ -96,7 +64,55 @@ namespace Gamepackage
                 {
                     ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
                 }
-                DyingEntitys.Add(target);
+
+                if (target.View.ViewGameObject != null)
+                {
+                    target.View.ViewGameObject.AddComponent<DeathAnimation>();
+                }
+            }
+        }
+
+        private static string DamageTypeToDisplayString(DamageTypes damageType)
+        {
+            if (damageType == DamageTypes.FIRE)
+            {
+                return "fire";
+            }
+            else if (damageType == DamageTypes.COLD)
+            {
+                return "cold";
+            }
+            else if (damageType == DamageTypes.LIGHTNING)
+            {
+                return "lightning";
+            }
+            else if (damageType == DamageTypes.SLASHING)
+            {
+                return "slashing";
+            }
+            else if (damageType == DamageTypes.BLUDGEONING)
+            {
+                return "bludgeoning";
+            }
+            else if (damageType == DamageTypes.PIERCING)
+            {
+                return "piercing";
+            }
+            else if (damageType == DamageTypes.ARCANE)
+            {
+                return "arcane";
+            }
+            else if (damageType == DamageTypes.NEGATIVE)
+            {
+                return "negative";
+            }
+            else if (damageType == DamageTypes.HOLY)
+            {
+                return "holy";
+            }
+            else
+            {
+                throw new NotImplementedException("Need to add a display string for this damage type: " + damageType);
             }
         }
     }

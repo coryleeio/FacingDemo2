@@ -17,6 +17,7 @@ namespace Gamepackage
                 {
                     CurrentHealth = 10,
                     MaxHealth = 10,
+                    Attacks = DefaultHumanoidBodyAttacks()
                 };
                 entity.Motor = new Motor();
                 entity.BlocksPathing = true;
@@ -37,6 +38,7 @@ namespace Gamepackage
                 {
                     CurrentHealth = 1,
                     MaxHealth = 1,
+                    Attacks = DefaultBeeBodyAttacks(),
                 };
                 entity.Motor = new Motor();
                 entity.BlocksPathing = true;
@@ -57,6 +59,7 @@ namespace Gamepackage
                 {
                     CurrentHealth = 3,
                     MaxHealth = 3,
+                    Attacks = DefaultBeeBodyAttacks(),
                 };
                 entity.Motor = new Motor();
                 entity.BlocksPathing = true;
@@ -107,6 +110,36 @@ namespace Gamepackage
                 throw new NotImplementedException();
             }
             return entity;
+        }
+
+        private static List<AttackParameters> DefaultHumanoidBodyAttacks()
+        {
+            return new List<AttackParameters>()
+                    {
+                        new AttackParameters()
+                        {
+                            AttackMessage = "{0} punches {1} for {2} points of {3} damage!",
+                            Bonus = 0,
+                            DyeNumber = 1,
+                            DyeSize = 1,
+                            DamageType = DamageTypes.BLUDGEONING,
+                        },
+                    };
+        }
+
+        private static List<AttackParameters> DefaultBeeBodyAttacks()
+        {
+            return new List<AttackParameters>()
+                    {
+                        new AttackParameters()
+                        {
+                            AttackMessage = "{0} strings {1} for {2} points of {3} damage!",
+                            Bonus = 0,
+                            DyeNumber = 1,
+                            DyeSize = 1,
+                            DamageType = DamageTypes.PIERCING,
+                        },
+                    };
         }
     }
 }
