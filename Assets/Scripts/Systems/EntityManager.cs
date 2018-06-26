@@ -1,3 +1,4 @@
+using KDSharp.KDTree;
 using System.Collections.Generic;
 
 namespace Gamepackage
@@ -7,6 +8,7 @@ namespace Gamepackage
         public EntityManager() {}
 
         private Dictionary<int, Entity> EntityMap = new Dictionary<int, Entity>();
+        public KDTree<Entity> Tree = new KDTree<Entity>(2, 5);
 
         public void Register(Entity entity, Level level)
         {
@@ -24,11 +26,13 @@ namespace Gamepackage
             }
             entity.Rewire();
             level.IndexEntity(entity, entity.Position);
+            Tree.AddPoint(new double[] { entity.Position.X, entity.Position.Y }, entity);
         }
 
         public void Clear()
         {
             EntityMap.Clear();
+            Tree.Clear();
         }
 
         public Entity GetEntityById(int id)
@@ -51,11 +55,12 @@ namespace Gamepackage
                 level.Entitys.Remove(entity);
             }
             level.UnindexEntity(entity, entity.Position);
+            Tree.Remove(entity);
         }
 
         public void Init()
         {
-            EntityMap.Clear();
+            Clear();
             var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
             foreach (var entity in level.Entitys)
             {

@@ -40,8 +40,8 @@ namespace Gamepackage
 
                 if (levelIndex == 0)
                 {
-                    SpawnConnectedStandardRoomsOnLevel(level, 2);
-                    var numberOfSpawnTablesToSpawn = 2;
+                    SpawnConnectedStandardRoomsOnLevel(level, 6);
+                    var numberOfSpawnTablesToSpawn = 5;
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
                         var entitiesInEncounter = ServiceLocator.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);

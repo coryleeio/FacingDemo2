@@ -35,50 +35,39 @@ namespace Gamepackage
             var target = FindTarget(level);
             NextAction = null;
 
-            if (target != null)
+            if (!ServiceLocator.VisibilitySystem.CanSee(level, Entity, target))
             {
-                if (!ServiceLocator.VisibilitySystem.CanSee(level, Entity, target))
+                if (LastKnownEnemyPosition != null && Point.Distance(Entity.Position, LastKnownEnemyPosition) > 2)
                 {
-                    if (LastKnownEnemyPosition != null && Point.Distance(Entity.Position, LastKnownEnemyPosition) > 2)
-                    {
-                        // If you dont know where the player is move toward his last known position
-                        ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownEnemyPosition));
-                    }
-                    else
-                    {
-                        // If you cant see him, and he's nearby just forget about it.  He is probably invisible / gone for some reason.
-                        LastKnownEnemyPosition = null;
-                        DefaultBehaviour();
-                    }
+                    // If you dont know where the player is move toward his last known position
+                    ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownEnemyPosition));
                 }
                 else
                 {
-                    // If we see the player set his last known position and move toward it or attack him
-                    LastKnownEnemyPosition = new Point(target.Position.X, target.Position.Y);
-                    if (ServiceLocator.CombatSystem.CanMelee(Entity, target))
-                    {
-                        var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(Entity);
-                        attack.Targets.Add(target);
-                        NextAction = attack;
-                    }
-                    else
-                    {
-                        ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownEnemyPosition));
-                    }
+                    // If you cant see him, and he's nearby just forget about it.  He is probably invisible / gone for some reason.
+                    LastKnownEnemyPosition = null;
+                    DefaultBehaviour();
                 }
             }
             else
             {
-                DefaultBehaviour();
+                // If we see the player set his last known position and move toward it or attack him
+                LastKnownEnemyPosition = new Point(target.Position.X, target.Position.Y);
+                if (ServiceLocator.CombatSystem.CanMelee(Entity, target))
+                {
+                    var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(Entity);
+                    attack.Targets.Add(target);
+                    NextAction = attack;
+                }
+                else
+                {
+                    ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownEnemyPosition));
+                }
             }
         }
 
         private static Entity FindTarget(Level level)
         {
-
-
-
-
             return level.Player;
         }
 
@@ -112,9 +101,9 @@ namespace Gamepackage
                 ServiceLocator.PathFinder.StartPath(Entity.Position, pointAroundMe, ServiceLocator.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
             }
 
-            while(NextAction == null)
+            while (NextAction == null)
             {
-                if(PathsReturned == PathsExpected)
+                if (PathsReturned == PathsExpected)
                 {
                     NextAction = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
                     break; // done
@@ -128,7 +117,7 @@ namespace Gamepackage
             PathsReturned++;
             if (path.Nodes.Count > 0)
             {
-                if(runningRoutine != null)
+                if (runningRoutine != null)
                 {
                     ServiceLocator.Application.StopCoroutine(runningRoutine);
                     runningRoutine = null;
