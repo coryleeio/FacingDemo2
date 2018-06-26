@@ -28,7 +28,7 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new PlayerBehaviour()
                 {
-                    Phase = FlowController.Phase.Player
+                    Team = Team.PLAYER,
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
@@ -49,7 +49,7 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new AIBehaviour()
                 {
-                    Phase = FlowController.Phase.Enemies
+                    Team = Team.ENEMY,
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
@@ -70,7 +70,7 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new AIBehaviour()
                 {
-                    Phase = FlowController.Phase.Enemies
+                    Team = Team.ENEMY,
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_UP)

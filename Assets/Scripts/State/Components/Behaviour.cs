@@ -6,7 +6,7 @@ namespace Gamepackage
     {
         public bool IsDoneThisTurn = false;
         public int TimeAccrued = 0;
-        public FlowController.Phase Phase;
+        public Team Team;
         public bool IsThinking = false;
 
         [JsonIgnore]

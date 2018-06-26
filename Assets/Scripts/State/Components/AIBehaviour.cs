@@ -24,47 +24,67 @@ namespace Gamepackage
         public int PathsExpected = 0;
         public int PathsReturned = 0;
 
-        public Point LastKnownPlayerPosition;
+        public Point LastKnownEnemyPosition;
 
         [JsonIgnore]
-        UnityEngine.Coroutine runningRoutine;
+        Coroutine runningRoutine;
 
         public override void FigureOutNextAction()
         {
             var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
-            var player = level.Player;
+            var target = FindTarget(level);
             NextAction = null;
 
-            if (!ServiceLocator.VisibilitySystem.CanSee(level, Entity, player))
+            if (target != null)
             {
-                if (LastKnownPlayerPosition != null && Point.Distance(Entity.Position, LastKnownPlayerPosition) > 2)
+                if (!ServiceLocator.VisibilitySystem.CanSee(level, Entity, target))
                 {
-                    ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownPlayerPosition));
-                    return;
+                    if (LastKnownEnemyPosition != null && Point.Distance(Entity.Position, LastKnownEnemyPosition) > 2)
+                    {
+                        // If you dont know where the player is move toward his last known position
+                        ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownEnemyPosition));
+                    }
+                    else
+                    {
+                        // If you cant see him, and he's nearby just forget about it.  He is probably invisible / gone for some reason.
+                        LastKnownEnemyPosition = null;
+                        DefaultBehaviour();
+                    }
                 }
                 else
                 {
-                    LastKnownPlayerPosition = null;
-                    NextAction = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
-                    return;
+                    // If we see the player set his last known position and move toward it or attack him
+                    LastKnownEnemyPosition = new Point(target.Position.X, target.Position.Y);
+                    if (ServiceLocator.CombatSystem.CanMelee(Entity, target))
+                    {
+                        var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(Entity);
+                        attack.Targets.Add(target);
+                        NextAction = attack;
+                    }
+                    else
+                    {
+                        ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownEnemyPosition));
+                    }
                 }
             }
             else
             {
-                LastKnownPlayerPosition = new Point(player.Position.X, player.Position.Y);
-                if (ServiceLocator.CombatSystem.CanMelee(Entity, player))
-                {
-                    var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(Entity);
-                    attack.Targets.Add(player);
-                    NextAction = attack;
-                    return;
-                }
-                else
-                {
-                    ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownPlayerPosition));
-                    return;
-                }
+                DefaultBehaviour();
             }
+        }
+
+        private static Entity FindTarget(Level level)
+        {
+
+
+
+
+            return level.Player;
+        }
+
+        private void DefaultBehaviour()
+        {
+            NextAction = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
         }
 
         IEnumerator MoveToward(Point targetPosition)

@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 
 namespace Gamepackage
 {
     public class EntityManager
     {
-
         public EntityManager() {}
 
         private Dictionary<int, Entity> EntityMap = new Dictionary<int, Entity>();

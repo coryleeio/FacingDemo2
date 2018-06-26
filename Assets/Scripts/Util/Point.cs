@@ -23,7 +23,7 @@ namespace Gamepackage
 
         public override bool Equals(object obj)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 return false;
             }
@@ -88,11 +88,11 @@ namespace Gamepackage
 
         public static bool IsDiagonalTo(Point a, Point b)
         {
-            if((a.X - b.X) == 0)
+            if ((a.X - b.X) == 0)
             {
                 return false;
             }
-            return Mathf.Abs( (a.Y - b.Y) / (a.X - b.X) ) == 1;
+            return Mathf.Abs((a.Y - b.Y) / (a.X - b.X)) == 1;
         }
 
         public static bool OffsetBy(Point p1, Point p2, Point[] offsets)
@@ -149,7 +149,7 @@ namespace Gamepackage
 
         public int Compare(Point x, Point y)
         {
-            if(Source == null)
+            if (Source == null)
             {
                 return -1;
             }

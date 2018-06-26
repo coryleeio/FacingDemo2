@@ -6,14 +6,6 @@ namespace Gamepackage
     public class FlowController
     {
         public LinkedList<Step> Steps = new LinkedList<Step>();
-
-        public enum Phase
-        {
-            Player,
-            Allies,
-            Enemies
-        }
-
         public Phase CurrentPhase = Phase.Player; // always start on player when changing scenes
 
         public void Init()
@@ -202,7 +194,10 @@ namespace Gamepackage
 
         public bool ActsInPhase(Entity entity)
         {
-            return entity.Behaviour.Phase == CurrentPhase;
+            var playerOnPlayerTurn = entity.Behaviour.Team == Team.PLAYER && CurrentPhase == Phase.Player;
+            var enemyOrNeutralOnEnemyPhase = (entity.Behaviour.Team == Team.ENEMY || entity.Behaviour.Team == Team.NEUTRAL) && CurrentPhase == Phase.Enemies;
+            var allyOnAllyPhase = !entity.Behaviour.IsPlayer && entity.Behaviour.Team == Team.PLAYER && CurrentPhase == Phase.Allies;
+            return playerOnPlayerTurn || enemyOrNeutralOnEnemyPhase || allyOnAllyPhase;
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Gamepackage
                 return;
             }
 
-            if(ActionList.Count > 0 && player.Behaviour.NextAction == null && ServiceLocator.FlowSystem.CurrentPhase == FlowController.Phase.Player)
+            if(ActionList.Count > 0 && player.Behaviour.NextAction == null && ServiceLocator.FlowSystem.CurrentPhase == Phase.Player)
             {
                 var nextAction = ActionList.Dequeue();
 
