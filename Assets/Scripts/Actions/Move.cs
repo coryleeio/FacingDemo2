@@ -34,10 +34,12 @@ namespace Gamepackage
         public override void Enter()
         {
             base.Enter();
-
-
             LerpCurrentPosition = MathUtil.MapToWorld(Source.Position);
             LerpTargetPosition = MathUtil.MapToWorld(TargetPosition);
+            if(Source.IsPlayer)
+            {
+                Camera.main.GetComponent<GameSceneCameraDriver>().NewTarget(TargetPosition);
+            }
         }
 
 
@@ -73,7 +75,8 @@ namespace Gamepackage
             {
                 ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = true;
             }
-            ServiceLocator.GameStateManager.Game.CurrentLevel.UnindexEntity(Source, Source.Position);
+
+            ServiceLocator.EntitySystem.Deregister(Source, ServiceLocator.GameStateManager.Game.CurrentLevel);
 
             // Move the view to the new position
             if (Source.View != null && Source.View.ViewGameObject != null)
@@ -89,7 +92,7 @@ namespace Gamepackage
             {
                 ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = false;
             }
-            ServiceLocator.GameStateManager.Game.CurrentLevel.IndexEntity(Source, Source.Position);
+            ServiceLocator.EntitySystem.Register(Source, ServiceLocator.GameStateManager.Game.CurrentLevel);
 
             foreach (var potentialTrigger in ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys)
             {

@@ -18,7 +18,7 @@ namespace Gamepackage
             ServiceLocator.FlowSystem.Init();
             ServiceLocator.PlayerController.Init();
             CameraDriver = ServiceLocator.GameScene.GetCamera();
-            CameraDriver.JumpToTarget();
+            CameraDriver.JumpToTarget(ServiceLocator.GameStateManager.Game.CurrentLevel.Player.Position);
 
             var EventSystemPrefab = Resources.Load<GameObject>("UI/EventSystem");
             var eventSYstem = GameObject.Instantiate(EventSystemPrefab);

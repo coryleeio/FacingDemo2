@@ -36,7 +36,7 @@ namespace Gamepackage
             var player = ServiceLocator.GameStateManager.Game.CurrentLevel.Player;
             if(player.View != null && player.View.ViewGameObject != null)
             {
-                gameSceneCameraDriver.target = player.View.ViewGameObject;
+                gameSceneCameraDriver.JumpToTarget(player.Position);
             }
             CameraDriver = gameSceneCameraDriver;
         }
