@@ -10,10 +10,22 @@ namespace Gamepackage
         public int X;
         public int Y;
 
-        public Point(int x, int y)
+        public Point()
+        {
+            X = 0;
+            Y = 0;
+        }
+
+            public Point(int x, int y)
         {
             this.X = x;
             this.Y = y;
+        }
+
+        public Point(double x, double y)
+        {
+            this.X = Convert.ToInt32(x);
+            this.Y = Convert.ToInt32(y);
         }
 
         public override string ToString()

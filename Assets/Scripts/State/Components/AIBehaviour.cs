@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using KDSharp.DistanceFunctions;
+using KDSharp.KDTree;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,8 +34,14 @@ namespace Gamepackage
         public override void FigureOutNextAction()
         {
             var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
-            var target = FindTarget(level);
+            var target = FindTarget(Entity);
             NextAction = null;
+
+            if(target == null)
+            {
+                DefaultBehaviour();
+                return;
+            }
 
             if (!ServiceLocator.VisibilitySystem.CanSee(level, Entity, target))
             {
@@ -66,9 +74,29 @@ namespace Gamepackage
             }
         }
 
-        private static Entity FindTarget(Level level)
+        public static NearestNeighbour<Entity> FindNearest(Entity entity)
         {
-            return level.Player;
+            var entitySystem = ServiceLocator.EntitySystem;
+            return entitySystem.Tree.NearestNeighbors(new double[2] { entity.Position.X, entity.Position.Y }, 10);
+        }
+
+        private static Entity FindTarget(Entity entity)
+        {
+            var entitySystem = ServiceLocator.EntitySystem;
+            var possibleTargets = FindNearest(entity);
+
+            if(possibleTargets == null)
+            {
+                return null;
+            }
+            foreach(var target in possibleTargets)
+            {
+                if(target.IsPlayer)
+                {
+                    return target;
+                }
+            }
+            return null;
         }
 
         private void DefaultBehaviour()
