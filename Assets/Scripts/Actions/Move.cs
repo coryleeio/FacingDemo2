@@ -21,7 +21,7 @@ namespace Gamepackage
             }
         }
 
-        private float TimeBetweenTiles = 0.25f;
+        public const float TimeBetweenTiles = 0.25f;
 
         private Vector2 LerpCurrentPosition;
         private Vector2 LerpTargetPosition;

@@ -31,6 +31,27 @@ namespace Gamepackage
                     Team = Team.PLAYER,
                 };
             }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_MASLOW)
+            {
+                entity.Name = "Maslow";
+                entity.Body = new Body()
+                {
+                    CurrentHealth = 45,
+                    MaxHealth = 45,
+                    Attacks = DefaultDogBodyAttacks(),
+                };
+                entity.Motor = new Motor();
+                entity.BlocksPathing = true;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.StaticSprite,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
+                };
+                entity.Behaviour = new AIBehaviour()
+                {
+                    Team = Team.PLAYER,
+                };
+            }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
             {
                 entity.Name = "Giant Bee";
@@ -123,6 +144,21 @@ namespace Gamepackage
                             DyeNumber = 1,
                             DyeSize = 1,
                             DamageType = DamageTypes.BLUDGEONING,
+                        },
+                    };
+        }
+
+        private static List<AttackParameters> DefaultDogBodyAttacks()
+        {
+            return new List<AttackParameters>()
+                    {
+                        new AttackParameters()
+                        {
+                            AttackMessage = "{0} bites {1} for {2} points of {3} damage!",
+                            Bonus = 1,
+                            DyeNumber = 2,
+                            DyeSize = 4,
+                            DamageType = DamageTypes.PIERCING,
                         },
                     };
         }

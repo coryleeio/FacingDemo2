@@ -5,39 +5,51 @@ namespace Gamepackage
 {
     public class EntityManager
     {
-        public EntityManager() {}
+        public EntityManager() { }
 
         private Dictionary<int, Entity> EntityMap = new Dictionary<int, Entity>();
-        public KDTree<Entity> Tree = new KDTree<Entity>(2, 5);
+        public KDTree<Entity> PlayerTeamTree = new KDTree<Entity>(2, 5);
+        public KDTree<Entity> EnemyTeamTree = new KDTree<Entity>(2, 5);
 
         public void Register(Entity entity, Level level)
         {
-            if(entity.Id == 0)
+            if (entity.Id == 0)
             {
                 entity.Id = ServiceLocator.GameStateManager.Game.NextId;
             }
-            if(!EntityMap.ContainsKey(entity.Id))
+            if (!EntityMap.ContainsKey(entity.Id))
             {
                 EntityMap.Add(entity.Id, entity);
             }
-            if(!level.Entitys.Contains(entity))
+            if (!level.Entitys.Contains(entity))
             {
                 level.Entitys.Add(entity);
             }
             entity.Rewire();
             level.IndexEntity(entity, entity.Position);
-            Tree.AddPoint(new double[] { entity.Position.X, entity.Position.Y }, entity);
+            if (entity.Behaviour != null)
+            {
+                if (entity.Behaviour.Team == Team.PLAYER)
+                {
+                    PlayerTeamTree.AddPoint(new double[] { entity.Position.X, entity.Position.Y }, entity);
+                }
+                else if (entity.Behaviour.Team == Team.ENEMY)
+                {
+                    EnemyTeamTree.AddPoint(new double[] { entity.Position.X, entity.Position.Y }, entity);
+                }
+            }
         }
 
         public void Clear()
         {
             EntityMap.Clear();
-            Tree.Clear();
+            PlayerTeamTree.Clear();
+            EnemyTeamTree.Clear();
         }
 
         public Entity GetEntityById(int id)
         {
-            if(!EntityMap.ContainsKey(id))
+            if (!EntityMap.ContainsKey(id))
             {
                 return null;
             }
@@ -46,7 +58,7 @@ namespace Gamepackage
 
         public void Deregister(Entity entity, Level level)
         {
-            if(EntityMap.ContainsKey(entity.Id))
+            if (EntityMap.ContainsKey(entity.Id))
             {
                 EntityMap.Remove(entity.Id);
             }
@@ -55,7 +67,17 @@ namespace Gamepackage
                 level.Entitys.Remove(entity);
             }
             level.UnindexEntity(entity, entity.Position);
-            Tree.Remove(entity);
+            if (entity.Behaviour != null)
+            {
+                if (entity.Behaviour.Team == Team.PLAYER)
+                {
+                    PlayerTeamTree.Remove(entity);
+                }
+                else if (entity.Behaviour.Team == Team.ENEMY)
+                {
+                    EnemyTeamTree.Remove(entity);
+                }
+            }
         }
 
         public void Init()

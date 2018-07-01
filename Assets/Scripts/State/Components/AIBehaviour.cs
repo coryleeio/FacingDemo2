@@ -26,8 +26,6 @@ namespace Gamepackage
         public int PathsExpected = 0;
         public int PathsReturned = 0;
 
-        public Point LastKnownEnemyPosition;
-
         [JsonIgnore]
         Coroutine runningRoutine;
 
@@ -37,7 +35,7 @@ namespace Gamepackage
             var target = FindTarget(Entity);
             NextAction = null;
 
-            if(target == null)
+            if (target == null)
             {
                 DefaultBehaviour();
                 return;
@@ -45,22 +43,11 @@ namespace Gamepackage
 
             if (!ServiceLocator.VisibilitySystem.CanSee(level, Entity, target))
             {
-                if (LastKnownEnemyPosition != null && Point.Distance(Entity.Position, LastKnownEnemyPosition) > 2)
-                {
-                    // If you dont know where the player is move toward his last known position
-                    ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownEnemyPosition));
-                }
-                else
-                {
-                    // If you cant see him, and he's nearby just forget about it.  He is probably invisible / gone for some reason.
-                    LastKnownEnemyPosition = null;
-                    DefaultBehaviour();
-                }
+                DefaultBehaviour();
             }
             else
             {
-                // If we see the player set his last known position and move toward it or attack him
-                LastKnownEnemyPosition = new Point(target.Position.X, target.Position.Y);
+                // If we see the target move toward it or attack him
                 if (ServiceLocator.CombatSystem.CanMelee(Entity, target))
                 {
                     var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(Entity);
@@ -69,39 +56,66 @@ namespace Gamepackage
                 }
                 else
                 {
-                    ServiceLocator.Application.StartCoroutine(MoveToward(LastKnownEnemyPosition));
+                    ServiceLocator.Application.StartCoroutine(MoveToward(target.Position));
                 }
             }
         }
 
-        public static NearestNeighbour<Entity> FindNearest(Entity entity)
+        public static NearestNeighbour<Entity> NearestTargets(Entity entity)
         {
             var entitySystem = ServiceLocator.EntitySystem;
-            return entitySystem.Tree.NearestNeighbors(new double[2] { entity.Position.X, entity.Position.Y }, 10);
+            KDTree<Entity> relevantTree = null;
+
+            if (entity.Behaviour.Team == Team.PLAYER)
+            {
+                // If I am a member of the player's team - search for enemies.
+                relevantTree = entitySystem.EnemyTeamTree;
+            }
+            else if (entity.Behaviour.Team == Team.ENEMY)
+            {
+                // If I am a member of the enemy team - search for players.
+                relevantTree = entitySystem.PlayerTeamTree;
+            }
+            else if (entity.Behaviour.Team == Team.NEUTRAL)
+            {
+                // Neutrals dont have enemies.
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            return relevantTree.NearestNeighbors(new double[2] { entity.Position.X, entity.Position.Y }, 10);
         }
 
         private static Entity FindTarget(Entity entity)
         {
             var entitySystem = ServiceLocator.EntitySystem;
-            var possibleTargets = FindNearest(entity);
+            var possibleTargets = NearestTargets(entity);
 
-            if(possibleTargets == null)
+            if (possibleTargets == null)
             {
                 return null;
             }
-            foreach(var target in possibleTargets)
+            foreach (var target in possibleTargets)
             {
-                if(target.IsPlayer)
-                {
-                    return target;
-                }
+                return target;
             }
             return null;
         }
 
         private void DefaultBehaviour()
         {
-            NextAction = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
+            if(Entity.Behaviour.Team == Team.PLAYER)
+            {
+                // Default for allies is follow player
+                var player = ServiceLocator.GameStateManager.Game.CurrentLevel.Player;
+                ServiceLocator.Application.StartCoroutine(MoveToward(player.Position));
+            }
+            else
+            {
+                // Default for monsters is waiting
+                NextAction = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
+            }
         }
 
         IEnumerator MoveToward(Point targetPosition)

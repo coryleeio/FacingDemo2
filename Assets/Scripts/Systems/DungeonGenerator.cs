@@ -65,7 +65,13 @@ namespace Gamepackage
             }
 
             ConnectLevelsByStairway(levels[0], levels[1]);
-            SpawnOnLevel(UniqueIdentifier.ENTITY_PONCY, levels[0]);
+            var playerSpawn = SpawnOnLevel(UniqueIdentifier.ENTITY_PONCY, levels[0]);
+            var playerPos = playerSpawn.Position;
+            SpawnInBounds(UniqueIdentifier.ENTITY_MASLOW, levels[0], new Rectangle() {
+                Position = new Point(playerPos.X - 2, playerPos.Y - 2),
+                Height = 4,
+                Width = 4,
+            });
             BuildPathfindingGrid(ServiceLocator.GameStateManager.Game);
         }
 
@@ -142,9 +148,9 @@ namespace Gamepackage
             upStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
         }
 
-        private Entity SpawnOnLevel(UniqueIdentifier identifier, Level level)
+        private Entity SpawnInBounds(UniqueIdentifier identifier, Level level, Rectangle boundingBox)
         {
-            var possiblePlayerSpawnPoints = FloorTilesInRect(level, level.BoundingBox);
+            var possiblePlayerSpawnPoints = FloorTilesInRect(level, boundingBox);
             foreach (var alreadyExistingEntity in level.Entitys)
             {
                 possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
@@ -154,6 +160,11 @@ namespace Gamepackage
             thing.Position = spawnPoint;
             level.Entitys.Add(thing);
             return thing;
+        }
+
+        private Entity SpawnOnLevel(UniqueIdentifier identifier, Level level)
+        {
+            return SpawnInBounds(identifier, level, level.BoundingBox);
         }
 
         private void BuildPathfindingGrid(Game game)

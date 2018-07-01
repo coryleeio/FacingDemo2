@@ -35,9 +35,9 @@ namespace Gamepackage
         {
             get
             {
-                foreach(var target in Targets)
+                foreach (var target in Targets)
                 {
-                    if(target.IsPlayer)
+                    if (target.IsPlayer)
                     {
                         return true;
                     }
@@ -68,6 +68,22 @@ namespace Gamepackage
                 {
                     targetIncludesPlayer = true;
                 }
+            }
+            if(targetIncludesPlayer)
+            {
+                var oldLevel = ServiceLocator.GameStateManager.Game.CurrentLevel;
+                foreach(var entityInLevel in oldLevel.Entitys)
+                {
+                    if(entityInLevel.Behaviour != null && entityInLevel.Behaviour.Team == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
+                    {
+                        // Add player followers to list of targets
+                        Targets.Add(entityInLevel);
+                    }
+                }
+            }
+
+            foreach (var target in Targets)
+            {
                 var oldLevel = ServiceLocator.GameStateManager.Game.CurrentLevel;
                 if (target.BlocksPathing)
                 {
@@ -87,7 +103,7 @@ namespace Gamepackage
             {
                 ServiceLocator.PlayerController.ActionList.Clear();
                 ServiceLocator.GameStateManager.Game.CurrentLevelIndex = levelId;
-                if(levelId > ServiceLocator.GameStateManager.Game.FurthestLevelReached)
+                if (levelId > ServiceLocator.GameStateManager.Game.FurthestLevelReached)
                 {
                     ServiceLocator.GameStateManager.Game.FurthestLevelReached = levelId;
                 }

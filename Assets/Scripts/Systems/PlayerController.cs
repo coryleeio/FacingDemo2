@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -59,9 +60,11 @@ namespace Gamepackage
             var player = level.Player;
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
             var isValidPoint = level.BoundingBox.Contains(mousePos);
-            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.Grid[mousePos].EntitiesInPosition.Count > 0 && level.Grid[mousePos].EntitiesInPosition[0].IsCombatant;
-            var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
+            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.Grid[mousePos].EntitiesInPosition.Count > 0 && level.Grid[mousePos].EntitiesInPosition[0].IsCombatant && level.Grid[mousePos].EntitiesInPosition[0].Behaviour.Team == Team.ENEMY;
+            var isHoveringOnAlly = isValidPoint && mousePos != player.Position && level.Grid[mousePos].EntitiesInPosition.Count > 0 && level.Grid[mousePos].EntitiesInPosition[0].IsCombatant && level.Grid[mousePos].EntitiesInPosition[0].Behaviour.Team == Team.PLAYER && !level.Grid[mousePos].EntitiesInPosition[0].Behaviour.IsPlayer;
 
+            var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
+            var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
             ServiceLocator.OverlaySystem.SetActivated(MouseHoverOverlay, true);
             MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
@@ -151,7 +154,11 @@ namespace Gamepackage
             if (Input.GetMouseButtonDown(0))
             {
                 ActionList.Clear();
-                if (isHoveringOnEnemyCombatant && isAbleToHitHoveringEnemyCombatant)
+                if(isAbleToSwapWithHoveringAlly)
+                {
+                    QueueSwapPosition(level, player, mousePos);
+                }
+                else if (isAbleToHitHoveringEnemyCombatant)
                 {
                     QueueAttack(level, player, mousePos);
                 }
@@ -163,6 +170,13 @@ namespace Gamepackage
                     }
                 }
             }
+        }
+
+        private void QueueSwapPosition(Level level, Entity player, Point mousePos)
+        {
+            var swapPositions = ServiceLocator.PrototypeFactory.BuildEntityAction<SwapPositionsWithAlly>(player);
+            swapPositions.Targets.Add(level.Grid[mousePos].EntitiesInPosition.Find((x) => { return x.Behaviour != null; } ));
+            player.Behaviour.NextAction = swapPositions;
         }
 
         private void QueueAttack(Level level, Entity player, Point mousePos)
