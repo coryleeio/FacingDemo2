@@ -26,7 +26,7 @@ namespace Gamepackage
 
         public void Clear()
         {
-            ServiceLocator.EntitySystem.Clear();
+            Context.EntitySystem.Clear();
             Debug.Log("Clearing game state");
             Game = null;
         }

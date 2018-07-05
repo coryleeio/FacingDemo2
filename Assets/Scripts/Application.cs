@@ -9,7 +9,7 @@ namespace Gamepackage
         void Start()
         {
             DontDestroyOnLoad(this);
-            ServiceLocator.Application = this;
+            Context.Application = this;
             StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
         }
 
@@ -20,21 +20,29 @@ namespace Gamepackage
 
         void OnDisable()
         {
-            ServiceLocator.PathFinder.Cleanup();
+            Context.PathFinder.Cleanup();
         }
 
         void OnGUI()
         {
             if (GUI.Button(new Rect(10, 10, 100, 50), "Start New game"))
             {
-                ServiceLocator.GameStateManager.Clear();
+                Context.GameStateManager.Clear();
                 StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
             }
 
             if (GUI.Button(new Rect(10, 75, 100, 50), "Exit game"))
             {
-                ServiceLocator.GameStateManager.Clear();
-                StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+
+                if(UnityEngine.Application.isEditor)
+                {
+                    Context.GameStateManager.Clear();
+                    StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+                }
+                else
+                {
+                    UnityEngine.Application.Quit();
+                }
             }
 
             if (GUI.Button(new Rect(10, 140, 100, 50), "Reload current"))
@@ -44,12 +52,12 @@ namespace Gamepackage
 
             if (GUI.Button(new Rect(10, 215, 100, 50), "Save"))
             {
-                ServiceLocator.GameStateManager.SaveGame();
+                Context.GameStateManager.SaveGame();
             }
 
             if (GUI.Button(new Rect(10, 290, 100, 50), "Load"))
             {
-                ServiceLocator.GameStateManager.LoadGame();
+                Context.GameStateManager.LoadGame();
                 StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
             }
 
@@ -63,7 +71,7 @@ namespace Gamepackage
                         newVis[x, y] = true;
                     }
                 }
-                ServiceLocator.VisibilitySystem.UpdateVisibility(newVis);
+                Context.VisibilitySystem.UpdateVisibility(newVis);
             }
 
             if (Camera.main != null)

@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class Move : Action
+    public class Move : TargetableAction
     {
         public override int TimeCost
         {
@@ -73,10 +75,10 @@ namespace Gamepackage
             // Release old position
             if (Source.BlocksPathing)
             {
-                ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = true;
+                Context.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = true;
             }
 
-            ServiceLocator.EntitySystem.Deregister(Source, ServiceLocator.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Deregister(Source, Context.GameStateManager.Game.CurrentLevel);
 
             // Move the view to the new position
             if (Source.View != null && Source.View.ViewGameObject != null)
@@ -90,26 +92,16 @@ namespace Gamepackage
             // Lock new position
             if (Source.BlocksPathing)
             {
-                ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = false;
+                Context.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = false;
             }
-            ServiceLocator.EntitySystem.Register(Source, ServiceLocator.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Register(Source, Context.GameStateManager.Game.CurrentLevel);
 
-            foreach (var potentialTrigger in ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys)
+            foreach (var triggerThatMightGoOff in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
-                if(potentialTrigger.Trigger != null && potentialTrigger.Trigger.Ability.TriggeredBy == Ability.TriggerType.OnTriggerStep)
+                if(triggerThatMightGoOff.Trigger != null && triggerThatMightGoOff.Trigger.Ability.TriggeredBy == TriggerType.OnTriggerStep)
                 {
-                    var points = MathUtil.GetPointsByOffset(potentialTrigger.Position, potentialTrigger.Trigger.Offsets);
-                    if (points.Contains(Source.Position))
-                    {
-                        var ability = potentialTrigger.Trigger.Ability;
-                        ability.Targets.Add(Source);
-                        if (potentialTrigger.Trigger.Ability.CanPerform)
-                        {
-                            var step = new Step();
-                            step.Actions.AddFirst(ability);
-                            ServiceLocator.FlowSystem.Steps.AddAfter(ServiceLocator.FlowSystem.Steps.First, step);
-                        }
-                    }
+                    var points = MathUtil.GetPointsByOffset(triggerThatMightGoOff.Position, triggerThatMightGoOff.Trigger.Offsets);
+                    CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Source, triggerThatMightGoOff, points);
                 }
             }
         }

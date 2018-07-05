@@ -15,7 +15,7 @@ namespace Gamepackage
         {
             if (entity.Id == 0)
             {
-                entity.Id = ServiceLocator.GameStateManager.Game.NextId;
+                entity.Id = Context.GameStateManager.Game.NextId;
             }
             if (!EntityMap.ContainsKey(entity.Id))
             {
@@ -83,10 +83,10 @@ namespace Gamepackage
         public void Init()
         {
             Clear();
-            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
+            var level = Context.GameStateManager.Game.CurrentLevel;
             foreach (var entity in level.Entitys)
             {
-                ServiceLocator.EntitySystem.Register(entity, level);
+                Context.EntitySystem.Register(entity, level);
             }
         }
     }

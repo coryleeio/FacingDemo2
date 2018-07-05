@@ -309,6 +309,11 @@ namespace Gamepackage
             Surrounding,
         }
 
+        public static bool ChanceToOccur(int percentile)
+        {
+            return UnityEngine.Random.Range(0, 100) > percentile;
+        }
+
         public static List<Point> FloodFill(Point p, int radius, ref List<Point> points, FloodFillType floodFillType, Predicate<Point> predicate = null)
         {
             if (predicate == null || predicate(p))

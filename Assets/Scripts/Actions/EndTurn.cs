@@ -1,6 +1,8 @@
-﻿namespace Gamepackage
+﻿using Newtonsoft.Json;
+
+namespace Gamepackage
 {
-    public class EndTurn : Action
+    public class EndTurn : TargetableAction
     {
         public override int TimeCost
         {

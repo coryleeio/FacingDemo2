@@ -11,10 +11,6 @@ namespace Gamepackage
         public override void Rewire(Entity entity)
         {
             base.Rewire(entity);
-            if(Ability != null)
-            {
-                Ability.Source = entity;
-            }
         }
     }
 }

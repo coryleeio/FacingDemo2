@@ -10,7 +10,7 @@ namespace Gamepackage
         public bool IsThinking = false;
 
         [JsonIgnore]
-        public Action NextAction = null;
+        public TargetableAction NextAction = null;
 
         public abstract bool IsPlayer
         {

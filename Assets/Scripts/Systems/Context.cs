@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public static class ServiceLocator
+    public static class Context
     {
         public static GameStateManager GameStateManager = new GameStateManager();
         public static VisibilitySystem VisibilitySystem = new VisibilitySystem();
@@ -11,7 +11,6 @@
         public static SpriteSortingSystem SpriteSortingSystem = new SpriteSortingSystem();
         public static OverlaySystem OverlaySystem = new OverlaySystem();
         public static PathFinder PathFinder = new PathFinder();
-        public static CombatSystem CombatSystem = new CombatSystem();
         public static GameScene GameScene = new GameScene();
         public static LoadingScene LoadingScene = new LoadingScene();
         public static MainMenuScene MainMenuScene = new MainMenuScene();

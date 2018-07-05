@@ -5,12 +5,6 @@ namespace Gamepackage
 {
     public abstract class Action : IStateMachineState
     {
-        [JsonIgnore]
-        public Entity Source;
-
-        [JsonIgnore]
-        public List<Entity> Targets = new List<Entity>(0);
-
         public abstract int TimeCost
         {
             get;
@@ -45,7 +39,6 @@ namespace Gamepackage
         {
             Started = false;
             Done = false;
-            Targets.Clear();
         }
 
         public virtual void Do()

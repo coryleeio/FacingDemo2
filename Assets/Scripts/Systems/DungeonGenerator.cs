@@ -13,8 +13,8 @@ namespace Gamepackage
         {
             var numberOfLevels = 2;
 
-            ServiceLocator.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevels];
-            var levels = ServiceLocator.GameStateManager.Game.Dungeon.Levels;
+            Context.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevels];
+            var levels = Context.GameStateManager.Game.Dungeon.Levels;
             for (int levelIndex = 0; levelIndex < numberOfLevels; levelIndex++)
             {
                 var level = new Level();
@@ -44,7 +44,7 @@ namespace Gamepackage
                     var numberOfSpawnTablesToSpawn = 5;
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        var entitiesInEncounter = ServiceLocator.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
+                        var entitiesInEncounter = Context.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
@@ -54,7 +54,7 @@ namespace Gamepackage
                     var numberOfSpawnTablesToSpawn = 3;
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        var entitiesInEncounter = ServiceLocator.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
+                        var entitiesInEncounter = Context.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
@@ -72,7 +72,7 @@ namespace Gamepackage
                 Height = 4,
                 Width = 4,
             });
-            BuildPathfindingGrid(ServiceLocator.GameStateManager.Game);
+            BuildPathfindingGrid(Context.GameStateManager.Game);
         }
 
         private void SpawnConnectedStandardRoomsOnLevel(Level level, int numberOfRoomsToSpawn)
@@ -134,8 +134,8 @@ namespace Gamepackage
             var lowerLevel = level1.LevelIndex < level2.LevelIndex ? level1 : level2;
             var higherLevel = lowerLevel == level1 ? level2 : level1;
 
-            var downStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_DOWN, ServiceLocator.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
-            var upStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_UP, ServiceLocator.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
+            var downStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_DOWN, Context.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
+            var upStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_UP, Context.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
 
             var downStairTraverseAction = downStair.Trigger;
             downStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
@@ -156,7 +156,7 @@ namespace Gamepackage
                 possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
             }
             var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
-            var thing = ServiceLocator.PrototypeFactory.BuildEntity(identifier);
+            var thing = Context.PrototypeFactory.BuildEntity(identifier);
             thing.Position = spawnPoint;
             level.Entitys.Add(thing);
             return thing;

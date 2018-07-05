@@ -31,7 +31,7 @@ namespace Gamepackage
 
         public override void FigureOutNextAction()
         {
-            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
+            var level = Context.GameStateManager.Game.CurrentLevel;
             var target = FindTarget(Entity);
             NextAction = null;
 
@@ -41,29 +41,29 @@ namespace Gamepackage
                 return;
             }
 
-            if (!ServiceLocator.VisibilitySystem.CanSee(level, Entity, target))
+            if (!Context.VisibilitySystem.CanSee(level, Entity, target))
             {
                 DefaultBehaviour();
             }
             else
             {
                 // If we see the target move toward it or attack him
-                if (ServiceLocator.CombatSystem.CanMelee(Entity, target))
+                if (CombatUtil.CanMelee(Entity, target))
                 {
-                    var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(Entity);
+                    var attack = Context.PrototypeFactory.BuildEntityAction<MeleeAttack>(Entity);
                     attack.Targets.Add(target);
                     NextAction = attack;
                 }
                 else
                 {
-                    ServiceLocator.Application.StartCoroutine(MoveToward(target.Position));
+                    Context.Application.StartCoroutine(MoveToward(target.Position));
                 }
             }
         }
 
         public static NearestNeighbour<Entity> NearestTargets(Entity entity)
         {
-            var entitySystem = ServiceLocator.EntitySystem;
+            var entitySystem = Context.EntitySystem;
             KDTree<Entity> relevantTree = null;
 
             if (entity.Behaviour.Team == Team.PLAYER)
@@ -89,7 +89,7 @@ namespace Gamepackage
 
         private static Entity FindTarget(Entity entity)
         {
-            var entitySystem = ServiceLocator.EntitySystem;
+            var entitySystem = Context.EntitySystem;
             var possibleTargets = NearestTargets(entity);
 
             if (possibleTargets == null)
@@ -108,13 +108,13 @@ namespace Gamepackage
             if(Entity.Behaviour.Team == Team.PLAYER)
             {
                 // Default for allies is follow player
-                var player = ServiceLocator.GameStateManager.Game.CurrentLevel.Player;
-                ServiceLocator.Application.StartCoroutine(MoveToward(player.Position));
+                var player = Context.GameStateManager.Game.CurrentLevel.Player;
+                Context.Application.StartCoroutine(MoveToward(player.Position));
             }
             else
             {
                 // Default for monsters is waiting
-                NextAction = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
+                NextAction = Context.PrototypeFactory.BuildEntityAction<Wait>(Entity);
             }
         }
 
@@ -123,7 +123,7 @@ namespace Gamepackage
             NextAction = null;
             PathsReturned = 0;
 
-            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
+            var level = Context.GameStateManager.Game.CurrentLevel;
             var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll((p) => { return level.Grid[p].Walkable; });
             var PointsAroundMe = MathUtil.OrthogonalPoints(Entity.Position).FindAll((p) => { return level.Grid[p].Walkable && Point.DistanceSquared(p, targetPosition) < Point.DistanceSquared(Entity.Position, targetPosition); });
 
@@ -135,19 +135,19 @@ namespace Gamepackage
 
             foreach (var pointAroundTarget in PointsAroundTarget)
             {
-                ServiceLocator.PathFinder.StartPath(Entity.Position, pointAroundTarget, ServiceLocator.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
+                Context.PathFinder.StartPath(Entity.Position, pointAroundTarget, Context.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
             }
 
             foreach (var pointAroundMe in PointsAroundMe)
             {
-                ServiceLocator.PathFinder.StartPath(Entity.Position, pointAroundMe, ServiceLocator.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
+                Context.PathFinder.StartPath(Entity.Position, pointAroundMe, Context.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
             }
 
             while (NextAction == null)
             {
                 if (PathsReturned == PathsExpected)
                 {
-                    NextAction = ServiceLocator.PrototypeFactory.BuildEntityAction<Wait>(Entity);
+                    NextAction = Context.PrototypeFactory.BuildEntityAction<Wait>(Entity);
                     break; // done
                 }
                 yield return new WaitForEndOfFrame();
@@ -161,10 +161,10 @@ namespace Gamepackage
             {
                 if (runningRoutine != null)
                 {
-                    ServiceLocator.Application.StopCoroutine(runningRoutine);
+                    Context.Application.StopCoroutine(runningRoutine);
                     runningRoutine = null;
                 }
-                var move = ServiceLocator.PrototypeFactory.BuildEntityAction<Move>(Entity) as Move;
+                var move = Context.PrototypeFactory.BuildEntityAction<Move>(Entity) as Move;
                 move.TargetPosition = new Point(path.Nodes[0].Position.X, path.Nodes[0].Position.Y);
                 NextAction = move;
             }

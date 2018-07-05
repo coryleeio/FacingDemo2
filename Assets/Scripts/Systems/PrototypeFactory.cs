@@ -22,7 +22,7 @@ namespace Gamepackage
             }
         }
 
-        public Action BuildEntityAction<TAction> (Entity entity) where TAction : Action
+        public TargetableAction BuildEntityAction<TAction> (Entity entity) where TAction : TargetableAction
         {
             var action = Activator.CreateInstance<TAction>();
             Assert.IsNotNull(action, string.Format("Failed to create {0}", typeof(TAction)));
@@ -46,14 +46,14 @@ namespace Gamepackage
 
         public Entity BuildEntity(UniqueIdentifier identifier)
         {
-            var entity = EntityPrototypes.Build(identifier);
+            var entity = EntityFactory.Build(identifier);
             entity.Position = new Point(0, 0);
             return entity;
         }
 
         public List<Entity> BuildEncounter(UniqueIdentifier identifier)
         {
-             return EncounterPrototypes.Build(identifier);
+             return EncounterFactory.Build(identifier);
         }
 
         public GameObject BuildView(Entity entity)
@@ -108,7 +108,7 @@ namespace Gamepackage
                 {
                     var point = new Point(x, y);
                     var tileInfo = level.Grid[x, y];
-                    var tileSet = ServiceLocator.ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
+                    var tileSet = Context.ResourceManager.GetPrototype<Tileset>(tileInfo.TilesetIdentifier);
 
                     if (tileInfo.TileType == TileType.Floor)
                     {
@@ -273,7 +273,7 @@ namespace Gamepackage
             o.transform.SetParent(folder.transform);
             renderer.sprite = sprite;
             o.transform.localPosition = MathUtil.MapToWorld(position);
-            ServiceLocator.SpriteSortingSystem.RegisterTile(renderer, position);
+            Context.SpriteSortingSystem.RegisterTile(renderer, position);
             return renderer;
         }
     }

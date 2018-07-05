@@ -2,6 +2,8 @@
 {
     public enum UniqueIdentifier
     {
+        ABILITY_TRAVERSE_STAIRCASE,
+        ABILITY_LUCKY_COIN_LIFE_SAVE,
         BEHAVIOUR_STANDARD,
         BEHAVIOUR_PLAYER,
         ENTITY_PONCY,
@@ -16,6 +18,10 @@
         VIEW_MARKER_YELLOW,
         VIEW_MARKER_GREEN,
         TRIGGER_TRAVERSE_STAIRCASE,
+        ITEM_LONGSWORD,
+        ITEM_LUCKY_COIN,
+        ITEM_APPEARANCE_LUCKY_COIN,
+        ITEM_APPEARANCE_LONGSWORD,
         TILESET_STONE,
     }
 }

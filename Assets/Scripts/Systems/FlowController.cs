@@ -25,7 +25,7 @@ namespace Gamepackage
             }
             else
             {
-                var entities = ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys;
+                var entities = Context.GameStateManager.Game.CurrentLevel.Entitys;
                 var entitiesDoneThinking = 0;
                 var entitesThatStillNeedToACtBeforePhaseEnds = 0;
                 foreach (var entity in entities)
@@ -112,7 +112,7 @@ namespace Gamepackage
                         }
                         foreach (var waiter in waiters)
                         {
-                            endTurnStep.Actions.AddFirst(ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(waiter));
+                            endTurnStep.Actions.AddFirst(Context.PrototypeFactory.BuildEntityAction<EndTurn>(waiter));
                         }
                         Steps.AddLast(step);
                         Steps.AddLast(endTurnStep);
@@ -131,7 +131,7 @@ namespace Gamepackage
                             {
                                 listOfMovedToPoints.Add(desiredMove.TargetPosition);
                                 moveStep.Actions.AddLast(entity.Behaviour.NextAction);
-                                endTurnSTep.Actions.AddLast(ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(entity));
+                                endTurnSTep.Actions.AddLast(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity));
                             }
                         }
                         Steps.AddLast(moveStep);
@@ -147,7 +147,7 @@ namespace Gamepackage
                         var entityToAct = everyoneElse[0];
                         var nextAction = entityToAct.Behaviour.NextAction;
                         step.Actions.AddLast(nextAction);
-                        endTurnStep.Actions.AddLast(ServiceLocator.PrototypeFactory.BuildEntityAction<EndTurn>(entityToAct));
+                        endTurnStep.Actions.AddLast(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entityToAct));
 
                         Steps.AddLast(step);
                         Steps.AddLast(endTurnStep);
@@ -180,7 +180,7 @@ namespace Gamepackage
         public void ChangePhase(Phase nextPhase)
         {
             CurrentPhase = nextPhase;
-            var entities = ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys;
+            var entities = Context.GameStateManager.Game.CurrentLevel.Entitys;
             foreach (var entity in entities)
             {
                 if (entity.Behaviour != null)

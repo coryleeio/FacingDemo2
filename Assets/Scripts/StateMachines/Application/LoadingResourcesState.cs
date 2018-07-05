@@ -7,19 +7,19 @@ namespace Gamepackage
     {
         public void Enter()
         {
-            ServiceLocator.LoadingScene.Load();
-            ServiceLocator.Application.StartCoroutine(LoadPrototypes());
+            Context.LoadingScene.Load();
+            Context.Application.StartCoroutine(LoadPrototypes());
         }
 
         IEnumerator LoadPrototypes()
         {
-            ServiceLocator.ResourceManager.LoadAllPrototypes();
-            if (ServiceLocator.GameStateManager.Game == null)
+            Context.ResourceManager.LoadAllPrototypes();
+            if (Context.GameStateManager.Game == null)
             {
-                ServiceLocator.GameStateManager.NewGame();
-                ServiceLocator.DungeonGenerator.GenerateDungeon();
+                Context.GameStateManager.NewGame();
+                Context.DungeonGenerator.GenerateDungeon();
             }
-            ServiceLocator.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
+            Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             yield return new WaitForEndOfFrame();
         }
 
@@ -30,7 +30,7 @@ namespace Gamepackage
 
         public void Exit()
         {
-            ServiceLocator.LoadingScene.Unload();
+            Context.LoadingScene.Unload();
         }
     }
 }

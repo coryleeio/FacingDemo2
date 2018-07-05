@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public static class EntityPrototypes
+    public static class EntityFactory
     {
         public static Entity Build(UniqueIdentifier uniqueIdentifier)
         {
             var entity = new Entity();
             entity.PrototypeIdentifier = uniqueIdentifier;
-
+            entity.Inventory = new Inventory();
             if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_PONCY)
             {
                 entity.Name = "Poncy";
                 entity.Body = new Body()
                 {
-                    CurrentHealth = 10,
-                    MaxHealth = 10,
+                    Attributes = new Dictionary<Attributes, int>
+                    {
+                        {Attributes.MAX_HEALTH, 10 },
+                    },
                     Attacks = DefaultHumanoidBodyAttacks()
                 };
-                entity.Motor = new Motor();
                 entity.BlocksPathing = true;
                 entity.View = new View()
                 {
@@ -30,17 +32,20 @@ namespace Gamepackage
                 {
                     Team = Team.PLAYER,
                 };
+                entity.Inventory.EquipItem(ItemFactory.Build(Tables.BanditWeapons.NextSingleItem()));
+                entity.Inventory.Items.Add(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_MASLOW)
             {
                 entity.Name = "Maslow";
                 entity.Body = new Body()
                 {
-                    CurrentHealth = 45,
-                    MaxHealth = 45,
+                    Attributes = new Dictionary<Attributes, int>
+                    {
+                        {Attributes.MAX_HEALTH, 45 },
+                    },
                     Attacks = DefaultDogBodyAttacks(),
                 };
-                entity.Motor = new Motor();
                 entity.BlocksPathing = true;
                 entity.View = new View()
                 {
@@ -57,11 +62,12 @@ namespace Gamepackage
                 entity.Name = "Giant Bee";
                 entity.Body = new Body()
                 {
-                    CurrentHealth = 1,
-                    MaxHealth = 1,
+                    Attributes = new Dictionary<Attributes, int>
+                    {
+                        {Attributes.MAX_HEALTH, 1 },
+                    },
                     Attacks = DefaultBeeBodyAttacks(),
                 };
-                entity.Motor = new Motor();
                 entity.BlocksPathing = true;
                 entity.View = new View()
                 {
@@ -78,11 +84,12 @@ namespace Gamepackage
                 entity.Name = "Queen Bee";
                 entity.Body = new Body()
                 {
-                    CurrentHealth = 3,
-                    MaxHealth = 3,
+                    Attributes = new Dictionary<Attributes, int>
+                    {
+                        {Attributes.MAX_HEALTH, 3 },
+                    },
                     Attacks = DefaultBeeBodyAttacks(),
                 };
-                entity.Motor = new Motor();
                 entity.BlocksPathing = true;
                 entity.View = new View()
                 {
@@ -129,6 +136,13 @@ namespace Gamepackage
             else
             {
                 throw new NotImplementedException();
+            }
+
+            if(entity.Body != null)
+            {
+                Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.MAX_HEALTH), "Entities must have a value for maximum health if they have a body.");
+                entity.Body.Entity = entity; // Needed for the recursive calculation.
+                entity.Body.CurrentHealth = entity.Body.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
             }
             return entity;
         }

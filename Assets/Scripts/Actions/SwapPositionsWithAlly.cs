@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class SwapPositionsWithAlly : Action
+    public class SwapPositionsWithAlly : TargetableAction
     {
         public override int TimeCost
         {
@@ -77,8 +79,8 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            ServiceLocator.EntitySystem.Deregister(Source, ServiceLocator.GameStateManager.Game.CurrentLevel);
-            ServiceLocator.EntitySystem.Deregister(Targets[0], ServiceLocator.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Deregister(Source, Context.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Deregister(Targets[0], Context.GameStateManager.Game.CurrentLevel);
             var oldSourcePos = new Point(Source.Position.X, Source.Position.Y);
             // Move the view to the new position
             if (Source.View != null && Source.View.ViewGameObject != null)
@@ -95,39 +97,19 @@ namespace Gamepackage
             Source.Position = Targets[0].Position;
             Targets[0].Position = oldSourcePos;
 
-            ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = !Source.BlocksPathing;
-            ServiceLocator.GameStateManager.Game.CurrentLevel.Grid[Targets[0].Position].Walkable = !Targets[0].BlocksPathing;
+            Context.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = !Source.BlocksPathing;
+            Context.GameStateManager.Game.CurrentLevel.Grid[Targets[0].Position].Walkable = !Targets[0].BlocksPathing;
 
-            ServiceLocator.EntitySystem.Register(Source, ServiceLocator.GameStateManager.Game.CurrentLevel);
-            ServiceLocator.EntitySystem.Register(Targets[0], ServiceLocator.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Register(Source, Context.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Register(Targets[0], Context.GameStateManager.Game.CurrentLevel);
 
-            foreach (var potentialTrigger in ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys)
+            foreach (var potentialTrigger in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
-                if (potentialTrigger.Trigger != null && potentialTrigger.Trigger.Ability.TriggeredBy == Ability.TriggerType.OnTriggerStep)
+                if (potentialTrigger.Trigger != null && potentialTrigger.Trigger.Ability.TriggeredBy == TriggerType.OnTriggerStep)
                 {
                     var points = MathUtil.GetPointsByOffset(potentialTrigger.Position, potentialTrigger.Trigger.Offsets);
-                    if (points.Contains(Source.Position))
-                    {
-                        var ability = potentialTrigger.Trigger.Ability;
-                        ability.Targets.Add(Source);
-                        if (potentialTrigger.Trigger.Ability.CanPerform)
-                        {
-                            var step = new Step();
-                            step.Actions.AddFirst(ability);
-                            ServiceLocator.FlowSystem.Steps.AddAfter(ServiceLocator.FlowSystem.Steps.First, step);
-                        }
-                    }
-                    if (points.Contains(Targets[0].Position))
-                    {
-                        var ability = potentialTrigger.Trigger.Ability;
-                        ability.Targets.Add(Targets[0]);
-                        if (potentialTrigger.Trigger.Ability.CanPerform)
-                        {
-                            var step = new Step();
-                            step.Actions.AddFirst(ability);
-                            ServiceLocator.FlowSystem.Steps.AddAfter(ServiceLocator.FlowSystem.Steps.First, step);
-                        }
-                    }
+                    CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Source, potentialTrigger, points);
+                    CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Targets[0], potentialTrigger, points);
                 }
             }
         }

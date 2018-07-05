@@ -6,6 +6,9 @@ namespace Gamepackage
 {
     public class TraverseStaircase : Ability
     {
+        [JsonIgnore]
+        public TriggerStepContext AbilityTriggerContext;
+
         public enum Params
         {
             TARGET_POSX,
@@ -30,22 +33,6 @@ namespace Gamepackage
             }
         }
 
-        [JsonIgnore]
-        public override bool CanPerform
-        {
-            get
-            {
-                foreach (var target in Targets)
-                {
-                    if (target.IsPlayer)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-
         public override TriggerType TriggeredBy
         {
             get
@@ -57,12 +44,12 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            var Parameters = Source.Trigger.TriggerParameters;
+            var Parameters = AbilityTriggerContext.Source.Trigger.TriggerParameters;
             var levelId = Convert.ToInt32(Parameters[Params.TARGET_LEVEL_ID.ToString()]);
             var posX = Convert.ToInt32(Parameters[Params.TARGET_POSX.ToString()]);
             var posY = Convert.ToInt32(Parameters[Params.TARGET_POSY.ToString()]);
             var targetIncludesPlayer = false;
-            foreach (var target in Targets)
+            foreach (var target in AbilityTriggerContext.Targets)
             {
                 if (target.IsPlayer)
                 {
@@ -71,20 +58,20 @@ namespace Gamepackage
             }
             if(targetIncludesPlayer)
             {
-                var oldLevel = ServiceLocator.GameStateManager.Game.CurrentLevel;
+                var oldLevel = Context.GameStateManager.Game.CurrentLevel;
                 foreach(var entityInLevel in oldLevel.Entitys)
                 {
                     if(entityInLevel.Behaviour != null && entityInLevel.Behaviour.Team == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
                     {
                         // Add player followers to list of targets
-                        Targets.Add(entityInLevel);
+                        AbilityTriggerContext.Targets.Add(entityInLevel);
                     }
                 }
             }
 
-            foreach (var target in Targets)
+            foreach (var target in AbilityTriggerContext.Targets)
             {
-                var oldLevel = ServiceLocator.GameStateManager.Game.CurrentLevel;
+                var oldLevel = Context.GameStateManager.Game.CurrentLevel;
                 if (target.BlocksPathing)
                 {
                     oldLevel.Grid[target.Position].Walkable = true;
@@ -93,7 +80,7 @@ namespace Gamepackage
                 {
                     GameObject.Destroy(target.View.ViewGameObject);
                 }
-                var newLevel = ServiceLocator.GameStateManager.Game.Dungeon.Levels[levelId];
+                var newLevel = Context.GameStateManager.Game.Dungeon.Levels[levelId];
                 var pos = new Point(posX, posY);
                 oldLevel.Entitys.Remove(target);
                 target.Position = pos;
@@ -101,14 +88,36 @@ namespace Gamepackage
             }
             if (targetIncludesPlayer)
             {
-                ServiceLocator.PlayerController.ActionList.Clear();
-                ServiceLocator.GameStateManager.Game.CurrentLevelIndex = levelId;
-                if (levelId > ServiceLocator.GameStateManager.Game.FurthestLevelReached)
+                Context.PlayerController.ActionList.Clear();
+                Context.GameStateManager.Game.CurrentLevelIndex = levelId;
+                if (levelId > Context.GameStateManager.Game.FurthestLevelReached)
                 {
-                    ServiceLocator.GameStateManager.Game.FurthestLevelReached = levelId;
+                    Context.GameStateManager.Game.FurthestLevelReached = levelId;
                 }
-                ServiceLocator.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
+                Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             }
+        }
+
+        public override AbilityTriggerContext Perform(AbilityTriggerContext abilityTriggerContext)
+        {
+            AbilityTriggerContext = (TriggerStepContext) abilityTriggerContext;
+            var step = new Step();
+            step.Actions.AddFirst(this);
+            Context.FlowSystem.Steps.AddAfter(Context.FlowSystem.Steps.First, step);
+            return abilityTriggerContext;
+        }
+
+        public override bool CanPerform(AbilityTriggerContext abilityTriggerContext)
+        {
+            var ctx = (TriggerStepContext)abilityTriggerContext;
+            foreach (var target in ctx.Targets)
+            {
+                if (target.IsPlayer)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

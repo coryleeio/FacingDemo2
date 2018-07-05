@@ -19,11 +19,11 @@ namespace Gamepackage
 
         public Trigger Trigger;
 
-        public Motor Motor;
-
         public View View;
 
         public Behaviour Behaviour;
+
+        public Inventory Inventory;
 
         public UniqueIdentifier PrototypeIdentifier { get; set; }
 
@@ -69,10 +69,6 @@ namespace Gamepackage
             if(View != null)
             {
                 View.Rewire(this);
-            }
-            if(Motor != null)
-            {
-                Motor.Rewire(this);
             }
             if(Behaviour != null)
             {

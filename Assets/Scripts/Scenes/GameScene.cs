@@ -25,15 +25,15 @@ namespace Gamepackage
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
 
-            ServiceLocator.PrototypeFactory.BuildMapTiles(ServiceLocator.GameStateManager.Game.CurrentLevel);
-            foreach (var entity in ServiceLocator.GameStateManager.Game.CurrentLevel.Entitys)
+            Context.PrototypeFactory.BuildMapTiles(Context.GameStateManager.Game.CurrentLevel);
+            foreach (var entity in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
                 if(entity.View != null)
                 {
-                    entity.View.ViewGameObject = ServiceLocator.PrototypeFactory.BuildView(entity);
+                    entity.View.ViewGameObject = Context.PrototypeFactory.BuildView(entity);
                 }
             }
-            var player = ServiceLocator.GameStateManager.Game.CurrentLevel.Player;
+            var player = Context.GameStateManager.Game.CurrentLevel.Player;
             if(player.View != null && player.View.ViewGameObject != null)
             {
                 gameSceneCameraDriver.JumpToTarget(player.Position);

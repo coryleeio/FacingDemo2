@@ -6,19 +6,13 @@ namespace Gamepackage
     public class SpriteSortingSystem
     {
         private SpriteRenderer[,] Tiles;
-        private static List<Direction> HigherSortingPositions = new List<Direction>() { Direction.East, Direction.SouthEast, Direction.South, Direction.SouthWest };
-        private static List<Direction> LowerSortingPositions = new List<Direction>() { Direction.West, Direction.NorthWest, Direction.North, Direction.NorthEast };
-        private ListGrid<Entity> NotMovingEntitys;
-        private ListGrid<Entity> MovingEntitys;
 
         public SpriteSortingSystem() { }
 
         public void Init()
         {
-            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
+            var level = Context.GameStateManager.Game.CurrentLevel;
             Tiles = new SpriteRenderer[level.BoundingBox.Width, level.BoundingBox.Height];
-            MovingEntitys = new ListGrid<Entity>(level.BoundingBox.Width, level.BoundingBox.Height);
-            NotMovingEntitys = new ListGrid<Entity>(level.BoundingBox.Width, level.BoundingBox.Height);
         }
 
         public void RegisterTile(SpriteRenderer tileSpriteRenderer, Point position)
@@ -28,21 +22,20 @@ namespace Gamepackage
 
         public void Process()
         {
-            var level = ServiceLocator.GameStateManager.Game.CurrentLevel;
-            foreach (var entity in level.Entitys)
+            var level = Context.GameStateManager.Game.CurrentLevel;
+            var sortOrdersPerTile = 20;
+
+            for (var x = 0; x < level.BoundingBox.Width; x++)
             {
-                if (entity.Motor != null && entity.Motor.MoveTargetPosition != entity.Position &&
-                                entity.Motor.MoveTargetPosition != null)
+                for (var y = 0; y < level.BoundingBox.Height; y++)
                 {
-                    MovingEntitys[entity.Motor.MoveTargetPosition].Add(entity);
-                }
-                else
-                {
-                    NotMovingEntitys[entity.Position].Add(entity);
+                    if (level.Grid[x, y].TileType == TileType.Floor)
+                    {
+                        var tileSpriteRenderer = Tiles[x, y];
+                        tileSpriteRenderer.sortingOrder = -1; // floor tiles always go in the back
+                    }
                 }
             }
-
-            var sortOrdersPerTile = 20;
 
             for (var x = 0; x < level.BoundingBox.Width; x++)
             {
@@ -50,14 +43,16 @@ namespace Gamepackage
                 {
                     var sortOrder = (y * (level.BoundingBox.Width * sortOrdersPerTile) + (x * sortOrdersPerTile));
                     var tileSpriteRenderer = Tiles[x, y];
-                    if (tileSpriteRenderer != null)
+
+                    if (tileSpriteRenderer != null && level.Grid[x, y].TileType != TileType.Floor)
                     {
                         tileSpriteRenderer.sortingOrder = sortOrder;
                         sortOrder++;
                     }
-                    if (ServiceLocator.OverlaySystem != null)
+
+                    if (Context.OverlaySystem != null)
                     {
-                        var tiles = ServiceLocator.OverlaySystem.GetTilesInPosition(x, y);
+                        var tiles = Context.OverlaySystem.GetTilesInPosition(x, y);
                         foreach (var tile in tiles)
                         {
                             tile.sortingOrder = sortOrder;
@@ -67,18 +62,12 @@ namespace Gamepackage
                     sortOrder++;
                     if (level.Grid != null)
                     {
-                        foreach (var entity in NotMovingEntitys[x, y])
-                        {
-                            sortOrder = sortEntity(sortOrder, entity);
-                        }
 
-                        foreach (var entity in MovingEntitys[x, y])
+                        foreach(var entity in level.Grid[x,y].EntitiesInPosition)
                         {
                             sortOrder = sortEntity(sortOrder, entity);
                         }
                     }
-                    NotMovingEntitys[x, y].Clear();
-                    MovingEntitys[x, y].Clear();
                 }
             }
         }
@@ -87,7 +76,7 @@ namespace Gamepackage
         {
             if (entity.View.ViewType == ViewType.StaticSprite)
             {
-                if (entity.View != null&& entity.View.ViewGameObject != null)
+                if (entity.View != null && entity.View.ViewGameObject != null)
                 {
                     var spriteRenderer = entity.View.ViewGameObject.GetComponent<SpriteRenderer>();
                     spriteRenderer.sortingOrder = sortOrder;

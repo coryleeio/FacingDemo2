@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class MeleeAttack : Action
+    public class MeleeAttack : TargetableAction
     {
         private float TimeStart;
         private float Duration = 0.5f;
@@ -30,10 +32,21 @@ namespace Gamepackage
             {
                 throw new NotImplementedException("You don't have any attacks, but are trying to attack anyway?");
             }
-            var attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
+
+            AttackParameters attack = null;
+            if(CombatUtil.HasWeapon(Source))
+            {
+                var weapon = Source.Inventory.GetItemBySlot(ItemSlot.Weapon);
+                attack = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
+            }
+            else
+            {
+                attack = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
+            }
+
             foreach(var target in Targets)
             {
-                ServiceLocator.CombatSystem.DealDamage(Source, target, attackParameters);
+                CombatUtil.DealDamage(Source, target, attack);
             }
         }
 

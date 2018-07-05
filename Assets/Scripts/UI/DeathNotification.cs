@@ -8,7 +8,7 @@ namespace Gamepackage
     {
         public void RestartGame()
         {
-            ServiceLocator.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+            Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
         }
 
         public override void Hide()

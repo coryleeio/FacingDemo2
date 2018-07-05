@@ -1,6 +1,6 @@
 ﻿using Gamepackage;
 
-public class Wait : Action
+public class Wait : TargetableAction
 {
     public override int TimeCost
     {

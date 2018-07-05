@@ -14,7 +14,7 @@ namespace Gamepackage
         private Color DefaultHoverColor = new Color(0, 213, 255);
         private Color EnemyHoverColor = Color.red;
         private Path CurrentPath;
-        public Queue<Action> ActionList = new Queue<Action>();
+        public Queue<TargetableAction> ActionList = new Queue<TargetableAction>();
 
         public void Init()
         {
@@ -55,7 +55,7 @@ namespace Gamepackage
 
         public void Process()
         {
-            var game = ServiceLocator.GameStateManager.Game;
+            var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
@@ -66,18 +66,18 @@ namespace Gamepackage
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
-            ServiceLocator.OverlaySystem.SetActivated(MouseHoverOverlay, true);
+            Context.OverlaySystem.SetActivated(MouseHoverOverlay, true);
             MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
             MouseHoverOverlayConfig.Position = mousePos;
             PathOverlayConfig.Position = mousePos;
 
             if (player.Body.IsDead)
             {
-                ServiceLocator.UIController.DeathNotification.Show();
+                Context.UIController.DeathNotification.Show();
                 return;
             }
 
-            if(ActionList.Count > 0 && player.Behaviour.NextAction == null && ServiceLocator.FlowSystem.CurrentPhase == Phase.Player)
+            if(ActionList.Count > 0 && player.Behaviour.NextAction == null && Context.FlowSystem.CurrentPhase == Phase.Player)
             {
                 var nextAction = ActionList.Dequeue();
 
@@ -119,7 +119,7 @@ namespace Gamepackage
                             return Point.Distance(player.Position, p1).CompareTo(Point.Distance(player.Position, p2));
                         });
                         waitingForPath = true;
-                        ServiceLocator.PathFinder.StartPath(player.Position, surroundingPositions[0], level.Grid, (path) =>
+                        Context.PathFinder.StartPath(player.Position, surroundingPositions[0], level.Grid, (path) =>
                         {
                             CurrentPath = path;
                             waitingForPath = false;
@@ -132,7 +132,7 @@ namespace Gamepackage
 
                     if(player.Behaviour.NextAction != null && player.Behaviour.NextAction.GetType() == typeof(Move))
                     {
-                        ServiceLocator.PathFinder.StartPath(((Move)player.Behaviour.NextAction).TargetPosition, mousePos, level.Grid, (path) =>
+                        Context.PathFinder.StartPath(((Move)player.Behaviour.NextAction).TargetPosition, mousePos, level.Grid, (path) =>
                         {
                             CurrentPath = path;
                             waitingForPath = false;
@@ -140,7 +140,7 @@ namespace Gamepackage
                     }
                     else
                     {
-                        ServiceLocator.PathFinder.StartPath(player.Position, mousePos, level.Grid, (path) =>
+                        Context.PathFinder.StartPath(player.Position, mousePos, level.Grid, (path) =>
                         {
                             CurrentPath = path;
                             waitingForPath = false;
@@ -174,26 +174,26 @@ namespace Gamepackage
 
         private void QueueSwapPosition(Level level, Entity player, Point mousePos)
         {
-            var swapPositions = ServiceLocator.PrototypeFactory.BuildEntityAction<SwapPositionsWithAlly>(player);
+            var swapPositions = Context.PrototypeFactory.BuildEntityAction<SwapPositionsWithAlly>(player);
             swapPositions.Targets.Add(level.Grid[mousePos].EntitiesInPosition.Find((x) => { return x.Behaviour != null; } ));
             player.Behaviour.NextAction = swapPositions;
         }
 
         private void QueueAttack(Level level, Entity player, Point mousePos)
         {
-            var attack = ServiceLocator.PrototypeFactory.BuildEntityAction<MeleeAttack>(player);
+            var attack = Context.PrototypeFactory.BuildEntityAction<MeleeAttack>(player);
             attack.Targets.Add(level.Grid[mousePos].EntitiesInPosition[0]);
             player.Behaviour.NextAction = attack;
         }
 
         private void OnPathComplete(Path path)
         {
-            var game = ServiceLocator.GameStateManager.Game;
+            var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
             foreach (var node in path.Nodes)
             {
-                var move = ServiceLocator.PrototypeFactory.BuildEntityAction<Move>(player) as Move;
+                var move = Context.PrototypeFactory.BuildEntityAction<Move>(player) as Move;
                 move.TargetPosition = new Point(node.Position.X, node.Position.Y);
                 ActionList.Enqueue(move);
             }
