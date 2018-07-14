@@ -20,7 +20,7 @@ namespace Gamepackage
             var camera = obj.AddComponent<Camera>();
             var gameSceneCameraDriver = obj.AddComponent<GameSceneCameraDriver>();
             obj.transform.position = new Vector3(0, 0, -30);
-            camera.orthographicSize = 3f;
+            camera.orthographicSize = 4f;
             camera.orthographic = true;
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);

@@ -146,9 +146,12 @@ namespace Gamepackage
                             waitingForPath = false;
                         });
                     }
-
-
                 }
+            }
+
+            if(Input.GetKeyDown(KeyCode.I))
+            {
+                Context.UIController.InventoryWindow.Toggle();
             }
 
             if (Input.GetMouseButtonDown(0))
