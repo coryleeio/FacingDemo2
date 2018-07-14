@@ -152,6 +152,7 @@ namespace Gamepackage
             if(Input.GetKeyDown(KeyCode.I))
             {
                 Context.UIController.InventoryWindow.Toggle();
+                Context.UIController.LootWindow.Toggle();
             }
 
             if (Input.GetMouseButtonDown(0))
