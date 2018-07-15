@@ -42,6 +42,11 @@ namespace Gamepackage
         {
             GetComponent<TextLog>().gameObject.SetActive(true);
         }
+
+        public override void Refresh()
+        {
+
+        }
     }
 }
 

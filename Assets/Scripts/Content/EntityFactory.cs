@@ -42,6 +42,7 @@ namespace Gamepackage
                 };
                 entity.Inventory.EquipItem(ItemFactory.Build(Tables.BanditWeapons.NextSingleItem()));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
+                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_MASLOW)
             {

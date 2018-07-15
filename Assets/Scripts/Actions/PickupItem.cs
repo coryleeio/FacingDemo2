@@ -46,14 +46,7 @@ namespace Gamepackage
             {
                 source.Inventory.AddItemAtPosition(Item, Index);
             }
-            if(Context.UIController.InventoryWindow.isActiveAndEnabled)
-            {
-                Context.UIController.InventoryWindow.ItemsChanged();
-            }
-            if (Context.UIController.LootWindow.isActiveAndEnabled)
-            {
-                Context.UIController.LootWindow.ItemsChanged();
-            }
+            Context.UIController.Refresh();
         }
     }
 }

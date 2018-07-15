@@ -27,4 +27,15 @@ public class UIController : MonoBehaviour
         TextLog.ClearText();
         TextLog.Show();
     }
+
+    public void Refresh()
+    {
+        // The false here indicates that we refresh only active windows
+        var childUIComponents = GetComponentsInChildren<UIComponent>(false);
+
+        foreach (var comp in childUIComponents)
+        {
+            comp.Refresh();
+        }
+    }
 }

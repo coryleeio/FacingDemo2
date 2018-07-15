@@ -22,12 +22,24 @@ namespace Gamepackage
         public void ShowFor(Entity entity)
         {
             target = entity;
-            ItemsChanged();
+            Refresh();
         }
 
-        public void ItemsChanged()
+        public void Toggle()
         {
-            if(target == null)
+            if (active)
+            {
+                Hide();
+            }
+            else
+            {
+                Show();
+            }
+        }
+
+        public override void Refresh()
+        {
+            if (target == null)
             {
                 return;
             }
@@ -47,18 +59,6 @@ namespace Gamepackage
                 instance.transform.SetParent(container.transform, false);
             }
             Show();
-        }
-
-        public void Toggle()
-        {
-            if (active)
-            {
-                Hide();
-            }
-            else
-            {
-                Show();
-            }
         }
     }
 }

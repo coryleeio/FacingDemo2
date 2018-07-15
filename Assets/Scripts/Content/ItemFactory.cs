@@ -14,6 +14,10 @@ namespace Gamepackage
             {
                 return new LuckyCoin();
             }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_ARROW)
+            {
+                return new Arrow();
+            }
             else
             {
                 throw new NotImplementedException();

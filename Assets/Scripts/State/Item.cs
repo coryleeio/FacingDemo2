@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
@@ -19,7 +18,6 @@ namespace Gamepackage
         public Item()
         {
             this.NumberOfItems = DefaultStackSize;
-            Assert.IsTrue(NumberOfItems <= DefaultStackSize);
         }
 
         public abstract List<ItemSlot> SlotsWearable

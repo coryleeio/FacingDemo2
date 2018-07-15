@@ -19,6 +19,11 @@ namespace Gamepackage
                     UniqueIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN,
                     InventorySprite=Resources.Load<Sprite>("Tilesets/Stone/StoneFloor"),
                 },
+                new ItemAppearance()
+                {
+                    UniqueIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW,
+                    InventorySprite=Resources.Load<Sprite>("Tilesets/Stone/StoneFloor"),
+                },
             };
         }
     }

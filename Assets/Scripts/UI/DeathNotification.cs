@@ -20,6 +20,10 @@ namespace Gamepackage
         {
             GetComponent<DeathNotification>().gameObject.SetActive(true);
         }
+
+        public override void Refresh()
+        {
+        }
     }
 }
 

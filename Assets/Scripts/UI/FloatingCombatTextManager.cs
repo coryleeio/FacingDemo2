@@ -27,5 +27,10 @@ namespace Gamepackage
         {
             GetComponent<FloatingCombatTextManager>().gameObject.SetActive(true);
         }
+
+        public override void Refresh()
+        {
+
+        }
     }
 }
