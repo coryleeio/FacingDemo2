@@ -131,13 +131,16 @@ namespace Gamepackage
         {
             foreach (var item in itemsCopy)
             {
-                foreach (var ability in item.Abilities)
+                if(item != null)
                 {
-                    if (ability.TriggeredBy == TriggerType.OnDamageWouldKill)
+                    foreach (var ability in item.Abilities)
                     {
-                        if (ability.CanPerform(ctx))
+                        if (ability.TriggeredBy == TriggerType.OnDamageWouldKill)
                         {
-                            ability.Perform(ctx);
+                            if (ability.CanPerform(ctx))
+                            {
+                                ability.Perform(ctx);
+                            }
                         }
                     }
                 }
