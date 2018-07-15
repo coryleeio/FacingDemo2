@@ -20,14 +20,14 @@ namespace Gamepackage
 
         public void AddItem(Item item)
         {
-            AddItemAtPosition(item, -1);
+            AddItem(item, -1);
         }
 
-        public void AddItemAtPosition(Item item, int position)
+        public void AddItem(Item item, int position)
         {
             var targetPosition = position;
 
-            if (position == -1 || !Items[position].CanStack(item))
+            if (position == -1 || (Items[position] != null && !Items[position].CanStack(item)))
             {
                 targetPosition = FindFirstAvailablePositionForItem(item);
             }
@@ -138,14 +138,40 @@ namespace Gamepackage
             EquippedItemBySlot[slot] = item;
         }
 
-        public void UnequipItemInSlot(ItemSlot slot)
+        public void UnequipItemInSlot(ItemSlot slot, int IndexToMoveTo = -1)
         {
             var item = GetItemBySlot(slot);
             if (item != null)
             {
                 EquippedItemBySlot.Remove(slot);
-                Items.Add(item);
+                AddItem(item, IndexToMoveTo);
             }
+        }
+
+        public bool IsWearing(Item item)
+        {
+            foreach(var slot in item.SlotsWearable)
+            {
+                var itemInSlot = GetItemBySlot(slot);
+                if (itemInSlot != null && itemInSlot == item)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public ItemSlot GetItemSlotOfEquippedItem(Item item)
+        {
+            foreach(var slot in item.SlotsWearable)
+            {
+                var itemInSlot = GetItemBySlot(slot);
+                if(itemInSlot == item)
+                {
+                    return slot;
+                }
+            }
+            throw new NotImplementedException("Must not be equipped after all..");
         }
 
         public Item GetItemBySlot(ItemSlot slot)

@@ -12,8 +12,7 @@ namespace Gamepackage
         MainHand,
         Ranged,
         Ammo,
-        Ring1,
-        Ring2,
+        Ring,
         Neck,
     }
 }

@@ -49,11 +49,11 @@ namespace Gamepackage
             {
                 GameObject.Destroy(child.gameObject);
             }
-            var slotPrefab = Resources.Load<ItemDropSlot>("UI/ItemDropSlot");
+            var slotPrefab = Resources.Load<InventoryDropSlot>("UI/ItemDropSlot");
 
             for (var i = 0; i < inventory.Items.Count; i++)
             {
-                var instance = GameObject.Instantiate<ItemDropSlot>(slotPrefab);
+                var instance = GameObject.Instantiate<InventoryDropSlot>(slotPrefab);
                 instance.Index = i;
                 instance.Entity = target;
                 instance.transform.SetParent(container.transform, false);

@@ -16,7 +16,7 @@ namespace Gamepackage
         {
             get
             {
-                return 0;
+                return 250;
             }
         }
 
@@ -44,7 +44,7 @@ namespace Gamepackage
             }
             else
             {
-                source.Inventory.AddItemAtPosition(Item, Index);
+                source.Inventory.AddItem(Item, Index);
             }
             Context.UIController.Refresh();
         }
