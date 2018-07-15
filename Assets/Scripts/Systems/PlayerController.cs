@@ -87,8 +87,29 @@ namespace Gamepackage
 
                     if(!level.Grid[nextActionAsMove.TargetPosition].Walkable)
                     {
-                        nextAction = null;
-                        ActionList.Clear();
+                        var occupants = level.Grid[nextActionAsMove.TargetPosition].EntitiesInPosition;
+                        Entity adjacentFriendlyBlocker = null;
+                        foreach(var occupant in occupants)
+                        {
+                            if(occupant.Behaviour != null && occupant.Behaviour.Team == Team.PLAYER && !occupant.IsPlayer && occupant.BlocksPathing)
+                            {
+                                adjacentFriendlyBlocker = occupant;
+                                break;
+                            }
+                        }
+                        if(adjacentFriendlyBlocker != null)
+                        {
+                            // Move is blocked by a non ghostly friendly, we can swap instead of move.
+                            // we will just create a swap because the move has already been dequeued
+                            nextAction = Context.PrototypeFactory.BuildEntityAction<SwapPositionsWithAlly>(player) as SwapPositionsWithAlly;
+                            nextAction.Targets.Add(adjacentFriendlyBlocker);
+                        }
+                        else
+                        {
+                            // Action is blocked by a non friendly
+                            nextAction = null;
+                            ActionList.Clear();
+                        }
                     }
                 }
 
@@ -157,20 +178,23 @@ namespace Gamepackage
 
             if (Input.GetMouseButtonDown(0))
             {
-                ActionList.Clear();
-                if(isAbleToSwapWithHoveringAlly)
+                if(!Context.UIController.InventoryWindow.isActiveAndEnabled)
                 {
-                    QueueSwapPosition(level, player, mousePos);
-                }
-                else if (isAbleToHitHoveringEnemyCombatant)
-                {
-                    QueueAttack(level, player, mousePos);
-                }
-                else
-                {
-                    if(CurrentPath != null)
+                    ActionList.Clear();
+                    if (isAbleToSwapWithHoveringAlly)
                     {
-                        OnPathComplete(CurrentPath);
+                        QueueSwapPosition(level, player, mousePos);
+                    }
+                    else if (isAbleToHitHoveringEnemyCombatant)
+                    {
+                        QueueAttack(level, player, mousePos);
+                    }
+                    else
+                    {
+                        if (CurrentPath != null)
+                        {
+                            OnPathComplete(CurrentPath);
+                        }
                     }
                 }
             }
