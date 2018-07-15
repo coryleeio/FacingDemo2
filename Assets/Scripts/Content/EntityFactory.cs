@@ -11,6 +11,14 @@ namespace Gamepackage
             var entity = new Entity();
             entity.PrototypeIdentifier = uniqueIdentifier;
             entity.Inventory = new Inventory();
+            
+            // Ensure correct default size - doing this in Inventory causes
+            // serialization issues
+            for(var i =0; i < 68; i++)
+            {
+                entity.Inventory.Items.Add(null);
+            }
+
             if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_PONCY)
             {
                 entity.Name = "Poncy";
@@ -33,7 +41,8 @@ namespace Gamepackage
                     Team = Team.PLAYER,
                 };
                 entity.Inventory.EquipItem(ItemFactory.Build(Tables.BanditWeapons.NextSingleItem()));
-                entity.Inventory.Items.Add(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
+                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
+                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_MASLOW)
             {

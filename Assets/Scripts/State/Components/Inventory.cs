@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
     public class Inventory
     {
-        public List<Item> Items = new List<Item>(0);
+        public List<Item> Items = new List<Item>(); 
         public Dictionary<ItemSlot, Item> EquippedItemBySlot = new Dictionary<ItemSlot, Item>();
 
         public void EquipItem(Item item)
@@ -15,6 +16,65 @@ namespace Gamepackage
             {
                 EquipItemToSlot(item, item.SlotsWearable[0]);
             }
+        }
+
+        public void AddItem(Item item)
+        {
+            AddItemAtPosition(item, -1);
+        }
+
+        public void AddItemAtPosition(Item item, int position)
+        {
+            var targetPosition = position;
+
+            if (position == -1 || !Items[position].CanStack(item))
+            {
+                targetPosition = FindFirstAvailablePositionForItem(item);
+            }
+
+            if(Items[targetPosition] != null)
+            {
+                if(Items[targetPosition].CanStack(item))
+                {
+                    Items[targetPosition].NumberOfItems += item.NumberOfItems;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            else
+            {
+                Items[targetPosition] = item;
+            }
+        }
+
+        private int FindFirstAvailablePositionForItem(Item item)
+        {
+            var firstNullIndex = -1;
+            for(var i = 0; i <Items.Count; i++)
+            {
+                if (Items[i] != null && Items[i].CanStack(item))
+                {
+                    return i;
+                }
+                if (Items[i] == null && firstNullIndex == -1)
+                {
+                    firstNullIndex = i;
+                }
+            }
+            Assert.IsTrue(firstNullIndex != -1); // need to handle full inventory
+            return firstNullIndex;
+        }
+
+        public void SwapItemPosition(Item item, int oldIndex, int newIndex)
+        {
+            RemoveItem(item);
+            if(Items[newIndex] != null)
+            {
+                Items[oldIndex] = Items[newIndex];
+            }
+            Items[newIndex] = item;
         }
 
         public Item ItemByIdentifier(UniqueIdentifier identifier)
@@ -47,7 +107,8 @@ namespace Gamepackage
             }
             if (Items.Contains(item))
             {
-                Items.Remove(item);
+                var ind = Items.IndexOf(item);
+                Items[ind] = null;
             }
         }
 
@@ -61,10 +122,7 @@ namespace Gamepackage
                     UnequipItemInSlot(slot);
                 }
             }
-            if (Items.Contains(item))
-            {
-                Items.Remove(item);
-            }
+            RemoveItem(item);
             EquippedItemBySlot[slot] = item;
         }
 

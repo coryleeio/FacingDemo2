@@ -30,19 +30,21 @@ namespace Gamepackage
                 GameObject.Destroy(child.gameObject);
             }
             var slotPrefab = Resources.Load<ItemDropSlot>("UI/ItemDropSlot");
-            for(var i= 0; i < 68; i++)
+            for(var i= 0; i < inventory.Items.Count; i++)
             {
                 var slotInstance = GameObject.Instantiate<ItemDropSlot>(slotPrefab);
                 slotInstance.Index = i;
                 slotInstance.Entity = player;
                 slotInstance.transform.SetParent(container.transform, false);
 
-                if(i < inventory.Items.Count)
+                if(inventory.Items[i] != null)
                 {
                     var itemInSlot = inventory.Items[i];
                     var draggablePrefab = Resources.Load<InventoryDraggable>("UI/InventoryDraggable");
                     var draggableInstance = GameObject.Instantiate<InventoryDraggable>(draggablePrefab);
                     draggableInstance.transform.SetParent(slotInstance.transform, false);
+                    draggableInstance.Source = player;
+                    draggableInstance.Item = inventory.Items[i];
                     var spr = draggableInstance.GetComponent<Image>();
                     spr.sprite = itemInSlot.ItemAppearance.InventorySprite;
                 }

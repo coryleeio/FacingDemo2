@@ -6,8 +6,13 @@ namespace Gamepackage
 {
     public class InventoryDraggable : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
+        public static InventoryDraggable CurrentDraggable;
+        public Entity Source;
+        public Item Item;
+
         public void OnBeginDrag(PointerEventData eventData)
         {
+            CurrentDraggable = this;
             var canvas = GetComponent<Canvas>();
             canvas.overrideSorting = true;
             canvas.sortingOrder = 9999;
@@ -30,14 +35,17 @@ namespace Gamepackage
 
         public void OnPointerClick(PointerEventData eventData)
         {
+
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
+
         }
     }
 }

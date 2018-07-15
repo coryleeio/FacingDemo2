@@ -5,6 +5,7 @@ namespace Gamepackage
     public class LootWindow : UIComponent
     {
         private bool active = false;
+        private Entity target;
 
         public override void Hide()
         {
@@ -20,7 +21,17 @@ namespace Gamepackage
 
         public void ShowFor(Entity entity)
         {
-            var inventory = entity.Inventory;
+            target = entity;
+            ItemsChanged();
+        }
+
+        public void ItemsChanged()
+        {
+            if(target == null)
+            {
+                return;
+            }
+            var inventory = target.Inventory;
             var container = GetComponentInChildren<ItemContainer>();
             foreach (Transform child in container.transform)
             {
@@ -32,7 +43,7 @@ namespace Gamepackage
             {
                 var instance = GameObject.Instantiate<ItemDropSlot>(slotPrefab);
                 instance.Index = i;
-                instance.Entity = entity;
+                instance.Entity = target;
                 instance.transform.SetParent(container.transform, false);
             }
             Show();
