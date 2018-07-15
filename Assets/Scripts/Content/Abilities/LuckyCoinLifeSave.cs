@@ -46,7 +46,7 @@ namespace Gamepackage
                 ev.attackResult.ShortCircuitedMessage = "The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters...";
                 ev.attackResult.ShortCircuitedFloatingText = "Got lucky!";
                 ev.attackResult.ShortCircuitedFloatingTextColor = Color.green;
-                ev.Target.Inventory.RemoveItem(item);
+                ev.Target.Inventory.RemoveItemStack(item);
             }
             return ev;
         }

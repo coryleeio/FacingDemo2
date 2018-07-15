@@ -6,7 +6,7 @@ namespace Gamepackage
 {
     public class Inventory
     {
-        public List<Item> Items = new List<Item>(); 
+        public List<Item> Items = new List<Item>();
         public Dictionary<ItemSlot, Item> EquippedItemBySlot = new Dictionary<ItemSlot, Item>();
 
         public void EquipItem(Item item)
@@ -32,9 +32,9 @@ namespace Gamepackage
                 targetPosition = FindFirstAvailablePositionForItem(item);
             }
 
-            if(Items[targetPosition] != null)
+            if (Items[targetPosition] != null)
             {
-                if(Items[targetPosition].CanStack(item))
+                if (Items[targetPosition].CanStack(item))
                 {
                     Items[targetPosition].NumberOfItems += item.NumberOfItems;
                 }
@@ -52,7 +52,7 @@ namespace Gamepackage
         private int FindFirstAvailablePositionForItem(Item item)
         {
             var firstNullIndex = -1;
-            for(var i = 0; i <Items.Count; i++)
+            for (var i = 0; i < Items.Count; i++)
             {
                 if (Items[i] != null && Items[i].CanStack(item))
                 {
@@ -69,8 +69,8 @@ namespace Gamepackage
 
         public void SwapItemPosition(Item item, int oldIndex, int newIndex)
         {
-            RemoveItem(item);
-            if(Items[newIndex] != null)
+            RemoveItemStack(item);
+            if (Items[newIndex] != null)
             {
                 Items[oldIndex] = Items[newIndex];
             }
@@ -96,7 +96,19 @@ namespace Gamepackage
             return null;
         }
 
-        public void RemoveItem(Item item)
+        public void ConsumeItem(Item item)
+        {
+            if(item.NumberOfItems > 1)
+            {
+                item.NumberOfItems--;
+            }
+            else
+            {
+                RemoveItemStack(item);
+            }
+        }
+
+        public void RemoveItemStack(Item item)
         {
             foreach (var pair in EquippedItemBySlot)
             {
@@ -122,7 +134,7 @@ namespace Gamepackage
                     UnequipItemInSlot(slot);
                 }
             }
-            RemoveItem(item);
+            RemoveItemStack(item);
             EquippedItemBySlot[slot] = item;
         }
 

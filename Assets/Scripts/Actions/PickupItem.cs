@@ -37,7 +37,7 @@ namespace Gamepackage
 
             var source = Source;
             var target = Targets[0];
-            target.Inventory.RemoveItem(Item);
+            target.Inventory.RemoveItemStack(Item);
             if(Index == -1)
             {
                source.Inventory.AddItem(Item);
