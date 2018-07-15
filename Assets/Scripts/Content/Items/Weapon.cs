@@ -4,8 +4,8 @@ namespace Gamepackage
 {
     public abstract class Weapon : Item
     {
-        private static List<ItemSlot> WearableSlotsInternal = new List<ItemSlot>() { ItemSlot.Weapon };
-        private static List<ItemSlot> SlotsOccupiedInternal = new List<ItemSlot>() { ItemSlot.Weapon };
+        private static List<ItemSlot> WearableSlotsInternal = new List<ItemSlot>() { ItemSlot.MainHand };
+        private static List<ItemSlot> SlotsOccupiedInternal = new List<ItemSlot>() { ItemSlot.MainHand };
 
         public override List<ItemSlot> SlotsWearable
         {

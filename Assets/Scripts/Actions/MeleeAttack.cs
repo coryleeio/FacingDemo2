@@ -36,7 +36,7 @@ namespace Gamepackage
             AttackParameters attack = null;
             if(CombatUtil.HasWeapon(Source))
             {
-                var weapon = Source.Inventory.GetItemBySlot(ItemSlot.Weapon);
+                var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
                 attack = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
             }
             else

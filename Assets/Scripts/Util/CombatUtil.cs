@@ -152,7 +152,8 @@ namespace Gamepackage
             }
             else
             {
-                return source.Inventory.GetItemBySlot(ItemSlot.Weapon) != null;
+                var item = source.Inventory.GetItemBySlot(ItemSlot.MainHand);
+                return item != null && item.AttackParameters.Count > 0;
             }
         }
 
