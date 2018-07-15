@@ -15,6 +15,11 @@ namespace Gamepackage
             get;
         }
 
+        public abstract string DisplayName
+        {
+            get;
+        }
+
         public Item()
         {
             this.NumberOfItems = DefaultStackSize;

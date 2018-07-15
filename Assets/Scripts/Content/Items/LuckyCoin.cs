@@ -20,6 +20,14 @@ namespace Gamepackage
             }
         }
 
+        public override string DisplayName
+        {
+            get
+            {
+                return "Lucky Coin";
+            }
+        }
+
         private static List<ItemSlot> WearableSlotsInternal = new List<ItemSlot>() { };
         private static List<ItemSlot> SlotsOccupiedInternal = new List<ItemSlot>() { };
         private static List<Ability> AbilitiesInternal = new List<Ability>() { AbilityFactory.Build(UniqueIdentifier.ABILITY_LUCKY_COIN_LIFE_SAVE) };

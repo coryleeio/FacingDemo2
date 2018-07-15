@@ -66,7 +66,7 @@ namespace Gamepackage
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
-            Context.OverlaySystem.SetActivated(MouseHoverOverlay, true);
+            Context.OverlaySystem.SetActivated(MouseHoverOverlay, !Context.UIController.InventoryWindow.isActiveAndEnabled);
             MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
             MouseHoverOverlayConfig.Position = mousePos;
             PathOverlayConfig.Position = mousePos;
@@ -174,6 +174,7 @@ namespace Gamepackage
             {
                 Context.UIController.InventoryWindow.Toggle();
                 Context.UIController.LootWindow.Toggle();
+                Context.UIController.Tooltip.Hide();
             }
 
             if (Input.GetMouseButtonDown(0))

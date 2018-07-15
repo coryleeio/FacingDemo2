@@ -20,6 +20,14 @@ namespace Gamepackage
             }
         }
 
+        public override string DisplayName
+        {
+            get
+            {
+                return "Longsword";
+            }
+        }
+
         private static Dictionary<Attributes, int> AttributesInternal = new Dictionary<Attributes, int>()
         {
         };
@@ -69,6 +77,7 @@ namespace Gamepackage
                 return ThrowParametersInternal;
             }
         }
+
         #endregion
     }
 }

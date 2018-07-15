@@ -92,6 +92,14 @@ namespace Gamepackage
                 return ThrowParametersInternal;
             }
         }
+
+        public override string DisplayName
+        {
+            get
+            {
+                return "Arrow";
+            }
+        }
         #endregion
     }
 }
