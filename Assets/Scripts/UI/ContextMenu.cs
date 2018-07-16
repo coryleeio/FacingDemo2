@@ -27,13 +27,6 @@ namespace Gamepackage
             BuildButton("Info", () => {
                 Context.UIController.ItemInspectionWindow.ShowFor(item);
             });
-            BuildButton("Info", () => {
-                Context.UIController.ItemInspectionWindow.ShowFor(item);
-            });
-            BuildButton("Info", () => {
-                Context.UIController.ItemInspectionWindow.ShowFor(item);
-            });
-
             this.transform.position = eventData.position;
             Show();
         }
@@ -49,7 +42,7 @@ namespace Gamepackage
 
         public void BuildButton(string buttonName, UnityAction handler)
         {
-            var _buttonPrefab = Resources.Load<Button>("UI/ContextMenuButton");
+            var _buttonPrefab = Resources.Load<Button>("UI/ButtonPrefab");
             var buttonGameObject = GameObject.Instantiate<Button>(_buttonPrefab);
             buttonGameObject.name = string.Format("{0}Button", buttonName);
             var text = buttonGameObject.GetComponentInChildren<Text>();
