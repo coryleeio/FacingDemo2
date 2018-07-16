@@ -99,6 +99,7 @@ namespace Gamepackage
         {
             active = true;
             GetComponent<InventoryWindow>().gameObject.SetActive(true);
+            Context.UIController.PushWindow(this);
             Refresh();
         }
 

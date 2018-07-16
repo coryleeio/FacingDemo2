@@ -45,6 +45,10 @@ namespace Gamepackage
             var hasItemInInventory = Source.Inventory.Items.Contains(Item);
             var isPickingUpItem = !isWearingItem && !hasItemInInventory;
 
+            if(rightClicked)
+            {
+                Context.UIController.ContextMenu.ShowForItemAtLocation(Item, eventData);
+            }
             if (shiftLeftClicked)
             {
                 if(isWearingItem)

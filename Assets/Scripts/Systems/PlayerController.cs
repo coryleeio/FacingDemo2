@@ -170,6 +170,12 @@ namespace Gamepackage
                 }
             }
 
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                Context.UIController.Pop();
+                Context.UIController.ContextMenu.Hide();
+            }
+
             if(Input.GetKeyDown(KeyCode.I))
             {
                 Context.UIController.InventoryWindow.Toggle();

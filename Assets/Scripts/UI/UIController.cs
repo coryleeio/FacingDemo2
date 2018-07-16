@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -32,13 +33,17 @@ namespace Gamepackage
         [NonSerialized]
         public Tooltip Tooltip;
 
+        private Stack<UIComponent> WindowStack = new Stack<UIComponent>();
+
         public void Init()
         {
+            WindowStack.Clear();
             var childUIComponents = GetComponentsInChildren<UIComponent>(true);
             var canvas = GetComponent<Canvas>();
             canvas.worldCamera = Camera.main;
             foreach (var component in childUIComponents)
             {
+                component.gameObject.SetActive(true); // force all children to activate
                 component.gameObject.SetActive(false);
             }
             DeathNotification = GetComponentInChildren<DeathNotification>(true);
@@ -53,6 +58,20 @@ namespace Gamepackage
             FloatingCombatTextManager.Show();
             TextLog.ClearText();
             TextLog.Show();
+        }
+
+        public void Pop()
+        {
+            if(WindowStack.Count > 0)
+            {
+                var win = WindowStack.Pop();
+                win.Hide();
+            }
+        }
+
+        public void PushWindow(UIComponent uIComponent)
+        {
+            WindowStack.Push(uIComponent);
         }
 
         public void Refresh()
