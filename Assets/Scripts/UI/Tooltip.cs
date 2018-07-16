@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 namespace Gamepackage
 {
-
     public class Tooltip : UIComponent
     {
         private static GameObject _mostRecentHover;
