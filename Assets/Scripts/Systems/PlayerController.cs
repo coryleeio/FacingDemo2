@@ -55,6 +55,8 @@ namespace Gamepackage
 
         public void Process()
         {
+            bool shouldAcceptInput =       !Context.UIController.InventoryWindow.isActiveAndEnabled
+                                        && !Context.UIController.EscapeMenu.isActiveAndEnabled;
             var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
@@ -66,7 +68,7 @@ namespace Gamepackage
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
-            Context.OverlaySystem.SetActivated(MouseHoverOverlay, !Context.UIController.InventoryWindow.isActiveAndEnabled);
+            Context.OverlaySystem.SetActivated(MouseHoverOverlay, shouldAcceptInput);
             MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
             MouseHoverOverlayConfig.Position = mousePos;
             PathOverlayConfig.Position = mousePos;
@@ -77,27 +79,27 @@ namespace Gamepackage
                 return;
             }
 
-            if(ActionList.Count > 0 && player.Behaviour.NextAction == null && Context.FlowSystem.CurrentPhase == Phase.Player)
+            if (ActionList.Count > 0 && player.Behaviour.NextAction == null && Context.FlowSystem.CurrentPhase == Phase.Player)
             {
                 var nextAction = ActionList.Dequeue();
 
-                if(nextAction.GetType() == typeof(Move))
+                if (nextAction.GetType() == typeof(Move))
                 {
                     var nextActionAsMove = nextAction as Move;
 
-                    if(!level.Grid[nextActionAsMove.TargetPosition].Walkable)
+                    if (!level.Grid[nextActionAsMove.TargetPosition].Walkable)
                     {
                         var occupants = level.Grid[nextActionAsMove.TargetPosition].EntitiesInPosition;
                         Entity adjacentFriendlyBlocker = null;
-                        foreach(var occupant in occupants)
+                        foreach (var occupant in occupants)
                         {
-                            if(occupant.Behaviour != null && occupant.Behaviour.Team == Team.PLAYER && !occupant.IsPlayer && occupant.BlocksPathing)
+                            if (occupant.Behaviour != null && occupant.Behaviour.Team == Team.PLAYER && !occupant.IsPlayer && occupant.BlocksPathing)
                             {
                                 adjacentFriendlyBlocker = occupant;
                                 break;
                             }
                         }
-                        if(adjacentFriendlyBlocker != null)
+                        if (adjacentFriendlyBlocker != null)
                         {
                             // Move is blocked by a non ghostly friendly, we can swap instead of move.
                             // we will just create a swap because the move has already been dequeued
@@ -117,7 +119,7 @@ namespace Gamepackage
             }
 
             var points = new List<Point>();
-            if(CurrentPath != null)
+            if (CurrentPath != null)
             {
                 foreach (var node in CurrentPath.Nodes)
                 {
@@ -151,7 +153,7 @@ namespace Gamepackage
                 {
                     waitingForPath = true;
 
-                    if(player.Behaviour.NextAction != null && player.Behaviour.NextAction.GetType() == typeof(Move))
+                    if (player.Behaviour.NextAction != null && player.Behaviour.NextAction.GetType() == typeof(Move))
                     {
                         Context.PathFinder.StartPath(((Move)player.Behaviour.NextAction).TargetPosition, mousePos, level.Grid, (path) =>
                         {
@@ -170,13 +172,21 @@ namespace Gamepackage
                 }
             }
 
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Context.UIController.Pop();
+                if (Context.UIController.HasWindowsToPop())
+                {
+                    Context.UIController.Pop();
+                }
+                else
+                {
+                    Context.UIController.EscapeMenu.Show();
+                }
                 Context.UIController.ContextMenu.Hide();
+                Context.UIController.Tooltip.Hide();
             }
 
-            if(Input.GetKeyDown(KeyCode.I))
+            if (Input.GetKeyDown(KeyCode.I))
             {
                 Context.UIController.InventoryWindow.Toggle();
                 Context.UIController.LootWindow.Toggle();
@@ -185,7 +195,7 @@ namespace Gamepackage
 
             if (Input.GetMouseButtonDown(0))
             {
-                if(!Context.UIController.InventoryWindow.isActiveAndEnabled)
+                if (shouldAcceptInput)
                 {
                     ActionList.Clear();
                     if (isAbleToSwapWithHoveringAlly)
@@ -210,7 +220,7 @@ namespace Gamepackage
         private void QueueSwapPosition(Level level, Entity player, Point mousePos)
         {
             var swapPositions = Context.PrototypeFactory.BuildEntityAction<SwapPositionsWithAlly>(player);
-            swapPositions.Targets.Add(level.Grid[mousePos].EntitiesInPosition.Find((x) => { return x.Behaviour != null; } ));
+            swapPositions.Targets.Add(level.Grid[mousePos].EntitiesInPosition.Find((x) => { return x.Behaviour != null; }));
             player.Behaviour.NextAction = swapPositions;
         }
 

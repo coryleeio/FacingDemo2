@@ -25,10 +25,16 @@ namespace Gamepackage
         public ItemInspectionWindow ItemInspectionWindow;
 
         [NonSerialized]
+        public EscapeMenu EscapeMenu;
+
+        [NonSerialized]
         public ContextMenu ContextMenu;
 
         [NonSerialized]
         public ClickoutCatcher ClickoutCatcher;
+
+        [NonSerialized]
+        public DarkOverlay DarkOverlay;
 
         [NonSerialized]
         public Tooltip Tooltip;
@@ -54,7 +60,10 @@ namespace Gamepackage
             ItemInspectionWindow = GetComponentInChildren<ItemInspectionWindow>(true);
             ContextMenu = GetComponentInChildren<ContextMenu>(true);
             ClickoutCatcher = GetComponentInChildren<ClickoutCatcher>(true);
+            DarkOverlay = GetComponentInChildren<DarkOverlay>(true);
             Tooltip = GetComponentInChildren<Tooltip>(true);
+            EscapeMenu = GetComponentInChildren<EscapeMenu>(true);
+
             FloatingCombatTextManager.Show();
             TextLog.ClearText();
             TextLog.Show();
@@ -62,11 +71,16 @@ namespace Gamepackage
 
         public void Pop()
         {
-            if(WindowStack.Count > 0)
+            if (WindowStack.Count > 0)
             {
                 var win = WindowStack.Pop();
                 win.Hide();
             }
+        }
+
+        public bool HasWindowsToPop()
+        {
+            return WindowStack.Count > 0;
         }
 
         public void PushWindow(UIComponent uIComponent)
