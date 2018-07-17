@@ -20,6 +20,11 @@ namespace Gamepackage
             get;
         }
 
+        public abstract string Description
+        {
+            get;
+        }
+
         public Item()
         {
             this.NumberOfItems = DefaultStackSize;

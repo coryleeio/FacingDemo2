@@ -69,7 +69,7 @@ namespace Gamepackage
             
             if (result.WasShortCircuited)
             {
-                Context.UIController.TextLog.AddText(string.Format(attackParameters.AttackMessage, sourceName, targetName, damage, DamageTypeToDisplayString(attackParameters.DamageType)));
+                Context.UIController.TextLog.AddText(string.Format(attackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(attackParameters.DamageType)));
                 if (result.ShortCircuitedMessage != null)
                 {
                     Context.UIController.TextLog.AddText(result.ShortCircuitedMessage);
@@ -81,7 +81,7 @@ namespace Gamepackage
                 }
                 return; // do short circuit
             }
-            Context.UIController.TextLog.AddText(string.Format(attackParameters.AttackMessage, sourceName, targetName, damage, DamageTypeToDisplayString(attackParameters.DamageType)));
+            Context.UIController.TextLog.AddText(string.Format(attackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(attackParameters.DamageType)));
             target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
 
             Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
@@ -157,50 +157,6 @@ namespace Gamepackage
             {
                 var item = source.Inventory.GetItemBySlot(ItemSlot.MainHand);
                 return item != null && item.AttackParameters.Count > 0;
-            }
-        }
-
-        private static string DamageTypeToDisplayString(DamageTypes damageType)
-        {
-            if (damageType == DamageTypes.FIRE)
-            {
-                return "fire";
-            }
-            else if (damageType == DamageTypes.COLD)
-            {
-                return "cold";
-            }
-            else if (damageType == DamageTypes.LIGHTNING)
-            {
-                return "lightning";
-            }
-            else if (damageType == DamageTypes.SLASHING)
-            {
-                return "slashing";
-            }
-            else if (damageType == DamageTypes.BLUDGEONING)
-            {
-                return "bludgeoning";
-            }
-            else if (damageType == DamageTypes.PIERCING)
-            {
-                return "piercing";
-            }
-            else if (damageType == DamageTypes.ARCANE)
-            {
-                return "arcane";
-            }
-            else if (damageType == DamageTypes.NEGATIVE)
-            {
-                return "negative";
-            }
-            else if (damageType == DamageTypes.HOLY)
-            {
-                return "holy";
-            }
-            else
-            {
-                throw new NotImplementedException("Need to add a display string for this damage type: " + damageType);
             }
         }
 

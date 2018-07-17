@@ -20,6 +20,14 @@ namespace Gamepackage
             }
         }
 
+        public override string Description
+        {
+            get
+            {
+                return "This coin is particularly lucky, and is probably deserving of a better description.";
+            }
+        }
+
         public override string DisplayName
         {
             get

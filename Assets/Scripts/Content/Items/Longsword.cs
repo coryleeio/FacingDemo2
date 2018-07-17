@@ -20,6 +20,14 @@ namespace Gamepackage
             }
         }
 
+        public override string Description
+        {
+            get
+            {
+                return "This is a simple longsword.";
+            }
+        }
+
         public override string DisplayName
         {
             get

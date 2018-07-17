@@ -20,6 +20,14 @@ namespace Gamepackage
             }
         }
 
+        public override string Description
+        {
+            get
+            {
+                return "People have been using this to kill each other literally forever. The only thing they used before this was a rock.  Arrows are considered by many to be more civil.";
+            }
+        }
+
         private static List<ItemSlot> WearableSlotsInternal = new List<ItemSlot>() { ItemSlot.Ammo };
         private static List<ItemSlot> SlotsOccupiedInternal = new List<ItemSlot>() { ItemSlot.Ammo };
         private static List<Ability> AbilitiesInternal = new List<Ability>() {  };

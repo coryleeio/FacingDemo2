@@ -4,6 +4,22 @@ namespace Gamepackage
 {
     public class LuckyCoinLifeSave : Ability
     {
+        public override string DisplayName
+        {
+            get
+            {
+                return "It's really lucky";
+            }
+        }
+
+        public override string Description
+        {
+            get
+            {
+                return "50% chance to survive a hit that would otherwise kill you.";
+            }
+        }
+
         public override TriggerType TriggeredBy
         {
             get

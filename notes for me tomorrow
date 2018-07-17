@@ -1,9 +1,0 @@
-Notes for me:
-
-You cant make abilities generic... you can use casting and assume it based on the trigger type however. 
-
-Maybe events are actually a context....
-
-Maybe make it so that events contain their sources and targets and CanPerform receives the context, and trigger also receives the context
-
-Actions do not have sources and targets by default i think.. you'll add them to each action conditionally, I believe this is fine because you always know what the action you are creating is and they typically aren't dealt with generically, this means you'll need to manually set the source on all the existing actions.  This is good because it removes the reset need on abilities.

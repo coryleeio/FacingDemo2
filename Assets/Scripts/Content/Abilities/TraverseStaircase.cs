@@ -6,6 +6,22 @@ namespace Gamepackage
 {
     public class TraverseStaircase : Ability
     {
+        public override string DisplayName
+        {
+            get
+            {
+                return "Change level";
+            }
+        }
+
+        public override string Description
+        {
+            get
+            {
+                return "Moves you to another level";
+            }
+        }
+
         [JsonIgnore]
         public TriggerStepContext AbilityTriggerContext;
 
