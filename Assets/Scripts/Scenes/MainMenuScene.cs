@@ -22,6 +22,10 @@ namespace Gamepackage
             camera.orthographic = true;
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = Color.black;
+
+            var EventSystemPrefab = Resources.Load<GameObject>("UI/EventSystem");
+            var eventSYstem = GameObject.Instantiate(EventSystemPrefab);
+            eventSYstem.name = "EventSystem";
         }
     }
 }

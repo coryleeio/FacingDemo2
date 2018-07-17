@@ -19,5 +19,6 @@
 
         public static Application Application; // mono
         public static UIController UIController; // mono
+        public static MainMenu MainMenu; //mono
     }
 }
