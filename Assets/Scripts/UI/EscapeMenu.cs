@@ -38,7 +38,10 @@ namespace Gamepackage
                     Context.GameStateManager.LoadGame();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
                 });
-                BuildButton("Options", () => { });
+                BuildButton("Quit to main menu", () => {
+                    Context.GameStateManager.Clear();
+                    Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+                });
                 BuildButton("Quit game", () =>
                 {
                     if (UnityEngine.Application.isEditor)
