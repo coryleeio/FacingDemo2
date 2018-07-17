@@ -39,11 +39,11 @@ namespace Gamepackage
         [NonSerialized]
         public Tooltip Tooltip;
 
-        private Stack<UIComponent> WindowStack = new Stack<UIComponent>();
+        private LinkedList<UIComponent> OpenWindows = new LinkedList<UIComponent>();
 
         public void Init()
         {
-            WindowStack.Clear();
+            OpenWindows.Clear();
             var childUIComponents = GetComponentsInChildren<UIComponent>(true);
             var canvas = GetComponent<Canvas>();
             canvas.worldCamera = Camera.main;
@@ -69,23 +69,37 @@ namespace Gamepackage
             TextLog.Show();
         }
 
-        public void Pop()
+        public bool HasWindowsOpen
         {
-            if (WindowStack.Count > 0)
+            get
             {
-                var win = WindowStack.Pop();
-                win.Hide();
+                return OpenWindows.Count > 0;
             }
         }
 
-        public bool HasWindowsToPop()
+        public void Pop()
         {
-            return WindowStack.Count > 0;
+            if (OpenWindows.Count > 0)
+            {
+                OpenWindows.First.Value.Hide();
+            }
+        }
+
+        public void RemoveWindow(UIComponent uIComponent)
+        {
+            if (OpenWindows.Contains(uIComponent))
+            {
+                OpenWindows.Remove(uIComponent);
+            }
         }
 
         public void PushWindow(UIComponent uIComponent)
         {
-            WindowStack.Push(uIComponent);
+            if(OpenWindows.Contains(uIComponent))
+            {
+                RemoveWindow(uIComponent);
+            }
+            OpenWindows.AddFirst(uIComponent);
         }
 
         public void Refresh()

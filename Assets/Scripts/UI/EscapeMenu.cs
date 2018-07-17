@@ -13,6 +13,7 @@ namespace Gamepackage
         {
             Context.UIController.DarkOverlay.Hide();
             GetComponent<EscapeMenu>().gameObject.SetActive(false);
+            Context.UIController.RemoveWindow(this);
         }
 
         public override void Show()

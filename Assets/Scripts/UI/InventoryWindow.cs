@@ -14,6 +14,7 @@ namespace Gamepackage
         {
             active = false;
             GetComponent<InventoryWindow>().gameObject.SetActive(false);
+            Context.UIController.RemoveWindow(this);
         }
 
         public override void Refresh()

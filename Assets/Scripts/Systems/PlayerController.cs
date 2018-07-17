@@ -174,7 +174,7 @@ namespace Gamepackage
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (Context.UIController.HasWindowsToPop())
+                if (Context.UIController.HasWindowsOpen)
                 {
                     Context.UIController.Pop();
                 }
@@ -186,8 +186,17 @@ namespace Gamepackage
                 Context.UIController.Tooltip.Hide();
             }
 
+            if(Context.UIController.EscapeMenu.isActiveAndEnabled)
+            {
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.I))
             {
+                if (Context.UIController.InventoryWindow.isActiveAndEnabled)
+                {
+                    Context.UIController.ItemInspectionWindow.Hide();
+                }
                 Context.UIController.InventoryWindow.Toggle();
                 Context.UIController.LootWindow.Toggle();
                 Context.UIController.Tooltip.Hide();

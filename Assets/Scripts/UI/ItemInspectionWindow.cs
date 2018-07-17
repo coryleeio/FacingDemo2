@@ -12,6 +12,7 @@ namespace Gamepackage
         public override void Hide()
         {
             GetComponent<ItemInspectionWindow>().gameObject.SetActive(false);
+            Context.UIController.RemoveWindow(this);
         }
 
         public void ShowFor(Item item)
