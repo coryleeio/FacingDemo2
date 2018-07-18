@@ -62,6 +62,18 @@ namespace Gamepackage
             }
         }
 
+        public static string TooltipFor(string key)
+        {
+            if(key == MeleeDamageKey)
+            {
+                return "";
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         public static string DisplayValueForAttackParameters(AttackParameters param, bool isLast)
         {
             return string.Format("{0}-{1}{2}", param.DyeNumber + param.Bonus, param.DyeNumber * param.DyeSize + param.Bonus, isLast ? "" : ",");

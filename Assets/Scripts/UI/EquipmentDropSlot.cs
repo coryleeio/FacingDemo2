@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace Gamepackage
 {
-    public class EquipmentDropSlot : MonoBehaviour, IDropHandler
+    public class EquipmentDropSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public ItemSlot Slot;
 
@@ -25,6 +25,25 @@ namespace Gamepackage
             {
                 Context.UIController.Refresh();
             }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            var item = Player.Inventory.GetItemBySlot(Slot);
+            if(item == null)
+            {
+                Context.UIController.Tooltip.Hover(this.gameObject, Slot.ToString());
+            }
+            else
+            {
+                Context.UIController.Tooltip.Hover(this.gameObject, String.Format("{0} ({1})", item.DisplayName, Slot.ToString()));
+            }
+            
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            Context.UIController.Tooltip.Leave(this.gameObject);
         }
     }
 }

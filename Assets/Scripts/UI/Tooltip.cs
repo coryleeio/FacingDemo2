@@ -10,6 +10,10 @@ namespace Gamepackage
 
         public void Hover(GameObject hoverOver, string input)
         {
+            if(input == null || input == "")
+            {
+                return;
+            }
             _mostRecentHover = hoverOver;
             SetDisplayText(input);
             var mousePos = Input.mousePosition;

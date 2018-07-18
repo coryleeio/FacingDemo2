@@ -6,8 +6,8 @@ namespace Gamepackage
 {
     public class ItemInspectionWindow : UIComponent
     {
-        public List<ItemInspectionWindowAttributeRow> attributeRows = new List<ItemInspectionWindowAttributeRow>();
-        public List<ItemInspectionWindowAbilityRow> abilityRows = new List<ItemInspectionWindowAbilityRow>();
+        public List<AttributeRow> attributeRows = new List<AttributeRow>();
+        public List<AbilityRow> abilityRows = new List<AbilityRow>();
 
         public override void Hide()
         {
@@ -19,7 +19,7 @@ namespace Gamepackage
         {
             if(attributeRows.Count == 0)
             {
-                attributeRows.AddRange(gameObject.GetComponentsInChildren<ItemInspectionWindowAttributeRow>());
+                attributeRows.AddRange(gameObject.GetComponentsInChildren<AttributeRow>());
                 Assert.IsTrue(attributeRows.Count == 6);
             }
             var displayAttributes = StringUtil.GetDisplayAttributesForItem(item);
@@ -27,6 +27,10 @@ namespace Gamepackage
             {
                 if (i < attributeRows.Count)
                 {
+                    if (attributeRows[i].GetComponent<TooltipMarker>() == null)
+                    {
+                        attributeRows[i].gameObject.AddComponent<TooltipMarker>();
+                    }
                     if (i < displayAttributes.Count)
                     {
                         attributeRows[i].Set(displayAttributes[i].Key, displayAttributes[i].Value);
@@ -39,7 +43,7 @@ namespace Gamepackage
             }
             if(abilityRows.Count == 0)
             {
-                abilityRows.AddRange(gameObject.GetComponentsInChildren<ItemInspectionWindowAbilityRow>());
+                abilityRows.AddRange(gameObject.GetComponentsInChildren<AbilityRow>());
                 Assert.IsTrue(abilityRows.Count == 2);
             }
             var displayAbilities = StringUtil.GetDisplayAbilitiesForItem(item);

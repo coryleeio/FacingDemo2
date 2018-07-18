@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Gamepackage
 {
-    public class ItemInspectionWindowAbilityRow : MonoBehaviour
+    public class AbilityRow : MonoBehaviour
     {
         public void Clear()
         {

@@ -13,11 +13,13 @@ namespace Gamepackage
         public override void Hide()
         {
             GetComponent<ContextMenu>().gameObject.SetActive(false);
+            Context.UIController.ClickoutCatcher.Hide();
         }
 
         public override void Show()
         {
             GetComponent<ContextMenu>().gameObject.SetActive(true);
+            Context.UIController.ClickoutCatcher.Show();
         }
 
         public void ShowForItemAtLocation(Item item, PointerEventData eventData)

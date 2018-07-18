@@ -1,6 +1,10 @@
-﻿namespace Gamepackage
+﻿using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+namespace Gamepackage
 {
-    public class ClickoutCatcher : UIComponent
+    public class ClickoutCatcher : UIComponent, IPointerClickHandler
     {
         public override void Hide()
         {
@@ -14,6 +18,11 @@
 
         public override void Refresh()
         {
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Context.UIController.ContextMenu.Hide();
         }
     }
 }

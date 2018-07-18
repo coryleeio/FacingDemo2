@@ -5,14 +5,11 @@ namespace Gamepackage
 {
     public class TooltipMarker : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        public string hoverString;
+        public string Key;
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (hoverString != null)
-            {
-                Context.UIController.Tooltip.Hover(this.gameObject, hoverString);
-            }
+            Context.UIController.Tooltip.Hover(this.gameObject, StringUtil.TooltipFor(Key));
         }
 
         public void OnPointerExit(PointerEventData eventData)
