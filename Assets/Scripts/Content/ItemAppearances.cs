@@ -12,17 +12,17 @@ namespace Gamepackage
                 new ItemAppearance()
                 {
                     UniqueIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LONGSWORD,
-                    InventorySprite=Resources.Load<Sprite>("Tilesets/Stone/StoneFloor"),
+                    InventorySprite=Resources.Load<Sprite>("Sprites/Longsword"),
                 },
                 new ItemAppearance()
                 {
                     UniqueIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN,
-                    InventorySprite=Resources.Load<Sprite>("Tilesets/Stone/StoneFloor"),
+                    InventorySprite=Resources.Load<Sprite>("Sprites/LuckyCoin"),
                 },
                 new ItemAppearance()
                 {
                     UniqueIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW,
-                    InventorySprite=Resources.Load<Sprite>("Tilesets/Stone/StoneFloor"),
+                    InventorySprite=Resources.Load<Sprite>("Sprites/Arrow"),
                 },
             };
         }

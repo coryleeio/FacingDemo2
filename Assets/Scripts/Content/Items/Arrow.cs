@@ -16,7 +16,7 @@ namespace Gamepackage
         {
             get
             {
-                return UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN;
+                return UniqueIdentifier.ITEM_APPEARANCE_ARROW;
             }
         }
 

@@ -96,6 +96,18 @@ namespace Gamepackage
                 spriteRenderer.sprite = Resources.Load<Sprite>("BlueMarker");
                 spriteRenderer.material = defaultMaterial;
             }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_UP)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseUp");
+                spriteRenderer.material = defaultMaterial;
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
+                spriteRenderer.material = defaultMaterial;
+            }
             return go;
         }
 

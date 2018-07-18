@@ -117,7 +117,7 @@ namespace Gamepackage
                 entity.View = new View()
                 {
                     ViewType = ViewType.StaticSprite,
-                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_STAIRCASE_UP,
                 };
                 entity.Trigger = new Trigger()
                 {
@@ -133,7 +133,7 @@ namespace Gamepackage
                 entity.View = new View()
                 {
                     ViewType = ViewType.StaticSprite,
-                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_GREEN,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_STAIRCASE_DOWN,
                 };
                 entity.Trigger = new Trigger()
                 {

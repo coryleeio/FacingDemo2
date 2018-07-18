@@ -202,6 +202,11 @@ namespace Gamepackage
                 Context.UIController.Tooltip.Hide();
             }
 
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                QueueWait(level, player);
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 if (shouldAcceptInput)
@@ -224,6 +229,12 @@ namespace Gamepackage
                     }
                 }
             }
+        }
+
+        private void QueueWait(Level level, Entity player)
+        {
+            var wait = Context.PrototypeFactory.BuildEntityAction<Wait>(player);
+            player.Behaviour.NextAction = wait;
         }
 
         private void QueueSwapPosition(Level level, Entity player, Point mousePos)
