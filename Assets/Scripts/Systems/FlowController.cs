@@ -58,15 +58,11 @@ namespace Gamepackage
                     // phase is over, nobbody else needs to act
                     if(CurrentPhase == Phase.Player)
                     {
-                        ChangePhase(Phase.Allies);
+                        ChangePhase(Phase.Enemies);
                     }
                     else if(CurrentPhase == Phase.Enemies)
                     {
                         ChangePhase(Phase.Player);
-                    }
-                    else if (CurrentPhase == Phase.Allies)
-                    {
-                        ChangePhase(Phase.Enemies);
                     }
                     else
                     {
