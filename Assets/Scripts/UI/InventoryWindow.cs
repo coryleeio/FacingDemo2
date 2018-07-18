@@ -80,6 +80,25 @@ namespace Gamepackage
                     }
                 }
             }
+
+            var attributeRows = new List<AttributeRow>();
+            attributeRows.AddRange(gameObject.GetComponentsInChildren<AttributeRow>());
+
+            Assert.AreEqual(14, attributeRows.Count);
+
+            var displayAttributes = new List<Tuple<string, string>>();
+            displayAttributes = StringUtil.GetDisplayAttributesForPlayer(player);
+            for (var i = 0; i < attributeRows.Count; i++)
+            {
+                if (i < displayAttributes.Count)
+                {
+                    attributeRows[i].Set(displayAttributes[i].Key, displayAttributes[i].Value);
+                }
+                else
+                {
+                    attributeRows[i].Clear();
+                }
+            }
         }
 
         private static void BuildDraggableItemForPlayerParentToTransform(Item item, Entity player, Transform parentTransform)

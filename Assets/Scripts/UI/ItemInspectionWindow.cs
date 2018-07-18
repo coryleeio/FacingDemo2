@@ -27,10 +27,6 @@ namespace Gamepackage
             {
                 if (i < attributeRows.Count)
                 {
-                    if (attributeRows[i].GetComponent<TooltipMarker>() == null)
-                    {
-                        attributeRows[i].gameObject.AddComponent<TooltipMarker>();
-                    }
                     if (i < displayAttributes.Count)
                     {
                         attributeRows[i].Set(displayAttributes[i].Key, displayAttributes[i].Value);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Gamepackage
 {
@@ -79,7 +80,43 @@ namespace Gamepackage
             return string.Format("{0}-{1}{2}", param.DyeNumber + param.Bonus, param.DyeNumber * param.DyeSize + param.Bonus, isLast ? "" : ",");
         }
 
-        public static List<Tuple<string, string>> GetDisplayAttributesForItem(Item item)
+        public static string DisplayValueForAttribute(Attributes attr)
+        {
+            if(attr == Attributes.MAX_HEALTH)
+            {
+                return "Health";
+            }
+            else
+            {
+                return attr.ToString();
+            }
+        }
+
+        public static List<Tuple<string, string>> GetDisplayAttributesForPlayer(Entity player)
+        {
+            var retVal = new List<Tuple<string, string>>();
+
+            retVal.Add(new Tuple<string, string>() {
+                Key = DisplayValueForAttribute(Attributes.MAX_HEALTH),
+                Value = string.Format("{0}/{1}", player.Body.CurrentHealth, player.Body.CalculateValueOfAttribute(Attributes.MAX_HEALTH)),
+            });
+            foreach (var enumVal in Enum.GetValues(typeof(Attributes)))
+            {
+                var castVal = (Attributes)enumVal;
+                if(castVal == Attributes.MAX_HEALTH)
+                {
+                    continue;
+                }
+                retVal.Add(new Tuple<string, string>()
+                {
+                    Key = DisplayValueForAttribute(castVal),
+                    Value = player.Body.CalculateValueOfAttribute(castVal).ToString(),
+                });
+            }
+            return retVal;
+        }
+
+            public static List<Tuple<string, string>> GetDisplayAttributesForItem(Item item)
         {
             var retVal = new List<Tuple<string, string>>();
             if (item.AttackParameters.Count > 0)
