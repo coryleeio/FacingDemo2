@@ -194,10 +194,9 @@ namespace Gamepackage
 
         public bool ActsInPhase(Entity entity)
         {
-            var playerOnPlayerTurn = entity.IsPlayer && entity.Behaviour.Team == Team.PLAYER && CurrentPhase == Phase.Player;
+            var playerOrPlayerAllyOnPlayerPhase = entity.Behaviour.Team == Team.PLAYER && CurrentPhase == Phase.Player;
             var enemyOrNeutralOnEnemyPhase = (entity.Behaviour.Team == Team.ENEMY || entity.Behaviour.Team == Team.NEUTRAL) && CurrentPhase == Phase.Enemies;
-            var allyOnAllyPhase = !entity.Behaviour.IsPlayer && entity.Behaviour.Team == Team.PLAYER && CurrentPhase == Phase.Allies;
-            return playerOnPlayerTurn || enemyOrNeutralOnEnemyPhase || allyOnAllyPhase;
+            return playerOrPlayerAllyOnPlayerPhase || enemyOrNeutralOnEnemyPhase;
         }
     }
 }
