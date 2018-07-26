@@ -37,6 +37,13 @@ namespace Gamepackage
             return Grid[p.X, p.Y];
         }
 
+        public void UnindexAll()
+        {
+            foreach(var entity in Entitys)
+            {
+                UnindexEntity(entity, entity.Position);
+            }
+        }
 
         public void UnindexEntity(Entity entity, Point oldPosition)
         {

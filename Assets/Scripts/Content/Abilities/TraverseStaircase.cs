@@ -83,6 +83,7 @@ namespace Gamepackage
                         AbilityTriggerContext.Targets.Add(entityInLevel);
                     }
                 }
+                Context.GameStateManager.Game.CurrentLevel.UnindexAll();
             }
 
             foreach (var target in AbilityTriggerContext.Targets)

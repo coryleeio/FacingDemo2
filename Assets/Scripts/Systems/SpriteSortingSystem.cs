@@ -62,7 +62,6 @@ namespace Gamepackage
                     sortOrder++;
                     if (level.Grid != null)
                     {
-
                         foreach(var entity in level.Grid[x,y].EntitiesInPosition)
                         {
                             sortOrder = sortEntity(sortOrder, entity);

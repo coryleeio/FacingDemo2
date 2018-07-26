@@ -83,6 +83,11 @@ namespace Gamepackage
                     {
                         if(entity.Behaviour != null && !entity.Behaviour.IsDoneThisTurn)
                         {
+                            if(!entity.Behaviour.NextAction.IsValid())
+                            {
+                                entity.Behaviour.NextAction = null;
+                                continue;
+                            }
                             if(entity.Behaviour.NextAction.GetType() == typeof(Wait))
                             {
                                 waiters.Add(entity);

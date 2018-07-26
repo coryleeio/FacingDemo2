@@ -113,5 +113,10 @@ namespace Gamepackage
                 }
             }
         }
+
+        public override bool IsValid()
+        {
+            return Source.Position.IsAdjacentTo(Targets[0].Position) && Source.Position.IsOrthogonalTo(Targets[0].Position);
+        }
     }
 }

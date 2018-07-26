@@ -19,6 +19,11 @@ namespace Gamepackage
             get;
         }
 
+        public virtual bool IsValid()
+        {
+            return true;
+        }
+
         public virtual void Enter()
         {
             Started = true;

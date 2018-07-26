@@ -108,6 +108,11 @@ namespace Gamepackage
                     target.View.ViewGameObject.AddComponent<DeathAnimation>();
                 }
             }
+
+            if(target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)
+            {
+                Context.UIController.Refresh();
+            }
         }
 
         private static void HandleRawDamageIsLethal(Entity target, AttackResult result)

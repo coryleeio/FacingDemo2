@@ -105,5 +105,10 @@ namespace Gamepackage
                 }
             }
         }
+
+        public override bool IsValid()
+        {
+            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].Walkable));
+        }
     }
 }
