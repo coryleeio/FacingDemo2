@@ -83,6 +83,20 @@ namespace Gamepackage
                 }
                 return sortOrder;
             }
+            else if (entity.View.ViewType == ViewType.MultipleStaticSprites)
+            {
+                if (entity.View != null && entity.View.ViewGameObject != null)
+                {
+                    var spriteRenderers = entity.View.ViewGameObject.GetComponentsInChildren<SpriteRenderer>();
+                    foreach(var renderer in spriteRenderers)
+                    {
+                        renderer.sortingOrder = sortOrder;
+                        sortOrder++;
+                    }
+                    return sortOrder;
+                }
+                return sortOrder;
+            }
             else
             {
                 throw new NotImplementedException();

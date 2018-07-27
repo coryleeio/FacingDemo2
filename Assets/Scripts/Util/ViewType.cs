@@ -3,6 +3,7 @@
     public enum ViewType
     {
         StaticSprite,
+        MultipleStaticSprites,
         Spine,
     }
 }

@@ -186,5 +186,58 @@ namespace Gamepackage
                 return null;
             }
         }
+
+        public int NumberOfItems
+        {
+            get
+            {
+                var count = 0;
+                foreach(var item in Items)
+                {
+                    if(item != null)
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+
+        public List<Item> ChooseRandomItemsFromInventory(int numberToChoose)
+        {
+            var validItems = new List<Item>();
+            foreach(var item in Items)
+            {
+                if(item != null)
+                {
+                    validItems.Add(item);
+                }
+            }
+            return MathUtil.ChooseNRandomElements(numberToChoose, validItems);
+        }
+
+        public int NumberOfEquippedItems
+        {
+            get
+            {
+                var count = 0;
+                foreach (var pair in EquippedItemBySlot)
+                {
+                    if (pair.Value != null)
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+
+        public bool HasAnyItems
+        {
+            get
+            {
+                return NumberOfEquippedItems > 0 || NumberOfItems > 0;
+            }
+        }
     }
 }

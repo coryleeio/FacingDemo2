@@ -15,8 +15,13 @@ namespace Gamepackage
             X = 0;
             Y = 0;
         }
+        public Point(Point p)
+        {
+            X = p.X;
+            Y = p.Y;
+        }
 
-            public Point(int x, int y)
+        public Point(int x, int y)
         {
             this.X = x;
             this.Y = y;

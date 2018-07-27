@@ -108,6 +108,19 @@ namespace Gamepackage
                 spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
                 spriteRenderer.material = defaultMaterial;
             }
+            else if(entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CORPSE)
+            {
+                var relevantItems = entity.Inventory.ChooseRandomItemsFromInventory(3);
+                foreach (var item in relevantItems)
+                {
+                    var childGo = new GameObject();
+                    childGo.name = item.DisplayName + "View";
+                    var spriteRenderer = childGo.AddComponent<SpriteRenderer>();
+                    childGo.transform.SetParent(go.transform, false);
+                    spriteRenderer.sprite = item.ItemAppearance.InventorySprite;
+                    spriteRenderer.material = defaultMaterial;
+                }
+            }
             return go;
         }
 

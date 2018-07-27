@@ -107,6 +107,19 @@ namespace Gamepackage
                 {
                     target.View.ViewGameObject.AddComponent<DeathAnimation>();
                 }
+
+                if(target.Inventory.HasAnyItems)
+                {
+                    var corpse = EntityFactory.Build(UniqueIdentifier.ENTITY_CORPSE);
+                    corpse.Inventory.Items.AddRange(target.Inventory.Items);
+                    foreach(var pair in target.Inventory.EquippedItemBySlot)
+                    {
+                        corpse.Inventory.Items.Add(pair.Value);
+                    }
+                    corpse.Position = new Point(target.Position);
+                    Context.EntitySystem.Register(corpse, level);
+                    corpse.View.ViewGameObject = Context.PrototypeFactory.BuildView(corpse);
+                }
             }
 
             if(target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)

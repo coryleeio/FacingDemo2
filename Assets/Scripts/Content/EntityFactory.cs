@@ -109,6 +109,7 @@ namespace Gamepackage
                 {
                     Team = Team.ENEMY,
                 };
+                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_UP)
             {
@@ -139,6 +140,38 @@ namespace Gamepackage
                 {
                     // params filled out by dungeon generator
                     Ability = new TraverseStaircase(),
+                    Offsets = new List<Point>() { new Point(0, 0) }
+                };
+            }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN)
+            {
+                entity.Name = "Stairs (Down)";
+                entity.BlocksPathing = false;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.StaticSprite,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_STAIRCASE_DOWN,
+                };
+                entity.Trigger = new Trigger()
+                {
+                    // params filled out by dungeon generator
+                    Ability = new TraverseStaircase(),
+                    Offsets = new List<Point>() { new Point(0, 0) }
+                };
+            }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_CORPSE)
+            {
+                entity.Name = "Corpse";
+                entity.BlocksPathing = false;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.MultipleStaticSprites,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE,
+                };
+                entity.Trigger = new Trigger()
+                {
+                    // params filled out by dungeon generator
+                    Ability = new LootCorpse(),
                     Offsets = new List<Point>() { new Point(0, 0) }
                 };
             }

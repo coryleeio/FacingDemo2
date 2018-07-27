@@ -203,9 +203,8 @@ namespace Gamepackage
         }
         public static List<TChoose> ChooseNRandomElements<TChoose>(int n, List<TChoose> elements)
         {
-            Assert.IsTrue(elements.Count > n);
             List<TChoose> output = new List<TChoose>();
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < n && i < elements.Count; i++)
             {
                 TChoose chosen = default(TChoose);
                 do
