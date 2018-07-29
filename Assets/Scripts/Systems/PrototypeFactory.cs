@@ -116,6 +116,9 @@ namespace Gamepackage
                     var childGo = new GameObject();
                     childGo.name = item.DisplayName + "View";
                     var spriteRenderer = childGo.AddComponent<SpriteRenderer>();
+                    childGo.transform.localEulerAngles = item.CorpseIconEulerAngles;
+                    childGo.transform.position = item.CorpsePositionOffset;
+                    childGo.transform.localScale = item.CorpseIconScale;
                     childGo.transform.SetParent(go.transform, false);
                     spriteRenderer.sprite = item.ItemAppearance.InventorySprite;
                     spriteRenderer.material = defaultMaterial;

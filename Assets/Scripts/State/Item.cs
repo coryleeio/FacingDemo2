@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -92,6 +93,33 @@ namespace Gamepackage
         public bool CanStack(Item other)
         {
             return UniqueIdentifier == other.UniqueIdentifier && (NumberOfItems + other.NumberOfItems < MaxStackSize);
+        }
+
+        [JsonIgnore]
+        public virtual Vector3 CorpseIconEulerAngles
+        {
+            get
+            {
+                return new Vector3(0, 0, 30.0f);
+            }
+        }
+
+        [JsonIgnore]
+        public virtual Vector3 CorpseIconScale
+        {
+            get
+            {
+                return new Vector3(0.5f,0.5f,0.5f);
+            }
+        }
+
+        [JsonIgnore]
+        public virtual Vector3 CorpsePositionOffset
+        {
+            get
+            {
+                return new Vector3(0f, -0.2f, 0f);
+            }
         }
 
         public int NumberOfItems;
