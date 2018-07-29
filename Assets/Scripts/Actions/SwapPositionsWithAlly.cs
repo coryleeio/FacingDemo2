@@ -116,6 +116,8 @@ namespace Gamepackage
 
         public override bool IsValid()
         {
+            var adj = Source.Position.IsAdjacentTo(Targets[0].Position);
+            var ort = Source.Position.IsOrthogonalTo(Targets[0].Position);
             return Source.Position.IsAdjacentTo(Targets[0].Position) && Source.Position.IsOrthogonalTo(Targets[0].Position);
         }
     }

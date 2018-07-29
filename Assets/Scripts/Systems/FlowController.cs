@@ -78,6 +78,7 @@ namespace Gamepackage
                     List<Entity> waiters = new List<Entity>(0);
                     List<Entity> movers = new List<Entity>(0);
                     List<Entity> everyoneElse = new List<Entity>(0);
+                    List<Entity> swappers = new List<Entity>(0);
 
                     foreach(var entity in entities)
                     {
@@ -96,13 +97,33 @@ namespace Gamepackage
                             {
                                 movers.Add(entity);
                             }
+                            else if(entity.Behaviour.NextAction.GetType() == typeof(SwapPositionsWithAlly))
+                            {
+                                swappers.Add(entity);
+                            }
                             else
                             {
                                 everyoneElse.Add(entity);
                             }
                         }
                     }
-                    if(waiters.Count != 0)
+                    if(swappers.Count != 0)
+                    {
+                        var step = new Step();
+                        var endTurnStep = new Step();
+                        foreach (var swapper in swappers)
+                        {
+                            step.Actions.AddFirst(swapper.Behaviour.NextAction);
+                        }
+                        foreach (var swapper in swappers)
+                        {
+                            endTurnStep.Actions.AddFirst(Context.PrototypeFactory.BuildEntityAction<EndTurn>(swapper));
+                        }
+                        Steps.AddLast(step);
+                        Steps.AddLast(endTurnStep);
+                        ForceAIsToRecalculateMoves(entities);
+                    }
+                    else if(waiters.Count != 0)
                     {
                         // Enqueue waiters
                         var step = new Step();
