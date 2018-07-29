@@ -62,9 +62,33 @@ namespace Gamepackage
             var player = level.Player;
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
             var isValidPoint = level.BoundingBox.Contains(mousePos);
-            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && level.Grid[mousePos].EntitiesInPosition.Count > 0 && level.Grid[mousePos].EntitiesInPosition[0].IsCombatant && level.Grid[mousePos].EntitiesInPosition[0].Behaviour.Team == Team.ENEMY;
-            var isHoveringOnAlly = isValidPoint && mousePos != player.Position && level.Grid[mousePos].EntitiesInPosition.Count > 0 && level.Grid[mousePos].EntitiesInPosition[0].IsCombatant && level.Grid[mousePos].EntitiesInPosition[0].Behaviour.Team == Team.PLAYER && !level.Grid[mousePos].EntitiesInPosition[0].Behaviour.IsPlayer;
 
+
+            var tileContainsEnemy = false;
+            var tileContainsCombatant = false;
+            var tileContainsAlly = false;
+
+            if(isValidPoint)
+            {
+                foreach (var entity in level.Grid[mousePos].EntitiesInPosition)
+                {
+                    if (entity.IsCombatant)
+                    {
+                        tileContainsCombatant = true;
+                    }
+                    if (entity.Behaviour != null && entity.Behaviour.Team == Team.ENEMY)
+                    {
+                        tileContainsEnemy = true;
+                    }
+                    if (entity.IsCombatant && entity.Behaviour != null && entity.Behaviour.Team == Team.PLAYER && !entity.IsPlayer)
+                    {
+                        tileContainsAlly = true;
+                    }
+                }
+            }
+
+            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && tileContainsCombatant && tileContainsEnemy;
+            var isHoveringOnAlly = isValidPoint && mousePos != player.Position && tileContainsAlly;
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
@@ -246,8 +270,9 @@ namespace Gamepackage
 
         private void QueueAttack(Level level, Entity player, Point mousePos)
         {
+            var enemyTarget = level.Grid[mousePos].EntitiesInPosition.Find((t) => t.IsCombatant);
             var attack = Context.PrototypeFactory.BuildEntityAction<MeleeAttack>(player);
-            attack.Targets.Add(level.Grid[mousePos].EntitiesInPosition[0]);
+            attack.Targets.Add(enemyTarget);
             player.Behaviour.NextAction = attack;
         }
 
