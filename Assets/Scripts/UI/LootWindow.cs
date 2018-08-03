@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Gamepackage
 {
@@ -37,6 +38,20 @@ namespace Gamepackage
             }
         }
 
+        private static void BuildDraggableItemForPlayerParentToTransform(Item item, Entity player, Transform parentTransform)
+        {
+            var draggablePrefab = Resources.Load<DraggableItem>("UI/DraggableItem");
+            var draggableInstance = GameObject.Instantiate<DraggableItem>(draggablePrefab);
+            draggableInstance.transform.SetParent(parentTransform, false);
+            draggableInstance.Source = player;
+            draggableInstance.Item = item;
+            var stackCounter = draggableInstance.GetComponentInChildren<Text>();
+            stackCounter.gameObject.SetActive(item.MaxStackSize > 1);
+            stackCounter.text = item.NumberOfItems.ToString();
+            var spr = draggableInstance.GetComponent<Image>();
+            spr.sprite = item.ItemAppearance.InventorySprite;
+        }
+
         public override void Refresh()
         {
             if (target == null)
@@ -53,11 +68,16 @@ namespace Gamepackage
 
             for (var i = 0; i < inventory.Items.Count; i++)
             {
-                var instance = GameObject.Instantiate<InventoryDropSlot>(slotPrefab);
-                instance.Index = i;
-                instance.Entity = target;
-                instance.transform.SetParent(container.transform, false);
+                if(inventory.Items[i] != null)
+                {
+                    var instance = GameObject.Instantiate<InventoryDropSlot>(slotPrefab);
+                    instance.Index = i;
+                    instance.Entity = target;
+                    instance.transform.SetParent(container.transform, false);
+                    BuildDraggableItemForPlayerParentToTransform(inventory.Items[i], target, instance.transform);
+                }
             }
+
             Show();
         }
     }

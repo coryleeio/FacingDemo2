@@ -88,7 +88,7 @@ namespace Gamepackage
             }
             foreach (var item in Items)
             {
-                if (item.UniqueIdentifier == item.UniqueIdentifier)
+                if (item != null && item.UniqueIdentifier == item.UniqueIdentifier)
                 {
                     return item;
                 }
@@ -98,7 +98,7 @@ namespace Gamepackage
 
         public void ConsumeItem(Item item)
         {
-            if(item.NumberOfItems > 1)
+            if (item.NumberOfItems > 1)
             {
                 item.NumberOfItems--;
             }
@@ -150,7 +150,7 @@ namespace Gamepackage
 
         public bool IsWearing(Item item)
         {
-            foreach(var slot in item.SlotsWearable)
+            foreach (var slot in item.SlotsWearable)
             {
                 var itemInSlot = GetItemBySlot(slot);
                 if (itemInSlot != null && itemInSlot == item)
@@ -163,10 +163,10 @@ namespace Gamepackage
 
         public ItemSlot GetItemSlotOfEquippedItem(Item item)
         {
-            foreach(var slot in item.SlotsWearable)
+            foreach (var slot in item.SlotsWearable)
             {
                 var itemInSlot = GetItemBySlot(slot);
-                if(itemInSlot == item)
+                if (itemInSlot == item)
                 {
                     return slot;
                 }
@@ -192,9 +192,9 @@ namespace Gamepackage
             get
             {
                 var count = 0;
-                foreach(var item in Items)
+                foreach (var item in Items)
                 {
-                    if(item != null)
+                    if (item != null)
                     {
                         count++;
                     }
@@ -206,9 +206,9 @@ namespace Gamepackage
         public List<Item> ChooseRandomItemsFromInventory(int numberToChoose)
         {
             var validItems = new List<Item>();
-            foreach(var item in Items)
+            foreach (var item in Items)
             {
-                if(item != null)
+                if (item != null)
                 {
                     validItems.Add(item);
                 }

@@ -87,6 +87,7 @@ namespace Gamepackage
                 {
                     Team = Team.ENEMY,
                 };
+                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
             {

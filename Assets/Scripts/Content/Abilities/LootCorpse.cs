@@ -54,7 +54,7 @@ namespace Gamepackage
         public override AbilityTriggerContext Perform(AbilityTriggerContext abilityTriggerContext)
         {
             AbilityTriggerContext = (TriggerStepContext)abilityTriggerContext;
-            Debug.Log("Opening Loot UI...");
+            Context.UIController.LootWindow.ShowFor(AbilityTriggerContext.Source);
             return abilityTriggerContext;
         }
 
