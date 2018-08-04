@@ -25,33 +25,59 @@ namespace Gamepackage
         public void ShowForItemAtLocation(Item item, PointerEventData eventData)
         {
             Purge();
-            BuildButton("Info", () => {
+            BuildButton("Info", () =>
+            {
                 Context.UIController.ItemInspectionWindow.ShowFor(item);
             });
-            if(item.SlotsWearable.Count > 0)
+            if (item.SlotsWearable.Count > 0)
             {
-                var player = Context.GameStateManager.Game.CurrentLevel.Player;
+                var level = Context.GameStateManager.Game.CurrentLevel;
+                var player = level.Player;
                 var isWearingItem = player.Inventory.IsWearing(item);
                 var hasItemInInventory = player.Inventory.Items.Contains(item);
                 var isPickingUpItem = !isWearingItem && !hasItemInInventory;
 
                 if (hasItemInInventory)
                 {
-                    BuildButton("Equip", () => {
+                    BuildButton("Equip", () =>
+                    {
                         var action = Context.PrototypeFactory.BuildEntityAction<EquipItem>(player) as EquipItem;
                         action.Item = item;
                         action.Slot = item.SlotsWearable[0];
                         Context.PlayerController.ActionList.Enqueue(action);
                     });
                 }
-                else if(isWearingItem)
+                else if (isWearingItem)
                 {
-                    BuildButton("Unequip", () => {
+                    BuildButton("Unequip", () =>
+                    {
                         var action = Context.PrototypeFactory.BuildEntityAction<UnequipItem>(player) as UnequipItem;
                         action.Item = item;
                         action.Slot = player.Inventory.GetItemSlotOfEquippedItem(action.Item);
                         Context.PlayerController.ActionList.Enqueue(action);
                     });
+                }
+                else
+                {
+                    var possibleTargets = level.Grid[player.Position].EntitiesInPosition;
+
+                    foreach (var possibleTarget in possibleTargets)
+                    {
+                        if (possibleTarget.Inventory.Items.Contains(item))
+                        {
+                            BuildButton("Take", () =>
+                            {
+                                var action = Context.PrototypeFactory.BuildEntityAction<PickupItem>(player) as PickupItem;
+                                action.Item = item;
+                                action.Targets.Add(possibleTarget);
+                                Context.PlayerController.ActionList.Enqueue(action);
+                                Context.PlayerController.ActionList.Enqueue(action);
+                                Context.UIController.Tooltip.Hide();
+                                Context.UIController.Refresh();
+                            });
+                            break;
+                        }
+                    }
                 }
             }
             this.transform.position = eventData.position;
@@ -60,7 +86,7 @@ namespace Gamepackage
 
         private void Purge()
         {
-            foreach(var button in buttons)
+            foreach (var button in buttons)
             {
                 GameObject.Destroy(button.gameObject);
             }

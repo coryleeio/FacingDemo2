@@ -12,12 +12,18 @@ namespace Gamepackage
         {
             active = false;
             GetComponent<LootWindow>().gameObject.SetActive(false);
+            if(Context.UIController.Tooltip != null)
+            {
+                Context.UIController.Tooltip.Hide();
+            }
+            Context.UIController.RemoveWindow(this);
         }
 
         public override void Show()
         {
             active = true;
             GetComponent<LootWindow>().gameObject.SetActive(true);
+            Context.UIController.PushWindow(this);
         }
 
         public void ShowFor(Entity entity)

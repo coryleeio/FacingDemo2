@@ -43,6 +43,10 @@ namespace Gamepackage
             LerpCurrentPositionForTarget = MathUtil.MapToWorld(Targets[0].Position);
             LerpTargetPositionForTarget = MathUtil.MapToWorld(Source.Position);
             Camera.main.GetComponent<GameSceneCameraDriver>().NewTarget(Targets[0].Position);
+            if(Source.IsPlayer)
+            {
+                Context.UIController.LootWindow.Hide();
+            }
         }
 
 

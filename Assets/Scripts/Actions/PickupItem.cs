@@ -30,6 +30,8 @@ namespace Gamepackage
 
         public override void Enter()
         {
+            var level = Context.GameStateManager.Game.CurrentLevel;
+
             base.Enter();
             Assert.IsNotNull(Source);
             Assert.IsTrue(Targets != null && Targets.Count == 1);
@@ -47,6 +49,15 @@ namespace Gamepackage
                 source.Inventory.AddItem(Item, Index);
             }
             Context.UIController.Refresh();
+            if(target.Inventory.NumberOfItems == 0)
+            {
+                Context.EntitySystem.Deregister(target, level);
+                if(target.View != null)
+                {
+                    UnityEngine.GameObject.Destroy(target.View.ViewGameObject);
+                }
+                Context.UIController.LootWindow.Hide();
+            }
         }
     }
 }

@@ -38,11 +38,15 @@ namespace Gamepackage
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            var shiftLeftClicked = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) && eventData.button == PointerEventData.InputButton.Left);
+            var isLeftClick = eventData.button == PointerEventData.InputButton.Left;
+            var shiftLeftClicked = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) && isLeftClick);
             var rightClicked = eventData.button == PointerEventData.InputButton.Right;
 
-            var isWearingItem = Source.Inventory.IsWearing(Item);
-            var hasItemInInventory = Source.Inventory.Items.Contains(Item);
+            var player = Context.GameStateManager.Game.CurrentLevel.Player;
+
+
+            var isWearingItem = player.Inventory.IsWearing(Item);
+            var hasItemInInventory = player.Inventory.Items.Contains(Item);
             var isPickingUpItem = !isWearingItem && !hasItemInInventory;
 
             if(rightClicked)
@@ -70,25 +74,24 @@ namespace Gamepackage
                     }
                     Context.UIController.Refresh();
                 }
-                else if(isPickingUpItem)
-                {
-                    // picking up the item
-                    var action = Context.PrototypeFactory.BuildEntityAction<PickupItem>(Source) as PickupItem;
-                    action.Item = Item;
-                    
-                    // player
-                    action.Source = Context.GameStateManager.Game.CurrentLevel.Player;
-                    
-                    // takes from source (which is the draggable source)
-                    action.Targets.Add(Source);
-
-                    Context.PlayerController.ActionList.Enqueue(action);
-                    Context.UIController.Refresh();
-                }
                 else
                 {
                     throw new NotImplementedException();
                 }
+            }
+            else if (isLeftClick && isPickingUpItem)
+            {
+                // picking up the item
+                var action = Context.PrototypeFactory.BuildEntityAction<PickupItem>(player) as PickupItem;
+                action.Item = Item;
+
+                // takes from source (which is the draggable source)
+                action.Targets.Add(Source);
+
+                Context.PlayerController.ActionList.Enqueue(action);
+                Context.UIController.Tooltip.Hide();
+                Context.UIController.Refresh();
+                Destroy(this.gameObject);
             }
         }
 

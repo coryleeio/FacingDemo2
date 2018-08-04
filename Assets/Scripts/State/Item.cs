@@ -4,72 +4,48 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public abstract class Item
+    public class Item
     {
-        public abstract UniqueIdentifier UniqueIdentifier
+        public UniqueIdentifier UniqueIdentifier;
+        public UniqueIdentifier ItemAppearanceIdentifier;
+        public string DisplayName;
+        public string Description;
+        public List<ItemSlot> SlotsWearable;
+        public List<ItemSlot> SlotsOccupiedByWearing;
+        public int MaxStackSize;
+        public Dictionary<Attributes, int> Attributes;
+        public List<Ability> Abilities;
+        public List<AttackParameters> AttackParameters;
+        public List<AttackParameters> ThrowParameters;
+
+        [JsonIgnore]
+        public Vector3 CorpsePositionOffset
         {
-            get;
+            get
+            {
+                return new Vector3(0f, -0.2f, 0f);
+            }
         }
 
-        public abstract UniqueIdentifier ItemAppearanceIdentifier
+        [JsonIgnore]
+        public Vector3 CorpseIconEulerAngles
         {
-            get;
+            get
+            {
+                return new Vector3(0, 0, 30);
+            }
         }
 
-        public abstract string DisplayName
+        [JsonIgnore]
+        public Vector3 CorpseIconScale
         {
-            get;
+            get
+            {
+                return new Vector3(0.5f, 0.5f, 0.5f);
+            }
         }
 
-        public abstract string Description
-        {
-            get;
-        }
-
-        public Item()
-        {
-            this.NumberOfItems = DefaultStackSize;
-        }
-
-        public abstract List<ItemSlot> SlotsWearable
-        {
-            get;
-        }
-
-        public abstract List<ItemSlot> SlotsOccupiedByWearing
-        {
-            get;
-        }
-
-        public abstract int MaxStackSize
-        {
-            get;
-        }
-
-        public abstract int DefaultStackSize
-        {
-            get;
-        }
-
-        public abstract Dictionary<Attributes, int> Attributes
-        {
-            get;
-        }
-
-        public abstract List<Ability> Abilities
-        {
-            get;
-        }
-
-        public abstract List<AttackParameters> AttackParameters
-        {
-            get;
-        }
-
-        public abstract List<AttackParameters> ThrowParameters
-        {
-            get;
-        }
+        public int NumberOfItems;
 
         [JsonIgnore]
         public ItemAppearance ItemAppearance
@@ -94,34 +70,5 @@ namespace Gamepackage
         {
             return UniqueIdentifier == other.UniqueIdentifier && (NumberOfItems + other.NumberOfItems < MaxStackSize);
         }
-
-        [JsonIgnore]
-        public virtual Vector3 CorpseIconEulerAngles
-        {
-            get
-            {
-                return new Vector3(0, 0, 30.0f);
-            }
-        }
-
-        [JsonIgnore]
-        public virtual Vector3 CorpseIconScale
-        {
-            get
-            {
-                return new Vector3(0.5f,0.5f,0.5f);
-            }
-        }
-
-        [JsonIgnore]
-        public virtual Vector3 CorpsePositionOffset
-        {
-            get
-            {
-                return new Vector3(0f, -0.2f, 0f);
-            }
-        }
-
-        public int NumberOfItems;
     }
 }

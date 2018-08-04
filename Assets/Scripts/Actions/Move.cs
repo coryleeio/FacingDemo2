@@ -41,6 +41,7 @@ namespace Gamepackage
             if(Source.IsPlayer)
             {
                 Camera.main.GetComponent<GameSceneCameraDriver>().NewTarget(TargetPosition);
+                Context.UIController.LootWindow.Hide();
             }
         }
 
