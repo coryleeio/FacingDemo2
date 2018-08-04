@@ -213,6 +213,10 @@ namespace Gamepackage
                     validItems.Add(item);
                 }
             }
+            foreach(var pair in EquippedItemBySlot)
+            {
+                validItems.Add(pair.Value);
+            }
             return MathUtil.ChooseNRandomElements(numberToChoose, validItems);
         }
 

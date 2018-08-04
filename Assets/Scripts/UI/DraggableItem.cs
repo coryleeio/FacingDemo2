@@ -91,7 +91,6 @@ namespace Gamepackage
                 Context.PlayerController.ActionList.Enqueue(action);
                 Context.UIController.Tooltip.Hide();
                 Context.UIController.Refresh();
-                Destroy(this.gameObject);
             }
         }
 

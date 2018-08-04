@@ -55,26 +55,26 @@ namespace Gamepackage
 
         public void Process()
         {
-            bool shouldAcceptInput =       !Context.UIController.InventoryWindow.isActiveAndEnabled
+            bool shouldAcceptInput = !Context.UIController.InventoryWindow.isActiveAndEnabled
                                         && !Context.UIController.EscapeMenu.isActiveAndEnabled;
             var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
-            var isValidPoint = level.BoundingBox.Contains(mousePos);
+            var hoverIsValidPoint = level.BoundingBox.Contains(mousePos);
 
 
             var tileContainsEnemy = false;
-            var tileContainsCombatant = false;
-            var tileContainsAlly = false;
+            var hoverContainsCombatant = false;
+            var hoverContainsAlly = false;
 
-            if(isValidPoint)
+            if (hoverIsValidPoint)
             {
                 foreach (var entity in level.Grid[mousePos].EntitiesInPosition)
                 {
                     if (entity.IsCombatant)
                     {
-                        tileContainsCombatant = true;
+                        hoverContainsCombatant = true;
                     }
                     if (entity.Behaviour != null && entity.Behaviour.Team == Team.ENEMY)
                     {
@@ -82,13 +82,13 @@ namespace Gamepackage
                     }
                     if (entity.IsCombatant && entity.Behaviour != null && entity.Behaviour.Team == Team.PLAYER && !entity.IsPlayer)
                     {
-                        tileContainsAlly = true;
+                        hoverContainsAlly = true;
                     }
                 }
             }
 
-            var isHoveringOnEnemyCombatant = isValidPoint && mousePos != player.Position && tileContainsCombatant && tileContainsEnemy;
-            var isHoveringOnAlly = isValidPoint && mousePos != player.Position && tileContainsAlly;
+            var isHoveringOnEnemyCombatant = hoverIsValidPoint && mousePos != player.Position && hoverContainsCombatant && tileContainsEnemy;
+            var isHoveringOnAlly = hoverIsValidPoint && mousePos != player.Position && hoverContainsAlly;
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
@@ -210,7 +210,7 @@ namespace Gamepackage
                 Context.UIController.Tooltip.Hide();
             }
 
-            if(Context.UIController.EscapeMenu.isActiveAndEnabled)
+            if (Context.UIController.EscapeMenu.isActiveAndEnabled)
             {
                 return;
             }
@@ -226,9 +226,19 @@ namespace Gamepackage
                 Context.UIController.Tooltip.Hide();
             }
 
-            if(Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 QueueWait(level, player);
+            }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                var entitiesInPosition = level.Grid[player.Position].EntitiesInPosition;
+                var deadEntitiesInPlayerPosition = entitiesInPosition.FindAll((ent) => { return ent.Body != null && ent.Body.IsDead; });
+                if (deadEntitiesInPlayerPosition.Count > 0)
+                {
+                    Context.UIController.LootWindow.ShowFor(deadEntitiesInPlayerPosition);
+                }
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -270,7 +280,7 @@ namespace Gamepackage
 
         private void QueueAttack(Level level, Entity player, Point mousePos)
         {
-            var enemyTarget = level.Grid[mousePos].EntitiesInPosition.Find((t) => t.IsCombatant);
+            var enemyTarget = level.Grid[mousePos].EntitiesInPosition.Find((t) => t.IsCombatant && t.Body != null && !t.Body.IsDead);
             var attack = Context.PrototypeFactory.BuildEntityAction<MeleeAttack>(player);
             attack.Targets.Add(enemyTarget);
             player.Behaviour.NextAction = attack;

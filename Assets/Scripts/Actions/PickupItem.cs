@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using UnityEngine.Assertions;
+﻿using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
@@ -40,6 +39,11 @@ namespace Gamepackage
             var source = Source;
             var target = Targets[0];
             target.Inventory.RemoveItemStack(Item);
+            if(target.View.ViewGameObject != null)
+            {
+                UnityEngine.GameObject.Destroy(target.View.ViewGameObject);
+                target.View.ViewGameObject = Context.PrototypeFactory.BuildView(target);
+            }
             if(Index == -1)
             {
                source.Inventory.AddItem(Item);
@@ -48,14 +52,13 @@ namespace Gamepackage
             {
                 source.Inventory.AddItem(Item, Index);
             }
-            Context.UIController.Refresh();
-            if(target.Inventory.NumberOfItems == 0)
+            if(source.IsPlayer)
             {
-                Context.EntitySystem.Deregister(target, level);
-                if(target.View != null)
-                {
-                    UnityEngine.GameObject.Destroy(target.View.ViewGameObject);
-                }
+                Context.UIController.TextLog.AddText(string.Format("You have looted {0}{1}", Item.DisplayName, Item.MaxStackSize > 1 ? string.Format(" x {0}", Item.NumberOfItems.ToString()) : ""));
+            }
+            Context.UIController.Refresh();
+            if(!Context.UIController.LootWindow.StillHasItems)
+            {
                 Context.UIController.LootWindow.Hide();
             }
         }

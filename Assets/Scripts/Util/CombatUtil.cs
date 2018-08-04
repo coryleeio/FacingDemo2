@@ -86,21 +86,19 @@ namespace Gamepackage
 
             Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
 
-
             if (target.Body.CurrentHealth <= 0)
             {
                 Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("Dead!", damage), Color.black, 35, MathUtil.MapToWorld(target.Position));
                 Context.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetName));
                 target.Body.IsDead = true;
+                Context.EntitySystem.MarkAsDead(target);
+                target.Behaviour = null;
                 var level = Context.GameStateManager.Game.CurrentLevel;
-                if (!target.IsPlayer)
-                {
-                    Context.EntitySystem.Deregister(target, level);
-                }
 
                 if (target.BlocksPathing)
                 {
                     Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
+                    target.BlocksPathing = false;
                 }
 
                 if (target.View.ViewGameObject != null)
@@ -110,14 +108,9 @@ namespace Gamepackage
 
                 if(target.Inventory.HasAnyItems)
                 {
-                    Entity corpse = FindOrCreateCorpse(target.Position);
-                    corpse.Inventory.Items.AddRange(target.Inventory.Items);
-                    foreach (var pair in target.Inventory.EquippedItemBySlot)
-                    {
-                        corpse.Inventory.Items.Add(pair.Value);
-                    }
-                    Context.EntitySystem.Register(corpse, level);
-                    corpse.View.ViewGameObject = Context.PrototypeFactory.BuildView(corpse);
+                    target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
+                    var corpseGameObject = Context.PrototypeFactory.BuildView(target);
+                    target.View.ViewGameObject = corpseGameObject;
                 }
             }
 
@@ -125,31 +118,6 @@ namespace Gamepackage
             {
                 Context.UIController.Refresh();
             }
-        }
-
-        private static Entity FindOrCreateCorpse(Point location)
-        {
-            Entity foundCorpse = null;
-
-            var entitiesInPosition = Context.GameStateManager.Game.CurrentLevel.Grid[location].EntitiesInPosition;
-            foreach (var entity in entitiesInPosition)
-            {
-                if(entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_CORPSE)
-                {
-                    foundCorpse = entity;
-                    continue;
-                }
-            }
-
-            if(foundCorpse != null)
-            {
-                return foundCorpse;
-            }
-
-            foundCorpse = EntityFactory.Build(UniqueIdentifier.ENTITY_CORPSE);
-            foundCorpse.Position = location;
-
-            return foundCorpse;
         }
 
         private static void HandleRawDamageIsLethal(Entity target, AttackResult result)

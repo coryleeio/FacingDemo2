@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Gamepackage
@@ -6,7 +8,26 @@ namespace Gamepackage
     public class LootWindow : UIComponent
     {
         private bool active = false;
-        private Entity target;
+        public List<Entity> _targets;
+
+        public bool StillHasItems
+        {
+            get
+            {
+                if(_targets == null || _targets.Count == 0)
+                {
+                    return false;
+                }
+                foreach(var target in _targets)
+                {
+                    if(target.Inventory.HasAnyItems)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
 
         public override void Hide()
         {
@@ -26,9 +47,10 @@ namespace Gamepackage
             Context.UIController.PushWindow(this);
         }
 
-        public void ShowFor(Entity entity)
+        public void ShowFor(List<Entity> entity)
         {
-            target = entity;
+            _targets = new List<Entity>(entity.Count);
+            _targets.AddRange(entity);
             Refresh();
         }
 
@@ -60,27 +82,30 @@ namespace Gamepackage
 
         public override void Refresh()
         {
-            if (target == null)
+            if (_targets == null)
             {
                 return;
             }
-            var inventory = target.Inventory;
             var container = GetComponentInChildren<ItemContainer>();
             foreach (Transform child in container.transform)
             {
                 GameObject.Destroy(child.gameObject);
             }
-            var slotPrefab = Resources.Load<InventoryDropSlot>("UI/ItemDropSlot");
-
-            for (var i = 0; i < inventory.Items.Count; i++)
+            foreach (var target in _targets)
             {
-                if(inventory.Items[i] != null)
+                var inventory = target.Inventory;
+                var slotPrefab = Resources.Load<InventoryDropSlot>("UI/ItemDropSlot");
+
+                for (var i = 0; i < inventory.Items.Count; i++)
                 {
-                    var instance = GameObject.Instantiate<InventoryDropSlot>(slotPrefab);
-                    instance.Index = i;
-                    instance.Entity = target;
-                    instance.transform.SetParent(container.transform, false);
-                    BuildDraggableItemForPlayerParentToTransform(inventory.Items[i], target, instance.transform);
+                    if (inventory.Items[i] != null)
+                    {
+                        var instance = GameObject.Instantiate<InventoryDropSlot>(slotPrefab);
+                        instance.Index = i;
+                        instance.Entity = target;
+                        instance.transform.SetParent(container.transform, false);
+                        BuildDraggableItemForPlayerParentToTransform(inventory.Items[i], target, instance.transform);
+                    }
                 }
             }
 

@@ -63,7 +63,7 @@ namespace Gamepackage
             go.name = entity.PrototypeIdentifier.ToString();
             go.transform.position = MathUtil.MapToWorld(entity.Position);
 
-            if(entity.IsCombatant)
+            if(entity.IsCombatant && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
             {
                 var healthbarPrefab = Resources.Load<GameObject>("UI/Healthbar/Healthbar");
                 var healthbarGameObject = GameObject.Instantiate(healthbarPrefab);

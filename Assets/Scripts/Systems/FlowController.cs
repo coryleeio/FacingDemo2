@@ -216,9 +216,10 @@ namespace Gamepackage
 
         public bool ActsInPhase(Entity entity)
         {
+            var canAct = entity.Body != null && !entity.Body.IsDead;
             var playerOrPlayerAllyOnPlayerPhase = entity.Behaviour.Team == Team.PLAYER && CurrentPhase == Phase.Player;
             var enemyOrNeutralOnEnemyPhase = (entity.Behaviour.Team == Team.ENEMY || entity.Behaviour.Team == Team.NEUTRAL) && CurrentPhase == Phase.Enemies;
-            return playerOrPlayerAllyOnPlayerPhase || enemyOrNeutralOnEnemyPhase;
+            return canAct && (playerOrPlayerAllyOnPlayerPhase || enemyOrNeutralOnEnemyPhase);
         }
     }
 }

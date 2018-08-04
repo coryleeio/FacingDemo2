@@ -78,8 +78,11 @@ namespace Gamepackage
                 if (entity.View != null && entity.View.ViewGameObject != null)
                 {
                     var spriteRenderer = entity.View.ViewGameObject.GetComponent<SpriteRenderer>();
-                    spriteRenderer.sortingOrder = sortOrder;
-                    return sortOrder + 1;
+                    if(spriteRenderer != null)
+                    {
+                        spriteRenderer.sortingOrder = sortOrder;
+                        return sortOrder + 1;
+                    }
                 }
                 return sortOrder;
             }
