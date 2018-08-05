@@ -44,7 +44,7 @@ namespace Gamepackage
             }
         }
 
-        public override bool CanPerform(AbilityContext ctx)
+        public override bool CanApply(AbilityContext ctx)
         {
             if(ctx.Targets.Count > 1)
             {
@@ -55,7 +55,7 @@ namespace Gamepackage
             return item != null;
         }
 
-        public override AbilityContext Perform(AbilityContext ctx)
+        public override AbilityContext Apply(AbilityContext ctx)
         {
             var target = ctx.Targets[0];
             if (MathUtil.ChanceToOccur(50))

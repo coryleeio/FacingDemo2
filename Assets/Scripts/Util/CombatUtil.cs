@@ -90,7 +90,8 @@ namespace Gamepackage
                     target.Body.DeadForTurns = 0;
                     Context.EntitySystem.MarkAsDead(target);
                     target.Behaviour = null;
-                    var level = Context.GameStateManager.Game.CurrentLevel;
+                    var game = Context.GameStateManager.Game;
+                    var level = game.CurrentLevel;
 
                     if (target.BlocksPathing)
                     {
@@ -109,6 +110,10 @@ namespace Gamepackage
                         var corpseGameObject = Context.PrototypeFactory.BuildView(target);
                         target.View.ViewGameObject = corpseGameObject;
                     }
+                    if(!target.IsPlayer)
+                    {
+                        game.MonstersKilled++;
+                    }
                 }
 
                 if (target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)
@@ -125,9 +130,9 @@ namespace Gamepackage
                 foreach(var ability in ctx.OnHitAbilities)
                 {
                     Assert.IsTrue(ability.TriggeredBy == TriggerType.OnHit);
-                    if(ability.CanPerform(ctx))
+                    if(ability.CanApply(ctx))
                     {
-                        ability.Perform(ctx);
+                        ability.Apply(ctx);
                     }
                 }
             }
@@ -157,9 +162,9 @@ namespace Gamepackage
                     {
                         if (ability.TriggeredBy == TriggerType.OnDamageWouldKill)
                         {
-                            if (ability.CanPerform(result))
+                            if (ability.CanApply(result))
                             {
-                                ability.Perform(result);
+                                ability.Apply(result);
                             }
                         }
                     }
@@ -188,9 +193,9 @@ namespace Gamepackage
                 var ctx = new AbilityContext();
                 ctx.Source = potentialTrigger;
                 ctx.Targets.Add(Source);
-                if (potentialTrigger.Trigger.Ability.CanPerform(ctx))
+                if (potentialTrigger.Trigger.Ability.CanApply(ctx))
                 {
-                    ability.Perform(ctx);
+                    ability.Apply(ctx);
                     return true;
                 }
             }

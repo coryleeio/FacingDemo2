@@ -115,7 +115,7 @@ namespace Gamepackage
             }
         }
 
-        public override AbilityContext Perform(AbilityContext abilityTriggerContext)
+        public override AbilityContext Apply(AbilityContext abilityTriggerContext)
         {
             var step = new Step();
             AbilityTriggerContext = abilityTriggerContext; // Save this off for enter / exit
@@ -124,7 +124,7 @@ namespace Gamepackage
             return abilityTriggerContext;
         }
 
-        public override bool CanPerform(AbilityContext ctx)
+        public override bool CanApply(AbilityContext ctx)
         {
             foreach (var target in ctx.Targets)
             {
