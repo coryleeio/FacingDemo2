@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
@@ -26,7 +27,7 @@ namespace Gamepackage
             public Color ShortCircuitedFloatingTextColor = Color.green;
         }
 
-        public static void DealDamage(Entity source, Entity target, AttackParameters attackParameters)
+        public static void DealDamage(Entity source, Entity target, AttackParameters attackParameters, List<Ability> onHitAbilities)
         {
             var result = new AttackResult()
             {
@@ -57,11 +58,11 @@ namespace Gamepackage
 
             result.damage = damage;
 
-            var rawDamageIsLethal = target.Body.CurrentHealth - damage <= 0;
+            var damageIsLethal = target.Body.CurrentHealth - damage <= 0;
 
-            if(rawDamageIsLethal)
+            if(damageIsLethal)
             {
-                HandleRawDamageIsLethal(target, result);
+                HandleDamageIsLethal(target, result);
             }
             var sourceName = source.Name;
             var targetName = target.Name;
@@ -85,6 +86,8 @@ namespace Gamepackage
             target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
 
             Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
+
+            HandleOnHit(source, target, result, onHitAbilities);
 
             if (target.Body.CurrentHealth <= 0)
             {
@@ -122,7 +125,27 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleRawDamageIsLethal(Entity target, AttackResult result)
+        private static void HandleOnHit(Entity source, Entity target, AttackResult result, List<Ability> onHitAbilities)
+        {
+            var ctx = new OnHitContext
+            {
+                Target = target,
+                attackResult = result,
+            };
+            if(!result.WasShortCircuited)
+            {
+                foreach(var ability in onHitAbilities)
+                {
+                    Assert.IsTrue(ability.TriggeredBy == TriggerType.OnHit);
+                    if(ability.CanPerform(ctx))
+                    {
+                        ability.Perform(ctx);
+                    }
+                }
+            }
+        }
+
+        private static void HandleDamageIsLethal(Entity target, AttackResult result)
         {
             var ctx = new DamageWouldKillContext
             {

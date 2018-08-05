@@ -34,19 +34,22 @@ namespace Gamepackage
             }
 
             AttackParameters attack = null;
+            List<Ability> onHitAbilities = new List<Ability>();
             if(CombatUtil.HasWeapon(Source))
             {
                 var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
                 attack = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
+                onHitAbilities.AddRange(weapon.Abilities.FindAll((possibleAbilities) => { return possibleAbilities.TriggeredBy == TriggerType.OnHit; }));
             }
             else
             {
                 attack = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
+                onHitAbilities.AddRange(Source.Body.Abilities.FindAll((possibleAbilities) => { return possibleAbilities.TriggeredBy == TriggerType.OnHit; }));
             }
 
             foreach(var target in Targets)
             {
-                CombatUtil.DealDamage(Source, target, attack);
+                CombatUtil.DealDamage(Source, target, attack, onHitAbilities);
             }
         }
 

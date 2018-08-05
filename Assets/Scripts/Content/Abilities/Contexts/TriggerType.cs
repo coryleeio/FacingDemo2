@@ -4,5 +4,6 @@
     {
         OnTriggerStep,
         OnDamageWouldKill,
+        OnHit,
     }
 }

@@ -61,10 +61,13 @@ namespace Gamepackage
 
         private void AddLine(string lineText)
         {
-            var text = lines[LinesInUse];
-            text.text = lineText;
-            LinesInUse++;
-            text.gameObject.SetActive(true);
+            if(LinesInUse < MaxLines)
+            {
+                var text = lines[LinesInUse];
+                text.text = lineText;
+                LinesInUse++;
+                text.gameObject.SetActive(true);
+            }
         }
     }
 }
