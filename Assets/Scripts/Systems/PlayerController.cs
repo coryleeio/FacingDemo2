@@ -63,6 +63,7 @@ namespace Gamepackage
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
             var hoverIsValidPoint = level.BoundingBox.Contains(mousePos);
 
+            Context.UIController.TileHoverHint.ShowFor(mousePos);
 
             var tileContainsEnemy = false;
             var hoverContainsCombatant = false;

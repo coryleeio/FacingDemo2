@@ -42,6 +42,9 @@ namespace Gamepackage
         [NonSerialized]
         public InputHint InputHint;
 
+        [NonSerialized]
+        public TileHoverHint TileHoverHint;
+
         private LinkedList<UIComponent> OpenWindows = new LinkedList<UIComponent>();
 
         public void Init()
@@ -67,6 +70,7 @@ namespace Gamepackage
             Tooltip = GetComponentInChildren<Tooltip>(true);
             EscapeMenu = GetComponentInChildren<EscapeMenu>(true);
             InputHint = GetComponentInChildren<InputHint>(true);
+            TileHoverHint = GetComponentInChildren<TileHoverHint>(true);
 
             FloatingCombatTextManager.Show();
             TextLog.ClearText();

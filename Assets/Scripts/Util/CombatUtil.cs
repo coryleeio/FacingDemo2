@@ -90,6 +90,7 @@ namespace Gamepackage
             {
                 Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("Dead!", damage), Color.black, 35, MathUtil.MapToWorld(target.Position));
                 Context.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetName));
+                target.Name = string.Format("( Corpse ) {0}", target.Name);
                 target.Body.IsDead = true;
                 target.Body.DeadForTurns = 0;
                 Context.EntitySystem.MarkAsDead(target);
