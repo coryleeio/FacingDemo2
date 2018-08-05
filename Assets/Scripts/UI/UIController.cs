@@ -39,6 +39,9 @@ namespace Gamepackage
         [NonSerialized]
         public Tooltip Tooltip;
 
+        [NonSerialized]
+        public InputHint InputHint;
+
         private LinkedList<UIComponent> OpenWindows = new LinkedList<UIComponent>();
 
         public void Init()
@@ -63,6 +66,7 @@ namespace Gamepackage
             DarkOverlay = GetComponentInChildren<DarkOverlay>(true);
             Tooltip = GetComponentInChildren<Tooltip>(true);
             EscapeMenu = GetComponentInChildren<EscapeMenu>(true);
+            InputHint = GetComponentInChildren<InputHint>(true);
 
             FloatingCombatTextManager.Show();
             TextLog.ClearText();

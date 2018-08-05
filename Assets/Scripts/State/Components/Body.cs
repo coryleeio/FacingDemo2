@@ -8,6 +8,7 @@ namespace Gamepackage
         public Dictionary<Attributes, int> Attributes = new Dictionary<Attributes, int>(0);
         public List<Ability> Abilities = new List<Ability>();
         public bool IsDead = false;
+        public int DeadForTurns = 0;
         public List<ItemSlot> UsableItemSlots = new List<ItemSlot>(0);
         public List<AttackParameters> Attacks = new List<AttackParameters>(0);
 

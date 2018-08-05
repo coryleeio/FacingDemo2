@@ -105,6 +105,22 @@ namespace Gamepackage
                     CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Source, triggerThatMightGoOff, points);
                 }
             }
+
+            if(Source.IsPlayer)
+            {
+                var level = Context.GameStateManager.Game.CurrentLevel;
+                var entitiesInPos = level.Grid[Source.Position].EntitiesInPosition;
+                var deadEntitiesInPos = entitiesInPos.FindAll((entInPos) => { return entInPos.Body != null && entInPos.Body.IsDead && entInPos.Inventory.HasAnyItems; });
+
+                if (deadEntitiesInPos.Count > 0)
+                {
+                    Context.UIController.InputHint.ShowText("Press <color=yellow>F</color> to loot...");
+                }
+                else
+                {
+                    Context.UIController.InputHint.Hide();
+                }
+            }
         }
 
         public override bool IsValid()

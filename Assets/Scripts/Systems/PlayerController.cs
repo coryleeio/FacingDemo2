@@ -234,11 +234,12 @@ namespace Gamepackage
             if (Input.GetKeyDown(KeyCode.F))
             {
                 var entitiesInPosition = level.Grid[player.Position].EntitiesInPosition;
-                var deadEntitiesInPlayerPosition = entitiesInPosition.FindAll((ent) => { return ent.Body != null && ent.Body.IsDead; });
-                if (deadEntitiesInPlayerPosition.Count > 0)
+                var lootableEntities = entitiesInPosition.FindAll((ent) => { return ent.Body != null && ent.Body.IsDead && ent.Inventory.HasAnyItems; });
+                if (lootableEntities.Count > 0)
                 {
-                    Context.UIController.LootWindow.ShowFor(deadEntitiesInPlayerPosition);
+                    Context.UIController.LootWindow.ShowFor(lootableEntities);
                 }
+                Context.UIController.InputHint.Hide();
             }
 
             if (Input.GetMouseButtonDown(0))

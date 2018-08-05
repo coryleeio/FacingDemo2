@@ -17,6 +17,26 @@ namespace Gamepackage
             Context.UIController.RemoveWindow(this);
         }
 
+        public override void Show()
+        {
+            active = true;
+            GetComponent<InventoryWindow>().gameObject.SetActive(true);
+            Context.UIController.PushWindow(this);
+            Refresh();
+        }
+
+        public void Toggle()
+        {
+            if (active)
+            {
+                Hide();
+            }
+            else
+            {
+                Show();
+            }
+        }
+
         public override void Refresh()
         {
             var player = Context.GameStateManager.Game.CurrentLevel.Player;
@@ -113,26 +133,6 @@ namespace Gamepackage
             stackCounter.text = item.NumberOfItems.ToString();
             var spr = draggableInstance.GetComponent<Image>();
             spr.sprite = item.ItemAppearance.InventorySprite;
-        }
-
-        public override void Show()
-        {
-            active = true;
-            GetComponent<InventoryWindow>().gameObject.SetActive(true);
-            Context.UIController.PushWindow(this);
-            Refresh();
-        }
-
-        public void Toggle()
-        {
-            if (active)
-            {
-                Hide();
-            }
-            else
-            {
-                Show();
-            }
         }
     }
 }
