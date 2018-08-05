@@ -1,4 +1,6 @@
-﻿namespace Gamepackage
+﻿using System.Collections.Generic;
+
+namespace Gamepackage
 {
     public class AttackParameters
     {
@@ -6,6 +8,7 @@
         public int DyeNumber;
         public int Bonus;
         public DamageTypes DamageType;
+        public List<Ability> AttackSpecificAbilities = new List<Ability>();
         public string AttackMessage = null;
 
         public AttackParameters() { }

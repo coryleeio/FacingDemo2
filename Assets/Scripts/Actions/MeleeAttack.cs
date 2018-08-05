@@ -40,11 +40,13 @@ namespace Gamepackage
                 var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
                 attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
                 onHitAbilities.AddRange(weapon.Abilities.FindAll((possibleAbilities) => { return possibleAbilities.TriggeredBy == TriggerType.OnHit; }));
+                onHitAbilities.AddRange(attackParameters.AttackSpecificAbilities);
             }
             else
             {
                 attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
                 onHitAbilities.AddRange(Source.Body.Abilities.FindAll((possibleAbilities) => { return possibleAbilities.TriggeredBy == TriggerType.OnHit; }));
+                onHitAbilities.AddRange(attackParameters.AttackSpecificAbilities);
             }
 
             foreach(var target in Targets)
