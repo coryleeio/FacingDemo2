@@ -44,27 +44,31 @@ namespace Gamepackage
             }
         }
 
-        public override bool CanPerform(AbilityTriggerContext abilityTriggerContext)
+        public override bool CanPerform(AbilityContext ctx)
         {
-            var ev = (DamageWouldKillContext)abilityTriggerContext;
-            var item = ev.Target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
+            if(ctx.Targets.Count > 1)
+            {
+                return false;
+            }
+            var target = ctx.Targets[0];
+            var item = target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
             return item != null;
         }
 
-        public override AbilityTriggerContext Perform(AbilityTriggerContext abilityTriggerContext)
+        public override AbilityContext Perform(AbilityContext ctx)
         {
-            var ev = (DamageWouldKillContext)abilityTriggerContext;
+            var target = ctx.Targets[0];
             if (MathUtil.ChanceToOccur(50))
             {
-                var item = ev.Target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
-                ev.attackResult.damage = 0;
-                ev.attackResult.WasShortCircuited = true;
-                ev.attackResult.ShortCircuitedMessage = "The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters...";
-                ev.attackResult.ShortCircuitedFloatingText = "Got lucky!";
-                ev.attackResult.ShortCircuitedFloatingTextColor = Color.green;
-                ev.Target.Inventory.RemoveItemStack(item);
+                var item = target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
+                ctx.Damage = 0;
+                ctx.WasShortCircuited = true;
+                ctx.ShortCircuitedMessage = "The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters...";
+                ctx.ShortCircuitedFloatingText = "Got lucky!";
+                ctx.ShortCircuitedFloatingTextColor = Color.green;
+                target.Inventory.RemoveItemStack(item);
             }
-            return ev;
+            return ctx;
         }
     }
 }

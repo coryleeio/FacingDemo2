@@ -2,8 +2,8 @@
 {
     public enum TriggerType
     {
-        OnTriggerStep,
         OnDamageWouldKill,
         OnHit,
+        OnStep,
     }
 }

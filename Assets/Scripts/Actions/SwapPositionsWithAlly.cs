@@ -109,7 +109,7 @@ namespace Gamepackage
 
             foreach (var potentialTrigger in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
-                if (potentialTrigger.Trigger != null && potentialTrigger.Trigger.Ability.TriggeredBy == TriggerType.OnTriggerStep)
+                if (potentialTrigger.Trigger != null && potentialTrigger.Trigger.Ability.TriggeredBy == TriggerType.OnStep)
                 {
                     var points = MathUtil.GetPointsByOffset(potentialTrigger.Position, potentialTrigger.Trigger.Offsets);
                     CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Source, potentialTrigger, points);

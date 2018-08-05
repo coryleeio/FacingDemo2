@@ -33,23 +33,28 @@ namespace Gamepackage
                 throw new NotImplementedException("You don't have any attacks, but are trying to attack anyway?");
             }
 
-            AttackParameters attack = null;
+            AttackParameters attackParameters = null;
             List<Ability> onHitAbilities = new List<Ability>();
             if(CombatUtil.HasWeapon(Source))
             {
                 var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
-                attack = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
+                attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
                 onHitAbilities.AddRange(weapon.Abilities.FindAll((possibleAbilities) => { return possibleAbilities.TriggeredBy == TriggerType.OnHit; }));
             }
             else
             {
-                attack = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
+                attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
                 onHitAbilities.AddRange(Source.Body.Abilities.FindAll((possibleAbilities) => { return possibleAbilities.TriggeredBy == TriggerType.OnHit; }));
             }
 
             foreach(var target in Targets)
             {
-                CombatUtil.DealDamage(Source, target, attack, onHitAbilities);
+                var abilityContext = new AbilityContext();
+                abilityContext.Source = Source;
+                abilityContext.Targets.Add(target);
+                abilityContext.AttackParameters = attackParameters;
+                abilityContext.OnHitAbilities.AddRange(onHitAbilities);
+                CombatUtil.Apply(abilityContext);
             }
         }
 

@@ -17,124 +17,112 @@ namespace Gamepackage
             return a.Position.IsAdjacentTo(b.Position) && a.Position.IsOrthogonalTo(b.Position);
         }
 
-        public class AttackResult
+        public static void Apply(AbilityContext result)
         {
-            public AttackParameters Parameters;
-            public int damage;
-            public bool WasShortCircuited = false;
-            public string ShortCircuitedMessage = null;
-            public string ShortCircuitedFloatingText = null;
-            public Color ShortCircuitedFloatingTextColor = Color.green;
-        }
+            Assert.IsNotNull(result.Source);
+            Assert.IsNotNull(result.Targets);
+            Assert.IsNotNull(result.OnHitAbilities);
+            Assert.IsNotNull(result.AttackParameters);
 
-        public static void DealDamage(Entity source, Entity target, AttackParameters attackParameters, List<Ability> onHitAbilities)
-        {
-            var result = new AttackResult()
+            foreach (var target in result.Targets)
             {
-                Parameters = attackParameters
-            };
-
-            if (attackParameters.DamageType == DamageTypes.NOT_SET)
-            {
-                throw new NotImplementedException("You forgot to set the damage type on this attack");
-            }
-
-            if (!target.IsCombatant)
-            {
-                throw new NotImplementedException("Cannot deal damage to non combatants");
-            }
-            if (target.Body.CurrentHealth <= 0)
-            {
-                // if you keep hitting him he doesn't get dead-er..
-                return;
-            }
-
-            var damage = 0;
-            for (var numDyeRolled = 0; numDyeRolled < attackParameters.DyeNumber; numDyeRolled++)
-            {
-                damage += UnityEngine.Random.Range(1, attackParameters.DyeSize + 1);
-            }
-            damage += attackParameters.Bonus;
-
-            result.damage = damage;
-
-            var damageIsLethal = target.Body.CurrentHealth - damage <= 0;
-
-            if(damageIsLethal)
-            {
-                HandleDamageIsLethal(target, result);
-            }
-            var sourceName = source.Name;
-            var targetName = target.Name;
-
-            
-            if (result.WasShortCircuited)
-            {
-                Context.UIController.TextLog.AddText(string.Format(attackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(attackParameters.DamageType)));
-                if (result.ShortCircuitedMessage != null)
+                if (result.AttackParameters.DamageType == DamageTypes.NOT_SET)
                 {
-                    Context.UIController.TextLog.AddText(result.ShortCircuitedMessage);
-                }
-                
-                if(result.ShortCircuitedFloatingText != null)
-                {
-                    Context.UIController.FloatingCombatTextManager.ShowCombatText(result.ShortCircuitedFloatingText, result.ShortCircuitedFloatingTextColor, 35, MathUtil.MapToWorld(target.Position));
-                }
-                return; // do short circuit
-            }
-            Context.UIController.TextLog.AddText(string.Format(attackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(attackParameters.DamageType)));
-            target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
-
-            Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
-
-            HandleOnHit(source, target, result, onHitAbilities);
-
-            if (target.Body.CurrentHealth <= 0)
-            {
-                Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("Dead!", damage), Color.black, 35, MathUtil.MapToWorld(target.Position));
-                Context.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetName));
-                target.Name = string.Format("( Corpse ) {0}", target.Name);
-                target.Body.IsDead = true;
-                target.Body.DeadForTurns = 0;
-                Context.EntitySystem.MarkAsDead(target);
-                target.Behaviour = null;
-                var level = Context.GameStateManager.Game.CurrentLevel;
-
-                if (target.BlocksPathing)
-                {
-                    Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
-                    target.BlocksPathing = false;
+                    throw new NotImplementedException("You forgot to set the damage type on this attack");
                 }
 
-                if (target.View.ViewGameObject != null)
+                if (!target.IsCombatant)
                 {
-                    target.View.ViewGameObject.AddComponent<DeathAnimation>();
+                    throw new NotImplementedException("Cannot deal damage to non combatants");
+                }
+                if (target.Body.CurrentHealth <= 0)
+                {
+                    // if you keep hitting him he doesn't get dead-er..
+                    return;
                 }
 
-                if(target.Inventory.HasAnyItems)
+                var damage = 0;
+                for (var numDyeRolled = 0; numDyeRolled < result.AttackParameters.DyeNumber; numDyeRolled++)
                 {
-                    target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
-                    var corpseGameObject = Context.PrototypeFactory.BuildView(target);
-                    target.View.ViewGameObject = corpseGameObject;
+                    damage += UnityEngine.Random.Range(1, result.AttackParameters.DyeSize + 1);
                 }
-            }
+                damage += result.AttackParameters.Bonus;
 
-            if(target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)
-            {
-                Context.UIController.Refresh();
+                result.Damage = damage;
+
+                var damageIsLethal = target.Body.CurrentHealth - damage <= 0;
+
+                if (damageIsLethal)
+                {
+                    HandleDamageIsLethal(result);
+                }
+
+                var sourceName = result.Source.Name;
+                var targetName = target.Name;
+
+                if (result.WasShortCircuited)
+                {
+                    Context.UIController.TextLog.AddText(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                    if (result.ShortCircuitedMessage != null)
+                    {
+                        Context.UIController.TextLog.AddText(result.ShortCircuitedMessage);
+                    }
+
+                    if (result.ShortCircuitedFloatingText != null)
+                    {
+                        Context.UIController.FloatingCombatTextManager.ShowCombatText(result.ShortCircuitedFloatingText, result.ShortCircuitedFloatingTextColor, 35, MathUtil.MapToWorld(target.Position));
+                    }
+                    return; // do short circuit
+                }
+                Context.UIController.TextLog.AddText(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
+
+                Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
+
+                HandleOnHit(result);
+
+                if (target.Body.CurrentHealth <= 0)
+                {
+                    Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("Dead!", damage), Color.black, 35, MathUtil.MapToWorld(target.Position));
+                    Context.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetName));
+                    target.Name = string.Format("( Corpse ) {0}", target.Name);
+                    target.Body.IsDead = true;
+                    target.Body.DeadForTurns = 0;
+                    Context.EntitySystem.MarkAsDead(target);
+                    target.Behaviour = null;
+                    var level = Context.GameStateManager.Game.CurrentLevel;
+
+                    if (target.BlocksPathing)
+                    {
+                        Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
+                        target.BlocksPathing = false;
+                    }
+
+                    if (target.View.ViewGameObject != null)
+                    {
+                        target.View.ViewGameObject.AddComponent<DeathAnimation>();
+                    }
+
+                    if (target.Inventory.HasAnyItems)
+                    {
+                        target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
+                        var corpseGameObject = Context.PrototypeFactory.BuildView(target);
+                        target.View.ViewGameObject = corpseGameObject;
+                    }
+                }
+
+                if (target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)
+                {
+                    Context.UIController.Refresh();
+                }
             }
         }
 
-        private static void HandleOnHit(Entity source, Entity target, AttackResult result, List<Ability> onHitAbilities)
+        private static void HandleOnHit(AbilityContext ctx)
         {
-            var ctx = new OnHitContext
+            if(!ctx.WasShortCircuited)
             {
-                Target = target,
-                attackResult = result,
-            };
-            if(!result.WasShortCircuited)
-            {
-                foreach(var ability in onHitAbilities)
+                foreach(var ability in ctx.OnHitAbilities)
                 {
                     Assert.IsTrue(ability.TriggeredBy == TriggerType.OnHit);
                     if(ability.CanPerform(ctx))
@@ -145,24 +133,21 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleDamageIsLethal(Entity target, AttackResult result)
+        private static void HandleDamageIsLethal(AbilityContext result)
         {
-            var ctx = new DamageWouldKillContext
+            foreach(var target in result.Targets)
             {
-                Target = target,
-                attackResult = result
-            };
+                var itemsCopy = new List<Item>();
+                itemsCopy.AddRange(target.Inventory.Items);
+                HandleLethalDamageCallbacksForListOfItems(result, itemsCopy);
 
-            var itemsCopy = new List<Item>();
-            itemsCopy.AddRange(target.Inventory.Items);
-            HandleLethalDamageCallbacksForListOfItems(ctx, itemsCopy);
-
-            var equipmentCopy = new List<Item>();
-            equipmentCopy.AddRange(target.Inventory.EquippedItemBySlot.Values);
-            HandleLethalDamageCallbacksForListOfItems(ctx, equipmentCopy);
+                var equipmentCopy = new List<Item>();
+                equipmentCopy.AddRange(target.Inventory.EquippedItemBySlot.Values);
+                HandleLethalDamageCallbacksForListOfItems(result, equipmentCopy);
+            }
         }
 
-        private static void HandleLethalDamageCallbacksForListOfItems(DamageWouldKillContext ctx, List<Item> itemsCopy)
+        private static void HandleLethalDamageCallbacksForListOfItems(AbilityContext result, List<Item> itemsCopy)
         {
             foreach (var item in itemsCopy)
             {
@@ -172,9 +157,9 @@ namespace Gamepackage
                     {
                         if (ability.TriggeredBy == TriggerType.OnDamageWouldKill)
                         {
-                            if (ability.CanPerform(ctx))
+                            if (ability.CanPerform(result))
                             {
-                                ability.Perform(ctx);
+                                ability.Perform(result);
                             }
                         }
                     }
@@ -200,12 +185,12 @@ namespace Gamepackage
             if (points.Contains(Source.Position))
             {
                 var ability = potentialTrigger.Trigger.Ability;
-                TriggerStepContext cxt = new TriggerStepContext();
-                cxt.Source = potentialTrigger;
-                cxt.Targets.Add(Source);
-                if (potentialTrigger.Trigger.Ability.CanPerform(cxt))
+                var ctx = new AbilityContext();
+                ctx.Source = potentialTrigger;
+                ctx.Targets.Add(Source);
+                if (potentialTrigger.Trigger.Ability.CanPerform(ctx))
                 {
-                    ability.Perform(cxt);
+                    ability.Perform(ctx);
                     return true;
                 }
             }

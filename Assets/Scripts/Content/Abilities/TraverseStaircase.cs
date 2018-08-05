@@ -23,7 +23,7 @@ namespace Gamepackage
         }
 
         [JsonIgnore]
-        public TriggerStepContext AbilityTriggerContext;
+        public AbilityContext AbilityTriggerContext;
 
         public enum Params
         {
@@ -53,7 +53,7 @@ namespace Gamepackage
         {
             get
             {
-                return TriggerType.OnTriggerStep;
+                return TriggerType.OnStep;
             }
         }
 
@@ -115,18 +115,17 @@ namespace Gamepackage
             }
         }
 
-        public override AbilityTriggerContext Perform(AbilityTriggerContext abilityTriggerContext)
+        public override AbilityContext Perform(AbilityContext abilityTriggerContext)
         {
-            AbilityTriggerContext = (TriggerStepContext) abilityTriggerContext;
             var step = new Step();
+            AbilityTriggerContext = abilityTriggerContext; // Save this off for enter / exit
             step.Actions.AddFirst(this);
             Context.FlowSystem.Steps.AddAfter(Context.FlowSystem.Steps.First, step);
             return abilityTriggerContext;
         }
 
-        public override bool CanPerform(AbilityTriggerContext abilityTriggerContext)
+        public override bool CanPerform(AbilityContext ctx)
         {
-            var ctx = (TriggerStepContext)abilityTriggerContext;
             foreach (var target in ctx.Targets)
             {
                 if (target.IsPlayer)

@@ -4,8 +4,8 @@ namespace Gamepackage
 {
     public abstract class Ability : Action
     {
-        public abstract bool CanPerform(AbilityTriggerContext abilityTriggerContext);
-        public abstract AbilityTriggerContext Perform(AbilityTriggerContext abilityTriggerContext);
+        public abstract bool CanPerform(AbilityContext abilityTriggerContext);
+        public abstract AbilityContext Perform(AbilityContext abilityTriggerContext);
 
         public abstract string DisplayName
         {
