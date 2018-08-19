@@ -30,9 +30,9 @@ namespace Gamepackage
             return action;
         }
 
-        public Ability BuildAbility(Entity source, UniqueIdentifier identifier)
+        public Effect BuildAbility(Entity source, UniqueIdentifier identifier)
         {
-            Ability ret = null;
+            Effect ret = null;
             if (identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
             {
                 ret = new TraverseStaircase();

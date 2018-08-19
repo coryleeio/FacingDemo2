@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public enum TriggerType
+    public enum EffectTriggerType
     {
         OnDamageWouldKill,
         OnHit,

@@ -14,7 +14,7 @@ namespace Gamepackage
             item.NumberOfItems = 1;
             item.MaxStackSize = 1;
             item.Attributes = new Dictionary<Attributes, int>(0);
-            item.Abilities = new List<Ability>(0);
+            item.Effects = new List<Effect>(0);
             item.AttackParameters = new List<AttackParameters>(0);
             item.ThrowParameters = new List<AttackParameters>(0);
             item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;
@@ -47,7 +47,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN;
                 item.DisplayName = "Lucky Coin";
                 item.Description = "This coin is particularly lucky, and is probably deserving of a better description.";
-                item.Abilities.Add(AbilityFactory.Build(UniqueIdentifier.ABILITY_LUCKY_COIN_LIFE_SAVE));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.ABILITY_LUCKY_COIN_LIFE_SAVE));
                 return item;
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ARROW)

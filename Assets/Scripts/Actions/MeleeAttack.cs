@@ -34,29 +34,29 @@ namespace Gamepackage
             }
 
             AttackParameters attackParameters = null;
-            List<Ability> onHitAbilities = new List<Ability>();
+            List<Effect> onHitEffects = new List<Effect>();
             if(CombatUtil.HasWeapon(Source))
             {
                 var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
                 attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
-                onHitAbilities.AddRange(weapon.Abilities.FindAll((possibleAbilities) => { return possibleAbilities.TriggeredBy == TriggerType.OnHit; }));
-                onHitAbilities.AddRange(attackParameters.AttackSpecificAbilities);
+                onHitEffects.AddRange(weapon.Effects.FindAll((possibleAbilities) => { return possibleAbilities.EffectApplicationTrigger == EffectTriggerType.OnHit; }));
+                onHitEffects.AddRange(attackParameters.AttackSpecificEffects);
             }
             else
             {
                 attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
-                onHitAbilities.AddRange(Source.Body.Abilities.FindAll((possibleAbilities) => { return possibleAbilities.TriggeredBy == TriggerType.OnHit; }));
-                onHitAbilities.AddRange(attackParameters.AttackSpecificAbilities);
+                onHitEffects.AddRange(Source.Body.Effects.FindAll((possibleAbilities) => { return possibleAbilities.EffectApplicationTrigger == EffectTriggerType.OnHit; }));
+                onHitEffects.AddRange(attackParameters.AttackSpecificEffects);
             }
 
             foreach(var target in Targets)
             {
-                var abilityContext = new AbilityContext();
-                abilityContext.Source = Source;
-                abilityContext.Targets.Add(target);
-                abilityContext.AttackParameters = attackParameters;
-                abilityContext.OnHitAbilities.AddRange(onHitAbilities);
-                CombatUtil.Apply(abilityContext);
+                var attack = new AttackContext();
+                attack.Source = Source;
+                attack.Targets.Add(target);
+                attack.AttackParameters = attackParameters;
+                attack.OnHitEffects.AddRange(onHitEffects);
+                CombatUtil.Apply(attack);
             }
         }
 

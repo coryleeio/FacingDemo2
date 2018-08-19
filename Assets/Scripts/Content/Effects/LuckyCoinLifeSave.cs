@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public class LuckyCoinLifeSave : Ability
+    public class LuckyCoinLifeSave : Effect
     {
         public override string DisplayName
         {
@@ -20,15 +20,15 @@ namespace Gamepackage
             }
         }
 
-        public override TriggerType TriggeredBy
+        public override EffectTriggerType EffectApplicationTrigger
         {
             get
             {
-                return TriggerType.OnDamageWouldKill;
+                return EffectTriggerType.OnDamageWouldKill;
             }
         }
 
-        public override bool CanApply(AbilityContext ctx)
+        public override bool CanApply(AttackContext ctx)
         {
             if(ctx.Targets.Count > 1)
             {
@@ -39,7 +39,7 @@ namespace Gamepackage
             return item != null;
         }
 
-        public override AbilityContext Apply(AbilityContext ctx)
+        public override AttackContext Apply(AttackContext ctx)
         {
             var target = ctx.Targets[0];
             if (MathUtil.ChanceToOccur(50))

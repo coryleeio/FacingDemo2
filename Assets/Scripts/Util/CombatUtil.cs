@@ -17,11 +17,11 @@ namespace Gamepackage
             return a.Position.IsAdjacentTo(b.Position) && a.Position.IsOrthogonalTo(b.Position);
         }
 
-        public static void Apply(AbilityContext result)
+        public static void Apply(AttackContext result)
         {
             Assert.IsNotNull(result.Source);
             Assert.IsNotNull(result.Targets);
-            Assert.IsNotNull(result.OnHitAbilities);
+            Assert.IsNotNull(result.OnHitEffects);
             Assert.IsNotNull(result.AttackParameters);
 
             foreach (var target in result.Targets)
@@ -123,13 +123,13 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleOnHit(AbilityContext ctx)
+        private static void HandleOnHit(AttackContext ctx)
         {
             if(!ctx.WasShortCircuited)
             {
-                foreach(var ability in ctx.OnHitAbilities)
+                foreach(var ability in ctx.OnHitEffects)
                 {
-                    Assert.IsTrue(ability.TriggeredBy == TriggerType.OnHit);
+                    Assert.IsTrue(ability.EffectApplicationTrigger == EffectTriggerType.OnHit);
                     if(ability.CanApply(ctx))
                     {
                         ability.Apply(ctx);
@@ -138,7 +138,7 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleDamageIsLethal(AbilityContext result)
+        private static void HandleDamageIsLethal(AttackContext result)
         {
             foreach(var target in result.Targets)
             {
@@ -152,19 +152,19 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleLethalDamageCallbacksForListOfItems(AbilityContext result, List<Item> itemsCopy)
+        private static void HandleLethalDamageCallbacksForListOfItems(AttackContext result, List<Item> itemsCopy)
         {
             foreach (var item in itemsCopy)
             {
                 if(item != null)
                 {
-                    foreach (var ability in item.Abilities)
+                    foreach (var effect in item.Effects)
                     {
-                        if (ability.TriggeredBy == TriggerType.OnDamageWouldKill)
+                        if (effect.EffectApplicationTrigger == EffectTriggerType.OnDamageWouldKill)
                         {
-                            if (ability.CanApply(result))
+                            if (effect.CanApply(result))
                             {
-                                ability.Apply(result);
+                                effect.Apply(result);
                             }
                         }
                     }
@@ -189,13 +189,13 @@ namespace Gamepackage
         {
             if (points.Contains(Source.Position))
             {
-                var ability = potentialTrigger.Trigger.Ability;
-                var ctx = new AbilityContext();
-                ctx.Source = potentialTrigger;
-                ctx.Targets.Add(Source);
-                if (potentialTrigger.Trigger.Ability.CanApply(ctx))
+                var ability = potentialTrigger.Trigger.Effect;
+                var attack = new AttackContext();
+                attack.Source = potentialTrigger;
+                attack.Targets.Add(Source);
+                if (potentialTrigger.Trigger.Effect.CanApply(attack))
                 {
-                    ability.Apply(ctx);
+                    ability.Apply(attack);
                     return true;
                 }
             }

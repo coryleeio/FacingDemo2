@@ -124,7 +124,7 @@ namespace Gamepackage
                 entity.Trigger = new Trigger()
                 {
                     // params filled out by dungeon generator
-                    Ability = new TraverseStaircase(),
+                    Effect = new TraverseStaircase(),
                     Offsets = new List<Point>() { new Point(0,0) }
                 };
             }
@@ -140,7 +140,7 @@ namespace Gamepackage
                 entity.Trigger = new Trigger()
                 {
                     // params filled out by dungeon generator
-                    Ability = new TraverseStaircase(),
+                    Effect = new TraverseStaircase(),
                     Offsets = new List<Point>() { new Point(0, 0) }
                 };
             }
@@ -156,7 +156,7 @@ namespace Gamepackage
                 entity.Trigger = new Trigger()
                 {
                     // params filled out by dungeon generator
-                    Ability = new TraverseStaircase(),
+                    Effect = new TraverseStaircase(),
                     Offsets = new List<Point>() { new Point(0, 0) }
                 };
             }

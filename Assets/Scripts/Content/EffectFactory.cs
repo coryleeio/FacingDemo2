@@ -1,8 +1,8 @@
 ﻿namespace Gamepackage
 {
-    public static class AbilityFactory
+    public static class EffectFactory
     {
-        public static Ability Build(UniqueIdentifier uniqueIdentifier)
+        public static Effect Build(UniqueIdentifier uniqueIdentifier)
         {
             if(uniqueIdentifier == UniqueIdentifier.ABILITY_TRAVERSE_STAIRCASE)
             {

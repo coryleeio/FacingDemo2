@@ -2,10 +2,10 @@
 
 namespace Gamepackage
 {
-    public abstract class Ability
+    public abstract class Effect
     {
-        public abstract bool CanApply(AbilityContext abilityTriggerContext);
-        public abstract AbilityContext Apply(AbilityContext abilityTriggerContext);
+        public abstract bool CanApply(AttackContext abilityTriggerContext);
+        public abstract AttackContext Apply(AttackContext abilityTriggerContext);
 
         public abstract string DisplayName
         {
@@ -17,7 +17,7 @@ namespace Gamepackage
         }
 
         [JsonIgnore]
-        public abstract TriggerType TriggeredBy
+        public abstract EffectTriggerType EffectApplicationTrigger
         {
             get;
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class TraverseStaircase : Ability
+    public class TraverseStaircase : Effect
     {
         public override string DisplayName
         {
@@ -23,7 +23,7 @@ namespace Gamepackage
         }
 
         [JsonIgnore]
-        public AbilityContext AbilityTriggerContext;
+        public AttackContext AbilityTriggerContext;
 
         public enum Params
         {
@@ -32,15 +32,15 @@ namespace Gamepackage
             TARGET_LEVEL_ID,
         }
 
-        public override TriggerType TriggeredBy
+        public override EffectTriggerType EffectApplicationTrigger
         {
             get
             {
-                return TriggerType.OnStep;
+                return EffectTriggerType.OnStep;
             }
         }
 
-        public override AbilityContext Apply(AbilityContext abilityTriggerContext)
+        public override AttackContext Apply(AttackContext abilityTriggerContext)
         {
             AbilityTriggerContext = abilityTriggerContext;
             var Parameters = AbilityTriggerContext.Source.Trigger.TriggerParameters;
@@ -101,7 +101,7 @@ namespace Gamepackage
             return abilityTriggerContext;
         }
 
-        public override bool CanApply(AbilityContext ctx)
+        public override bool CanApply(AttackContext ctx)
         {
             foreach (var target in ctx.Targets)
             {
