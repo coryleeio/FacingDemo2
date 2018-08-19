@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public abstract class Ability : Action
+    public abstract class Ability
     {
         public abstract bool CanApply(AbilityContext abilityTriggerContext);
         public abstract AbilityContext Apply(AbilityContext abilityTriggerContext);

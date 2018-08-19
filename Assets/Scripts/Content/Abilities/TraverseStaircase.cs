@@ -32,23 +32,6 @@ namespace Gamepackage
             TARGET_LEVEL_ID,
         }
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
-        [JsonIgnore]
-        public override bool IsEndable
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public override TriggerType TriggeredBy
         {
             get
@@ -57,9 +40,9 @@ namespace Gamepackage
             }
         }
 
-        public override void Exit()
+        public override AbilityContext Apply(AbilityContext abilityTriggerContext)
         {
-            base.Exit();
+            AbilityTriggerContext = abilityTriggerContext;
             var Parameters = AbilityTriggerContext.Source.Trigger.TriggerParameters;
             var levelId = Convert.ToInt32(Parameters[Params.TARGET_LEVEL_ID.ToString()]);
             var posX = Convert.ToInt32(Parameters[Params.TARGET_POSX.ToString()]);
@@ -72,12 +55,12 @@ namespace Gamepackage
                     targetIncludesPlayer = true;
                 }
             }
-            if(targetIncludesPlayer)
+            if (targetIncludesPlayer)
             {
                 var oldLevel = Context.GameStateManager.Game.CurrentLevel;
-                foreach(var entityInLevel in oldLevel.Entitys)
+                foreach (var entityInLevel in oldLevel.Entitys)
                 {
-                    if(entityInLevel.Behaviour != null && entityInLevel.Behaviour.Team == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
+                    if (entityInLevel.Behaviour != null && entityInLevel.Behaviour.Team == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
                     {
                         // Add player followers to list of targets
                         AbilityTriggerContext.Targets.Add(entityInLevel);
@@ -88,6 +71,8 @@ namespace Gamepackage
 
             foreach (var target in AbilityTriggerContext.Targets)
             {
+                target.Behaviour.NextAction = null;
+                Context.FlowSystem.Steps.First.Value.Actions.Clear();
                 var oldLevel = Context.GameStateManager.Game.CurrentLevel;
                 if (target.BlocksPathing)
                 {
@@ -113,14 +98,6 @@ namespace Gamepackage
                 }
                 Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             }
-        }
-
-        public override AbilityContext Apply(AbilityContext abilityTriggerContext)
-        {
-            var step = new Step();
-            AbilityTriggerContext = abilityTriggerContext; // Save this off for enter / exit
-            step.Actions.AddFirst(this);
-            Context.FlowSystem.Steps.AddAfter(Context.FlowSystem.Steps.First, step);
             return abilityTriggerContext;
         }
 

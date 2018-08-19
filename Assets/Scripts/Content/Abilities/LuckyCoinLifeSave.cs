@@ -28,22 +28,6 @@ namespace Gamepackage
             }
         }
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
-        public override bool IsEndable
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public override bool CanApply(AbilityContext ctx)
         {
             if(ctx.Targets.Count > 1)
