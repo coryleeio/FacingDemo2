@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Gamepackage
+﻿namespace Gamepackage
 {
-    public class Poison : Effect
+    public class AppliedWeakPoison : Effect
     {
         public override string DisplayName
         {

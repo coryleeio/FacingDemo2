@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public class WeakPoison : Poison
+    public class StrongPoison : Poison
     {
         public override string Description
         {

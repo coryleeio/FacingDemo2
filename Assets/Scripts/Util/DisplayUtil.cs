@@ -57,6 +57,10 @@ namespace Gamepackage
             {
                 return "holy";
             }
+            else if (damageType == DamageTypes.POISON)
+            {
+                return "poison";
+            }
             else
             {
                 throw new NotImplementedException("Need to add a display string for this damage type: " + damageType);

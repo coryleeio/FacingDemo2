@@ -7,6 +7,11 @@ namespace Gamepackage
         public abstract bool CanApply(AttackContext abilityTriggerContext);
         public abstract AttackContext Apply(AttackContext abilityTriggerContext);
 
+        public virtual void Tick(Entity source)
+        {
+            throw new NotImplementedException("You probably forgot to implement tick on something...");
+        }
+
         public abstract string DisplayName
         {
             get;

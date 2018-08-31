@@ -109,7 +109,8 @@ namespace Gamepackage
 
             foreach (var potentialTrigger in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
-                if (potentialTrigger.Trigger != null && potentialTrigger.Trigger.Effect.EffectApplicationTrigger == EffectTriggerType.OnStep)
+                var onStepTriggers = potentialTrigger.GetEffects(EffectTriggerType.OnStep);
+                foreach(var onStepTrigger in onStepTriggers)
                 {
                     var points = MathUtil.GetPointsByOffset(potentialTrigger.Position, potentialTrigger.Trigger.Offsets);
                     CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Source, potentialTrigger, points);

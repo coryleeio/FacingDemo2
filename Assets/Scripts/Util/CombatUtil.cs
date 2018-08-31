@@ -19,7 +19,6 @@ namespace Gamepackage
 
         public static void Apply(AttackContext result)
         {
-            Assert.IsNotNull(result.Source);
             Assert.IsNotNull(result.Targets);
             Assert.IsNotNull(result.OnHitEffects);
             Assert.IsNotNull(result.AttackParameters);
@@ -57,7 +56,11 @@ namespace Gamepackage
                     HandleDamageIsLethal(result);
                 }
 
-                var sourceName = result.Source.Name;
+                var sourceName = "";
+                if(result.Source != null)
+                {
+                    sourceName = result.Source.Name;
+                }
                 var targetName = target.Name;
 
                 if (result.WasShortCircuited)

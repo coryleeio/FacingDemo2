@@ -12,5 +12,6 @@
         ARCANE,
         NEGATIVE,
         HOLY,
+        POISON,
     }
 }

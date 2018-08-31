@@ -5,5 +5,6 @@
         OnDamageWouldKill,
         OnHit,
         OnStep,
+        OnTick,
     }
 }
