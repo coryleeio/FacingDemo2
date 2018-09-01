@@ -40,6 +40,14 @@ namespace Gamepackage
             }
         }
 
+        public override string RemovalText
+        {
+            get
+            {
+                return "";
+            }
+        }
+
         public override AttackContext Apply(AttackContext abilityTriggerContext)
         {
             AbilityTriggerContext = abilityTriggerContext;

@@ -28,6 +28,14 @@ namespace Gamepackage
             }
         }
 
+        public override string RemovalText
+        {
+            get
+            {
+                return "";
+            }
+        }
+
         public override bool CanApply(AttackContext ctx)
         {
             if(ctx.Targets.Count > 1)

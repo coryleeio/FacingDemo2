@@ -26,6 +26,14 @@
             }
         }
 
+        public override string RemovalText
+        {
+            get
+            {
+                return "";
+            }
+        }
+
         public override bool CanApply(AttackContext ctx)
         {
             return ctx.Targets.Count > 1;

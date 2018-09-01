@@ -26,5 +26,15 @@ namespace Gamepackage
         {
             get;
         }
+
+        public virtual void OnRemove()
+        {
+
+        }
+
+        public abstract string RemovalText
+        {
+            get;
+        }
     }
 }

@@ -46,6 +46,14 @@
             }
         }
 
+        public override string RemovalText
+        {
+            get
+            {
+                return "Your poison fades";
+            }
+        }
+
         public override void Tick(Entity entity)
         {
             base.Tick(entity);
