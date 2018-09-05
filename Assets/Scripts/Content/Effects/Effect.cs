@@ -4,12 +4,25 @@ namespace Gamepackage
 {
     public abstract class Effect
     {
-        public abstract bool CanApply(AttackContext abilityTriggerContext);
-        public abstract AttackContext Apply(AttackContext abilityTriggerContext);
+        public Duration Ticker;
 
-        public virtual void Tick(Entity source)
+        public abstract bool CanTrigger(AttackContext abilityTriggerContext);
+        public abstract AttackContext Trigger(AttackContext abilityTriggerContext);
+
+        public virtual void Tick(Entity owner)
         {
-            throw new NotImplementedException("You probably forgot to implement tick on something...");
+            if(IsTickingEffect)
+            {
+                Ticker.Tick(owner);
+            }
+        }
+
+        public bool IsTickingEffect
+        {
+            get
+            {
+                return Ticker != null;
+            }
         }
 
         public abstract string DisplayName

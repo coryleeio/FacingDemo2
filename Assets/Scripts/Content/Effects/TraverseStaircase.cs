@@ -48,7 +48,7 @@ namespace Gamepackage
             }
         }
 
-        public override AttackContext Apply(AttackContext abilityTriggerContext)
+        public override AttackContext Trigger(AttackContext abilityTriggerContext)
         {
             AbilityTriggerContext = abilityTriggerContext;
             var Parameters = AbilityTriggerContext.Source.Trigger.TriggerParameters;
@@ -109,7 +109,7 @@ namespace Gamepackage
             return abilityTriggerContext;
         }
 
-        public override bool CanApply(AttackContext ctx)
+        public override bool CanTrigger(AttackContext ctx)
         {
             foreach (var target in ctx.Targets)
             {

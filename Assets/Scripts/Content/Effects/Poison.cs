@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public class Poison : TickingEffect
+    public class Poison : Effect
     {
         public override string DisplayName
         {
@@ -26,15 +26,15 @@
             }
         }
 
-        public override bool CanApply(AttackContext ctx)
+        public override bool CanTrigger(AttackContext ctx)
         {
-            return ctx.Targets.Count > 1;
+            return ctx.Targets.Count == 1;
         }
 
-        public override AttackContext Apply(AttackContext ctx)
+        public override AttackContext Trigger(AttackContext ctx)
         {
             var target = ctx.Targets[0];
-            // apply weak poison here
+            target.Body.Effects.Add(this);
             return ctx;
         }
 
@@ -42,7 +42,7 @@
         {
             get
             {
-                return 3;
+                return 1;
             }
         }
 
@@ -62,14 +62,14 @@
                 AttackParameters = new AttackParameters
                 {
                     DamageType = DamageTypes.POISON,
-                    AttackMessage = "Poison hurts you for {2} point of damage!",
+                    AttackMessage = "Poison hurts {1} for {2} point of damage!",
                     DyeNumber = 1,
                     DyeSize = PoisonAmount,
                     Bonus = 0
                 }
             };
             ctx.Targets.Add(entity);
-            CombatUtil.Apply(ctx);
+            CombatUtil.ApplyAttackResult(ctx);
         }
     }
 }

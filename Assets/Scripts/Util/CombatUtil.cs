@@ -17,15 +17,14 @@ namespace Gamepackage
             return a.Position.IsAdjacentTo(b.Position) && a.Position.IsOrthogonalTo(b.Position);
         }
 
-        public static void Apply(AttackContext result)
+        public static void ApplyAttackResult(AttackContext result)
         {
             Assert.IsNotNull(result.Targets);
-            Assert.IsNotNull(result.OnHitEffects);
-            Assert.IsNotNull(result.AttackParameters);
+            Assert.IsNotNull(result.AppliedEffects);
 
             foreach (var target in result.Targets)
             {
-                if (result.AttackParameters.DamageType == DamageTypes.NOT_SET)
+                if (result.AttackParameters != null && result.AttackParameters.DamageType == DamageTypes.NOT_SET)
                 {
                     throw new NotImplementedException("You forgot to set the damage type on this attack");
                 }
@@ -37,17 +36,19 @@ namespace Gamepackage
                 if (target.Body.CurrentHealth <= 0)
                 {
                     // if you keep hitting him he doesn't get dead-er..
-                    return;
+                    continue;
                 }
 
                 var damage = 0;
-                for (var numDyeRolled = 0; numDyeRolled < result.AttackParameters.DyeNumber; numDyeRolled++)
+                if(result.AttackParameters != null)
                 {
-                    damage += UnityEngine.Random.Range(1, result.AttackParameters.DyeSize + 1);
+                    for (var numDyeRolled = 0; numDyeRolled < result.AttackParameters.DyeNumber; numDyeRolled++)
+                    {
+                        damage += UnityEngine.Random.Range(1, result.AttackParameters.DyeSize + 1);
+                    }
+                    damage += result.AttackParameters.Bonus;
+                    result.Damage = damage;
                 }
-                damage += result.AttackParameters.Bonus;
-
-                result.Damage = damage;
 
                 var damageIsLethal = target.Body.CurrentHealth - damage <= 0;
 
@@ -77,12 +78,14 @@ namespace Gamepackage
                     }
                     return; // do short circuit
                 }
-                Context.UIController.TextLog.AddText(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
-                target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
+                if(result.AttackParameters != null)
+                {
+                    Context.UIController.TextLog.AddText(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                    target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
+                    Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
+                }
 
-                Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
-
-                HandleOnHit(result);
+                HandleAppliedEffects(result);
 
                 if (target.Body.CurrentHealth <= 0)
                 {
@@ -218,16 +221,15 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleOnHit(AttackContext ctx)
+        private static void HandleAppliedEffects(AttackContext ctx)
         {
             if(!ctx.WasShortCircuited)
             {
-                foreach(var ability in ctx.OnHitEffects)
+                foreach(var ability in ctx.AppliedEffects)
                 {
-                    Assert.IsTrue(ability.EffectApplicationTrigger == EffectTriggerType.OnHit);
-                    if(ability.CanApply(ctx))
+                    if(ability.CanTrigger(ctx))
                     {
-                        ability.Apply(ctx);
+                        ability.Trigger(ctx);
                     }
                 }
             }
@@ -257,9 +259,9 @@ namespace Gamepackage
                     {
                         if (effect.EffectApplicationTrigger == EffectTriggerType.OnDamageWouldKill)
                         {
-                            if (effect.CanApply(result))
+                            if (effect.CanTrigger(result))
                             {
-                                effect.Apply(result);
+                                effect.Trigger(result);
                             }
                         }
                     }
@@ -288,9 +290,9 @@ namespace Gamepackage
                 var attack = new AttackContext();
                 attack.Source = potentialTrigger;
                 attack.Targets.Add(Source);
-                if (potentialTrigger.Trigger.Effect.CanApply(attack))
+                if (potentialTrigger.Trigger.Effect.CanTrigger(attack))
                 {
-                    ability.Apply(attack);
+                    ability.Trigger(attack);
                     return true;
                 }
             }

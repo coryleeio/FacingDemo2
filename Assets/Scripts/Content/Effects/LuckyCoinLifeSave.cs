@@ -36,7 +36,7 @@ namespace Gamepackage
             }
         }
 
-        public override bool CanApply(AttackContext ctx)
+        public override bool CanTrigger(AttackContext ctx)
         {
             if(ctx.Targets.Count > 1)
             {
@@ -47,7 +47,7 @@ namespace Gamepackage
             return item != null;
         }
 
-        public override AttackContext Apply(AttackContext ctx)
+        public override AttackContext Trigger(AttackContext ctx)
         {
             var target = ctx.Targets[0];
             if (MathUtil.ChanceToOccur(50))

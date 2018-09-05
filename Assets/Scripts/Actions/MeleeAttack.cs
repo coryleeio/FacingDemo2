@@ -55,8 +55,8 @@ namespace Gamepackage
                 attack.Source = Source;
                 attack.Targets.Add(target);
                 attack.AttackParameters = attackParameters;
-                attack.OnHitEffects.AddRange(onHitEffects);
-                CombatUtil.Apply(attack);
+                attack.AppliedEffects.AddRange(onHitEffects);
+                CombatUtil.ApplyAttackResult(attack);
             }
         }
 

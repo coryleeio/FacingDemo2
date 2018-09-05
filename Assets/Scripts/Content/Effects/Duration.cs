@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public abstract class TickingEffect : Effect
+    public class Duration
     {
         // this cant be set in constructor, if it is loading your game will reset the time
         // due to the constructor begin called during deserialization.
@@ -32,10 +32,10 @@
             }
         }
 
-        public override void Tick(Entity source)
+        public void Tick(Entity source)
         {
             // Dont call base bc it will throw not implemented
-            if(!HasUnlimitedDuration)
+            if (!HasUnlimitedDuration)
             {
                 TurnsRemaining--;
             }

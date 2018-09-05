@@ -34,15 +34,20 @@
             }
         }
 
-        public override bool CanApply(AttackContext ctx)
+        public override bool CanTrigger(AttackContext ctx)
         {
-            return ctx.Targets.Count > 1;
+            return ctx.Targets.Count >= 1;
         }
 
-        public override AttackContext Apply(AttackContext ctx)
+        public override AttackContext Trigger(AttackContext ctx)
         {
-            var target = ctx.Targets[0];
-            // apply weak poison here
+            foreach(var target in ctx.Targets)
+            {
+                AttackContext poisonAttack = new AttackContext();
+                poisonAttack.Targets.Add(ctx.Targets[0]);
+                poisonAttack.AppliedEffects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_WEAK_POISON));
+                CombatUtil.ApplyAttackResult(poisonAttack);
+            }
             return ctx;
         }
     }

@@ -30,20 +30,6 @@ namespace Gamepackage
             return action;
         }
 
-        public Effect BuildAbility(Entity source, UniqueIdentifier identifier)
-        {
-            Effect ret = null;
-            if (identifier == UniqueIdentifier.TRIGGER_TRAVERSE_STAIRCASE)
-            {
-                ret = new TraverseStaircase();
-            }
-            else
-            {
-                throw new NotImplementedException(string.Format("Tried to instantiate trigger: {0}, but it hasn't been implemented yet", identifier));
-            }
-            return ret;
-        }
-
         public Entity BuildEntity(UniqueIdentifier identifier)
         {
             var entity = EntityFactory.Build(identifier);

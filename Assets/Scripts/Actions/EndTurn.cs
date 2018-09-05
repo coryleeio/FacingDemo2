@@ -30,17 +30,13 @@ namespace Gamepackage
             var onTickEffects = Source.GetEffects(EffectTriggerType.OnTick);
             foreach(var effect in onTickEffects)
             {
-                var tickingEffect = (TickingEffect) effect;
+                var tickingEffect = effect;
                 tickingEffect.Tick(Source);
-                if(tickingEffect.ShouldExpire)
+                if(tickingEffect.Ticker.ShouldExpire)
                 {
-                    if(tickingEffect.ShouldExpire)
-                    {
-                        effectsThatShouldExpire.Add(tickingEffect);
-                    }
+                    effectsThatShouldExpire.Add(tickingEffect);
                 }
             }
-
             Source.RemoveEffects(effectsThatShouldExpire);
         }
     }

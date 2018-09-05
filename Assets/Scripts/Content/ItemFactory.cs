@@ -40,6 +40,7 @@ namespace Gamepackage
                 });
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON));
                 return item;
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_LUCKY_COIN)

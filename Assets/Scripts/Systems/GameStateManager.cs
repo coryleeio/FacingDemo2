@@ -27,7 +27,6 @@ namespace Gamepackage
         public void Clear()
         {
             Context.EntitySystem.Clear();
-            Debug.Log("Clearing game state");
             Game = null;
         }
 

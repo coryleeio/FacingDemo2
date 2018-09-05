@@ -8,7 +8,7 @@ namespace Gamepackage
         public Entity Source;
         public List<Entity> Targets = new List<Entity>();
         public AttackParameters AttackParameters;
-        public List<Effect> OnHitEffects = new List<Effect>();
+        public List<Effect> AppliedEffects = new List<Effect>();
         public int Damage;
         public bool WasShortCircuited = false;
         public string ShortCircuitedMessage = null;

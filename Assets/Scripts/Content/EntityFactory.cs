@@ -73,7 +73,7 @@ namespace Gamepackage
                 {
                     Attributes = new Dictionary<Attributes, int>
                     {
-                        {Attributes.MAX_HEALTH, 1 },
+                        {Attributes.MAX_HEALTH, 10 },
                     },
                     Attacks = DefaultBeeBodyAttacks(),
                 };
@@ -96,7 +96,7 @@ namespace Gamepackage
                 {
                     Attributes = new Dictionary<Attributes, int>
                     {
-                        {Attributes.MAX_HEALTH, 3 },
+                        {Attributes.MAX_HEALTH, 15 },
                     },
                     Attacks = DefaultBeeBodyAttacks(),
                 };
