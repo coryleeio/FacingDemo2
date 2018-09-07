@@ -1,12 +1,21 @@
 ﻿namespace Gamepackage
 {
-    public class AppliedWeakPoison : Effect
+    // This is all the common logic for a on hit effect, and should be instantiated directly
+    // in the factory that constructs items and wants to add an on hit effect.
+    // It does this by starting a second attack with the applied effect
+    // this gives other effects on the entity the chance to block the effect, reduce the damage
+    // etc...
+    public class AppliedEffect : Effect
     {
+        public UniqueIdentifier EffectAppliedId;
+        public string AppliedDisplayName;
+        public string AppliedDisplayDescription;
+
         public override string DisplayName
         {
             get
             {
-                return "Applied Weak Poison";
+                return AppliedDisplayName;
             }
         }
 
@@ -14,7 +23,7 @@
         {
             get
             {
-                return "The business end of this is coated in poison...";
+                return AppliedDisplayDescription;
             }
         }
 
@@ -45,7 +54,7 @@
             {
                 AttackContext poisonAttack = new AttackContext();
                 poisonAttack.Targets.Add(ctx.Targets[0]);
-                poisonAttack.AppliedEffects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_WEAK_POISON));
+                poisonAttack.AppliedEffects.Add(EffectFactory.Build(EffectAppliedId));
                 CombatUtil.ApplyAttackResult(poisonAttack);
             }
             return ctx;

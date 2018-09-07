@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public class Duration
+    public class Ticker
     {
         // this cant be set in constructor, if it is loading your game will reset the time
         // due to the constructor begin called during deserialization.

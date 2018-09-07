@@ -4,7 +4,8 @@ namespace Gamepackage
 {
     public abstract class Effect
     {
-        public Duration Ticker;
+        public Ticker Ticker;
+        public IStackingStrategy StackingStrategy;
 
         public abstract bool CanTrigger(AttackContext abilityTriggerContext);
         public abstract AttackContext Trigger(AttackContext abilityTriggerContext);
@@ -40,7 +41,22 @@ namespace Gamepackage
             get;
         }
 
-        public virtual void OnRemove()
+        public virtual void OnAdd(Entity owner)
+        {
+            AddVisualEffects(owner);
+        }
+
+        protected virtual void AddVisualEffects(Entity owner)
+        {
+
+        }
+
+        public virtual void OnRemove(Entity owner)
+        {
+            RemoveVisualEffects(owner);
+        }
+
+        protected virtual void RemoveVisualEffects(Entity owner)
         {
 
         }

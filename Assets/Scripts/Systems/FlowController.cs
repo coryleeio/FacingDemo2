@@ -6,11 +6,11 @@ namespace Gamepackage
     public class FlowController
     {
         public LinkedList<Step> Steps = new LinkedList<Step>();
-        public Phase CurrentPhase = Phase.Player; // always start on player when changing scenes
+        public TurnPhase CurrentPhase = TurnPhase.Player; // always start on player when changing scenes
 
         public void Init()
         {
-            ChangePhase(Phase.Player);
+            ChangePhase(TurnPhase.Player);
         }
 
         public void Process()
@@ -56,13 +56,13 @@ namespace Gamepackage
                 if(entitesThatStillNeedToACtBeforePhaseEnds == 0)
                 {
                     // phase is over, nobbody else needs to act
-                    if(CurrentPhase == Phase.Player)
+                    if(CurrentPhase == TurnPhase.Player)
                     {
-                        ChangePhase(Phase.Enemies);
+                        ChangePhase(TurnPhase.Enemies);
                     }
-                    else if(CurrentPhase == Phase.Enemies)
+                    else if(CurrentPhase == TurnPhase.Enemies)
                     {
-                        ChangePhase(Phase.Player);
+                        ChangePhase(TurnPhase.Player);
                     }
                     else
                     {
@@ -199,7 +199,7 @@ namespace Gamepackage
             }
         }
 
-        public void ChangePhase(Phase nextPhase)
+        public void ChangePhase(TurnPhase nextPhase)
         {
             CurrentPhase = nextPhase;
             var entities = Context.GameStateManager.Game.CurrentLevel.Entitys;
@@ -217,8 +217,8 @@ namespace Gamepackage
         public bool ActsInPhase(Entity entity)
         {
             var canAct = entity.Body != null && !entity.Body.IsDead;
-            var playerOrPlayerAllyOnPlayerPhase = entity.Behaviour.Team == Team.PLAYER && CurrentPhase == Phase.Player;
-            var enemyOrNeutralOnEnemyPhase = (entity.Behaviour.Team == Team.ENEMY || entity.Behaviour.Team == Team.NEUTRAL) && CurrentPhase == Phase.Enemies;
+            var playerOrPlayerAllyOnPlayerPhase = entity.Behaviour.Team == Team.PLAYER && CurrentPhase == TurnPhase.Player;
+            var enemyOrNeutralOnEnemyPhase = (entity.Behaviour.Team == Team.ENEMY || entity.Behaviour.Team == Team.NEUTRAL) && CurrentPhase == TurnPhase.Enemies;
             return canAct && (playerOrPlayerAllyOnPlayerPhase || enemyOrNeutralOnEnemyPhase);
         }
     }

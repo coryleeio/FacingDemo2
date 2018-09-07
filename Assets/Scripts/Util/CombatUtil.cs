@@ -40,7 +40,7 @@ namespace Gamepackage
                 }
 
                 var damage = 0;
-                if(result.AttackParameters != null)
+                if (result.AttackParameters != null)
                 {
                     for (var numDyeRolled = 0; numDyeRolled < result.AttackParameters.DyeNumber; numDyeRolled++)
                     {
@@ -58,7 +58,7 @@ namespace Gamepackage
                 }
 
                 var sourceName = "";
-                if(result.Source != null)
+                if (result.Source != null)
                 {
                     sourceName = result.Source.Name;
                 }
@@ -78,7 +78,7 @@ namespace Gamepackage
                     }
                     return; // do short circuit
                 }
-                if(result.AttackParameters != null)
+                if (result.AttackParameters != null)
                 {
                     Context.UIController.TextLog.AddText(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                     target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
@@ -116,7 +116,7 @@ namespace Gamepackage
                         var corpseGameObject = Context.PrototypeFactory.BuildView(target);
                         target.View.ViewGameObject = corpseGameObject;
                     }
-                    if(!target.IsPlayer)
+                    if (!target.IsPlayer)
                     {
                         game.MonstersKilled++;
                     }
@@ -129,20 +129,12 @@ namespace Gamepackage
             }
         }
 
-        public static List<Effect> GetEntityEffectsByType(Entity entity, EffectTriggerType triggertype)
+        public static List<Effect> GetEntityEffectsByType(Entity entity, Predicate<Effect> filter = null)
         {
-            Assert.IsTrue(triggertype != EffectTriggerType.OnHit, "This function is for everything except on hit.  Melee and ranged attacks implement their own collection of onhit effects because it is more complicated and includes attack specific effects");
-            var effects = new List<Effect>();
-
-            if (entity.Trigger != null && entity.Trigger.Effect != null && entity.Trigger.Effect.EffectApplicationTrigger == triggertype)
+            var effectsAggregate = new List<Effect>();
+            if (entity.Trigger != null && entity.Trigger.Effect != null)
             {
-                effects.Add(entity.Trigger.Effect);
-            }
-
-            if (triggertype == EffectTriggerType.OnStep)
-            {
-                // for now only triggers should use this, no items use it, so this saves us a lot of searching.
-                return effects;
+                effectsAggregate.Add(entity.Trigger.Effect);
             }
 
             foreach (var pair in entity.Inventory.EquippedItemBySlot)
@@ -150,10 +142,7 @@ namespace Gamepackage
                 var item = pair.Value;
                 foreach (var effect in item.Effects)
                 {
-                    if (effect.EffectApplicationTrigger == triggertype)
-                    {
-                        effects.Add(effect);
-                    }
+                    effectsAggregate.Add(effect);
                 }
             }
 
@@ -163,10 +152,7 @@ namespace Gamepackage
                 {
                     foreach (var effect in item.Effects)
                     {
-                        if (effect.EffectApplicationTrigger == triggertype)
-                        {
-                            effects.Add(effect);
-                        }
+                        effectsAggregate.Add(effect);
                     }
                 }
             }
@@ -175,13 +161,17 @@ namespace Gamepackage
             {
                 foreach (var effect in entity.Body.Effects)
                 {
-                    if (effect.EffectApplicationTrigger == triggertype)
-                    {
-                        effects.Add(effect);
-                    }
+                    effectsAggregate.Add(effect);
                 }
             }
-            return effects;
+            if(filter == null)
+            {
+                return effectsAggregate;
+            }
+            else
+            {
+                return effectsAggregate.FindAll(filter);
+            }
         }
 
         public static void RemoveEntityEffects(Entity entity, List<Effect> effectsThatShouldExpire)
@@ -213,21 +203,21 @@ namespace Gamepackage
 
             foreach (var effect in effectsThatShouldExpire)
             {
-                if(effect.RemovalText != null && effect.RemovalText != "")
+                if (effect.RemovalText != null && effect.RemovalText != "")
                 {
                     Context.UIController.TextLog.AddText(effect.RemovalText);
                 }
-                effect.OnRemove();
+                effect.OnRemove(entity);
             }
         }
 
         private static void HandleAppliedEffects(AttackContext ctx)
         {
-            if(!ctx.WasShortCircuited)
+            if (!ctx.WasShortCircuited)
             {
-                foreach(var ability in ctx.AppliedEffects)
+                foreach (var ability in ctx.AppliedEffects)
                 {
-                    if(ability.CanTrigger(ctx))
+                    if (ability.CanTrigger(ctx))
                     {
                         ability.Trigger(ctx);
                     }
@@ -237,7 +227,7 @@ namespace Gamepackage
 
         private static void HandleDamageIsLethal(AttackContext result)
         {
-            foreach(var target in result.Targets)
+            foreach (var target in result.Targets)
             {
                 var itemsCopy = new List<Item>();
                 itemsCopy.AddRange(target.Inventory.Items);
@@ -253,7 +243,7 @@ namespace Gamepackage
         {
             foreach (var item in itemsCopy)
             {
-                if(item != null)
+                if (item != null)
                 {
                     foreach (var effect in item.Effects)
                     {

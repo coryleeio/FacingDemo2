@@ -60,7 +60,7 @@ namespace Gamepackage
 
         public List<Effect> GetEffects(EffectTriggerType triggertype)
         {
-            return CombatUtil.GetEntityEffectsByType(this, triggertype);
+            return CombatUtil.GetEntityEffectsByType(this, (entityInQuestion) => { return entityInQuestion.EffectApplicationTrigger == triggertype; });
         }
 
         public void RemoveEffects(List<Effect> effectsThatShouldExpire)

@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public enum Phase
+    public enum TurnPhase
     {
         Player,
         Allies,

@@ -55,7 +55,7 @@ namespace Gamepackage
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;
                 item.DisplayName = "Arrow";
-                item.Description = "People have been using this to kill each other literally forever. The only thing they used before this was a rock.Arrows are considered by many to be more civil.";
+                item.Description = "People have been using this to kill each other literally forever. The only thing they used before this was a rock. Arrows are considered by many to be more civil.";
                 item.MaxStackSize = 20;
                 item.NumberOfItems = MathUtil.ChooseRandomIntInRange(5, item.MaxStackSize / 2 - 1);
                 item.SlotsWearable.Add(ItemSlot.Ammo);

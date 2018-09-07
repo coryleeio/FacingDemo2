@@ -104,7 +104,7 @@ namespace Gamepackage
                 return;
             }
 
-            if (ActionList.Count > 0 && player.Behaviour.NextAction == null && Context.FlowSystem.CurrentPhase == Phase.Player)
+            if (ActionList.Count > 0 && player.Behaviour.NextAction == null && Context.FlowSystem.CurrentPhase == TurnPhase.Player)
             {
                 var nextAction = ActionList.Dequeue();
 
