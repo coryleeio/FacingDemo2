@@ -1,7 +1,11 @@
 ﻿namespace Gamepackage
 {
+
+    // Important - After release add new entries to the end of this file or you will break all existing save files
+
     public enum UniqueIdentifier
     {
+        EFFECT_CURE_POISON,
         EFFECT_TRAVERSE_STAIRCASE,
         EFFECT_LUCKY_COIN_LIFE_SAVE,
         EFFECT_WEAK_POISON,
@@ -24,9 +28,11 @@
         VIEW_STAIRCASE_DOWN,
         VIEW_CORPSE,
         TRIGGER_TRAVERSE_STAIRCASE,
+        ITEM_ANTIDOTE,
         ITEM_LONGSWORD,
         ITEM_LUCKY_COIN,
         ITEM_ARROW,
+        ITEM_APPEARANCE_ANTIDOTE,
         ITEM_APPEARANCE_LUCKY_COIN,
         ITEM_APPEARANCE_LONGSWORD,
         ITEM_APPEARANCE_ARROW,

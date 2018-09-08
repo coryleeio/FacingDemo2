@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class AttackContext
+    public class EntityStateChange
     {
         public Entity Source;
         public List<Entity> Targets = new List<Entity>();

@@ -18,6 +18,9 @@ namespace Gamepackage
             item.AttackParameters = new List<AttackParameters>(0);
             item.ThrowParameters = new List<AttackParameters>(0);
             item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;
+            item.ExactNumberOfChargesRemaining = 0;
+            item.HasUnlimitedCharges = false;
+            item.DestroyWhenAllChargesAreConsumed = false;
         }
 
         public static Item Build(UniqueIdentifier uniqueIdentifier)
@@ -41,7 +44,17 @@ namespace Gamepackage
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON));
-                return item;
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_ANTIDOTE)
+            {
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ANTIDOTE;
+                item.DisplayName = "Antidote";
+                item.Description = "A bubbling vial of viscous green liquid.";
+                item.CustomOnUseText = "Drink";
+                item.OnUseText = "You quaff a potion";
+                item.ExactNumberOfChargesRemaining = 1;
+                item.DestroyWhenAllChargesAreConsumed = true;
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_CURE_POISON));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_LUCKY_COIN)
             {
@@ -49,7 +62,6 @@ namespace Gamepackage
                 item.DisplayName = "Lucky Coin";
                 item.Description = "This coin is particularly lucky, and is probably deserving of a better description.";
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
-                return item;
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ARROW)
             {
@@ -60,12 +72,13 @@ namespace Gamepackage
                 item.NumberOfItems = MathUtil.ChooseRandomIntInRange(5, item.MaxStackSize / 2 - 1);
                 item.SlotsWearable.Add(ItemSlot.Ammo);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.Ammo);
-                return item;
             }
             else
             {
                 throw new NotImplementedException();
             }
+
+            return item;
         }
     }
 }

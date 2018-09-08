@@ -58,9 +58,19 @@ namespace Gamepackage
             }
         }
 
-        public List<Effect> GetEffects(EffectTriggerType triggertype)
+        public List<Effect> GetEffects(Predicate<Effect> predicate)
+        {
+            return CombatUtil.GetEntityEffectsByType(this, predicate);
+        }
+
+        public List<Effect> GetEffectsByTriggerType(EffectTriggerType triggertype)
         {
             return CombatUtil.GetEntityEffectsByType(this, (entityInQuestion) => { return entityInQuestion.EffectApplicationTrigger == triggertype; });
+        }
+
+        public void RemoveEffects(Effect effectThatShouldExpire)
+        {
+            RemoveEffects(new List<Effect>(1) { effectThatShouldExpire });
         }
 
         public void RemoveEffects(List<Effect> effectsThatShouldExpire)

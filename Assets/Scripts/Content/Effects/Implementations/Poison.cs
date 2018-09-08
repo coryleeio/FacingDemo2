@@ -26,12 +26,12 @@
             }
         }
 
-        public override bool CanTrigger(AttackContext ctx)
+        public override bool CanTrigger(EntityStateChange ctx)
         {
             return ctx.Targets.Count == 1;
         }
 
-        public override AttackContext Trigger(AttackContext ctx)
+        public override EntityStateChange Trigger(EntityStateChange ctx)
         {
             var target = ctx.Targets[0];
             target.Body.Effects.Add(this);
@@ -57,7 +57,7 @@
         public override void Tick(Entity entity)
         {
             base.Tick(entity);
-            AttackContext ctx = new AttackContext
+            EntityStateChange ctx = new EntityStateChange
             {
                 AttackParameters = new AttackParameters
                 {
@@ -69,7 +69,7 @@
                 }
             };
             ctx.Targets.Add(entity);
-            CombatUtil.ApplyAttackResult(ctx);
+            CombatUtil.ApplyEntityStateChange(ctx);
         }
     }
 }

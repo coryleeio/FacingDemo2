@@ -1,7 +1,6 @@
 ﻿namespace Gamepackage
 {
-    // This is all the common logic for a on hit effect, and should be instantiated directly
-    // in the factory that constructs items and wants to add an on hit effect.
+    // This is all the common logic for a on hit effect,
     // It does this by starting a second attack with the applied effect
     // this gives other effects on the entity the chance to block the effect, reduce the damage
     // etc...
@@ -43,19 +42,19 @@
             }
         }
 
-        public override bool CanTrigger(AttackContext ctx)
+        public override bool CanTrigger(EntityStateChange ctx)
         {
             return ctx.Targets.Count >= 1;
         }
 
-        public override AttackContext Trigger(AttackContext ctx)
+        public override EntityStateChange Trigger(EntityStateChange ctx)
         {
             foreach(var target in ctx.Targets)
             {
-                AttackContext poisonAttack = new AttackContext();
+                EntityStateChange poisonAttack = new EntityStateChange();
                 poisonAttack.Targets.Add(ctx.Targets[0]);
                 poisonAttack.AppliedEffects.Add(EffectFactory.Build(EffectAppliedId));
-                CombatUtil.ApplyAttackResult(poisonAttack);
+                CombatUtil.ApplyEntityStateChange(poisonAttack);
             }
             return ctx;
         }

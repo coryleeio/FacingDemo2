@@ -23,7 +23,7 @@ namespace Gamepackage
         }
 
         [JsonIgnore]
-        public AttackContext AbilityTriggerContext;
+        public EntityStateChange AbilityTriggerContext;
 
         public enum Params
         {
@@ -48,7 +48,7 @@ namespace Gamepackage
             }
         }
 
-        public override AttackContext Trigger(AttackContext abilityTriggerContext)
+        public override EntityStateChange Trigger(EntityStateChange abilityTriggerContext)
         {
             AbilityTriggerContext = abilityTriggerContext;
             var Parameters = AbilityTriggerContext.Source.Trigger.TriggerParameters;
@@ -109,7 +109,7 @@ namespace Gamepackage
             return abilityTriggerContext;
         }
 
-        public override bool CanTrigger(AttackContext ctx)
+        public override bool CanTrigger(EntityStateChange ctx)
         {
             foreach (var target in ctx.Targets)
             {

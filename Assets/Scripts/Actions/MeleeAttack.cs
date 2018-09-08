@@ -51,12 +51,12 @@ namespace Gamepackage
 
             foreach(var target in Targets)
             {
-                var attack = new AttackContext();
+                var attack = new EntityStateChange();
                 attack.Source = Source;
                 attack.Targets.Add(target);
                 attack.AttackParameters = attackParameters;
                 attack.AppliedEffects.AddRange(onHitEffects);
-                CombatUtil.ApplyAttackResult(attack);
+                CombatUtil.ApplyEntityStateChange(attack);
             }
         }
 

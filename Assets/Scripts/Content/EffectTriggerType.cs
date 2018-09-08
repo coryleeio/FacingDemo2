@@ -6,5 +6,6 @@
         OnHit,
         OnStep,
         OnTick,
+        OnUseSelf,
     }
 }

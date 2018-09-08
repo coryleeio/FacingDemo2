@@ -8,7 +8,7 @@
             var matchingEffects = entity.Body.Effects.FindAll((x) => { return x.GetType() == newEffect.GetType(); });
             if(matchingEffects.Count > 1)
             {
-                throw new NotImplementedException("If these effects add to the duration of a matching, how the hell did you get two of them?");
+                throw new NotImplementedException("If these effects add to the duration of a matching effect, how the hell did you get two of them?");
             }
             if(!newEffect.IsTickingEffect)
             {

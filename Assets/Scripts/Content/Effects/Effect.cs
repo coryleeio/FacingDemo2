@@ -7,8 +7,8 @@ namespace Gamepackage
         public Ticker Ticker;
         public IStackingStrategy StackingStrategy;
 
-        public abstract bool CanTrigger(AttackContext abilityTriggerContext);
-        public abstract AttackContext Trigger(AttackContext abilityTriggerContext);
+        public abstract bool CanTrigger(EntityStateChange abilityTriggerContext);
+        public abstract EntityStateChange Trigger(EntityStateChange abilityTriggerContext);
 
         public virtual void Tick(Entity owner)
         {

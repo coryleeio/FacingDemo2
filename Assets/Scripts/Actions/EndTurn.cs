@@ -27,7 +27,7 @@ namespace Gamepackage
             var effectsThatShouldExpire = new List<Effect>(0);
             Source.Behaviour.IsDoneThisTurn = true;
 
-            var onTickEffects = Source.GetEffects(EffectTriggerType.OnTick);
+            var onTickEffects = Source.GetEffectsByTriggerType(EffectTriggerType.OnTick);
             foreach(var effect in onTickEffects)
             {
                 var tickingEffect = effect;

@@ -21,6 +21,11 @@ namespace Gamepackage
                 },
                 new ItemAppearance()
                 {
+                    UniqueIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ANTIDOTE,
+                    InventorySprite=Resources.Load<Sprite>("Sprites/Antidote"),
+                },
+                new ItemAppearance()
+                {
                     UniqueIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW,
                     InventorySprite=Resources.Load<Sprite>("Sprites/Arrow"),
                 },

@@ -42,7 +42,12 @@
                     }
                 };
             }
-            if (uniqueIdentifier == UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE)
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_CURE_POISON)
+            {
+                retVal = new CurePoison();
+            }
+
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE)
             {
                 retVal = new LuckyCoinLifeSave();
             }

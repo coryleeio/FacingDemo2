@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -29,59 +30,75 @@ namespace Gamepackage
             {
                 Context.UIController.ItemInspectionWindow.ShowFor(item);
             });
-            if (item.SlotsWearable.Count > 0)
+
+            var level = Context.GameStateManager.Game.CurrentLevel;
+            var player = level.Player;
+            var isWearingItem = player.Inventory.IsWearing(item);
+            var hasItemInInventory = player.Inventory.Items.Contains(item);
+            var isPickingUpItem = !isWearingItem && !hasItemInInventory;
+            var isUsable = item.IsUsable;
+
+            if (hasItemInInventory)
             {
-                var level = Context.GameStateManager.Game.CurrentLevel;
-                var player = level.Player;
-                var isWearingItem = player.Inventory.IsWearing(item);
-                var hasItemInInventory = player.Inventory.Items.Contains(item);
-                var isPickingUpItem = !isWearingItem && !hasItemInInventory;
+                BuildOnUseButtonIfNeeded(player, item);
+                BuildButton("Equip", () =>
+                {
+                    var action = Context.PrototypeFactory.BuildEntityAction<EquipItem>(player) as EquipItem;
+                    action.Item = item;
+                    action.Slot = item.SlotsWearable[0];
+                    Context.PlayerController.ActionList.Enqueue(action);
+                });
+            }
+            else if (isWearingItem)
+            {
+                BuildOnUseButtonIfNeeded(player, item);
+                BuildButton("Unequip", () =>
+                {
+                    var action = Context.PrototypeFactory.BuildEntityAction<UnequipItem>(player) as UnequipItem;
+                    action.Item = item;
+                    action.Slot = player.Inventory.GetItemSlotOfEquippedItem(action.Item);
+                    Context.PlayerController.ActionList.Enqueue(action);
+                });
+            }
+            else
+            {
+                var possibleTargets = level.Grid[player.Position].EntitiesInPosition;
 
-                if (hasItemInInventory)
+                foreach (var possibleTarget in possibleTargets)
                 {
-                    BuildButton("Equip", () =>
+                    if (possibleTarget.Inventory.Items.Contains(item))
                     {
-                        var action = Context.PrototypeFactory.BuildEntityAction<EquipItem>(player) as EquipItem;
-                        action.Item = item;
-                        action.Slot = item.SlotsWearable[0];
-                        Context.PlayerController.ActionList.Enqueue(action);
-                    });
-                }
-                else if (isWearingItem)
-                {
-                    BuildButton("Unequip", () =>
-                    {
-                        var action = Context.PrototypeFactory.BuildEntityAction<UnequipItem>(player) as UnequipItem;
-                        action.Item = item;
-                        action.Slot = player.Inventory.GetItemSlotOfEquippedItem(action.Item);
-                        Context.PlayerController.ActionList.Enqueue(action);
-                    });
-                }
-                else
-                {
-                    var possibleTargets = level.Grid[player.Position].EntitiesInPosition;
-
-                    foreach (var possibleTarget in possibleTargets)
-                    {
-                        if (possibleTarget.Inventory.Items.Contains(item))
+                        BuildButton("Take", () =>
                         {
-                            BuildButton("Take", () =>
-                            {
-                                var action = Context.PrototypeFactory.BuildEntityAction<PickupItem>(player) as PickupItem;
-                                action.Item = item;
-                                action.Targets.Add(possibleTarget);
-                                Context.PlayerController.ActionList.Enqueue(action);
-                                Context.PlayerController.ActionList.Enqueue(action);
-                                Context.UIController.Tooltip.Hide();
-                                Context.UIController.Refresh();
-                            });
-                            break;
-                        }
+                            var action = Context.PrototypeFactory.BuildEntityAction<PickupItem>(player) as PickupItem;
+                            action.Item = item;
+                            action.Targets.Add(possibleTarget);
+                            Context.PlayerController.ActionList.Enqueue(action);
+                            Context.PlayerController.ActionList.Enqueue(action);
+                            Context.UIController.Tooltip.Hide();
+                            Context.UIController.Refresh();
+                        });
+                        break;
                     }
                 }
             }
             this.transform.position = eventData.position;
             Show();
+        }
+
+        private void BuildOnUseButtonIfNeeded(Entity player, Item item)
+        {
+            if (item.IsUsable)
+            {
+                var onUseText = item.CustomOnUseText ?? "Use";
+                BuildButton(onUseText, () =>
+                {
+                    var action = Context.PrototypeFactory.BuildEntityAction<UseItemOnSelf>(player) as UseItemOnSelf;
+                    action.Item = item;
+                    action.Targets.Add(player);
+                    Context.PlayerController.ActionList.Enqueue(action);
+                });
+            }
         }
 
         private void Purge()

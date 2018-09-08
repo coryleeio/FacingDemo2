@@ -46,7 +46,7 @@ namespace Gamepackage
 
         public override void Refresh()
         {
-
+            Hide();
         }
     }
 }

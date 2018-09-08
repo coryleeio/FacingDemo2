@@ -109,7 +109,7 @@ namespace Gamepackage
 
             foreach (var potentialTrigger in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
-                var onStepTriggers = potentialTrigger.GetEffects(EffectTriggerType.OnStep);
+                var onStepTriggers = potentialTrigger.GetEffectsByTriggerType(EffectTriggerType.OnStep);
                 foreach(var onStepTrigger in onStepTriggers)
                 {
                     var points = MathUtil.GetPointsByOffset(potentialTrigger.Position, potentialTrigger.Trigger.Offsets);

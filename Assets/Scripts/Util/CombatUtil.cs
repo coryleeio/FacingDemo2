@@ -17,7 +17,7 @@ namespace Gamepackage
             return a.Position.IsAdjacentTo(b.Position) && a.Position.IsOrthogonalTo(b.Position);
         }
 
-        public static void ApplyAttackResult(AttackContext result)
+        public static void ApplyEntityStateChange(EntityStateChange result)
         {
             Assert.IsNotNull(result.Targets);
             Assert.IsNotNull(result.AppliedEffects);
@@ -164,7 +164,7 @@ namespace Gamepackage
                     effectsAggregate.Add(effect);
                 }
             }
-            if(filter == null)
+            if (filter == null)
             {
                 return effectsAggregate;
             }
@@ -172,6 +172,10 @@ namespace Gamepackage
             {
                 return effectsAggregate.FindAll(filter);
             }
+        }
+        public static void RemoveEntityEffects(Entity entity, Effect effectThatShouldExpire)
+        {
+            RemoveEntityEffects(entity, new List<Effect>() { effectThatShouldExpire });
         }
 
         public static void RemoveEntityEffects(Entity entity, List<Effect> effectsThatShouldExpire)
@@ -211,7 +215,7 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleAppliedEffects(AttackContext ctx)
+        private static void HandleAppliedEffects(EntityStateChange ctx)
         {
             if (!ctx.WasShortCircuited)
             {
@@ -225,7 +229,7 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleDamageIsLethal(AttackContext result)
+        private static void HandleDamageIsLethal(EntityStateChange result)
         {
             foreach (var target in result.Targets)
             {
@@ -239,7 +243,7 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleLethalDamageCallbacksForListOfItems(AttackContext result, List<Item> itemsCopy)
+        private static void HandleLethalDamageCallbacksForListOfItems(EntityStateChange result, List<Item> itemsCopy)
         {
             foreach (var item in itemsCopy)
             {
@@ -277,7 +281,7 @@ namespace Gamepackage
             if (points.Contains(Source.Position))
             {
                 var ability = potentialTrigger.Trigger.Effect;
-                var attack = new AttackContext();
+                var attack = new EntityStateChange();
                 attack.Source = potentialTrigger;
                 attack.Targets.Add(Source);
                 if (potentialTrigger.Trigger.Effect.CanTrigger(attack))
@@ -287,6 +291,23 @@ namespace Gamepackage
                 }
             }
             return false;
+        }
+
+        public static void ConsumeItemCharges(Entity owner, Item item, int NumberConsumed = 1)
+        {
+            if(!item.HasUnlimitedCharges && item.HasCharges)
+            {
+                item.ExactNumberOfChargesRemaining = item.ExactNumberOfChargesRemaining - NumberConsumed;
+                if(item.ExactNumberOfChargesRemaining < 0)
+                {
+                    item.ExactNumberOfChargesRemaining = 0;
+                }
+                if(item.DestroyWhenAllChargesAreConsumed)
+                {
+                    owner.Inventory.RemoveItemStack(item);
+                    Context.UIController.Refresh();
+                }
+            }
         }
     }
 }
