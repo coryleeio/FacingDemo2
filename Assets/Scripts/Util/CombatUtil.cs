@@ -99,6 +99,15 @@ namespace Gamepackage
                     var game = Context.GameStateManager.Game;
                     var level = game.CurrentLevel;
 
+                    foreach (var pair in target.Inventory.EquippedItemBySlot)
+                    {
+                        var item = pair.Value;
+                        foreach (var effect in item.Effects.Values)
+                        {
+                            effect.RemovePersistantVisualEffects(target);
+                        }
+                    }
+
                     if (target.BlocksPathing)
                     {
                         Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
