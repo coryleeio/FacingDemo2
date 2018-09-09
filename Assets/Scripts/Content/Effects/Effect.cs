@@ -41,22 +41,27 @@ namespace Gamepackage
             get;
         }
 
-        public virtual void OnAdd(Entity owner)
+        // Call when applying for the first time, may actually do state changes, or apply 
+        // non permanent visual effects on initial application
+        public virtual void OnApply(Entity owner)
         {
-            AddVisualEffects(owner);
+            ApplyPersistentVisualEffects(owner);
         }
 
-        protected virtual void AddVisualEffects(Entity owner)
+        // Apply persistent visual effects, be sure to call this when loading the game for all effects
+        public virtual void ApplyPersistentVisualEffects(Entity owner)
         {
 
         }
 
+        // When an effect is removed, perform any state changes, and remove the persistent visual effects
+        // Do not remove temporary effects as they may not exist at this point
         public virtual void OnRemove(Entity owner)
         {
-            RemoveVisualEffects(owner);
+            RemovePersistantVisualEffects(owner);
         }
 
-        protected virtual void RemoveVisualEffects(Entity owner)
+        public virtual void RemovePersistantVisualEffects(Entity owner)
         {
 
         }

@@ -113,8 +113,7 @@ namespace Gamepackage
                     if (target.Inventory.HasAnyItems)
                     {
                         target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
-                        var corpseGameObject = Context.PrototypeFactory.BuildView(target);
-                        target.View.ViewGameObject = corpseGameObject;
+                        Context.PrototypeFactory.BuildView(target);
                     }
                     if (!target.IsPlayer)
                     {
@@ -132,37 +131,28 @@ namespace Gamepackage
         public static List<Effect> GetEntityEffectsByType(Entity entity, Predicate<Effect> filter = null)
         {
             var effectsAggregate = new List<Effect>();
-            if (entity.Trigger != null && entity.Trigger.Effect != null)
+            if (entity.Trigger != null && entity.Trigger.Effects.Count > 0)
             {
-                effectsAggregate.Add(entity.Trigger.Effect);
+                effectsAggregate.AddRange(entity.Trigger.Effects.Values);
             }
 
             foreach (var pair in entity.Inventory.EquippedItemBySlot)
             {
                 var item = pair.Value;
-                foreach (var effect in item.Effects)
-                {
-                    effectsAggregate.Add(effect);
-                }
+                effectsAggregate.AddRange(item.Effects.Values);
             }
 
             foreach (var item in entity.Inventory.Items)
             {
                 if (item != null)
                 {
-                    foreach (var effect in item.Effects)
-                    {
-                        effectsAggregate.Add(effect);
-                    }
+                    effectsAggregate.AddRange(item.Effects.Values);
                 }
             }
 
             if (entity.Body != null)
             {
-                foreach (var effect in entity.Body.Effects)
-                {
-                    effectsAggregate.Add(effect);
-                }
+                effectsAggregate.AddRange(entity.Body.Effects.Values);
             }
             if (filter == null)
             {
@@ -173,6 +163,7 @@ namespace Gamepackage
                 return effectsAggregate.FindAll(filter);
             }
         }
+
         public static void RemoveEntityEffects(Entity entity, Effect effectThatShouldExpire)
         {
             RemoveEntityEffects(entity, new List<Effect>() { effectThatShouldExpire });
@@ -181,37 +172,28 @@ namespace Gamepackage
         public static void RemoveEntityEffects(Entity entity, List<Effect> effectsThatShouldExpire)
         {
             // Note that we never remove attack specific effects
-            if (entity.Trigger != null && entity.Trigger.Effect != null && effectsThatShouldExpire.Contains(entity.Trigger.Effect))
+            if (entity.Trigger != null && entity.Trigger.Effects.Count > 0)
             {
-                entity.Trigger.Effect = null;
+                entity.Trigger.Effects.RemoveAll(entity, (eff) => { return effectsThatShouldExpire.Contains(eff); });
             }
 
             foreach (var pair in entity.Inventory.EquippedItemBySlot)
             {
                 var item = pair.Value;
-                item.Effects.RemoveAll((eff) => { return effectsThatShouldExpire.Contains(eff); });
+                item.Effects.RemoveAll(entity, (eff) => { return effectsThatShouldExpire.Contains(eff); });
             }
 
             foreach (var item in entity.Inventory.Items)
             {
                 if (item != null)
                 {
-                    item.Effects.RemoveAll((eff) => { return effectsThatShouldExpire.Contains(eff); });
+                    item.Effects.RemoveAll(entity, (eff) => { return effectsThatShouldExpire.Contains(eff); });
                 }
             }
 
             if (entity.Body != null)
             {
-                entity.Body.Effects.RemoveAll((eff) => { return effectsThatShouldExpire.Contains(eff); });
-            }
-
-            foreach (var effect in effectsThatShouldExpire)
-            {
-                if (effect.RemovalText != null && effect.RemovalText != "")
-                {
-                    Context.UIController.TextLog.AddText(effect.RemovalText);
-                }
-                effect.OnRemove(entity);
+                entity.Body.Effects.RemoveAll(entity, (eff) => { return effectsThatShouldExpire.Contains(eff); });
             }
         }
 
@@ -249,7 +231,7 @@ namespace Gamepackage
             {
                 if (item != null)
                 {
-                    foreach (var effect in item.Effects)
+                    foreach (var effect in item.Effects.Values)
                     {
                         if (effect.EffectApplicationTrigger == EffectTriggerType.OnDamageWouldKill)
                         {
@@ -276,21 +258,22 @@ namespace Gamepackage
             }
         }
 
-        public static bool PerformTriggerStepAbilityIfSteppedOn(Entity Source, Entity potentialTrigger, List<Point> points)
+        public static void PerformTriggerStepAbilityIfSteppedOn(Entity Source, Entity potentialTrigger, List<Point> points)
         {
             if (points.Contains(Source.Position))
             {
-                var ability = potentialTrigger.Trigger.Effect;
-                var attack = new EntityStateChange();
-                attack.Source = potentialTrigger;
-                attack.Targets.Add(Source);
-                if (potentialTrigger.Trigger.Effect.CanTrigger(attack))
+                var abilities = potentialTrigger.Trigger.Effects;
+                foreach(var effect in abilities.Values)
                 {
-                    ability.Trigger(attack);
-                    return true;
+                    var attack = new EntityStateChange();
+                    attack.Source = potentialTrigger;
+                    attack.Targets.Add(Source);
+                    if (effect.CanTrigger(attack))
+                    {
+                        effect.Trigger(attack);
+                    }
                 }
             }
-            return false;
         }
 
         public static void ConsumeItemCharges(Entity owner, Item item, int NumberConsumed = 1)

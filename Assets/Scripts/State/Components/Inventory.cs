@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
@@ -8,6 +9,14 @@ namespace Gamepackage
     {
         public List<Item> Items = new List<Item>();
         public Dictionary<ItemSlot, Item> EquippedItemBySlot = new Dictionary<ItemSlot, Item>();
+
+        [JsonIgnore]
+        public Entity Entity;
+
+        public virtual void Rewire(Entity entity)
+        {
+            Entity = entity;
+        }
 
         public void EquipItem(Item item)
         {
@@ -136,6 +145,13 @@ namespace Gamepackage
             }
             RemoveItemStack(item);
             EquippedItemBySlot[slot] = item;
+            if (Entity != null)
+            {
+                foreach (var effect in item.Effects.Values)
+                {
+                    effect.OnApply(Entity);
+                }
+            }
         }
 
         public void UnequipItemInSlot(ItemSlot slot, int IndexToMoveTo = -1)
@@ -145,6 +161,13 @@ namespace Gamepackage
             {
                 EquippedItemBySlot.Remove(slot);
                 AddItem(item, IndexToMoveTo);
+                if (Entity != null)
+                {
+                    foreach (var effect in item.Effects.Values)
+                    {
+                        effect.OnRemove(Entity);
+                    }
+                }
             }
         }
 

@@ -30,7 +30,7 @@ namespace Gamepackage
             {
                 if(entity.View != null)
                 {
-                    entity.View.ViewGameObject = Context.PrototypeFactory.BuildView(entity);
+                    Context.PrototypeFactory.BuildView(entity);
                 }
             }
             var player = Context.GameStateManager.Game.CurrentLevel.Player;

@@ -88,6 +88,10 @@ namespace Gamepackage
             {
                 Body.Rewire(this);
             }
+            if (Inventory != null)
+            {
+                Inventory.Rewire(this);
+            }
             if (View != null)
             {
                 View.Rewire(this);

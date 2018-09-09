@@ -42,12 +42,13 @@ namespace Gamepackage
              return EncounterFactory.Build(identifier);
         }
 
-        public GameObject BuildView(Entity entity)
+        public void BuildView(Entity entity)
         {
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var go = new GameObject();
             go.name = entity.PrototypeIdentifier.ToString();
             go.transform.position = MathUtil.MapToWorld(entity.Position);
+            entity.View.ViewGameObject = go;
 
             if(entity.IsCombatant && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
             {
@@ -110,7 +111,18 @@ namespace Gamepackage
                     spriteRenderer.material = defaultMaterial;
                 }
             }
-            return go;
+
+            if (entity.IsCombatant)
+            {
+                foreach (var pair in entity.Inventory.EquippedItemBySlot)
+                {
+                    var item = pair.Value;
+                    foreach (var effect in item.Effects.Values)
+                    {
+                        effect.ApplyPersistentVisualEffects(entity);
+                    }
+                }
+            }
         }
 
         public void BuildMapTiles(Level level)

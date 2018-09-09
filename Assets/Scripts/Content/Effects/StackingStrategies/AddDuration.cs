@@ -17,7 +17,7 @@
 
             if(matchingEffects.Count ==  0)
             {
-                entity.Body.Effects.Add(newEffect);
+                entity.Body.Effects.Add(entity, newEffect);
                 return;
             }
             if(matchingEffects.Count == 1)

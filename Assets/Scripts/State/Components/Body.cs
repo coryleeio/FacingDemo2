@@ -6,7 +6,7 @@ namespace Gamepackage
     {
         public int CurrentHealth;
         public Dictionary<Attributes, int> Attributes = new Dictionary<Attributes, int>(0);
-        public List<Effect> Effects = new List<Effect>();
+        public EffectList Effects = new EffectList();
         public bool IsDead = false;
         public int DeadForTurns = 0;
         public List<ItemSlot> UsableItemSlots = new List<ItemSlot>(0);

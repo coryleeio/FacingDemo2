@@ -125,10 +125,9 @@ namespace Gamepackage
                 };
                 entity.Trigger = new Trigger()
                 {
-                    // params filled out by dungeon generator
-                    Effect = new TraverseStaircase(),
                     Offsets = new List<Point>() { new Point(0,0) }
                 };
+                entity.Trigger.Effects.Add(entity, new TraverseStaircase());
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN)
             {
@@ -142,25 +141,9 @@ namespace Gamepackage
                 entity.Trigger = new Trigger()
                 {
                     // params filled out by dungeon generator
-                    Effect = new TraverseStaircase(),
                     Offsets = new List<Point>() { new Point(0, 0) }
                 };
-            }
-            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN)
-            {
-                entity.Name = "Stairs (Down)";
-                entity.BlocksPathing = false;
-                entity.View = new View()
-                {
-                    ViewType = ViewType.StaticSprite,
-                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_STAIRCASE_DOWN,
-                };
-                entity.Trigger = new Trigger()
-                {
-                    // params filled out by dungeon generator
-                    Effect = new TraverseStaircase(),
-                    Offsets = new List<Point>() { new Point(0, 0) }
-                };
+                entity.Trigger.Effects.Add(entity, new TraverseStaircase());
             }
             else
             {

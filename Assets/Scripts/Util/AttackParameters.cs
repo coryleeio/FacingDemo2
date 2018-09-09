@@ -8,7 +8,7 @@ namespace Gamepackage
         public int DyeNumber;
         public int Bonus;
         public DamageTypes DamageType;
-        public List<Effect> AttackSpecificEffects = new List<Effect>();
+        public EffectList AttackSpecificEffects = new EffectList();
         public string AttackMessage = null;
 
         public AttackParameters() { }

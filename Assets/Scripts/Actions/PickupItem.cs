@@ -42,7 +42,7 @@ namespace Gamepackage
             if(target.View.ViewGameObject != null)
             {
                 UnityEngine.GameObject.Destroy(target.View.ViewGameObject);
-                target.View.ViewGameObject = Context.PrototypeFactory.BuildView(target);
+                Context.PrototypeFactory.BuildView(target);
             }
             if(Index == -1)
             {

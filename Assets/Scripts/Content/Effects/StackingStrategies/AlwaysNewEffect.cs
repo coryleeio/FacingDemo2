@@ -5,7 +5,7 @@
     {
         public void Stack(Entity entity, Effect effect)
         {
-            entity.Body.Effects.Add(effect);
+            entity.Body.Effects.Add(entity, effect);
         }
     }
 }

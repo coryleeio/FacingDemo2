@@ -34,7 +34,7 @@
         public override EntityStateChange Trigger(EntityStateChange ctx)
         {
             var target = ctx.Targets[0];
-            target.Body.Effects.Add(this);
+            target.Body.Effects.Add(target, this);
             return ctx;
         }
 
