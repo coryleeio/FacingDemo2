@@ -228,7 +228,6 @@ namespace Gamepackage
                     }
                 }
             }
-            Debug.Log("FinishedApplying effects...");
         }
 
         private static void HandleModifyIncomingAttack(EntityStateChange result)
