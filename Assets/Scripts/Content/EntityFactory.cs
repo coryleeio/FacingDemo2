@@ -127,7 +127,7 @@ namespace Gamepackage
                 {
                     Offsets = new List<Point>() { new Point(0,0) }
                 };
-                entity.Trigger.Effects.Add(entity, new TraverseStaircase());
+                entity.Trigger.Effects.Add(entity, EffectFactory.Build(UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN)
             {
@@ -143,7 +143,7 @@ namespace Gamepackage
                     // params filled out by dungeon generator
                     Offsets = new List<Point>() { new Point(0, 0) }
                 };
-                entity.Trigger.Effects.Add(entity, new TraverseStaircase());
+                entity.Trigger.Effects.Add(entity, EffectFactory.Build(UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE));
             }
             else
             {

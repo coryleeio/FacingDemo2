@@ -58,7 +58,7 @@
                     StackingStrategy = new AddDuration(),
                     Ticker = new Ticker()
                     {
-                        TurnsRemaining = 3
+                        TurnsRemaining = 10
                     }
                 };
             }

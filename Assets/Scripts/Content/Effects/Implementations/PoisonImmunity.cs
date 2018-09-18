@@ -32,7 +32,6 @@
             var effectsToRemove = CombatUtil.GetEntityEffectsByType(owner, (effectInQuestion) => { return effectInQuestion is Poison; });
             CombatUtil.RemoveEntityEffects(owner, effectsToRemove);
             Context.UIController.TextLog.AddText(string.Format("Your body is cleansed of all toxins", owner.Name));
-            owner.Body.Effects.Add(owner, this);
         }
     }
 }
