@@ -21,6 +21,7 @@ namespace Gamepackage
             item.ExactNumberOfChargesRemaining = 0;
             item.HasUnlimitedCharges = false;
             item.DestroyWhenAllChargesAreConsumed = false;
+            item.IsUsable = false;
         }
 
         public static Item Build(UniqueIdentifier uniqueIdentifier)
@@ -54,7 +55,8 @@ namespace Gamepackage
                 item.OnUseText = "You quaff a potion";
                 item.ExactNumberOfChargesRemaining = 1;
                 item.DestroyWhenAllChargesAreConsumed = true;
-                item.Effects.Add(null, EffectFactory.Build(UniqueIdentifier.EFFECT_CURE_POISON));
+                item.Effects.Add(null, EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY));
+                item.IsUsable = true;
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_LUCKY_COIN)
             {

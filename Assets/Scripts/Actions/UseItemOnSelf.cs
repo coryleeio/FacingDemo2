@@ -30,7 +30,7 @@ namespace Gamepackage
             stateChange.Source = Source;
             stateChange.Targets.Add(Targets[0]);
             Assert.IsTrue(Source == Targets[0]);
-            stateChange.AppliedEffects.AddRange(Item.Effects.FindAll((effectInQuestion) => { return effectInQuestion.EffectApplicationTrigger == EffectTriggerType.OnUseSelf; }));
+            stateChange.AppliedEffects.AddRange(Item.Effects.Values);
 
             if(Item.OnUseText != null)
             {

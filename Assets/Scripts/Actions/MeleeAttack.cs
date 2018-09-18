@@ -33,28 +33,26 @@ namespace Gamepackage
                 throw new NotImplementedException("You don't have any attacks, but are trying to attack anyway?");
             }
 
-            AttackParameters attackParameters = null;
-            List<Effect> onHitEffects = new List<Effect>();
-            if(CombatUtil.HasWeapon(Source))
-            {
-                var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
-                attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
-                onHitEffects.AddRange(weapon.Effects.FindAll((possibleAbilities) => { return possibleAbilities.EffectApplicationTrigger == EffectTriggerType.OnHit; }));
-                onHitEffects.AddRange(attackParameters.AttackSpecificEffects.Values);
-            }
-            else
-            {
-                attackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
-                onHitEffects.AddRange(Source.Body.Effects.FindAll((possibleAbilities) => { return possibleAbilities.EffectApplicationTrigger == EffectTriggerType.OnHit; }));
-                onHitEffects.AddRange(attackParameters.AttackSpecificEffects.Values);
-            }
-
             foreach(var target in Targets)
             {
                 var attack = new EntityStateChange();
                 attack.Source = Source;
                 attack.Targets.Add(target);
-                attack.AttackParameters = attackParameters;
+                List<Effect> onHitEffects = new List<Effect>();
+
+                if (CombatUtil.HasWeapon(Source))
+                {
+                    var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
+                    attack.AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
+                    onHitEffects.AddRange(weapon.Effects.Values);
+                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.Values);
+                }
+                else
+                {
+                    attack.AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
+                    onHitEffects.AddRange(Source.Body.Effects.Values);
+                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.Values);
+                }
                 attack.AppliedEffects.AddRange(onHitEffects);
                 CombatUtil.ApplyEntityStateChange(attack);
             }

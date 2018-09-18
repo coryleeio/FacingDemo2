@@ -19,6 +19,7 @@ namespace Gamepackage
         public List<AttackParameters> AttackParameters;
         public List<AttackParameters> ThrowParameters;
         public string OnUseText;
+        public bool IsUsable;
 
         public bool HasCharges
         {
@@ -85,13 +86,5 @@ namespace Gamepackage
             return UniqueIdentifier == other.UniqueIdentifier && (NumberOfItems + other.NumberOfItems < MaxStackSize);
         }
 
-        public bool IsUsable
-        {
-            get
-            {
-                var onUseEffects = Effects.FindAll((foundEffect) => { return foundEffect.EffectApplicationTrigger == EffectTriggerType.OnUseSelf; });
-                return onUseEffects.Count > 0;
-            }
-        }
     }
 }

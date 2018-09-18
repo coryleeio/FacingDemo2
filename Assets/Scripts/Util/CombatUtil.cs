@@ -50,12 +50,7 @@ namespace Gamepackage
                     result.Damage = damage;
                 }
 
-                var damageIsLethal = target.Body.CurrentHealth - damage <= 0;
-
-                if (damageIsLethal)
-                {
-                    HandleDamageIsLethal(result);
-                }
+                HandleModifyIncomingAttack(result);
 
                 var sourceName = "";
                 if (result.Source != null)
@@ -210,43 +205,47 @@ namespace Gamepackage
         {
             if (!ctx.WasShortCircuited)
             {
-                foreach (var ability in ctx.AppliedEffects)
+                foreach (var effect in ctx.AppliedEffects)
                 {
-                    if (ability.CanTrigger(ctx))
+                    if(effect is ItemEffect)
                     {
-                        ability.Trigger(ctx);
+                        var appliedEffect = (ItemEffect) effect;
+                        if(appliedEffect.CanApply(ctx))
+                        {
+                            appliedEffect.Apply(ctx);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException("Your items applied effect did not receive a target");
+                        }
+                    }
+                    else
+                    {
+                        foreach (var target in ctx.Targets)
+                        {
+                            effect.StackingStrategy.StackEffectOnEntity(target, effect);
+                        }
                     }
                 }
             }
         }
 
-        private static void HandleDamageIsLethal(EntityStateChange result)
+        private static void HandleModifyIncomingAttack(EntityStateChange result)
         {
             foreach (var target in result.Targets)
             {
                 var itemsCopy = new List<Item>();
                 itemsCopy.AddRange(target.Inventory.Items);
-                HandleLethalDamageCallbacksForListOfItems(result, itemsCopy);
-
-                var equipmentCopy = new List<Item>();
-                equipmentCopy.AddRange(target.Inventory.EquippedItemBySlot.Values);
-                HandleLethalDamageCallbacksForListOfItems(result, equipmentCopy);
-            }
-        }
-
-        private static void HandleLethalDamageCallbacksForListOfItems(EntityStateChange result, List<Item> itemsCopy)
-        {
-            foreach (var item in itemsCopy)
-            {
-                if (item != null)
+                itemsCopy.AddRange(target.Inventory.EquippedItemBySlot.Values);
+                foreach (var item in itemsCopy)
                 {
-                    foreach (var effect in item.Effects.Values)
+                    if (item != null)
                     {
-                        if (effect.EffectApplicationTrigger == EffectTriggerType.OnDamageWouldKill)
+                        foreach (var effect in item.Effects.Values)
                         {
-                            if (effect.CanTrigger(result))
+                            if (effect.CanAffectIncomingAttack(result))
                             {
-                                effect.Trigger(result);
+                                effect.AffectIncomingAttack(result);
                             }
                         }
                     }
@@ -277,10 +276,7 @@ namespace Gamepackage
                     var attack = new EntityStateChange();
                     attack.Source = potentialTrigger;
                     attack.Targets.Add(Source);
-                    if (effect.CanTrigger(attack))
-                    {
-                        effect.Trigger(attack);
-                    }
+                    effect.TriggerOnStep(attack);
                 }
             }
         }

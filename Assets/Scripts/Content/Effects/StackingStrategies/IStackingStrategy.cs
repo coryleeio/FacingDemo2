@@ -2,6 +2,6 @@
 {
     public interface IStackingStrategy
     {
-        void Stack(Entity entity, Effect effect);
+        void StackEffectOnEntity(Entity entity, Effect effect);
     }
 }

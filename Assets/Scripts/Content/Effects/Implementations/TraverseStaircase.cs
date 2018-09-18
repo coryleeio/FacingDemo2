@@ -22,22 +22,11 @@ namespace Gamepackage
             }
         }
 
-        [JsonIgnore]
-        public EntityStateChange AbilityTriggerContext;
-
         public enum Params
         {
             TARGET_POSX,
             TARGET_POSY,
             TARGET_LEVEL_ID,
-        }
-
-        public override EffectTriggerType EffectApplicationTrigger
-        {
-            get
-            {
-                return EffectTriggerType.OnStep;
-            }
         }
 
         public override string RemovalText
@@ -48,15 +37,32 @@ namespace Gamepackage
             }
         }
 
-        public override EntityStateChange Trigger(EntityStateChange abilityTriggerContext)
+        public override bool CanTriggerOnStep()
         {
-            AbilityTriggerContext = abilityTriggerContext;
-            var Parameters = AbilityTriggerContext.Source.Trigger.TriggerParameters;
+            return true;
+        }
+
+        public override EntityStateChange TriggerOnStep(EntityStateChange ctx)
+        {
+            var foundPlayer = false;
+            foreach (var target in ctx.Targets)
+            {
+                if (target.IsPlayer)
+                {
+                    foundPlayer = true;
+                }
+            }
+            if(!foundPlayer)
+            {
+                return ctx;
+            }
+
+            var Parameters = ctx.Source.Trigger.TriggerParameters;
             var levelId = Convert.ToInt32(Parameters[Params.TARGET_LEVEL_ID.ToString()]);
             var posX = Convert.ToInt32(Parameters[Params.TARGET_POSX.ToString()]);
             var posY = Convert.ToInt32(Parameters[Params.TARGET_POSY.ToString()]);
             var targetIncludesPlayer = false;
-            foreach (var target in AbilityTriggerContext.Targets)
+            foreach (var target in ctx.Targets)
             {
                 if (target.IsPlayer)
                 {
@@ -71,13 +77,13 @@ namespace Gamepackage
                     if (entityInLevel.Behaviour != null && entityInLevel.Behaviour.Team == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
                     {
                         // Add player followers to list of targets
-                        AbilityTriggerContext.Targets.Add(entityInLevel);
+                        ctx.Targets.Add(entityInLevel);
                     }
                 }
                 Context.GameStateManager.Game.CurrentLevel.UnindexAll();
             }
 
-            foreach (var target in AbilityTriggerContext.Targets)
+            foreach (var target in ctx.Targets)
             {
                 target.Behaviour.NextAction = null;
                 Context.FlowSystem.Steps.First.Value.Actions.Clear();
@@ -106,19 +112,7 @@ namespace Gamepackage
                 }
                 Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             }
-            return abilityTriggerContext;
-        }
-
-        public override bool CanTrigger(EntityStateChange ctx)
-        {
-            foreach (var target in ctx.Targets)
-            {
-                if (target.IsPlayer)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return ctx;
         }
     }
 }

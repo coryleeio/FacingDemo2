@@ -20,14 +20,6 @@ namespace Gamepackage
             }
         }
 
-        public override EffectTriggerType EffectApplicationTrigger
-        {
-            get
-            {
-                return EffectTriggerType.OnDamageWouldKill;
-            }
-        }
-
         public override string RemovalText
         {
             get
@@ -36,9 +28,9 @@ namespace Gamepackage
             }
         }
 
-        public override bool CanTrigger(EntityStateChange ctx)
+        public override bool CanAffectIncomingAttack(EntityStateChange ctx)
         {
-            if(ctx.Targets.Count > 1)
+            if (ctx.Targets.Count > 1)
             {
                 return false;
             }
@@ -47,10 +39,11 @@ namespace Gamepackage
             return item != null;
         }
 
-        public override EntityStateChange Trigger(EntityStateChange ctx)
+        public override EntityStateChange AffectIncomingAttack(EntityStateChange ctx)
         {
             var target = ctx.Targets[0];
-            if (MathUtil.ChanceToOccur(50))
+            var isLethal = target.Body.CurrentHealth - ctx.Damage <= 0;
+            if (isLethal && MathUtil.ChanceToOccur(50))
             {
                 var item = target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
                 ctx.Damage = 0;
@@ -62,5 +55,6 @@ namespace Gamepackage
             }
             return ctx;
         }
+
     }
 }

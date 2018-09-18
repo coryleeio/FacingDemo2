@@ -15,11 +15,20 @@
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON)
             {
-                retVal = new AppliedEffect()
+                retVal = new ItemEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_WEAK_POISON,
                     AppliedDisplayName = "Applied weak poison",
-                    AppliedDisplayDescription = "The business end of this is coated in poison..."
+                    AppliedDisplayDescription = "The business end of this is coated in poison...",
+                };
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY)
+            {
+                retVal = new ItemEffect()
+                {
+                    EffectAppliedId = UniqueIdentifier.EFFECT_POISON_IMMUNITY,
+                    AppliedDisplayName = "Applied poison immunity",
+                    AppliedDisplayDescription = "This makes you immune to poison...",
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_WEAK_POISON)
@@ -42,9 +51,16 @@
                     }
                 };
             }
-            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_CURE_POISON)
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_POISON_IMMUNITY)
             {
-                retVal = new CurePoison();
+                retVal = new PoisonImmunity()
+                {
+                    StackingStrategy = new AddDuration(),
+                    Ticker = new Ticker()
+                    {
+                        TurnsRemaining = 3
+                    }
+                };
             }
 
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE)

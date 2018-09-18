@@ -18,26 +18,6 @@
             }
         }
 
-        public override EffectTriggerType EffectApplicationTrigger
-        {
-            get
-            {
-                return EffectTriggerType.OnTick;
-            }
-        }
-
-        public override bool CanTrigger(EntityStateChange ctx)
-        {
-            return ctx.Targets.Count == 1;
-        }
-
-        public override EntityStateChange Trigger(EntityStateChange ctx)
-        {
-            var target = ctx.Targets[0];
-            target.Body.Effects.Add(target, this);
-            return ctx;
-        }
-
         public virtual int PoisonAmount
         {
             get
