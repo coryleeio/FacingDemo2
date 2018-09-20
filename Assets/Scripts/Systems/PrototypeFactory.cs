@@ -117,7 +117,7 @@ namespace Gamepackage
                 foreach (var pair in entity.Inventory.EquippedItemBySlot)
                 {
                     var item = pair.Value;
-                    foreach (var effect in item.Effects.Values)
+                    foreach (var effect in item.Effects.AllValues)
                     {
                         effect.ApplyPersistentVisualEffects(entity);
                     }

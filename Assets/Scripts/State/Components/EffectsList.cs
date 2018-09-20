@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Gamepackage
@@ -20,11 +19,20 @@ namespace Gamepackage
         }
 
         [JsonIgnore]
-        public List<Effect> Values
+        public List<Effect> AllValues
         {
             get
             {
                 return InternalList;
+            }
+        }
+
+        [JsonIgnore]
+        public List<Effect> AppliedEffects
+        {
+            get
+            {
+                return InternalList.FindAll((effectInQuestion) => { return effectInQuestion is AppliedEffect; });
             }
         }
 

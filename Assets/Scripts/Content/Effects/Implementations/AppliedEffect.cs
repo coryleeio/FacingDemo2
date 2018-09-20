@@ -1,6 +1,6 @@
 ﻿namespace Gamepackage
 {
-    public class ItemEffect : Effect
+    public class AppliedEffect : Effect
     {
         public UniqueIdentifier EffectAppliedId;
         public string AppliedDisplayName;

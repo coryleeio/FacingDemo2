@@ -33,5 +33,10 @@
             CombatUtil.RemoveEntityEffects(owner, effectsToRemove);
             Context.UIController.TextLog.AddText(string.Format("Your body is cleansed of all toxins", owner.Name));
         }
+
+        public override void HandleStacking(Entity entity)
+        {
+            StackingStrategies.AddDuration(entity, this);
+        }
     }
 }

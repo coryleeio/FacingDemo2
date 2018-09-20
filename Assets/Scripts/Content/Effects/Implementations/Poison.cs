@@ -18,13 +18,7 @@
             }
         }
 
-        public virtual int PoisonAmount
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public int PoisonAmount;
 
         public override string RemovalText
         {
@@ -50,6 +44,11 @@
             };
             ctx.Targets.Add(entity);
             CombatUtil.ApplyEntityStateChange(ctx);
+        }
+
+        public override void HandleStacking(Entity entity)
+        {
+            StackingStrategies.AddDuration(entity, this);
         }
     }
 }

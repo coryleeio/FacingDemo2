@@ -13,8 +13,14 @@ namespace Gamepackage
             get;
         }
 
+        public UniqueIdentifier Identifier; 
+
+        public virtual void HandleStacking(Entity entity)
+        {
+            StackingStrategies.AddDuplicate(entity, this);
+        }
+
         public Ticker Ticker;
-        public IStackingStrategy StackingStrategy;
 
         [JsonIgnore]
         public bool CanTick

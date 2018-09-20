@@ -147,7 +147,7 @@ namespace Gamepackage
             EquippedItemBySlot[slot] = item;
             if (Entity != null)
             {
-                foreach (var effect in item.Effects.Values)
+                foreach (var effect in item.Effects.AllValues)
                 {
                     effect.OnApply(Entity);
                 }
@@ -163,7 +163,7 @@ namespace Gamepackage
                 AddItem(item, IndexToMoveTo);
                 if (Entity != null)
                 {
-                    foreach (var effect in item.Effects.Values)
+                    foreach (var effect in item.Effects.AllValues)
                     {
                         effect.OnRemove(Entity);
                     }

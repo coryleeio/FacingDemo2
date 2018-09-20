@@ -44,14 +44,14 @@ namespace Gamepackage
                 {
                     var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
                     attack.AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
-                    onHitEffects.AddRange(weapon.Effects.Values);
-                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.Values);
+                    onHitEffects.AddRange(weapon.Effects.AppliedEffects);
+                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.AppliedEffects);
                 }
                 else
                 {
                     attack.AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
-                    onHitEffects.AddRange(Source.Body.Effects.Values);
-                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.Values);
+                    onHitEffects.AddRange(Source.Body.Effects.AppliedEffects);
+                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.AppliedEffects);
                 }
                 attack.AppliedEffects.AddRange(onHitEffects);
                 CombatUtil.ApplyEntityStateChange(attack);

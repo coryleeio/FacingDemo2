@@ -15,7 +15,7 @@
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON)
             {
-                retVal = new ItemEffect()
+                retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_WEAK_POISON,
                     AppliedDisplayName = "Applied weak poison",
@@ -24,7 +24,7 @@
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY)
             {
-                retVal = new ItemEffect()
+                retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_POISON_IMMUNITY,
                     AppliedDisplayName = "Applied poison immunity",
@@ -33,8 +33,9 @@
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_WEAK_POISON)
             {
-                retVal = new WeakPoison()
+                retVal = new Poison()
                 {
+                    PoisonAmount = 1,
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3
@@ -43,8 +44,9 @@
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_STRONG_POISON)
             {
-                retVal = new StrongPoison()
+                retVal = new Poison()
                 {
+                    PoisonAmount = 3,
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3
@@ -55,7 +57,6 @@
             {
                 retVal = new PoisonImmunity()
                 {
-                    StackingStrategy = new AddDuration(),
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 10
@@ -68,15 +69,11 @@
                 retVal = new LuckyCoinLifeSave();
             }
 
-            if(retVal.StackingStrategy == null)
-            {
-                retVal.StackingStrategy = new AlwaysNewEffect();
-            }
-
             if(retVal == null)
             {
                 throw new NotImplementedException();
             }
+            retVal.Identifier = uniqueIdentifier;
             return retVal;
         }
     }

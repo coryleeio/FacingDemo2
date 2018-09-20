@@ -97,7 +97,7 @@ namespace Gamepackage
                     foreach (var pair in target.Inventory.EquippedItemBySlot)
                     {
                         var item = pair.Value;
-                        foreach (var effect in item.Effects.Values)
+                        foreach (var effect in item.Effects.AllValues)
                         {
                             effect.RemovePersistantVisualEffects(target);
                         }
@@ -137,26 +137,26 @@ namespace Gamepackage
             var effectsAggregate = new List<Effect>();
             if (entity.Trigger != null && entity.Trigger.Effects.Count > 0)
             {
-                effectsAggregate.AddRange(entity.Trigger.Effects.Values);
+                effectsAggregate.AddRange(entity.Trigger.Effects.AllValues);
             }
 
             foreach (var pair in entity.Inventory.EquippedItemBySlot)
             {
                 var item = pair.Value;
-                effectsAggregate.AddRange(item.Effects.Values);
+                effectsAggregate.AddRange(item.Effects.AllValues);
             }
 
             foreach (var item in entity.Inventory.Items)
             {
                 if (item != null)
                 {
-                    effectsAggregate.AddRange(item.Effects.Values);
+                    effectsAggregate.AddRange(item.Effects.AllValues);
                 }
             }
 
             if (entity.Body != null)
             {
-                effectsAggregate.AddRange(entity.Body.Effects.Values);
+                effectsAggregate.AddRange(entity.Body.Effects.AllValues);
             }
             if (filter == null)
             {
@@ -207,9 +207,9 @@ namespace Gamepackage
             {
                 foreach (var effect in ctx.AppliedEffects)
                 {
-                    if(effect is ItemEffect)
+                    if(effect is AppliedEffect)
                     {
-                        var appliedEffect = (ItemEffect) effect;
+                        var appliedEffect = (AppliedEffect) effect;
                         if(appliedEffect.CanApply(ctx))
                         {
                             appliedEffect.Apply(ctx);
@@ -223,7 +223,7 @@ namespace Gamepackage
                     {
                         foreach (var target in ctx.Targets)
                         {
-                            effect.StackingStrategy.StackEffectOnEntity(target, effect);
+                            effect.HandleStacking(target);
                         }
                     }
                 }
@@ -241,7 +241,7 @@ namespace Gamepackage
                 {
                     if (item != null)
                     {
-                        foreach (var effect in item.Effects.Values)
+                        foreach (var effect in item.Effects.AllValues)
                         {
                             if (effect.CanAffectIncomingAttack(result))
                             {
@@ -271,7 +271,7 @@ namespace Gamepackage
             if (points.Contains(Source.Position))
             {
                 var abilities = potentialTrigger.Trigger.Effects;
-                foreach(var effect in abilities.Values)
+                foreach(var effect in abilities.AllValues)
                 {
                     var attack = new EntityStateChange();
                     attack.Source = potentialTrigger;

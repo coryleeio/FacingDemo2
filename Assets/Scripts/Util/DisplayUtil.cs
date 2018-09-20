@@ -160,7 +160,7 @@ namespace Gamepackage
         public static List<string> GetDisplayAbilitiesForItem(Item item)
         {
             var retVal = new List<string>();
-            foreach (var ability in item.Effects.Values)
+            foreach (var ability in item.Effects.AllValues)
             {
                 retVal.Add(string.Format("{0} - {1}", ability.DisplayName, ability.Description));
             }
