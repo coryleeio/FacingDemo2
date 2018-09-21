@@ -11,10 +11,10 @@ namespace Gamepackage
             var entity = new Entity();
             entity.PrototypeIdentifier = uniqueIdentifier;
             entity.Inventory = new Inventory();
-            
+
             // Ensure correct default size - doing this in Inventory causes
             // serialization issues
-            for(var i =0; i < 68; i++)
+            for (var i = 0; i < 68; i++)
             {
                 entity.Inventory.Items.Add(null);
             }
@@ -125,9 +125,9 @@ namespace Gamepackage
                 };
                 entity.Trigger = new Trigger()
                 {
-                    Offsets = new List<Point>() { new Point(0,0) }
+                    Offsets = new List<Point>() { new Point(0, 0) }
                 };
-                entity.Trigger.Effects.Add(entity, EffectFactory.Build(UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE));
+                entity.Trigger.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN)
             {
@@ -143,14 +143,14 @@ namespace Gamepackage
                     // params filled out by dungeon generator
                     Offsets = new List<Point>() { new Point(0, 0) }
                 };
-                entity.Trigger.Effects.Add(entity, EffectFactory.Build(UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE));
+                entity.Trigger.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE));
             }
             else
             {
                 throw new NotImplementedException();
             }
 
-            if(entity.Body != null)
+            if (entity.Body != null)
             {
                 Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.MAX_HEALTH), "Entities must have a value for maximum health if they have a body.");
                 entity.Body.Entity = entity; // Needed for the recursive calculation.
@@ -191,17 +191,21 @@ namespace Gamepackage
 
         private static List<AttackParameters> DefaultBeeBodyAttacks()
         {
+            var effectList = new List<Effect>();
+            effectList.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON));
+            var attackParameters = new AttackParameters()
+            {
+                AttackMessage = "{0} strings {1} for {2} points of {3} damage!",
+                Bonus = 0,
+                DyeNumber = 1,
+                DyeSize = 1,
+                DamageType = DamageTypes.PIERCING,
+                AttackSpecificEffects = effectList,
+            };
             return new List<AttackParameters>()
-                    {
-                        new AttackParameters()
-                        {
-                            AttackMessage = "{0} strings {1} for {2} points of {3} damage!",
-                            Bonus = 0,
-                            DyeNumber = 1,
-                            DyeSize = 1,
-                            DamageType = DamageTypes.PIERCING,
-                        },
-                    };
+            {
+                attackParameters,
+            };
         }
     }
 }

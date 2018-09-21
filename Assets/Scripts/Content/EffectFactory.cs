@@ -22,6 +22,15 @@
                     AppliedDisplayDescription = "The business end of this is coated in poison...",
                 };
             }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON)
+            {
+                retVal = new AppliedEffect()
+                {
+                    EffectAppliedId = UniqueIdentifier.EFFECT_STRONG_POISON,
+                    AppliedDisplayName = "Applied strong poison",
+                    AppliedDisplayDescription = "The business end of this is coated in a viscous poison...",
+                };
+            }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY)
             {
                 retVal = new AppliedEffect()
@@ -59,7 +68,7 @@
                 {
                     Ticker = new Ticker()
                     {
-                        TurnsRemaining = 10
+                        TurnsRemaining = 500
                     }
                 };
             }

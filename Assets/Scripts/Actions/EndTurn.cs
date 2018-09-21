@@ -37,7 +37,8 @@ namespace Gamepackage
                     effectsThatShouldExpire.Add(tickingEffect);
                 }
             }
-            Source.RemoveEffects(effectsThatShouldExpire);
+            // You dont need to use a state change to do this removal, because nothing should be preventing a ticking effect from expiring
+            CombatUtil.RemoveEntityEffects(Source, effectsThatShouldExpire);
         }
     }
 }

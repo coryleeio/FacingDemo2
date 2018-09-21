@@ -17,6 +17,25 @@ namespace Gamepackage
             return a.Position.IsAdjacentTo(b.Position) && a.Position.IsOrthogonalTo(b.Position);
         }
 
+        public static void ShowMessages(EntityStateChange result)
+        {
+            foreach(var target in result.Targets)
+            {
+                foreach (var msg in result.LogMessages)
+                {
+                    Context.UIController.TextLog.AddText(msg);
+                }
+                foreach (var msg in result.LateMessages)
+                {
+                    Context.UIController.TextLog.AddText(msg);
+                }
+                foreach (var msg in result.FloatingTextMessage)
+                {
+                    Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(target.Position));
+                }
+            }
+        }
+
         public static void ApplyEntityStateChange(EntityStateChange result)
         {
             Assert.IsNotNull(result.Targets);
@@ -61,74 +80,79 @@ namespace Gamepackage
 
                 if (result.WasShortCircuited)
                 {
-                    Context.UIController.TextLog.AddText(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
-                    if (result.ShortCircuitedMessage != null)
-                    {
-                        Context.UIController.TextLog.AddText(result.ShortCircuitedMessage);
-                    }
-
-                    if (result.ShortCircuitedFloatingText != null)
-                    {
-                        Context.UIController.FloatingCombatTextManager.ShowCombatText(result.ShortCircuitedFloatingText, result.ShortCircuitedFloatingTextColor, 35, MathUtil.MapToWorld(target.Position));
-                    }
-                    return; // do short circuit
+                    result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                 }
-                if (result.AttackParameters != null)
+                else
                 {
-                    Context.UIController.TextLog.AddText(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
-                    target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
-                    Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("{0}", damage), target.IsPlayer ? Color.red : Color.magenta, 35, MathUtil.MapToWorld(target.Position));
-                }
-
-                HandleAppliedEffects(result);
-
-                if (target.Body.CurrentHealth <= 0)
-                {
-                    Context.UIController.FloatingCombatTextManager.ShowCombatText(string.Format("Dead!", damage), Color.black, 35, MathUtil.MapToWorld(target.Position));
-                    Context.UIController.TextLog.AddText(string.Format("{0} has been slain!", targetName));
-                    target.Name = string.Format("( Corpse ) {0}", target.Name);
-                    target.Body.IsDead = true;
-                    target.Body.DeadForTurns = 0;
-                    Context.EntitySystem.MarkAsDead(target);
-                    target.Behaviour = null;
-                    var game = Context.GameStateManager.Game;
-                    var level = game.CurrentLevel;
-
-                    foreach (var pair in target.Inventory.EquippedItemBySlot)
+                    if (result.AttackParameters != null)
                     {
-                        var item = pair.Value;
-                        foreach (var effect in item.Effects.AllValues)
+                        result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                        target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
+                        result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                         {
-                            effect.RemovePersistantVisualEffects(target);
+                            Message = string.Format("{0}", damage),
+                            Color = target.IsPlayer ? Color.red : Color.magenta,
+                            target = target,
+                        });
+                    }
+
+                    HandleAppliedEffects(result);
+                    HandleRemovedEffects(result);
+
+                    if (target.Body.CurrentHealth <= 0)
+                    {
+                        result.FloatingTextMessage.AddLast(new FloatingTextMessage()
+                        {
+                            Message = string.Format("Dead!", damage),
+                            Color = Color.black,
+                            target = target,
+                        });
+                        result.LogMessages.AddLast(string.Format("{0} has been slain!", targetName));
+                        target.Name = string.Format("( Corpse ) {0}", target.Name);
+                        target.Body.IsDead = true;
+                        target.Body.DeadForTurns = 0;
+                        Context.EntitySystem.MarkAsDead(target);
+                        target.Behaviour = null;
+                        var game = Context.GameStateManager.Game;
+                        var level = game.CurrentLevel;
+
+                        foreach (var pair in target.Inventory.EquippedItemBySlot)
+                        {
+                            var item = pair.Value;
+                            foreach (var effect in item.Effects)
+                            {
+                                effect.RemovePersistantVisualEffects(target);
+                            }
+                        }
+
+                        if (target.BlocksPathing)
+                        {
+                            Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
+                            target.BlocksPathing = false;
+                        }
+
+                        if (target.View.ViewGameObject != null)
+                        {
+                            target.View.ViewGameObject.AddComponent<DeathAnimation>();
+                        }
+
+                        if (target.Inventory.HasAnyItems)
+                        {
+                            target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
+                            Context.PrototypeFactory.BuildView(target);
+                        }
+                        if (!target.IsPlayer)
+                        {
+                            game.MonstersKilled++;
                         }
                     }
 
-                    if (target.BlocksPathing)
+                    if (target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)
                     {
-                        Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
-                        target.BlocksPathing = false;
-                    }
-
-                    if (target.View.ViewGameObject != null)
-                    {
-                        target.View.ViewGameObject.AddComponent<DeathAnimation>();
-                    }
-
-                    if (target.Inventory.HasAnyItems)
-                    {
-                        target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
-                        Context.PrototypeFactory.BuildView(target);
-                    }
-                    if (!target.IsPlayer)
-                    {
-                        game.MonstersKilled++;
+                        Context.UIController.Refresh();
                     }
                 }
-
-                if (target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)
-                {
-                    Context.UIController.Refresh();
-                }
+                ShowMessages(result);
             }
         }
 
@@ -137,26 +161,26 @@ namespace Gamepackage
             var effectsAggregate = new List<Effect>();
             if (entity.Trigger != null && entity.Trigger.Effects.Count > 0)
             {
-                effectsAggregate.AddRange(entity.Trigger.Effects.AllValues);
+                effectsAggregate.AddRange(entity.Trigger.Effects);
             }
 
             foreach (var pair in entity.Inventory.EquippedItemBySlot)
             {
                 var item = pair.Value;
-                effectsAggregate.AddRange(item.Effects.AllValues);
+                effectsAggregate.AddRange(item.Effects);
             }
 
             foreach (var item in entity.Inventory.Items)
             {
                 if (item != null)
                 {
-                    effectsAggregate.AddRange(item.Effects.AllValues);
+                    effectsAggregate.AddRange(item.Effects);
                 }
             }
 
             if (entity.Body != null)
             {
-                effectsAggregate.AddRange(entity.Body.Effects.AllValues);
+                effectsAggregate.AddRange(entity.Body.Effects);
             }
             if (filter == null)
             {
@@ -168,49 +192,79 @@ namespace Gamepackage
             }
         }
 
-        public static void RemoveEntityEffects(Entity entity, Effect effectThatShouldExpire)
-        {
-            RemoveEntityEffects(entity, new List<Effect>() { effectThatShouldExpire });
-        }
-
         public static void RemoveEntityEffects(Entity entity, List<Effect> effectsThatShouldExpire)
         {
+            Predicate<Effect> IsAnAffectThatShouldExpire = (eff) => { return effectsThatShouldExpire.Contains(eff); };
+
             // Note that we never remove attack specific effects
             if (entity.Trigger != null && entity.Trigger.Effects.Count > 0)
             {
-                entity.Trigger.Effects.RemoveAll(entity, (eff) => { return effectsThatShouldExpire.Contains(eff); });
+                var expiring = entity.Trigger.Effects.FindAll(IsAnAffectThatShouldExpire);
+                foreach(var expire in expiring)
+                {
+                    expire.OnRemove(entity);
+                }
+                entity.Trigger.Effects.RemoveAll(IsAnAffectThatShouldExpire);
             }
 
             foreach (var pair in entity.Inventory.EquippedItemBySlot)
             {
                 var item = pair.Value;
-                item.Effects.RemoveAll(entity, (eff) => { return effectsThatShouldExpire.Contains(eff); });
+                var expiring = item.Effects.FindAll(IsAnAffectThatShouldExpire);
+                foreach (var expire in expiring)
+                {
+                    expire.OnRemove(entity);
+                }
+                item.Effects.RemoveAll(IsAnAffectThatShouldExpire);
             }
 
             foreach (var item in entity.Inventory.Items)
             {
                 if (item != null)
                 {
-                    item.Effects.RemoveAll(entity, (eff) => { return effectsThatShouldExpire.Contains(eff); });
+                    var expiring = item.Effects.FindAll(IsAnAffectThatShouldExpire);
+                    foreach (var expire in expiring)
+                    {
+                        expire.OnRemove(entity);
+                    }
+                    item.Effects.RemoveAll(IsAnAffectThatShouldExpire);
                 }
             }
 
             if (entity.Body != null)
             {
-                entity.Body.Effects.RemoveAll(entity, (eff) => { return effectsThatShouldExpire.Contains(eff); });
+                var expiring = entity.Body.Effects.FindAll(IsAnAffectThatShouldExpire);
+                foreach (var expire in expiring)
+                {
+                    expire.OnRemove(entity);
+                }
+                entity.Body.Effects.RemoveAll(IsAnAffectThatShouldExpire);
             }
         }
 
+        private static void HandleRemovedEffects(EntityStateChange ctx)
+        {
+            if (!ctx.WasShortCircuited)
+            {
+                foreach (var effect in ctx.RemovedEffects)
+                {
+                    foreach(var target in ctx.Targets)
+                    {
+                        RemoveEntityEffects(target, ctx.RemovedEffects);
+                    }
+                }
+            }
+        }
         private static void HandleAppliedEffects(EntityStateChange ctx)
         {
             if (!ctx.WasShortCircuited)
             {
                 foreach (var effect in ctx.AppliedEffects)
                 {
-                    if(effect is AppliedEffect)
+                    if (effect is AppliedEffect)
                     {
-                        var appliedEffect = (AppliedEffect) effect;
-                        if(appliedEffect.CanApply(ctx))
+                        var appliedEffect = (AppliedEffect)effect;
+                        if (appliedEffect.CanApply(ctx))
                         {
                             appliedEffect.Apply(ctx);
                         }
@@ -237,17 +291,12 @@ namespace Gamepackage
                 var itemsCopy = new List<Item>();
                 itemsCopy.AddRange(target.Inventory.Items);
                 itemsCopy.AddRange(target.Inventory.EquippedItemBySlot.Values);
-                foreach (var item in itemsCopy)
+                var targetEffects = target.GetEffects();
+                foreach (var effect in targetEffects)
                 {
-                    if (item != null)
+                    if (effect.CanAffectIncomingAttack(result))
                     {
-                        foreach (var effect in item.Effects.AllValues)
-                        {
-                            if (effect.CanAffectIncomingAttack(result))
-                            {
-                                effect.AffectIncomingAttack(result);
-                            }
-                        }
+                        effect.AffectIncomingAttackEffects(result);
                     }
                 }
             }
@@ -271,7 +320,7 @@ namespace Gamepackage
             if (points.Contains(Source.Position))
             {
                 var abilities = potentialTrigger.Trigger.Effects;
-                foreach(var effect in abilities.AllValues)
+                foreach (var effect in abilities)
                 {
                     var attack = new EntityStateChange();
                     attack.Source = potentialTrigger;
@@ -283,14 +332,14 @@ namespace Gamepackage
 
         public static void ConsumeItemCharges(Entity owner, Item item, int NumberConsumed = 1)
         {
-            if(!item.HasUnlimitedCharges && item.HasCharges)
+            if (!item.HasUnlimitedCharges && item.HasCharges)
             {
                 item.ExactNumberOfChargesRemaining = item.ExactNumberOfChargesRemaining - NumberConsumed;
-                if(item.ExactNumberOfChargesRemaining < 0)
+                if (item.ExactNumberOfChargesRemaining < 0)
                 {
                     item.ExactNumberOfChargesRemaining = 0;
                 }
-                if(item.DestroyWhenAllChargesAreConsumed)
+                if (item.DestroyWhenAllChargesAreConsumed)
                 {
                     owner.Inventory.RemoveItemStack(item);
                     Context.UIController.Refresh();

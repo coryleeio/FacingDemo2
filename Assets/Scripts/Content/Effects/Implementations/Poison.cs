@@ -20,12 +20,16 @@
 
         public int PoisonAmount;
 
-        public override string RemovalText
+        public override void OnApply(Entity owner)
         {
-            get
-            {
-                return "Your poison fades";
-            }
+            base.OnApply(owner);
+            Context.UIController.TextLog.AddText(string.Format("{0} is now poisoned...", owner.Name));
+        }
+
+        public override void OnRemove(Entity owner)
+        {
+            base.OnRemove(owner);
+            Context.UIController.TextLog.AddText(string.Format("{0} is no longer poisoned!", owner.Name));
         }
 
         public override void Tick(Entity entity)

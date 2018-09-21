@@ -14,7 +14,7 @@ namespace Gamepackage
             item.NumberOfItems = 1;
             item.MaxStackSize = 1;
             item.Attributes = new Dictionary<Attributes, int>(0);
-            item.Effects = new EffectList();
+            item.Effects = new List<Effect>();
             item.AttackParameters = new List<AttackParameters>(0);
             item.ThrowParameters = new List<AttackParameters>(0);
             item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;
@@ -44,7 +44,7 @@ namespace Gamepackage
                 });
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
-                item.Effects.Add(null, EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ANTIDOTE)
             {
@@ -55,7 +55,7 @@ namespace Gamepackage
                 item.OnUseText = "You quaff a potion";
                 item.ExactNumberOfChargesRemaining = 1;
                 item.DestroyWhenAllChargesAreConsumed = true;
-                item.Effects.Add(null, EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY));
                 item.IsUsable = true;
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_LUCKY_COIN)
@@ -63,7 +63,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN;
                 item.DisplayName = "Lucky Coin";
                 item.Description = "This coin is particularly lucky, and is probably deserving of a better description.";
-                item.Effects.Add(null, EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ARROW)
             {

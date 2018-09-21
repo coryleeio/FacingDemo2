@@ -64,16 +64,11 @@ namespace Gamepackage
 
         }
 
-        public abstract string RemovalText
-        {
-            get;
-        }
-
         public virtual bool CanAffectIncomingAttack(EntityStateChange abilityTriggerContext)
         {
             return false;
         }
-        public virtual EntityStateChange AffectIncomingAttack(EntityStateChange ctx)
+        public virtual EntityStateChange AffectIncomingAttackEffects(EntityStateChange ctx)
         {
             return ctx;
         }

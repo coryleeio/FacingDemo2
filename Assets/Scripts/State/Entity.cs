@@ -58,19 +58,14 @@ namespace Gamepackage
             }
         }
 
+        public List<Effect> GetEffects()
+        {
+            return GetEffects(null);
+        }
+
         public List<Effect> GetEffects(Predicate<Effect> predicate)
         {
             return CombatUtil.GetEntityEffectsByType(this, predicate);
-        }
-
-        public void RemoveEffects(Effect effectThatShouldExpire)
-        {
-            RemoveEffects(new List<Effect>(1) { effectThatShouldExpire });
-        }
-
-        public void RemoveEffects(List<Effect> effectsThatShouldExpire)
-        {
-            CombatUtil.RemoveEntityEffects(this, effectsThatShouldExpire);
         }
 
         public void Rewire()

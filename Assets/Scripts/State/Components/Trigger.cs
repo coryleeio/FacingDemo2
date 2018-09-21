@@ -4,7 +4,7 @@ namespace Gamepackage
 {
     public class Trigger : Component
     {
-        public EffectList Effects = new EffectList();
+        public List<Effect> Effects = new List<Effect>();
         public List<Point> Offsets = new List<Point>(0);
         public Dictionary<string, string> TriggerParameters = new Dictionary<string, string>();
 

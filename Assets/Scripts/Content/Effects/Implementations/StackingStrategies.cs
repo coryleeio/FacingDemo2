@@ -16,7 +16,8 @@
 
             if (matchingEffects.Count == 0)
             {
-                entity.Body.Effects.Add(entity, effect);
+                entity.Body.Effects.Add(effect);
+                effect.OnApply(entity);
                 return;
             }
             if (matchingEffects.Count == 1)
@@ -28,7 +29,8 @@
 
         public static void AddDuplicate(Entity entity, Effect effect)
         {
-            entity.Body.Effects.Add(entity, effect);
+            entity.Body.Effects.Add(effect);
+            effect.OnApply(entity);
         }
     }
 }

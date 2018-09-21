@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
@@ -39,19 +40,21 @@ namespace Gamepackage
                 attack.Source = Source;
                 attack.Targets.Add(target);
                 List<Effect> onHitEffects = new List<Effect>();
-
+                Predicate<Effect> appliedEffects = (effectInQuestion) => { return effectInQuestion is AppliedEffect; };
                 if (CombatUtil.HasWeapon(Source))
                 {
                     var weapon = Source.Inventory.GetItemBySlot(ItemSlot.MainHand);
                     attack.AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(weapon.AttackParameters);
-                    onHitEffects.AddRange(weapon.Effects.AppliedEffects);
-                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.AppliedEffects);
+
+
+                    onHitEffects.AddRange(weapon.Effects.FindAll(appliedEffects));
+                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.FindAll(appliedEffects));
                 }
                 else
                 {
                     attack.AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Source.Body.Attacks);
-                    onHitEffects.AddRange(Source.Body.Effects.AppliedEffects);
-                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.AppliedEffects);
+                    onHitEffects.AddRange(Source.Body.Effects.FindAll(appliedEffects));
+                    onHitEffects.AddRange(attack.AttackParameters.AttackSpecificEffects.FindAll(appliedEffects));
                 }
                 attack.AppliedEffects.AddRange(onHitEffects);
                 CombatUtil.ApplyEntityStateChange(attack);

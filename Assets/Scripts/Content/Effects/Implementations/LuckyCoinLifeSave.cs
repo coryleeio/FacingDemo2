@@ -20,14 +20,6 @@ namespace Gamepackage
             }
         }
 
-        public override string RemovalText
-        {
-            get
-            {
-                return "";
-            }
-        }
-
         public override bool CanAffectIncomingAttack(EntityStateChange ctx)
         {
             if (ctx.Targets.Count > 1)
@@ -39,18 +31,21 @@ namespace Gamepackage
             return item != null;
         }
 
-        public override EntityStateChange AffectIncomingAttack(EntityStateChange ctx)
+        public override EntityStateChange AffectIncomingAttackEffects(EntityStateChange ctx)
         {
             var target = ctx.Targets[0];
             var isLethal = target.Body.CurrentHealth - ctx.Damage <= 0;
             if (isLethal && MathUtil.ChanceToOccur(50))
             {
                 var item = target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
-                ctx.Damage = 0;
-                ctx.WasShortCircuited = true;
-                ctx.ShortCircuitedMessage = "The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters...";
-                ctx.ShortCircuitedFloatingText = "Got lucky!";
-                ctx.ShortCircuitedFloatingTextColor = Color.green;
+                ctx.ShortCircuit();
+                ctx.FloatingTextMessage.AddLast(new FloatingTextMessage()
+                {
+                    Message = "Got lucky!",
+                    Color = Color.green,
+                    target = target,
+                });
+                ctx.LateMessages.AddLast("The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters...");
                 target.Inventory.RemoveItemStack(item);
             }
             return ctx;

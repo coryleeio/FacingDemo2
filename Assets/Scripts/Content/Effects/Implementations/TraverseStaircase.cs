@@ -29,14 +29,6 @@ namespace Gamepackage
             TARGET_LEVEL_ID,
         }
 
-        public override string RemovalText
-        {
-            get
-            {
-                return "";
-            }
-        }
-
         public override bool CanTriggerOnStep()
         {
             return true;

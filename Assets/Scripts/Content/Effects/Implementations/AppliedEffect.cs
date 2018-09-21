@@ -22,14 +22,6 @@
             }
         }
 
-        public override string RemovalText
-        {
-            get
-            {
-                return "";
-            }
-        }
-
         public bool CanApply(EntityStateChange ctx)
         {
             return ctx.Targets.Count >= 1;
