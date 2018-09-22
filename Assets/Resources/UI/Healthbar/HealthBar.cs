@@ -18,7 +18,7 @@ namespace Gamepackage
             if (Slider != null && Entity != null)
             {
                 Slider.minValue = 0;
-                Slider.maxValue = Entity.Body.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
+                Slider.maxValue = Entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
                 Slider.value = Entity.Body.CurrentHealth;
             }
         }

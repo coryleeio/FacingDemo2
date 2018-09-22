@@ -102,7 +102,7 @@ namespace Gamepackage
 
             retVal.Add(new Tuple<string, string>() {
                 Key = DisplayValueForAttribute(Attributes.MAX_HEALTH),
-                Value = string.Format("{0}/{1}", player.Body.CurrentHealth, player.Body.CalculateValueOfAttribute(Attributes.MAX_HEALTH)),
+                Value = string.Format("{0}/{1}", player.Body.CurrentHealth, player.CalculateValueOfAttribute(Attributes.MAX_HEALTH)),
             });
             foreach (var enumVal in Enum.GetValues(typeof(Attributes)))
             {
@@ -114,7 +114,7 @@ namespace Gamepackage
                 retVal.Add(new Tuple<string, string>()
                 {
                     Key = DisplayValueForAttribute(castVal),
-                    Value = player.Body.CalculateValueOfAttribute(castVal).ToString(),
+                    Value = player.CalculateValueOfAttribute(castVal).ToString(),
                 });
             }
             return retVal;

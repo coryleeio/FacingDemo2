@@ -1,4 +1,6 @@
-﻿namespace Gamepackage
+﻿using System.Collections.Generic;
+
+namespace Gamepackage
 {
     public static class EffectFactory
     {
@@ -68,7 +70,17 @@
                 {
                     Ticker = new Ticker()
                     {
-                        TurnsRemaining = 500
+                        TurnsRemaining = 20
+                    }
+                };
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_STRENGTH_OF_GIANTS)
+            {
+                retVal = new StrengthOfGiants()
+                {
+                    Attributes = new Dictionary<Attributes, int>()
+                    {
+                        {  Attributes.MAX_HEALTH, 100 },
                     }
                 };
             }
@@ -83,6 +95,10 @@
                 throw new NotImplementedException();
             }
             retVal.Identifier = uniqueIdentifier;
+            if(retVal.Attributes == null)
+            {
+                retVal.Attributes = new Dictionary<Attributes, int>();
+            }
             return retVal;
         }
     }

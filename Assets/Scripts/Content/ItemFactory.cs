@@ -45,6 +45,7 @@ namespace Gamepackage
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_STRENGTH_OF_GIANTS));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ANTIDOTE)
             {

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Gamepackage
 {
@@ -13,7 +14,8 @@ namespace Gamepackage
             get;
         }
 
-        public UniqueIdentifier Identifier; 
+        public UniqueIdentifier Identifier;
+        public Dictionary<Attributes, int> Attributes;
 
         public virtual void HandleStacking(Entity entity)
         {
@@ -33,7 +35,7 @@ namespace Gamepackage
 
         public virtual void Tick(Entity owner)
         {
-            if(CanTick)
+            if (CanTick)
             {
                 Ticker.Tick(owner);
             }
@@ -44,6 +46,13 @@ namespace Gamepackage
         public virtual void OnApply(Entity owner)
         {
             ApplyPersistentVisualEffects(owner);
+            if (owner.Body != null)
+            {
+                if (owner.Body.CurrentHealth > owner.CalculateValueOfAttribute(Gamepackage.Attributes.MAX_HEALTH))
+                {
+                    owner.Body.CurrentHealth = owner.CalculateValueOfAttribute(Gamepackage.Attributes.MAX_HEALTH);
+                }
+            }
         }
 
         // When an effect is removed, perform any state changes, and remove the persistent visual effects
@@ -51,6 +60,18 @@ namespace Gamepackage
         public virtual void OnRemove(Entity owner)
         {
             RemovePersistantVisualEffects(owner);
+            if (owner.Body != null)
+            {
+                var aliveBeforeRemoval = owner.Body.CurrentHealth > 0;
+                if (Attributes.ContainsKey(Gamepackage.Attributes.MAX_HEALTH))
+                {
+                    owner.Body.CurrentHealth -= Attributes[Gamepackage.Attributes.MAX_HEALTH];
+                }
+                if(aliveBeforeRemoval && owner.Body.CurrentHealth < 0)
+                {
+                    owner.Body.CurrentHealth = 1;
+                }
+            }
         }
 
         // Apply persistent visual effects, be sure to call this when loading the game for all effects

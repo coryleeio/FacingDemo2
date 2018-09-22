@@ -154,7 +154,7 @@ namespace Gamepackage
             {
                 Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.MAX_HEALTH), "Entities must have a value for maximum health if they have a body.");
                 entity.Body.Entity = entity; // Needed for the recursive calculation.
-                entity.Body.CurrentHealth = entity.Body.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
+                entity.Body.CurrentHealth = entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
             }
             return entity;
         }

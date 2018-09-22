@@ -68,6 +68,37 @@ namespace Gamepackage
             return CombatUtil.GetEntityEffectsByType(this, predicate);
         }
 
+        public int CalculateValueOfAttribute(Attributes attr)
+        {
+            int total = 0;
+            if (Body != null)
+            {
+                Body.Attributes.TryGetValue(attr, out total);
+            }
+
+            if (Inventory != null)
+            {
+                foreach (var pair in Inventory.EquippedItemBySlot)
+                {
+                    var item = pair.Value;
+                    foreach (var attribute in item.Attributes)
+                    {
+                        if (attribute.Key == attr)
+                        {
+                            total += attribute.Value;
+                        }
+                    }
+                    foreach(var effect in item.Effects)
+                    {
+                        int amountToAdd = 0;
+                        effect.Attributes.TryGetValue(attr, out amountToAdd);
+                        total += amountToAdd;
+                    }
+                }
+            }
+            return total;
+        }
+
         public void Rewire()
         {
             if (Trigger != null)

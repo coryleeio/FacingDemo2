@@ -14,7 +14,6 @@ namespace Gamepackage
         public List<ItemSlot> SlotsOccupiedByWearing;
         public int MaxStackSize;
         public Dictionary<Attributes, int> Attributes;
-        public List<AppliedEffect> AppliedEffects;
         public List<Effect> Effects;
         public string CustomOnUseText = null;
         public List<AttackParameters> AttackParameters;
