@@ -38,12 +38,14 @@ namespace Gamepackage
                 Context.UIController.Tooltip.Hide();
             }
             Context.UIController.RemoveWindow(this);
+            Context.UIController.DarkOverlay.Hide();
         }
 
         public override void Show()
         {
             active = true;
             GetComponent<LootWindow>().gameObject.SetActive(true);
+            Context.UIController.DarkOverlay.Show();
             Context.UIController.PushWindow(this);
         }
 

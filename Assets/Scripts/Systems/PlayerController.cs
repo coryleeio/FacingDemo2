@@ -55,8 +55,10 @@ namespace Gamepackage
 
         public void Process()
         {
-            bool shouldAcceptInput = !Context.UIController.InventoryWindow.isActiveAndEnabled
-                                        && !Context.UIController.EscapeMenu.isActiveAndEnabled;
+            bool isAcceptingClickInput = !Context.UIController.EscapeMenu.isActiveAndEnabled &&
+                !Context.UIController.LootWindow.isActiveAndEnabled &&
+                !Context.UIController.InventoryWindow.isActiveAndEnabled;
+
             var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
@@ -93,7 +95,7 @@ namespace Gamepackage
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
 
-            Context.OverlaySystem.SetActivated(MouseHoverOverlay, shouldAcceptInput);
+            Context.OverlaySystem.SetActivated(MouseHoverOverlay, isAcceptingClickInput);
             MouseHoverOverlayConfig.DefaultColor = isHoveringOnEnemyCombatant ? EnemyHoverColor : DefaultHoverColor;
             MouseHoverOverlayConfig.Position = mousePos;
             PathOverlayConfig.Position = mousePos;
@@ -223,8 +225,12 @@ namespace Gamepackage
                     Context.UIController.ItemInspectionWindow.Hide();
                 }
                 Context.UIController.InventoryWindow.Toggle();
-                Context.UIController.LootWindow.Toggle();
                 Context.UIController.Tooltip.Hide();
+            }
+
+            if (Context.UIController.InventoryWindow.isActiveAndEnabled)
+            {
+                return;
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -243,25 +249,27 @@ namespace Gamepackage
                 Context.UIController.InputHint.Hide();
             }
 
+            if(!isAcceptingClickInput)
+            {
+                return;
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
-                if (shouldAcceptInput)
+                ActionList.Clear();
+                if (isAbleToSwapWithHoveringAlly)
                 {
-                    ActionList.Clear();
-                    if (isAbleToSwapWithHoveringAlly)
+                    QueueSwapPosition(level, player, mousePos);
+                }
+                else if (isAbleToHitHoveringEnemyCombatant)
+                {
+                    QueueAttack(level, player, mousePos);
+                }
+                else
+                {
+                    if (CurrentPath != null)
                     {
-                        QueueSwapPosition(level, player, mousePos);
-                    }
-                    else if (isAbleToHitHoveringEnemyCombatant)
-                    {
-                        QueueAttack(level, player, mousePos);
-                    }
-                    else
-                    {
-                        if (CurrentPath != null)
-                        {
-                            OnPathComplete(CurrentPath);
-                        }
+                        OnPathComplete(CurrentPath);
                     }
                 }
             }
