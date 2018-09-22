@@ -34,6 +34,10 @@ namespace Gamepackage
                     Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(target.Position));
                 }
             }
+            // Because in some circumstances this can be caused twice, clear the buffer.
+            result.LogMessages.Clear();
+            result.LateMessages.Clear();
+            result.FloatingTextMessage.Clear();
         }
 
         public static void ApplyEntityStateChange(EntityStateChange result)
@@ -88,12 +92,18 @@ namespace Gamepackage
                     {
                         result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                         target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
+
                         result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                         {
                             Message = string.Format("{0}", damage),
                             Color = target.IsPlayer ? Color.red : Color.magenta,
                             target = target,
                         });
+
+                        // Go ahead and show messages so that onApply messages appear in the correct order
+                        // onapply lacks a combat context so its messages appear immediately
+                        // We do this here so that the messages appear before the effect messages
+                        ShowMessages(result);
                     }
 
                     HandleAppliedEffects(result);

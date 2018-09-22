@@ -23,13 +23,13 @@ namespace Gamepackage
         public override void OnApply(Entity owner)
         {
             base.OnApply(owner);
+            Context.UIController.TextLog.AddText(string.Format("Your body is cleansed of all toxins", owner.Name));
             EntityStateChange ctx = new EntityStateChange();
             ctx.Source = owner;
             ctx.Targets.Add(owner);
             var effectsToAttemptRemoval = CombatUtil.GetEntityEffectsByType(owner, (effectInQuestion) => { return effectInQuestion is Poison; });
             ctx.RemovedEffects.AddRange(effectsToAttemptRemoval);
             CombatUtil.ApplyEntityStateChange(ctx);
-            Context.UIController.TextLog.AddText(string.Format("Your body is cleansed of all toxins", owner.Name));
         }
 
         public override void OnRemove(Entity owner)
