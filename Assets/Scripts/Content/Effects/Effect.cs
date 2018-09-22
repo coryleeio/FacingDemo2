@@ -102,5 +102,15 @@ namespace Gamepackage
         {
             return ctx;
         }
+
+        public virtual bool CanTriggerOnPress()
+        {
+            return false;
+        }
+
+        public virtual EntityStateChange TriggerOnPress(EntityStateChange ctx)
+        {
+            return ctx;
+        }
     }
 }

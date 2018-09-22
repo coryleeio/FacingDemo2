@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace Gamepackage
@@ -18,7 +17,7 @@ namespace Gamepackage
         {
             get
             {
-                return "Moves you to another level";
+                return "Press <color=yellow>F</color> use stairs...";
             }
         }
 
@@ -29,12 +28,12 @@ namespace Gamepackage
             TARGET_LEVEL_ID,
         }
 
-        public override bool CanTriggerOnStep()
+        public override bool CanTriggerOnPress()
         {
             return true;
         }
 
-        public override EntityStateChange TriggerOnStep(EntityStateChange ctx)
+        public override EntityStateChange TriggerOnPress(EntityStateChange ctx)
         {
             var foundPlayer = false;
             foreach (var target in ctx.Targets)
@@ -78,7 +77,11 @@ namespace Gamepackage
             foreach (var target in ctx.Targets)
             {
                 target.Behaviour.NextAction = null;
-                Context.FlowSystem.Steps.First.Value.Actions.Clear();
+                if(Context.FlowSystem.Steps.First != null)
+                {
+                    Context.FlowSystem.Steps.First.Value.Actions.Clear();
+                }
+                
                 var oldLevel = Context.GameStateManager.Game.CurrentLevel;
                 if (target.BlocksPathing)
                 {

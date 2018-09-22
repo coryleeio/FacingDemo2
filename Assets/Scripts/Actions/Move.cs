@@ -111,16 +111,39 @@ namespace Gamepackage
             {
                 var level = Context.GameStateManager.Game.CurrentLevel;
                 var entitiesInPos = level.Grid[Source.Position].EntitiesInPosition;
-                var deadEntitiesInPos = entitiesInPos.FindAll((entInPos) => { return entInPos.Body != null && entInPos.Body.IsDead && entInPos.Inventory.HasAnyItems; });
+                HandleInputHints(entitiesInPos);
+            }
+        }
 
-                if (deadEntitiesInPos.Count > 0)
+        public static void HandleInputHints(List<Entity> entitiesInPos)
+        {
+            var deadEntitiesInPos = entitiesInPos.FindAll((entInPos) => { return entInPos.Body != null && entInPos.Body.IsDead && entInPos.Inventory.HasAnyItems; });
+            var trigggerEntitiesInPos = entitiesInPos.FindAll((entInPos) => { return entInPos.Trigger != null; });
+            Effect triggerOnPressEffect = null;
+
+            foreach (var triggerEnt in trigggerEntitiesInPos)
+            {
+                foreach (var effect in triggerEnt.Trigger.Effects)
                 {
-                    Context.UIController.InputHint.ShowText("Press <color=yellow>F</color> to loot...");
+                    if (effect.CanTriggerOnPress())
+                    {
+                        triggerOnPressEffect = effect;
+                    }
                 }
-                else
-                {
-                    Context.UIController.InputHint.Hide();
-                }
+            }
+
+            if (triggerOnPressEffect != null)
+            {
+                Context.UIController.InputHint.ShowText(triggerOnPressEffect.Description);
+            }
+
+            else if (deadEntitiesInPos.Count > 0)
+            {
+                Context.UIController.InputHint.ShowText("Press <color=yellow>F</color> to loot...");
+            }
+            else
+            {
+                Context.UIController.InputHint.Hide();
             }
         }
 

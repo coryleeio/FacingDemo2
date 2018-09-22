@@ -240,13 +240,48 @@ namespace Gamepackage
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                var entitiesInPosition = level.Grid[player.Position].EntitiesInPosition;
-                var lootableEntities = entitiesInPosition.FindAll((ent) => { return ent.Body != null && ent.Body.IsDead && ent.Inventory.HasAnyItems; });
-                if (lootableEntities.Count > 0)
+                if(Context.UIController.LootWindow.isActiveAndEnabled)
                 {
-                    Context.UIController.LootWindow.ShowFor(lootableEntities);
+                    Context.UIController.LootWindow.Hide();
                 }
-                Context.UIController.InputHint.Hide();
+                else
+                {
+                    var entitiesInPosition = level.Grid[player.Position].EntitiesInPosition;
+                    var lootableEntities = entitiesInPosition.FindAll((ent) => { return ent.Body != null && ent.Body.IsDead && ent.Inventory.HasAnyItems; });
+
+                    Entity triggerEntity = null;
+                    Effect triggerEffect = null;
+                    foreach(var entity in entitiesInPosition)
+                    {
+                        if(entity.Trigger != null)
+                        {
+                            foreach(var effect in entity.Trigger.Effects)
+                            {
+                                if(effect.CanTriggerOnPress())
+                                {
+                                    triggerEntity = entity;
+                                    triggerEffect = effect;
+                                    break;
+                                }
+                            }
+                            if(triggerEntity == null || triggerEffect == null)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    if(triggerEntity != null && triggerEffect != null)
+                    {
+                        QueueTriggerEffect(triggerEntity, triggerEffect, player);
+                    }
+
+                    else if (lootableEntities.Count > 0)
+                    {
+                        Context.UIController.LootWindow.ShowFor(lootableEntities);
+                    }
+                    Context.UIController.InputHint.Hide();
+                }
             }
 
             if(!isAcceptingClickInput)
@@ -273,6 +308,14 @@ namespace Gamepackage
                     }
                 }
             }
+        }
+
+        private void QueueTriggerEffect(Entity triggerEntity, Effect triggerEffect, Entity player)
+        {
+            EntityStateChange ctx = new EntityStateChange();
+            ctx.Source = triggerEntity;
+            ctx.Targets.Add(player);
+            triggerEffect.TriggerOnPress(ctx);
         }
 
         private void QueueWait(Level level, Entity player)
