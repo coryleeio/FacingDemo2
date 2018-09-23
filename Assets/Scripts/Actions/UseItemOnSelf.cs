@@ -1,9 +1,12 @@
-﻿using UnityEngine.Assertions;
+﻿using Newtonsoft.Json;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class UseItemOnSelf : TargetableAction
+    public class UseItemOnSelf : Action
     {
+        [JsonIgnore]
+        public Entity Source;
         public Item Item;
 
         public override int TimeCost
@@ -27,9 +30,9 @@ namespace Gamepackage
             base.Enter();
 
             var stateChange = new EntityStateChange();
+            stateChange.CombatContext = CombatContext.OnUse;
             stateChange.Source = Source;
-            stateChange.Targets.Add(Targets[0]);
-            Assert.IsTrue(Source == Targets[0]);
+            stateChange.Targets.Add(Source);
             stateChange.AppliedEffects.AddRange(Item.Effects);
 
             if(Item.OnUseText != null)
@@ -38,14 +41,12 @@ namespace Gamepackage
             }
 
             CombatUtil.ApplyEntityStateChange(stateChange);
-            CombatUtil.ConsumeItemCharges(Targets[0], Item);
+            CombatUtil.ConsumeItemCharges(Source, Item);
         }
 
         public override bool IsValid()
         {
             Assert.IsNotNull(Source);
-            Assert.IsTrue(Targets.Count == 1);
-            Assert.IsNotNull(Targets[0]);
             Assert.IsNotNull(Item);
             Assert.IsTrue(Item.IsUsable);
             return base.IsValid();

@@ -15,11 +15,35 @@ namespace Gamepackage
         public int MaxStackSize;
         public Dictionary<Attributes, int> Attributes;
         public List<Effect> Effects;
-        public string CustomOnUseText = null;
-        public List<AttackParameters> AttackParameters;
+
+        // Percentage chance /100 that the item survives being shot or thrown
+        // if it survives it will appear on the ground wherever it was thrown or shot to
+        public int ChanceToSurviveLaunch;
+        
+
+        // For ammo it determines what type of ammo the item is
+        // For ranged items it determines what type of ammo is fired
+        public AmmoType AmmoType;
+
+        public List<AttackParameters> MeleeParameters;
+        public int MeleeRange;
+        public int MeleeTargetsPierced;
+
         public List<AttackParameters> ThrowParameters;
-        public string OnUseText;
+        public int ThrownRange;
+        public int ThrownTargetsPierced;
+
+        public List<AttackParameters> RangedParameters;
+        public int RangedRange;
+        public int RangedTargetsPierced;
+
+        public List<AttackParameters> ZapParameters;
+        public int ZapRange;
+        public int ZappedTargetsPierced;
+
         public bool IsUsable;
+        public string OnUseText;
+        public string CustomOnUseText = null;
 
         public bool HasCharges
         {
@@ -71,20 +95,42 @@ namespace Gamepackage
             }
         }
 
-        public bool CanBeUsedInMelee()
+        public bool CanBeUsedInMelee
         {
-            return AttackParameters.Count > 0;
+            get
+            {
+                return MeleeParameters.Count > 0;
+            }
         }
 
-        public bool CanBeThrown()
+        public bool CanBeThrown
         {
-            return ThrowParameters.Count > 0;
+            get
+            {
+                return ThrowParameters.Count > 0;
+            }
+        }
+
+        public bool CanBeUsedForRanged
+        {
+            get
+            {
+                return RangedParameters.Count > 0 && AmmoType != AmmoType.None;
+            }
+        }
+
+        public bool CanBeUsedForZap
+        {
+            get
+            {
+                return RangedParameters.Count > 0 && HasCharges;
+
+            }
         }
 
         public bool CanStack(Item other)
         {
             return UniqueIdentifier == other.UniqueIdentifier && (NumberOfItems + other.NumberOfItems < MaxStackSize);
         }
-
     }
 }

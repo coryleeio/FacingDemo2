@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -10,6 +11,21 @@ namespace Gamepackage
         public bool IsDead = false;
         public int DeadForTurns = 0;
         public List<ItemSlot> UsableItemSlots = new List<ItemSlot>(0);
-        public List<AttackParameters> Attacks = new List<AttackParameters>(0);
+        public List<AttackParameters> MeleeParameters = new List<AttackParameters>(0);
+        public int MeleeRange;
+        public int MeleeTargetsPierced;
+
+        public GameObject MeleeProjectilePrefab;
+        public GameObject MeleeOnHitPrefab;
+        public GameObject MeleeOnSwingPrefab;
+        public float MeleeProjectileTravelTime;
+
+        public bool CanAttackInMelee
+        {
+            get
+            {
+                return MeleeParameters.Count > 0;
+            }
+        }
     }
 }

@@ -37,30 +37,60 @@ namespace Gamepackage
             var hasItemInInventory = player.Inventory.Items.Contains(item);
             var isPickingUpItem = !isWearingItem && !hasItemInInventory;
             var isUsable = item.IsUsable;
+            var isEquippable = item.SlotsWearable.Count > 0;
 
-            if (hasItemInInventory)
+
+            if (hasItemInInventory && item.IsUsable)
             {
-                BuildOnUseButtonIfNeeded(player, item);
-                BuildButton("context.menu.buttons.equip".Localize(), () =>
+                var onUseText = item.CustomOnUseText ?? "context.menu.buttons.use.default".Localize();
+                BuildButton(onUseText, () =>
                 {
-                    var action = Context.PrototypeFactory.BuildEntityAction<EquipItem>(player) as EquipItem;
-                    action.Item = item;
-                    action.Slot = item.SlotsWearable[0];
+                    var action = new UseItemOnSelf
+                    {
+                        Source = player,
+                        Item = item
+                    };
                     Context.PlayerController.ActionList.Enqueue(action);
                 });
             }
-            else if (isWearingItem)
+
+            if ((hasItemInInventory || isWearingItem) && item.CanBeThrown)
             {
-                BuildOnUseButtonIfNeeded(player, item);
+                BuildButton("context.menu.buttons.throw".Localize(), () =>
+                {
+                    AttackCapabilities capabilities = new AttackCapabilities(player, item);
+                    Context.PlayerController.StartAiming(capabilities, CombatContext.Thrown);
+                    Context.UIController.InventoryWindow.Hide();
+                });
+            }
+
+            if (hasItemInInventory && isEquippable)
+            {
+                BuildButton("context.menu.buttons.equip".Localize(), () =>
+                {
+                    var action = new EquipItem
+                    {
+                        Source = player,
+                        Item = item,
+                        Slot = item.SlotsWearable[0]
+                    };
+                    Context.PlayerController.ActionList.Enqueue(action);
+                });
+            }
+            if (isWearingItem)
+            {
                 BuildButton("context.menu.buttons.unequip".Localize(), () =>
                 {
-                    var action = Context.PrototypeFactory.BuildEntityAction<UnequipItem>(player) as UnequipItem;
-                    action.Item = item;
+                    var action = new UnequipItem
+                    {
+                        Source = player,
+                        Item = item
+                    };
                     action.Slot = player.Inventory.GetItemSlotOfEquippedItem(action.Item);
                     Context.PlayerController.ActionList.Enqueue(action);
                 });
             }
-            else
+            if (!isWearingItem && !hasItemInInventory)
             {
                 var possibleTargets = level.Grid[player.Position].EntitiesInPosition;
 
@@ -70,8 +100,11 @@ namespace Gamepackage
                     {
                         BuildButton("context.menu.buttons.take".Localize(), () =>
                         {
-                            var action = Context.PrototypeFactory.BuildEntityAction<PickupItem>(player) as PickupItem;
-                            action.Item = item;
+                            var action = new PickupItem
+                            {
+                                Source = player,
+                                Item = item
+                            };
                             action.Targets.Add(possibleTarget);
                             Context.PlayerController.ActionList.Enqueue(action);
                             Context.PlayerController.ActionList.Enqueue(action);
@@ -84,21 +117,6 @@ namespace Gamepackage
             }
             this.transform.position = eventData.position;
             Show();
-        }
-
-        private void BuildOnUseButtonIfNeeded(Entity player, Item item)
-        {
-            if (item.IsUsable)
-            {
-                var onUseText = item.CustomOnUseText ?? "context.menu.buttons.use.default".Localize();
-                BuildButton(onUseText, () =>
-                {
-                    var action = Context.PrototypeFactory.BuildEntityAction<UseItemOnSelf>(player) as UseItemOnSelf;
-                    action.Item = item;
-                    action.Targets.Add(player);
-                    Context.PlayerController.ActionList.Enqueue(action);
-                });
-            }
         }
 
         private void Purge()

@@ -97,7 +97,7 @@ namespace Gamepackage
             }
             foreach (var item in Items)
             {
-                if (item != null && item.UniqueIdentifier == item.UniqueIdentifier)
+                if (item != null && item.UniqueIdentifier == identifier)
                 {
                     return item;
                 }
@@ -119,17 +119,32 @@ namespace Gamepackage
 
         public void RemoveItemStack(Item item)
         {
+            // If you modify the dictionary while iterating it,
+            // it will fail silently sometimes due to a undetected race condition
+            ItemSlot found = default(ItemSlot);
             foreach (var pair in EquippedItemBySlot)
             {
                 if (pair.Value == item)
                 {
-                    UnequipItemInSlot(pair.Key);
+                    found = pair.Key;
                 }
+            }
+            if(found != default(ItemSlot))
+            {
+                UnequipItemInSlot(found);
             }
             if (Items.Contains(item))
             {
                 var ind = Items.IndexOf(item);
                 Items[ind] = null;
+            }
+            if(Entity != null && Entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GROUND_DROP)
+            {
+                // Remove ground drop entities if their last item is looted
+                if(Context.GameStateManager != null && Context.GameStateManager.Game != null&& Context.GameStateManager.Game.CurrentLevel != null)
+                {
+                    Context.EntitySystem.Deregister(Entity, Context.GameStateManager.Game.CurrentLevel);
+                }
             }
         }
 

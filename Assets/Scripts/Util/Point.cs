@@ -7,6 +7,7 @@ namespace Gamepackage
     [Serializable]
     public class Point
     {
+        public static Point Zero = new Point(0, 0);
         public int X;
         public int Y;
 
@@ -86,6 +87,26 @@ namespace Gamepackage
         public static bool operator !=(Point lhs, Point rhs)
         {
             return !(lhs == rhs);
+        }
+
+        public static Point operator *(Point lhs, int rhs)
+        {
+            return new Point(lhs.X * rhs, lhs.Y * rhs);
+        }
+
+        public static Point operator +(Point lhs, int rhs)
+        {
+            return new Point(lhs.X + rhs, lhs.Y + rhs);
+        }
+
+        public static Point operator +(Point lhs, Point rhs)
+        {
+            return new Point(lhs.X + rhs.X, lhs.Y + rhs.Y);
+        }
+
+        public float Distance(Point p2)
+        {
+            return Distance(this, p2);
         }
 
         public static float Distance(Point p1, Point p2)

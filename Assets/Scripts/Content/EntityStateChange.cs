@@ -7,6 +7,11 @@ namespace Gamepackage
     {
         public Entity Source;
         public List<Entity> Targets = new List<Entity>();
+
+        // Some effects look at this to decide if they should modify incoming or outbound attacks
+        // this is mostly set by the attack action and shouldn't need to be set most of the time 
+        // for effects or other types of damage.
+        public CombatContext CombatContext = CombatContext.NotSet;
         public AttackParameters AttackParameters;
         public List<Effect> AppliedEffects = new List<Effect>();
         public List<Effect> RemovedEffects = new List<Effect>();

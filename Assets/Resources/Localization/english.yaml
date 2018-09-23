@@ -1,3 +1,5 @@
+show.loot.message: "Press <color=yellow>F</color> to loot..."
+
 main.menu.buttons.new.game: New Game
 main.menu.buttons.continue: Continue
 main.menu.buttons.quit: Quit
@@ -12,6 +14,19 @@ context.menu.buttons.equip: Equip
 context.menu.buttons.unequip: Unequip
 context.menu.buttons.take: Take
 context.menu.buttons.use.default: Use
+context.menu.buttons.throw: Throw
+
+player.controller.not.holding: "You are not holding anything"
+
+player.controller.select.direction.melee: Select which direction to attack
+player.controller.select.direction.ranged: Select which direction to shoot
+player.controller.select.direction.thrown: Select which direction to throw
+player.controller.select.direction.zapped: Select which direction to zap
+
+player.controller.cannot.do.melee: "You cannot use {0} in melee"
+player.controller.cannot.do.ranged: "You cannot shoot with {0}"
+player.controller.cannot.do.thrown: "You cannot throw {0}"
+player.controller.cannot.do.zapped: "You cannot zap with {0}"
 
 attribute.max.health: "Health"
 
@@ -33,7 +48,6 @@ item.slot.display.helmet: Helmet
 item.slot.display.shoes: Shoes
 item.slot.display.offhand: Offhand
 item.slot.display.mainhand: MainHand
-item.slot.display.ranged: Ranged
 item.slot.display.ammo: Ammo
 item.slot.display.ring: Ring
 item.slot.display.neck: Neck
@@ -42,6 +56,8 @@ attacks.humanoid.1: "{0} punches {1} for {2} points of {3} damage!"
 attacks.dog.1: "{0} bites {1} for {2} points of {3} damage!"
 attacks.bee.1: "{0} strings {1} for {2} points of {3} damage!"
 attacks.slashing.1: "{0} slashes {1} for {2} points of {3} damage!"
+
+attacks.throw.useless.1: "{0} throws an item clumbsily at {1} for {2} points of {3} damage!"
 
 entity.player.name.default: "Poncy"
 entity.dog.name.default: "Maslow"
@@ -63,7 +79,7 @@ effect.poison.tick.message: "Poison hurts {1} for {2} point of damage!"
 
 effect.poison.immunity.name: "Cures poison"
 effect.poison.immunity.description: "Removes all poisons from your body."
-effect.poison.immunity.apply.message: "Your body is cleansed of all toxins"
+effect.poison.immunity.apply.message: "{0} is cleansed of all toxins"
 effect.poison.immunity.remove.message: "{0} is no longer immune to poison..."
 effect.poison.immunity.block.message: "The poison had no effect on {0}."
 

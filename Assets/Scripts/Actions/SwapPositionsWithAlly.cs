@@ -5,8 +5,14 @@ using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class SwapPositionsWithAlly : TargetableAction
+    public class SwapPositionsWithAlly : Action
     {
+        [JsonIgnore]
+        public Entity Source;
+
+        [JsonIgnore]
+        public List<Entity> Targets = new List<Entity>(0);
+
         public override int TimeCost
         {
             get

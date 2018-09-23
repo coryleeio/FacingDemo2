@@ -97,10 +97,6 @@ namespace Gamepackage
             {
                 return "item.slot.display.offhand".Localize();
             }
-            else if (slot == ItemSlot.Ranged)
-            {
-                return "item.slot.display.ranged".Localize();
-            }
             else if (slot == ItemSlot.Ammo)
             {
                 return "item.slot.display.ammo".Localize();
@@ -176,22 +172,22 @@ namespace Gamepackage
         public static List<Tuple<string, string>> GetDisplayAttributesForItem(Item item)
         {
             var retVal = new List<Tuple<string, string>>();
-            if (item.AttackParameters.Count > 0)
+            if (item.MeleeParameters.Count > 0)
             {
-                for (var i = 0; i < item.AttackParameters.Count; i++)
+                for (var i = 0; i < item.MeleeParameters.Count; i++)
                 {
-                    var attackParameter = item.AttackParameters[i];
-                    var isLast = i == item.AttackParameters.Count - 1;
+                    var attackParameter = item.MeleeParameters[i];
+                    var isLast = i == item.MeleeParameters.Count - 1;
                     retVal.Add(new Tuple<string, string>()
                     {
                         Key = MeleeDamageKey,
                         Value = DisplayValueForAttackParameters(attackParameter, isLast)
                     });
                 }
-                for (var i = 0; i < item.AttackParameters.Count; i++)
+                for (var i = 0; i < item.MeleeParameters.Count; i++)
                 {
-                    var attackParameter = item.AttackParameters[i];
-                    var isLast = i == item.AttackParameters.Count - 1;
+                    var attackParameter = item.MeleeParameters[i];
+                    var isLast = i == item.MeleeParameters.Count - 1;
                     retVal.Add(new Tuple<string, string>()
                     {
                         Key = DamageTypeKey,

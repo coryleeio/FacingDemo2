@@ -22,14 +22,6 @@ namespace Gamepackage
             }
         }
 
-        public TargetableAction BuildEntityAction<TAction> (Entity entity) where TAction : TargetableAction
-        {
-            var action = Activator.CreateInstance<TAction>();
-            Assert.IsNotNull(action, string.Format("Failed to create {0}", typeof(TAction)));
-            action.Source = entity;
-            return action;
-        }
-
         public Entity BuildEntity(UniqueIdentifier identifier)
         {
             var entity = EntityFactory.Build(identifier);

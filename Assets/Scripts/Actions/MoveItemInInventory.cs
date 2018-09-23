@@ -1,10 +1,17 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class MoveItemInInventory : TargetableAction
+    public class MoveItemInInventory : Action
     {
+        [JsonIgnore]
+        public Entity Source;
+
+        [JsonIgnore]
+        public List<Entity> Targets = new List<Entity>(0);
+
         public Item Item;
         public int Index = -1;
 

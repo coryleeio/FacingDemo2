@@ -1,7 +1,11 @@
 ﻿using Gamepackage;
+using Newtonsoft.Json;
 
-public class Wait : TargetableAction
+public class Wait : Action
 {
+    [JsonIgnore]
+    public Entity Source;
+
     public override int TimeCost
     {
         get

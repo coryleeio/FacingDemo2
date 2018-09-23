@@ -1,5 +1,4 @@
-﻿using KDSharp.DistanceFunctions;
-using KDSharp.KDTree;
+﻿using KDSharp.KDTree;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,6 +32,8 @@ namespace Gamepackage
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
             var target = FindTarget(Entity);
+            var capabilities = new AttackCapabilities(Entity);
+            var meleeCapabilities = capabilities[CombatContext.Melee];
             NextAction = null;
 
             if (target == null)
@@ -48,10 +49,10 @@ namespace Gamepackage
             else
             {
                 // If we see the target move toward it or attack him
-                if (CombatUtil.CanMelee(Entity, target))
+                if (meleeCapabilities.CanPerform && meleeCapabilities.IsInRange(target))
                 {
-                    var attack = Context.PrototypeFactory.BuildEntityAction<MeleeAttack>(Entity);
-                    attack.Targets.Add(target);
+                    var direction = MathUtil.RelativeDirection(Entity.Position, target.Position);
+                    var attack = new Attack(capabilities, CombatContext.Melee, direction);
                     NextAction = attack;
                 }
                 else
@@ -105,7 +106,7 @@ namespace Gamepackage
 
         private void DefaultBehaviour()
         {
-            if(Entity.Behaviour.Team == Team.PLAYER)
+            if (Entity.Behaviour.Team == Team.PLAYER)
             {
                 // Default for allies is follow player
                 var player = Context.GameStateManager.Game.CurrentLevel.Player;
@@ -114,7 +115,11 @@ namespace Gamepackage
             else
             {
                 // Default for monsters is waiting
-                NextAction = Context.PrototypeFactory.BuildEntityAction<Wait>(Entity);
+                var wait = new Wait
+                {
+                    Source = Entity
+                };
+                NextAction = wait;
             }
         }
 
@@ -147,7 +152,11 @@ namespace Gamepackage
             {
                 if (PathsReturned == PathsExpected)
                 {
-                    NextAction = Context.PrototypeFactory.BuildEntityAction<Wait>(Entity);
+                    var wait = new Wait
+                    {
+                        Source = Entity
+                    };
+                    NextAction = wait;
                     break; // done
                 }
                 yield return new WaitForEndOfFrame();
@@ -164,8 +173,11 @@ namespace Gamepackage
                     Context.Application.StopCoroutine(runningRoutine);
                     runningRoutine = null;
                 }
-                var move = Context.PrototypeFactory.BuildEntityAction<Move>(Entity) as Move;
-                move.TargetPosition = new Point(path.Nodes[0].Position.X, path.Nodes[0].Position.Y);
+                var move = new Move
+                {
+                    Source = Entity,
+                    TargetPosition = new Point(path.Nodes[0].Position.X, path.Nodes[0].Position.Y)
+                };
                 NextAction = move;
             }
         }

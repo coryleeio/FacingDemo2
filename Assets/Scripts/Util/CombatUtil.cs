@@ -8,18 +8,28 @@ namespace Gamepackage
 {
     public static class CombatUtil
     {
-        public static bool CanMelee(Entity a, Entity b)
+        public static Predicate<Effect> AppliedEffects = (effectInQuestion) => { return effectInQuestion is AppliedEffect; };
+        public static Predicate<Entity> HittableEntities = (t) => t.IsCombatant && t.Body != null && !t.Body.IsDead;
+        public static Predicate<Entity> LootableEntities = (ent) => { return ent.PrototypeIdentifier == UniqueIdentifier.ENTITY_GROUND_DROP || (ent.Body != null && ent.Body.IsDead && ent.Inventory.HasAnyItems); };
+
+        public static List<Entity> HittableEntitiesInPositionsOnLevel(Point point, Level level)
         {
-            if (a == null || b == null)
+            return HittableEntitiesInPositionsOnLevel(new List<Point>() { point }, level);
+        }
+
+        public static List<Entity> HittableEntitiesInPositionsOnLevel(List<Point> points, Level level)
+        {
+            List<Entity> entities = new List<Entity>();
+            foreach (var point in points)
             {
-                return false;
+                entities.AddRange(level.Grid[point].EntitiesInPosition.FindAll(CombatUtil.HittableEntities));
             }
-            return a.Position.IsAdjacentTo(b.Position) && a.Position.IsOrthogonalTo(b.Position);
+            return entities;
         }
 
         public static void ShowMessages(EntityStateChange result)
         {
-            foreach(var target in result.Targets)
+            foreach (var target in result.Targets)
             {
                 foreach (var msg in result.LogMessages)
                 {
@@ -47,6 +57,7 @@ namespace Gamepackage
 
             foreach (var target in result.Targets)
             {
+                Assert.IsNotNull(target);
                 if (result.AttackParameters != null && result.AttackParameters.DamageType == DamageTypes.NOT_SET)
                 {
                     throw new NotImplementedException("You forgot to set the damage type on this attack");
@@ -73,6 +84,7 @@ namespace Gamepackage
                     result.Damage = damage;
                 }
 
+                HandleModifyOutgoingAttack(result);
                 HandleModifyIncomingAttack(result);
 
                 var sourceName = "";
@@ -185,6 +197,7 @@ namespace Gamepackage
                 if (item != null)
                 {
                     effectsAggregate.AddRange(item.Effects);
+
                 }
             }
 
@@ -210,7 +223,7 @@ namespace Gamepackage
             if (entity.Trigger != null && entity.Trigger.Effects.Count > 0)
             {
                 var expiring = entity.Trigger.Effects.FindAll(IsAnAffectThatShouldExpire);
-                foreach(var expire in expiring)
+                foreach (var expire in expiring)
                 {
                     expire.OnRemove(entity);
                 }
@@ -258,7 +271,7 @@ namespace Gamepackage
             {
                 foreach (var effect in ctx.RemovedEffects)
                 {
-                    foreach(var target in ctx.Targets)
+                    foreach (var target in ctx.Targets)
                     {
                         RemoveEntityEffects(target, ctx.RemovedEffects);
                     }
@@ -278,10 +291,6 @@ namespace Gamepackage
                         {
                             appliedEffect.Apply(ctx);
                         }
-                        else
-                        {
-                            throw new NotImplementedException("Your items applied effect did not receive a target");
-                        }
                     }
                     else
                     {
@@ -293,14 +302,27 @@ namespace Gamepackage
                 }
             }
         }
+        
+
+        private static void HandleModifyOutgoingAttack(EntityStateChange result)
+        {
+            if(result.Source != null)
+            {
+                var sourceEffects = result.Source.GetEffects();
+                foreach (var effect in sourceEffects)
+                {
+                    if (effect.CanAffecOutgoingAttack(result))
+                    {
+                        effect.AffectOutgoingAttack(result);
+                    }
+                }
+            }
+        }
 
         private static void HandleModifyIncomingAttack(EntityStateChange result)
         {
             foreach (var target in result.Targets)
             {
-                var itemsCopy = new List<Item>();
-                itemsCopy.AddRange(target.Inventory.Items);
-                itemsCopy.AddRange(target.Inventory.EquippedItemBySlot.Values);
                 var targetEffects = target.GetEffects();
                 foreach (var effect in targetEffects)
                 {
@@ -309,19 +331,6 @@ namespace Gamepackage
                         effect.AffectIncomingAttackEffects(result);
                     }
                 }
-            }
-        }
-
-        internal static bool HasWeapon(Entity source)
-        {
-            if (source.Inventory == null)
-            {
-                return false;
-            }
-            else
-            {
-                var item = source.Inventory.GetItemBySlot(ItemSlot.MainHand);
-                return item != null && item.AttackParameters.Count > 0;
             }
         }
 

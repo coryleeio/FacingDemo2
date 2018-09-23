@@ -3,8 +3,10 @@ using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class EquipItem : TargetableAction
+    public class EquipItem : Action
     {
+        [JsonIgnore]
+        public Entity Source;
         public Item Item;
         public ItemSlot Slot;
 

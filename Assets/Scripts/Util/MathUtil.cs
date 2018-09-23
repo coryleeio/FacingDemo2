@@ -9,6 +9,8 @@ namespace Gamepackage
 {
     public static class MathUtil
     {
+        public static Vector3 Offscreen = new Vector3(-999999, -999999, -999999);
+
         public static float TileHeight = 0.5f;
         public static float TileWidth = 1.0f;
 
@@ -31,7 +33,7 @@ namespace Gamepackage
         public static List<Point> RotatePointsInDirection(Point center, List<Point> pointsToRotate, Direction dir)
         {
             var returnValue = new List<Point>(pointsToRotate.Count);
-            foreach(var point in pointsToRotate)
+            foreach (var point in pointsToRotate)
             {
                 returnValue.Add(RotatePointInDirection(center, point, dir));
             }
@@ -70,7 +72,7 @@ namespace Gamepackage
             {
                 radians = Mathf.Deg2Rad * 225;
             }
-            else if(dir == Direction.East)
+            else if (dir == Direction.East)
             {
                 radians = Mathf.Deg2Rad * 315;
             }
@@ -86,6 +88,12 @@ namespace Gamepackage
             return ConvertLocalMapSpaceToMapSpace(center, rotatedPoint);
         }
 
+        public static Direction OppositeDirection(Direction direction)
+        {
+            var newOffset = OffsetForDirection(direction) * -1;
+            return RelativeDirection(new Point(0, 0), newOffset);
+        }
+
         public static Rectangle BoundingRectangleForPoints(List<Point> points)
         {
             var lowestX = points[0].X;
@@ -93,21 +101,21 @@ namespace Gamepackage
             var highestX = points[0].X;
             var highestY = points[0].Y;
 
-            foreach(var point in points)
+            foreach (var point in points)
             {
-                if(point.X < lowestX)
+                if (point.X < lowestX)
                 {
                     lowestX = point.X;
                 }
-                if(point.X > highestX)
+                if (point.X > highestX)
                 {
                     highestX = point.X;
                 }
-                if(point.Y < lowestY)
+                if (point.Y < lowestY)
                 {
                     lowestY = point.Y;
                 }
-                if(point.Y > highestY)
+                if (point.Y > highestY)
                 {
                     highestY = point.Y;
                 }
@@ -215,6 +223,35 @@ namespace Gamepackage
                 output.Add(chosen);
             }
             return output;
+        }
+
+        public static bool PercentageChanceEventOccurs(int Percentage)
+        {
+            return ChooseRandomIntInRange(0, 100) < Percentage;
+        }
+
+        public static Vector3 GetProjectileRotation(Direction direction)
+        {
+            if(direction == Direction.NorthEast)
+            {
+                return new Vector3(0, 0, -60f);
+            }
+            else if(direction == Direction.NorthWest)
+            {
+                return new Vector3(0, 0, 60f);
+            }
+            else if (direction == Direction.SouthEast)
+            {
+                return new Vector3(0, 0, -120f);
+            }
+            else if (direction == Direction.SouthWest)
+            {
+                return new Vector3(0, 0, 120f);
+            }
+            else
+            {
+                throw new NotImplementedException("Cannot resolve projectile direction for direction: " + direction);
+            }
         }
 
         // min inclusive, max exclusive
@@ -371,6 +408,57 @@ namespace Gamepackage
                 list.Add(GetPointByOffset(point, offset));
             }
             return list;
+        }
+
+        public static Point OffsetForDirection(Direction direction)
+        {
+            if (direction == Direction.SouthEast)
+            {
+                return SouthEastOffset;
+            }
+            else if (direction == Direction.SouthWest)
+            {
+                return SouthWestOffset;
+            }
+            else if (direction == Direction.NorthWest)
+            {
+                return NorthWestOffset;
+            }
+            else if (direction == Direction.NorthEast)
+            {
+                return NorthEastOffset;
+            }
+            else if (direction == Direction.North)
+            {
+                return NorthOffset;
+            }
+            else if (direction == Direction.East)
+            {
+                return EastOffset;
+            }
+            else if (direction == Direction.South)
+            {
+                return SouthOffset;
+            }
+            else if (direction == Direction.West)
+            {
+                return WestOffset;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public static List<Point> LineInDirection(Point origin, Direction direction, int length)
+        {
+            var retVal = new List<Point>();
+            var offset = OffsetForDirection(direction);
+            for(var i = 1; i <= length; i++)
+            {
+                retVal.Add((offset * i) + origin);
+            }
+            return retVal;
         }
 
         public static Point GetPointByOffset(Point point, Point offset)

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 
 namespace Gamepackage
 {
-    public class EndTurn : TargetableAction
+    public class EndTurn : Action
     {
+        [JsonIgnore]
+        public Entity Source;
+
         public override int TimeCost
         {
             get

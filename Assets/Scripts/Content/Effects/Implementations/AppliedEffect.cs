@@ -1,10 +1,13 @@
-﻿namespace Gamepackage
+﻿using System.Collections.Generic;
+
+namespace Gamepackage
 {
     public class AppliedEffect : Effect
     {
         public UniqueIdentifier EffectAppliedId;
         public string AppliedDisplayName;
         public string AppliedDisplayDescription;
+        public List<CombatContext> ValidCombatContextsForApplication = new List<CombatContext>();
 
         public override string DisplayName
         {
@@ -24,7 +27,7 @@
 
         public bool CanApply(EntityStateChange ctx)
         {
-            return ctx.Targets.Count >= 1;
+            return ctx.Targets.Count >= 1 && ValidCombatContextsForApplication.Contains(ctx.CombatContext);
         }
 
         public EntityStateChange Apply(EntityStateChange usageContext)

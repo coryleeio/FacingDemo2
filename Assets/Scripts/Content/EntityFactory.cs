@@ -6,6 +6,17 @@ namespace Gamepackage
 {
     public static class EntityFactory
     {
+        private static Body BuildBody(List<AttackParameters> attackParameters)
+        {
+            Body body = new Body
+            {
+                MeleeRange = 1,
+                MeleeTargetsPierced = 1,
+                MeleeParameters = attackParameters,
+            };
+            return body;
+        }
+
         public static Entity Build(UniqueIdentifier uniqueIdentifier)
         {
             var entity = new Entity();
@@ -22,13 +33,10 @@ namespace Gamepackage
             if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_PONCY)
             {
                 entity.Name = "entity.player.name.default".Localize();
-                entity.Body = new Body()
+                entity.Body = BuildBody(DefaultHumanoidBodyAttacks());
+                entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
-                    Attributes = new Dictionary<Attributes, int>
-                    {
-                        {Attributes.MAX_HEALTH, 10 },
-                    },
-                    Attacks = DefaultHumanoidBodyAttacks()
+                    {Attributes.MAX_HEALTH, 10 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -48,13 +56,10 @@ namespace Gamepackage
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_MASLOW)
             {
                 entity.Name = "entity.dog.name.default".Localize();
-                entity.Body = new Body()
+                entity.Body = BuildBody(DefaultDogBodyAttacks());
+                entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
-                    Attributes = new Dictionary<Attributes, int>
-                    {
-                        {Attributes.MAX_HEALTH, 45 },
-                    },
-                    Attacks = DefaultDogBodyAttacks(),
+                    {Attributes.MAX_HEALTH, 45 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -70,13 +75,10 @@ namespace Gamepackage
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
             {
                 entity.Name = "entity.bee.name".Localize();
-                entity.Body = new Body()
+                entity.Body = BuildBody(DefaultBeeBodyAttacks());
+                entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
-                    Attributes = new Dictionary<Attributes, int>
-                    {
-                        {Attributes.MAX_HEALTH, 10 },
-                    },
-                    Attacks = DefaultBeeBodyAttacks(),
+                   {Attributes.MAX_HEALTH, 10 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -93,13 +95,10 @@ namespace Gamepackage
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
             {
                 entity.Name = "entity.queen.bee.name".Localize();
-                entity.Body = new Body()
+                entity.Body = BuildBody(DefaultBeeBodyAttacks());
+                entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
-                    Attributes = new Dictionary<Attributes, int>
-                    {
-                        {Attributes.MAX_HEALTH, 15 },
-                    },
-                    Attacks = DefaultBeeBodyAttacks(),
+                    {Attributes.MAX_HEALTH, 15 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -145,6 +144,17 @@ namespace Gamepackage
                 };
                 entity.Trigger.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE));
             }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GROUND_DROP)
+            {
+                entity.Name = "";
+                entity.BlocksPathing = false;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.StaticSprite,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE,
+                };
+            }
+
             else
             {
                 throw new NotImplementedException();
@@ -192,7 +202,7 @@ namespace Gamepackage
         private static List<AttackParameters> DefaultBeeBodyAttacks()
         {
             var effectList = new List<Effect>();
-            effectList.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON));
+            effectList.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<CombatContext>() { CombatContext.Melee }));
             var attackParameters = new AttackParameters()
             {
                 AttackMessage = "attacks.bee.1".Localize(),

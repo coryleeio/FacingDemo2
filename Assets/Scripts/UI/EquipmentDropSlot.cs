@@ -13,10 +13,13 @@ namespace Gamepackage
 
         public void OnDrop(PointerEventData eventData)
         {
-            var action = Context.PrototypeFactory.BuildEntityAction<EquipItem>(Player) as EquipItem;
-            action.Item = DraggableItem.CurrentDraggable.Item;
-            action.Slot = Slot;
-            if(action.Item.SlotsWearable.Contains(Slot))
+            var action = new EquipItem
+            {
+                Source = Player,
+                Item = DraggableItem.CurrentDraggable.Item,
+                Slot = Slot
+            };
+            if (action.Item.SlotsWearable.Contains(Slot))
             {
                 DraggableItem.CurrentDraggable.transform.SetParent(this.transform);
                 Context.PlayerController.ActionList.Enqueue(action);

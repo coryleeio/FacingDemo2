@@ -3,8 +3,11 @@ using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class UnequipItem : TargetableAction
+    public class UnequipItem : Action
     {
+        [JsonIgnore]
+        public Entity Source;
+
         public Item Item;
         public ItemSlot Slot;
         public int Index = -1;

@@ -4,7 +4,7 @@ namespace Gamepackage
 {
     public static class EffectFactory
     {
-        public static Effect Build(UniqueIdentifier uniqueIdentifier)
+        public static Effect Build(UniqueIdentifier uniqueIdentifier, List<CombatContext> validCombatContexts = null)
         {
             Effect retVal = null;
             if (uniqueIdentifier == UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE)
@@ -90,12 +90,22 @@ namespace Gamepackage
                 retVal = new LuckyCoinLifeSave();
             }
 
-            if(retVal == null)
+            if (retVal is AppliedEffect)
+            {
+                var castVal = retVal as AppliedEffect;
+                if (validCombatContexts == null || validCombatContexts.Count == 0)
+                {
+                    throw new NotImplementedException("An applied effect with no combat contexts will never be applied: " + uniqueIdentifier);
+                }
+                castVal.ValidCombatContextsForApplication.AddRange(validCombatContexts);
+            }
+
+            if (retVal == null)
             {
                 throw new NotImplementedException();
             }
             retVal.Identifier = uniqueIdentifier;
-            if(retVal.Attributes == null)
+            if (retVal.Attributes == null)
             {
                 retVal.Attributes = new Dictionary<Attributes, int>();
             }

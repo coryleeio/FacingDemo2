@@ -1,9 +1,17 @@
-﻿using UnityEngine.Assertions;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class PickupItem : TargetableAction
+    public class PickupItem : Action
     {
+        [JsonIgnore]
+        public Entity Source;
+
+        [JsonIgnore]
+        public List<Entity> Targets = new List<Entity>(0);
+
         public Item Item;
         public int Index = -1; // if you dont set this the inventory system will find a slot 
         // for the item

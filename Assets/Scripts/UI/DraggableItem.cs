@@ -49,25 +49,31 @@ namespace Gamepackage
             var hasItemInInventory = player.Inventory.Items.Contains(Item);
             var isPickingUpItem = !isWearingItem && !hasItemInInventory;
 
-            if(rightClicked)
+            if (rightClicked)
             {
                 Context.UIController.ContextMenu.ShowForItemAtLocation(Item, eventData);
             }
             if (shiftLeftClicked)
             {
-                if(isWearingItem)
+                if (isWearingItem)
                 {
-                    var action = Context.PrototypeFactory.BuildEntityAction<UnequipItem>(Source) as UnequipItem;
-                    action.Item = Item;
+                    var action = new UnequipItem
+                    {
+                        Source = Source,
+                        Item = Item
+                    };
                     action.Slot = Source.Inventory.GetItemSlotOfEquippedItem(action.Item);
                     Context.PlayerController.ActionList.Enqueue(action);
                     Context.UIController.Refresh();
                 }
-                else if(hasItemInInventory)
+                else if (hasItemInInventory)
                 {
-                    var action = Context.PrototypeFactory.BuildEntityAction<EquipItem>(Source) as EquipItem;
-                    action.Item = Item;
-                    if(Item.SlotsWearable.Count > 0)
+                    var action = new EquipItem
+                    {
+                        Source = Source,
+                        Item = Item
+                    };
+                    if (Item.SlotsWearable.Count > 0)
                     {
                         action.Slot = Item.SlotsWearable[0];
                         Context.PlayerController.ActionList.Enqueue(action);
@@ -82,8 +88,11 @@ namespace Gamepackage
             else if (isLeftClick && isPickingUpItem)
             {
                 // picking up the item
-                var action = Context.PrototypeFactory.BuildEntityAction<PickupItem>(player) as PickupItem;
-                action.Item = Item;
+                var action = new PickupItem
+                {
+                    Source = player,
+                    Item = Item
+                };
 
                 // takes from source (which is the draggable source)
                 action.Targets.Add(Source);

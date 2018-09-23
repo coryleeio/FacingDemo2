@@ -53,14 +53,14 @@ namespace Gamepackage
                     }
                 }
 
-                if(entitesThatStillNeedToACtBeforePhaseEnds == 0)
+                if (entitesThatStillNeedToACtBeforePhaseEnds == 0)
                 {
                     // phase is over, nobbody else needs to act
-                    if(CurrentPhase == TurnPhase.Player)
+                    if (CurrentPhase == TurnPhase.Player)
                     {
                         ChangePhase(TurnPhase.Enemies);
                     }
-                    else if(CurrentPhase == TurnPhase.Enemies)
+                    else if (CurrentPhase == TurnPhase.Enemies)
                     {
                         ChangePhase(TurnPhase.Player);
                     }
@@ -71,7 +71,7 @@ namespace Gamepackage
                     return;
                 }
 
-                if(entitiesDoneThinking == entitesThatStillNeedToACtBeforePhaseEnds)
+                if (entitiesDoneThinking == entitesThatStillNeedToACtBeforePhaseEnds)
                 {
                     // At this point all the actors have reevaluted their situation and know their next action.
                     // and we have actors that have actions to take
@@ -80,24 +80,24 @@ namespace Gamepackage
                     List<Entity> everyoneElse = new List<Entity>(0);
                     List<Entity> swappers = new List<Entity>(0);
 
-                    foreach(var entity in entities)
+                    foreach (var entity in entities)
                     {
-                        if(entity.Behaviour != null && !entity.Behaviour.IsDoneThisTurn)
+                        if (entity.Behaviour != null && !entity.Behaviour.IsDoneThisTurn)
                         {
-                            if(!entity.Behaviour.NextAction.IsValid())
+                            if (!entity.Behaviour.NextAction.IsValid())
                             {
                                 entity.Behaviour.NextAction = null;
                                 continue;
                             }
-                            if(entity.Behaviour.NextAction.GetType() == typeof(Wait))
+                            if (entity.Behaviour.NextAction.GetType() == typeof(Wait))
                             {
                                 waiters.Add(entity);
                             }
-                            else if(entity.Behaviour.NextAction.GetType() == typeof(Move))
+                            else if (entity.Behaviour.NextAction.GetType() == typeof(Move))
                             {
                                 movers.Add(entity);
                             }
-                            else if(entity.Behaviour.NextAction.GetType() == typeof(SwapPositionsWithAlly))
+                            else if (entity.Behaviour.NextAction.GetType() == typeof(SwapPositionsWithAlly))
                             {
                                 swappers.Add(entity);
                             }
@@ -107,7 +107,7 @@ namespace Gamepackage
                             }
                         }
                     }
-                    if(swappers.Count != 0)
+                    if (swappers.Count != 0)
                     {
                         var step = new Step();
                         var endTurnStep = new Step();
@@ -117,13 +117,17 @@ namespace Gamepackage
                         }
                         foreach (var swapper in swappers)
                         {
-                            endTurnStep.Actions.AddFirst(Context.PrototypeFactory.BuildEntityAction<EndTurn>(swapper));
+                            var endTurn = new EndTurn
+                            {
+                                Source = swapper
+                            };
+                            endTurnStep.Actions.AddFirst(endTurn);
                         }
                         Steps.AddLast(step);
                         Steps.AddLast(endTurnStep);
                         ForceAIsToRecalculateMoves(entities);
                     }
-                    else if(waiters.Count != 0)
+                    else if (waiters.Count != 0)
                     {
                         // Enqueue waiters
                         var step = new Step();
@@ -134,33 +138,41 @@ namespace Gamepackage
                         }
                         foreach (var waiter in waiters)
                         {
-                            endTurnStep.Actions.AddFirst(Context.PrototypeFactory.BuildEntityAction<EndTurn>(waiter));
+                            var endTurn = new EndTurn
+                            {
+                                Source = waiter
+                            };
+                            endTurnStep.Actions.AddFirst(endTurn);
                         }
                         Steps.AddLast(step);
                         Steps.AddLast(endTurnStep);
                     }
-                    else if(movers.Count != 0)
+                    else if (movers.Count != 0)
                     {
                         // Batch the non conflicting moves
                         var listOfMovedToPoints = new List<Point>();
                         var moveStep = new Step();
                         var endTurnSTep = new Step();
 
-                        foreach(var entity in movers)
+                        foreach (var entity in movers)
                         {
                             var desiredMove = entity.Behaviour.NextAction as Move;
                             if (!listOfMovedToPoints.Contains(desiredMove.TargetPosition))
                             {
                                 listOfMovedToPoints.Add(desiredMove.TargetPosition);
                                 moveStep.Actions.AddLast(entity.Behaviour.NextAction);
-                                endTurnSTep.Actions.AddLast(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entity));
+                                var endTurn = new EndTurn
+                                {
+                                    Source = entity
+                                };
+                                endTurnSTep.Actions.AddLast(endTurn);
                             }
                         }
                         Steps.AddLast(moveStep);
                         Steps.AddLast(endTurnSTep);
                         ForceAIsToRecalculateMoves(entities);
                     }
-                    else if(everyoneElse.Count != 0)
+                    else if (everyoneElse.Count != 0)
                     {
                         // Enqueue a combat action
                         var step = new Step();
@@ -169,7 +181,11 @@ namespace Gamepackage
                         var entityToAct = everyoneElse[0];
                         var nextAction = entityToAct.Behaviour.NextAction;
                         step.Actions.AddLast(nextAction);
-                        endTurnStep.Actions.AddLast(Context.PrototypeFactory.BuildEntityAction<EndTurn>(entityToAct));
+                        var endTurn = new EndTurn
+                        {
+                            Source = entityToAct
+                        };
+                        endTurnStep.Actions.AddLast(endTurn);
 
                         Steps.AddLast(step);
                         Steps.AddLast(endTurnStep);

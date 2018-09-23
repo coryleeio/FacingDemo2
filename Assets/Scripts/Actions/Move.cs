@@ -5,8 +5,11 @@ using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class Move : TargetableAction
+    public class Move : Action
     {
+        [JsonIgnore]
+        public Entity Source;
+
         public override int TimeCost
         {
             get
@@ -117,7 +120,7 @@ namespace Gamepackage
 
         public static void HandleInputHints(List<Entity> entitiesInPos)
         {
-            var deadEntitiesInPos = entitiesInPos.FindAll((entInPos) => { return entInPos.Body != null && entInPos.Body.IsDead && entInPos.Inventory.HasAnyItems; });
+            var lootableEntitiesInPosition = entitiesInPos.FindAll(CombatUtil.LootableEntities);
             var trigggerEntitiesInPos = entitiesInPos.FindAll((entInPos) => { return entInPos.Trigger != null; });
             Effect triggerOnPressEffect = null;
 
@@ -137,9 +140,9 @@ namespace Gamepackage
                 Context.UIController.InputHint.ShowText(triggerOnPressEffect.Description);
             }
 
-            else if (deadEntitiesInPos.Count > 0)
+            else if (lootableEntitiesInPosition.Count > 0)
             {
-                Context.UIController.InputHint.ShowText("Press <color=yellow>F</color> to loot...");
+                Context.UIController.InputHint.ShowText("show.loot.message".Localize());
             }
             else
             {

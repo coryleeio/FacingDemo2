@@ -10,7 +10,6 @@ namespace Gamepackage
         Shoes,
         Offhand,
         MainHand,
-        Ranged,
         Ammo,
         Ring,
         Neck,

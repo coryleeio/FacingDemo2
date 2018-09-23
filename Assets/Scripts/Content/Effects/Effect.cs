@@ -94,6 +94,15 @@ namespace Gamepackage
             return ctx;
         }
 
+        public virtual bool CanAffecOutgoingAttack(EntityStateChange abilityTriggerContext)
+        {
+            return false;
+        }
+        public virtual EntityStateChange AffectOutgoingAttack(EntityStateChange ctx)
+        {
+            return ctx;
+        }
+
         public virtual bool CanTriggerOnStep()
         {
             return false;
