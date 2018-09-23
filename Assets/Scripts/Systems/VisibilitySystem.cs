@@ -15,7 +15,7 @@ namespace Gamepackage
 
     public class VisibilitySystem
     {
-        public VisibilitySystem() {}
+        public VisibilitySystem() { }
 
         private Texture2D RevealMask;
         private LayerMask FogLayer;
@@ -40,7 +40,7 @@ namespace Gamepackage
                 var prefab = Resources.Load<GameObject>("Fog/Fog of War");
                 FogOfWarGameObject = GameObject.Instantiate(prefab);
             }
-            if(RevealMask == null)
+            if (RevealMask == null)
             {
                 RevealMask = Resources.Load<Texture2D>("Fog/CubeMask");
             }
@@ -246,9 +246,9 @@ namespace Gamepackage
 
                 foreach (var entity in level.Entitys)
                 {
-                    if(entity.View != null)
+                    if (entity.View != null)
                     {
-                        if (entity.IsPlayer)
+                        if (entity.IsPlayer || (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN || entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_UP))
                         {
                             entity.View.IsVisible = true;
                         }
@@ -258,7 +258,7 @@ namespace Gamepackage
                         }
                     }
 
-                    if(entity.View.ViewGameObject != null)
+                    if (entity.View.ViewGameObject != null)
                     {
                         entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
                     }

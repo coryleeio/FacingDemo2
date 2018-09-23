@@ -21,7 +21,7 @@ namespace Gamepackage
 
             if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_PONCY)
             {
-                entity.Name = "Poncy";
+                entity.Name = "entity.player.name.default".Localize();
                 entity.Body = new Body()
                 {
                     Attributes = new Dictionary<Attributes, int>
@@ -47,7 +47,7 @@ namespace Gamepackage
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_MASLOW)
             {
-                entity.Name = "Maslow";
+                entity.Name = "entity.dog.name.default".Localize();
                 entity.Body = new Body()
                 {
                     Attributes = new Dictionary<Attributes, int>
@@ -69,7 +69,7 @@ namespace Gamepackage
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
             {
-                entity.Name = "Giant Bee";
+                entity.Name = "entity.bee.name".Localize();
                 entity.Body = new Body()
                 {
                     Attributes = new Dictionary<Attributes, int>
@@ -92,7 +92,7 @@ namespace Gamepackage
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
             {
-                entity.Name = "Queen Bee";
+                entity.Name = "entity.queen.bee.name".Localize();
                 entity.Body = new Body()
                 {
                     Attributes = new Dictionary<Attributes, int>
@@ -116,7 +116,7 @@ namespace Gamepackage
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_UP)
             {
-                entity.Name = "Stairs (Up)";
+                entity.Name = "entity.stairs.up.name".Localize();
                 entity.BlocksPathing = false;
                 entity.View = new View()
                 {
@@ -131,7 +131,7 @@ namespace Gamepackage
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN)
             {
-                entity.Name = "Stairs (Down)";
+                entity.Name = "entity.stairs.down.name".Localize();
                 entity.BlocksPathing = false;
                 entity.View = new View()
                 {
@@ -165,7 +165,7 @@ namespace Gamepackage
                     {
                         new AttackParameters()
                         {
-                            AttackMessage = "{0} punches {1} for {2} points of {3} damage!",
+                            AttackMessage = "attacks.humanoid.1".Localize(),
                             Bonus = 0,
                             DyeNumber = 1,
                             DyeSize = 1,
@@ -180,7 +180,7 @@ namespace Gamepackage
                     {
                         new AttackParameters()
                         {
-                            AttackMessage = "{0} bites {1} for {2} points of {3} damage!",
+                            AttackMessage = "attacks.dog.1".Localize(),
                             Bonus = 1,
                             DyeNumber = 2,
                             DyeSize = 4,
@@ -195,7 +195,7 @@ namespace Gamepackage
             effectList.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON));
             var attackParameters = new AttackParameters()
             {
-                AttackMessage = "{0} strings {1} for {2} points of {3} damage!",
+                AttackMessage = "attacks.bee.1".Localize(),
                 Bonus = 0,
                 DyeNumber = 1,
                 DyeSize = 1,

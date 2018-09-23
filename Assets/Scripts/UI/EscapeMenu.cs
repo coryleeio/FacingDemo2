@@ -21,28 +21,28 @@ namespace Gamepackage
             if (!hasInit)
             {
                 hasInit = true;
-                BuildButton("Return to game", () =>
+                BuildButton("escape.menu.buttons.return".Localize(), () =>
                 {
 
                 });
-                BuildButton("Restart", () => {
+                BuildButton("escape.menu.buttons.restart".Localize(), () => {
                     Context.GameStateManager.Clear();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
                 });
-                BuildButton("Save", () =>
+                BuildButton("escape.menu.buttons.save".Localize(), () =>
                 {
                     Context.GameStateManager.SaveGame();
                 });
-                BuildButton("Load", () =>
+                BuildButton("escape.menu.buttons.load".Localize(), () =>
                 {
                     Context.GameStateManager.LoadGame();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
                 });
-                BuildButton("Quit to main menu", () => {
+                BuildButton("escape.menu.buttons.quit.to.main.menu".Localize(), () => {
                     Context.GameStateManager.Clear();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
                 });
-                BuildButton("Quit game", () =>
+                BuildButton("escape.menu.buttons.quit.game".Localize(), () =>
                 {
                     if (UnityEngine.Application.isEditor)
                     {

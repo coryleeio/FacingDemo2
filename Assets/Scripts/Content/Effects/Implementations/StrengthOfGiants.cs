@@ -6,7 +6,7 @@
         {
             get
             {
-                return "Strength of Giants";
+                return "effect.strength.of.giants.name".Localize();
             }
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return "Your strength feels boundless";
+                return "effect.strength.of.giants.description".Localize();
             }
         }
 
@@ -26,13 +26,13 @@
         public override void OnApply(Entity owner)
         {
             base.OnApply(owner);
-            Context.UIController.TextLog.AddText(string.Format("{0} is filled with boundless strength!", owner.Name));
+            Context.UIController.TextLog.AddText(string.Format("effect.strength.of.giants.apply".Localize(), owner.Name));
         }
 
         public override void OnRemove(Entity owner)
         {
             base.OnRemove(owner);
-            Context.UIController.TextLog.AddText(string.Format("{0} feels much weaker...", owner.Name));
+            Context.UIController.TextLog.AddText(string.Format("effect.strength.of.giants.remove".Localize(), owner.Name));
         }
     }
 }

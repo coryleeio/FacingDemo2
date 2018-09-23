@@ -20,8 +20,8 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_WEAK_POISON,
-                    AppliedDisplayName = "Applied weak poison",
-                    AppliedDisplayDescription = "The business end of this is coated in poison...",
+                    AppliedDisplayName = "effect.applied.weak.poison.name".Localize(),
+                    AppliedDisplayDescription = "effect.applied.weak.poison.description".Localize(),
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON)
@@ -29,8 +29,8 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_STRONG_POISON,
-                    AppliedDisplayName = "Applied strong poison",
-                    AppliedDisplayDescription = "The business end of this is coated in a viscous poison...",
+                    AppliedDisplayName = "effect.applied.strong.poison.name".Localize(),
+                    AppliedDisplayDescription = "effect.applied.strong.poison.description".Localize(),
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY)
@@ -38,8 +38,8 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_POISON_IMMUNITY,
-                    AppliedDisplayName = "Applied poison immunity",
-                    AppliedDisplayDescription = "This makes you immune to poison...",
+                    AppliedDisplayName = "effect.applied.poison.immunity.name".Localize(),
+                    AppliedDisplayDescription = "effect.applied.poison.immunity.description".Localize(),
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_WEAK_POISON)

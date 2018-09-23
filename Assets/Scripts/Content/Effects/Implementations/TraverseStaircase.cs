@@ -9,7 +9,7 @@ namespace Gamepackage
         {
             get
             {
-                return "Change level";
+                return "effect.traverse.stairs.name".Localize();
             }
         }
 
@@ -17,7 +17,7 @@ namespace Gamepackage
         {
             get
             {
-                return "Press <color=yellow>F</color> use stairs...";
+                return "effect.traverse.stairs.description".Localize();
             }
         }
 

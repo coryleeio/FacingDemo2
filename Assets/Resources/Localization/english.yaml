@@ -1,0 +1,103 @@
+main.menu.buttons.new.game: New Game
+main.menu.buttons.continue: Continue
+main.menu.buttons.quit: Quit
+escape.menu.buttons.return: "Return to game"
+escape.menu.buttons.restart: "Restart"
+escape.menu.buttons.save: "Save"
+escape.menu.buttons.load: "Load"
+escape.menu.buttons.quit.to.main.menu: "Quit to main menu"
+escape.menu.buttons.quit.game: "Quit game"
+context.menu.buttons.info: Info
+context.menu.buttons.equip: Equip
+context.menu.buttons.unequip: Unequip
+context.menu.buttons.take: Take
+context.menu.buttons.use.default: Use
+
+attribute.max.health: "Health"
+
+damage.type.fire: "fire"
+damage.type.cold: "cold"
+damage.type.lightning: "lightning"
+damage.type.slashing: "slashing"
+damage.type.bludgeoning: "bludgeoning"
+damage.type.piercing: "piercing"
+damage.type.arcane: "arcane"
+damage.type.negative: "negative"
+damage.type.holy: "holy"
+damage.type.poison: "poison"
+
+item.slot.display.none: None
+item.slot.display.chest: Chest
+item.slot.display.cloak: Cloak
+item.slot.display.helmet: Helmet
+item.slot.display.shoes: Shoes
+item.slot.display.offhand: Offhand
+item.slot.display.mainhand: MainHand
+item.slot.display.ranged: Ranged
+item.slot.display.ammo: Ammo
+item.slot.display.ring: Ring
+item.slot.display.neck: Neck
+
+attacks.humanoid.1: "{0} punches {1} for {2} points of {3} damage!"
+attacks.dog.1: "{0} bites {1} for {2} points of {3} damage!"
+attacks.bee.1: "{0} strings {1} for {2} points of {3} damage!"
+attacks.slashing.1: "{0} slashes {1} for {2} points of {3} damage!"
+
+entity.player.name.default: "Poncy"
+entity.dog.name.default: "Maslow"
+entity.bee.name: "Giant Bee"
+entity.queen.bee.name: "Giant Bee"
+entity.stairs.up.name: "Stairs (Up)"
+entity.stairs.down.name: "Stairs (Down)"
+
+effect.lucky.coin.lifesave.name: "It's really lucky"
+effect.lucky.coin.lifesave.description: "50% chance to survive a hit that would otherwise kill you."
+effect.lucky.coin.lifesave.floating.message: "Got lucky!"
+effect.lucky.coin.lifesave.block.attack: "The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters..."
+
+effect.poison.name: "Poison"
+effect.poison.description: "You are poisoned..."
+effect.poison.apply.message: "{0} is now poisoned..."
+effect.poison.remove.message: "{0} is no longer poisoned!"
+effect.poison.tick.message: "Poison hurts {1} for {2} point of damage!"
+
+effect.poison.immunity.name: "Cures poison"
+effect.poison.immunity.description: "Removes all poisons from your body."
+effect.poison.immunity.apply.message: "Your body is cleansed of all toxins"
+effect.poison.immunity.remove.message: "{0} is no longer immune to poison..."
+effect.poison.immunity.block.message: "The poison had no effect on {0}."
+
+effect.strength.of.giants.name: "Strength of Giants"
+effect.strength.of.giants.description: "Your strength feels boundless"
+effect.strength.of.giants.apply: "{0} is filled with boundless strength!"
+effect.strength.of.giants.remove: "{0} feels much weaker..."
+
+effect.traverse.stairs.name: "Change level"
+effect.traverse.stairs.description: "Press <color=yellow>F</color> use stairs..."
+
+effect.applied.weak.poison.name: "Applied weak poison"
+effect.applied.weak.poison.description: "The business end of this is coated in poison..."
+effect.applied.strong.poison.name: "Applied strong poison"
+effect.applied.strong.poison.description: "The business end of this is coated in a viscous poison..."
+effect.applied.poison.immunity.name: "Applied poison immunity"
+effect.applied.poison.immunity.description: "This makes you immune to poison..."
+
+item.no.name: No name
+item.no.description: No set description
+
+item.longsword.name: Longsword
+item.longsword.description: This is a simple longsword.
+
+item.antidote.name: "Antidote"
+item.antidote.description: "A bubbling vial of viscous green liquid."
+item.antidote.action: Drink
+item.antidote.on.use: You quaff a potion
+
+item.lucky.coin.name: Lucky Coin
+item.lucky.coin.description: "This coin is particularly lucky, and is probably deserving of a better description."
+
+item.arrow.name: "Arrow"
+item.arrow.description: "People have been using this to kill each other literally forever. The only thing they used before this was a rock. Arrows are considered by many to be more civil."
+
+
+

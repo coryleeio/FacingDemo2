@@ -7,6 +7,7 @@
         public static ResourceManager ResourceManager = new ResourceManager();
         public static PrototypeFactory PrototypeFactory = new PrototypeFactory();
         public static EntityManager EntitySystem = new EntityManager();
+        public static Localizer Localizer = new Localizer();
         public static DungeonGenerator DungeonGenerator = new DungeonGenerator();
         public static SpriteSortingSystem SpriteSortingSystem = new SpriteSortingSystem();
         public static OverlaySystem OverlaySystem = new OverlaySystem();

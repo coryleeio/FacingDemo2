@@ -26,7 +26,7 @@ namespace Gamepackage
         public void ShowForItemAtLocation(Item item, PointerEventData eventData)
         {
             Purge();
-            BuildButton("Info", () =>
+            BuildButton("context.menu.buttons.info".Localize(), () =>
             {
                 Context.UIController.ItemInspectionWindow.ShowFor(item);
             });
@@ -41,7 +41,7 @@ namespace Gamepackage
             if (hasItemInInventory)
             {
                 BuildOnUseButtonIfNeeded(player, item);
-                BuildButton("Equip", () =>
+                BuildButton("context.menu.buttons.equip".Localize(), () =>
                 {
                     var action = Context.PrototypeFactory.BuildEntityAction<EquipItem>(player) as EquipItem;
                     action.Item = item;
@@ -52,7 +52,7 @@ namespace Gamepackage
             else if (isWearingItem)
             {
                 BuildOnUseButtonIfNeeded(player, item);
-                BuildButton("Unequip", () =>
+                BuildButton("context.menu.buttons.unequip".Localize(), () =>
                 {
                     var action = Context.PrototypeFactory.BuildEntityAction<UnequipItem>(player) as UnequipItem;
                     action.Item = item;
@@ -68,7 +68,7 @@ namespace Gamepackage
                 {
                     if (possibleTarget.Inventory.Items.Contains(item))
                     {
-                        BuildButton("Take", () =>
+                        BuildButton("context.menu.buttons.take".Localize(), () =>
                         {
                             var action = Context.PrototypeFactory.BuildEntityAction<PickupItem>(player) as PickupItem;
                             action.Item = item;
@@ -90,7 +90,7 @@ namespace Gamepackage
         {
             if (item.IsUsable)
             {
-                var onUseText = item.CustomOnUseText ?? "Use";
+                var onUseText = item.CustomOnUseText ?? "context.menu.buttons.use.default".Localize();
                 BuildButton(onUseText, () =>
                 {
                     var action = Context.PrototypeFactory.BuildEntityAction<UseItemOnSelf>(player) as UseItemOnSelf;

@@ -7,8 +7,8 @@ namespace Gamepackage
     {
         public static void SetDefaults(Item item)
         {
-            item.DisplayName = "No name";
-            item.Description = "No set description";
+            item.DisplayName = "item.no.name".Localize();
+            item.Description = "item.no.description".Localize();
             item.SlotsWearable = new List<ItemSlot>(0);
             item.SlotsOccupiedByWearing = new List<ItemSlot>(0);
             item.NumberOfItems = 1;
@@ -32,11 +32,11 @@ namespace Gamepackage
             if (uniqueIdentifier == UniqueIdentifier.ITEM_LONGSWORD)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LONGSWORD;
-                item.DisplayName = "Longsword";
-                item.Description = "This is a simple longsword.";
+                item.DisplayName = "item.longsword.name".Localize();
+                item.Description = "item.longsword.description".Localize();
                 item.AttackParameters.Add(new AttackParameters()
                 {
-                    AttackMessage = "{0} slashes {1} for {2} points of {3} damage!",
+                    AttackMessage = "attacks.slashing.1".Localize(),
                     Bonus = 0,
                     DyeNumber = 1,
                     DyeSize = 8,
@@ -50,10 +50,10 @@ namespace Gamepackage
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ANTIDOTE)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ANTIDOTE;
-                item.DisplayName = "Antidote";
-                item.Description = "A bubbling vial of viscous green liquid.";
-                item.CustomOnUseText = "Drink";
-                item.OnUseText = "You quaff a potion";
+                item.DisplayName = "item.antidote.name".Localize();
+                item.Description = "item.antidote.description".Localize();
+                item.CustomOnUseText = "item.antidote.action".Localize();
+                item.OnUseText = "item.antidote.on.use".Localize();
                 item.ExactNumberOfChargesRemaining = 1;
                 item.DestroyWhenAllChargesAreConsumed = true;
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY));
@@ -62,15 +62,15 @@ namespace Gamepackage
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_LUCKY_COIN)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN;
-                item.DisplayName = "Lucky Coin";
-                item.Description = "This coin is particularly lucky, and is probably deserving of a better description.";
+                item.DisplayName = "item.lucky.coin.name".Localize();
+                item.Description = "item.lucky.coin.description".Localize();
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ARROW)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;
-                item.DisplayName = "Arrow";
-                item.Description = "People have been using this to kill each other literally forever. The only thing they used before this was a rock. Arrows are considered by many to be more civil.";
+                item.DisplayName = "item.arrow.name".Localize();
+                item.Description = "item.arrow.description".Localize();
                 item.MaxStackSize = 20;
                 item.NumberOfItems = MathUtil.ChooseRandomIntInRange(5, item.MaxStackSize / 2 - 1);
                 item.SlotsWearable.Add(ItemSlot.Ammo);

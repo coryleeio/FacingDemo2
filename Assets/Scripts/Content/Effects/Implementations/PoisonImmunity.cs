@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Gamepackage
+﻿namespace Gamepackage
 {
     public class PoisonImmunity : Effect
     {
@@ -8,7 +6,7 @@ namespace Gamepackage
         {
             get
             {
-                return "Cures poison";
+                return "effect.poison.immunity.name".Localize();
             }
         }
 
@@ -16,14 +14,14 @@ namespace Gamepackage
         {
             get
             {
-                return "Removes all poisons from your body.";
+                return "effect.poison.immunity.description".Localize();
             }
         }
 
         public override void OnApply(Entity owner)
         {
             base.OnApply(owner);
-            Context.UIController.TextLog.AddText(string.Format("Your body is cleansed of all toxins", owner.Name));
+            Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.apply.message".Localize(), owner.Name));
             EntityStateChange ctx = new EntityStateChange();
             ctx.Source = owner;
             ctx.Targets.Add(owner);
@@ -35,7 +33,7 @@ namespace Gamepackage
         public override void OnRemove(Entity owner)
         {
             base.OnRemove(owner);
-            Context.UIController.TextLog.AddText(string.Format("{0} is no longer immune to poison...", owner.Name));
+            Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.remove.message".Localize(), owner.Name));
         }
 
         public override void HandleStacking(Entity entity)
@@ -60,7 +58,7 @@ namespace Gamepackage
                 }
                 if (effectsBlocked.Count > 0)
                 {
-                    ctx.LateMessages.AddLast(string.Format("The poison had no effect on {0}.", target.Name));
+                    ctx.LateMessages.AddLast(string.Format("effect.poison.immunity.block.message".Localize(), target.Name));
                 }
             }
             return ctx;

@@ -99,19 +99,52 @@ namespace Gamepackage
 
         private static void PlaceEntitiesInLevel(List<Entity> entities, Level level)
         {
+            Predicate<Point> findFloorPoints = (piq) => { return level.Grid[piq.X, piq.Y].TileType == TileType.Floor; };
+
+
             Point floodFillStartPoint;
-            var floorTilesInRoom = FloorTilesInRect(level, level.BoundingBox);
-            floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInRoom);
+            var floorTilesInLevel = FloorTilesInRect(level, level.BoundingBox);
+            floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInLevel);
 
             var pointsInDomain = MathUtil.PointsInRect(level.BoundingBox);
             for (int i = 2; i < 8; i = i + 2)
             {
                 List<Point> spawnPoints = new List<Point>();
-                MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, (piq) => { return level.Grid[piq.X, piq.Y].TileType == TileType.Floor; });
+                MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, findFloorPoints);
 
                 foreach (var alreadyExistingEntity in level.Entitys)
                 {
                     spawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
+                }
+
+                var entitiesThatBlockPathing = entities.FindAll((entityInQuestion) => { return entityInQuestion.BlocksPathing; });
+                if(entitiesThatBlockPathing.Count > 0)
+                {
+                    var shouldRemove = new List<Point>();
+                    foreach(var point in spawnPoints)
+                    {
+                        var orthogonals = MathUtil.OrthogonalPoints(point);
+                        var foundMatch = false;
+
+                        foreach(var orthogonal in orthogonals)
+                        {
+                            // If you can path to this tile from another tile, you can place a blocking object in it
+                            if(floorTilesInLevel.Contains(orthogonal))
+                            {
+                                foundMatch = true;
+                                break;
+                            }
+                        }
+
+                        if(!foundMatch)
+                        {
+                            shouldRemove.Add(point);
+                        }
+                    }
+                    foreach(var pointToRemove in shouldRemove)
+                    {
+                        spawnPoints.Remove(pointToRemove);
+                    }
                 }
 
                 if (spawnPoints.Count >= entities.Count)

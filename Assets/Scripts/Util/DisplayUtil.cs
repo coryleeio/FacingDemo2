@@ -23,43 +23,43 @@ namespace Gamepackage
         {
             if (damageType == DamageTypes.FIRE)
             {
-                return "fire";
+                return "damage.type.fire".Localize();
             }
             else if (damageType == DamageTypes.COLD)
             {
-                return "cold";
+                return "damage.type.cold".Localize();
             }
             else if (damageType == DamageTypes.LIGHTNING)
             {
-                return "lightning";
+                return "damage.type.lightning".Localize();
             }
             else if (damageType == DamageTypes.SLASHING)
             {
-                return "slashing";
+                return "damage.type.slashing".Localize();
             }
             else if (damageType == DamageTypes.BLUDGEONING)
             {
-                return "bludgeoning";
+                return "damage.type.bludgeoning".Localize();
             }
             else if (damageType == DamageTypes.PIERCING)
             {
-                return "piercing";
+                return "damage.type.piercing".Localize();
             }
             else if (damageType == DamageTypes.ARCANE)
             {
-                return "arcane";
+                return "damage.type.arcane".Localize();
             }
             else if (damageType == DamageTypes.NEGATIVE)
             {
-                return "negative";
+                return "damage.type.negative".Localize();
             }
             else if (damageType == DamageTypes.HOLY)
             {
-                return "holy";
+                return "damage.type.holy".Localize();
             }
             else if (damageType == DamageTypes.POISON)
             {
-                return "poison";
+                return "damage.type.poison".Localize();
             }
             else
             {
@@ -67,9 +67,61 @@ namespace Gamepackage
             }
         }
 
+        public static string DisplayValueForSlot(ItemSlot slot)
+        {
+            if (slot == ItemSlot.None)
+            {
+                return "item.slot.display.none".Localize();
+            }
+            else if (slot == ItemSlot.Chest)
+            {
+                return "item.slot.display.chest".Localize();
+            }
+            else if (slot == ItemSlot.Cloak)
+            {
+                return "item.slot.display.cloak".Localize();
+            }
+            else if (slot == ItemSlot.Helmet)
+            {
+                return "item.slot.display.helmet".Localize();
+            }
+            else if (slot == ItemSlot.Shoes)
+            {
+                return "item.slot.display.shoes".Localize();
+            }
+            else if (slot == ItemSlot.MainHand)
+            {
+                return "item.slot.display.mainhand".Localize();
+            }
+            else if (slot == ItemSlot.Offhand)
+            {
+                return "item.slot.display.offhand".Localize();
+            }
+            else if (slot == ItemSlot.Ranged)
+            {
+                return "item.slot.display.ranged".Localize();
+            }
+            else if (slot == ItemSlot.Ammo)
+            {
+                return "item.slot.display.ammo".Localize();
+            }
+            else if (slot == ItemSlot.Ring)
+            {
+                return "item.slot.display.ring".Localize();
+            }
+            else if (slot == ItemSlot.Neck)
+            {
+                return "item.slot.display.neck".Localize();
+            }
+            else
+            {
+                throw new NotImplementedException("Need to add a display string for this slot type: " + slot);
+            }
+        }
+
         public static string TooltipFor(string key)
         {
-            if(key == MeleeDamageKey)
+            if (key == MeleeDamageKey)
             {
                 return "";
             }
@@ -86,9 +138,9 @@ namespace Gamepackage
 
         public static string DisplayValueForAttribute(Attributes attr)
         {
-            if(attr == Attributes.MAX_HEALTH)
+            if (attr == Attributes.MAX_HEALTH)
             {
-                return "Health";
+                return "attribute.max.health".Localize();
             }
             else
             {
@@ -100,14 +152,15 @@ namespace Gamepackage
         {
             var retVal = new List<Tuple<string, string>>();
 
-            retVal.Add(new Tuple<string, string>() {
+            retVal.Add(new Tuple<string, string>()
+            {
                 Key = DisplayValueForAttribute(Attributes.MAX_HEALTH),
                 Value = string.Format("{0}/{1}", player.Body.CurrentHealth, player.CalculateValueOfAttribute(Attributes.MAX_HEALTH)),
             });
             foreach (var enumVal in Enum.GetValues(typeof(Attributes)))
             {
                 var castVal = (Attributes)enumVal;
-                if(castVal == Attributes.MAX_HEALTH)
+                if (castVal == Attributes.MAX_HEALTH)
                 {
                     continue;
                 }
@@ -120,7 +173,7 @@ namespace Gamepackage
             return retVal;
         }
 
-            public static List<Tuple<string, string>> GetDisplayAttributesForItem(Item item)
+        public static List<Tuple<string, string>> GetDisplayAttributesForItem(Item item)
         {
             var retVal = new List<Tuple<string, string>>();
             if (item.AttackParameters.Count > 0)

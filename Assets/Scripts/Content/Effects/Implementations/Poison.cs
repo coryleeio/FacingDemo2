@@ -6,7 +6,7 @@
         {
             get
             {
-                return "Poison";
+                return "effect.poison.name".Localize();
             }
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return "You are poisoned...";
+                return "effect.poison.description".Localize();
             }
         }
 
@@ -23,13 +23,13 @@
         public override void OnApply(Entity owner)
         {
             base.OnApply(owner);
-            Context.UIController.TextLog.AddText(string.Format("{0} is now poisoned...", owner.Name));
+            Context.UIController.TextLog.AddText(string.Format("effect.poison.apply.message".Localize(), owner.Name));
         }
 
         public override void OnRemove(Entity owner)
         {
             base.OnRemove(owner);
-            Context.UIController.TextLog.AddText(string.Format("{0} is no longer poisoned!", owner.Name));
+            Context.UIController.TextLog.AddText(string.Format("effect.poison.remove.message".Localize(), owner.Name));
         }
 
         public override void Tick(Entity entity)
@@ -40,7 +40,7 @@
                 AttackParameters = new AttackParameters
                 {
                     DamageType = DamageTypes.POISON,
-                    AttackMessage = "Poison hurts {1} for {2} point of damage!",
+                    AttackMessage = "effect.poison.tick.message".Localize(),
                     DyeNumber = 1,
                     DyeSize = PoisonAmount,
                     Bonus = 0

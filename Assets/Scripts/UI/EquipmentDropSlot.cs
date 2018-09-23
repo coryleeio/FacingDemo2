@@ -32,11 +32,11 @@ namespace Gamepackage
             var item = Player.Inventory.GetItemBySlot(Slot);
             if(item == null)
             {
-                Context.UIController.Tooltip.Hover(this.gameObject, Slot.ToString());
+                Context.UIController.Tooltip.Hover(this.gameObject, StringUtil.DisplayValueForSlot(Slot));
             }
             else
             {
-                Context.UIController.Tooltip.Hover(this.gameObject, String.Format("{0} ({1})", item.DisplayName, Slot.ToString()));
+                Context.UIController.Tooltip.Hover(this.gameObject, String.Format("{0} ({1})", item.DisplayName, StringUtil.DisplayValueForSlot(Slot)));
             }
             
         }

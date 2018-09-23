@@ -8,7 +8,7 @@ namespace Gamepackage
         {
             get
             {
-                return "It's really lucky";
+                return "effect.lucky.coin.lifesave.name".Localize();
             }
         }
 
@@ -16,7 +16,7 @@ namespace Gamepackage
         {
             get
             {
-                return "50% chance to survive a hit that would otherwise kill you.";
+                return "effect.lucky.coin.lifesave.description".Localize();
             }
         }
 
@@ -41,11 +41,11 @@ namespace Gamepackage
                 ctx.ShortCircuit();
                 ctx.FloatingTextMessage.AddLast(new FloatingTextMessage()
                 {
-                    Message = "Got lucky!",
+                    Message = "effect.lucky.coin.lifesave.floating.message".Localize(),
                     Color = Color.green,
                     target = target,
                 });
-                ctx.LateMessages.AddLast("The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters...");
+                ctx.LateMessages.AddLast("effect.lucky.coin.lifesave.block.attack".Localize());
                 target.Inventory.RemoveItemStack(item);
             }
             return ctx;
