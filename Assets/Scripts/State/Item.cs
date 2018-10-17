@@ -123,8 +123,7 @@ namespace Gamepackage
         {
             get
             {
-                return RangedParameters.Count > 0 && HasCharges;
-
+                return ZapParameters.Count > 0 && HasCharges;
             }
         }
 

@@ -48,7 +48,9 @@ namespace Gamepackage
                 {
                     Team = Team.PLAYER,
                 };
-                entity.Inventory.EquipItem(ItemFactory.Build(Tables.BanditWeapons.NextSingleItem()));
+                entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_LIGHTNING));
+                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_STAFF_OF_FIREBALLS));
+                entity.Inventory.AddItem(ItemFactory.Build(Tables.BanditWeapons.NextSingleItem()));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));

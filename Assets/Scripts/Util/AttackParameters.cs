@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Gamepackage
 {
@@ -10,16 +11,18 @@ namespace Gamepackage
         public DamageTypes DamageType;
         public List<Effect> AttackSpecificEffects = new List<Effect>();
         public string AttackMessage = null;
+        public UniqueIdentifier ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_NONE;
+        public ExplosionParameters ExplosionParameters;
+
+        [JsonIgnore]
+        public ProjectileAppearance ProjectileAppearance
+        {
+            get
+            {
+                return Context.ResourceManager.GetPrototype<ProjectileAppearance>(ProjectileAppearanceIdentifier);
+            }
+        }
 
         public AttackParameters() { }
-
-        public AttackParameters(AttackParameters input)
-        {
-            this.DyeSize = input.DyeSize;
-            this.DyeNumber = input.DyeNumber;
-            this.Bonus = input.Bonus;
-            this.DamageType = input.DamageType;
-            this.AttackMessage = input.AttackMessage;
-        }
     }
 }

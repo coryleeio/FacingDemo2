@@ -29,12 +29,6 @@ namespace Gamepackage
             {
                 UniqueIdentifier = uniqueIdentifier,
                 InventorySprite = Resources.Load<Sprite>(inventorySpriteLocation),
-                MeleeProjectileTravelTime = 0.25f,
-                MeleeProjectilePrefab = BuildDefaultProjectile(Resources.Load<Sprite>(inventorySpriteLocation)),
-                RangedProjectilePrefab = BuildDefaultProjectile(Resources.Load<Sprite>(inventorySpriteLocation)),
-                ThrownProjectilePrefab = BuildDefaultProjectile(Resources.Load<Sprite>(inventorySpriteLocation)),
-                ZappedProjectilePrefab = BuildDefaultProjectile(Resources.Load<Sprite>(inventorySpriteLocation)),
-                ShouldSpinWhenThrown = true,
             };
         }
 
@@ -51,7 +45,6 @@ namespace Gamepackage
             retVal.Add(greenPotion);
 
             var arrow = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ARROW, "Sprites/Arrow");
-            arrow.ShouldSpinWhenThrown = false;
             retVal.Add(arrow);
 
             return retVal;

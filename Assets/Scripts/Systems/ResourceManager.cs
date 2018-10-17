@@ -20,6 +20,7 @@ namespace Gamepackage
                 _prototypesByUniqueIdentifier.Clear();
                 CacheResources(Tilesets.LoadAll());
                 CacheResources(ItemAppearances.LoadAll());
+                CacheResources(ProjectileAppearances.LoadAll());
             }
             hasInit = true;
         }

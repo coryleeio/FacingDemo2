@@ -29,9 +29,16 @@ namespace Gamepackage
             }
         }
 
+        private ProjectileAppearance ProjectileAppearance
+        {
+            get
+            {
+                return CombatContextCapability.AttackParameters.ProjectileAppearance;
+            }
+        }
+
         // Book keeping values
         private float ElapsedTime = 0.0f;
-        private float Duration = 0.5f;
         private GameObject ProjectileView;
         private int NumberOfTargetsHit;
         private int RangeTraversed = 0;
@@ -77,12 +84,17 @@ namespace Gamepackage
 
         private void MoveProjectileTowardNextPositionFromHere(Vector2 currentPosition)
         {
+            if (ProjectileAppearance.OnLeaveDefinition != null)
+            {
+                ProjectileAppearance.OnLeaveDefinition.Instantiate(NextGridPosition, Direction);
+            }
+
             ElapsedTime = 0.0f;
             RangeTraversed++;
             LerpCurrentPosition = currentPosition;
             NextGridPosition = SourceGridPosition + (MathUtil.OffsetForDirection(Direction) * RangeTraversed);
             LerpCurrentNextPosition = MathUtil.MapToWorld(NextGridPosition);
-            if(Context.GameStateManager.Game.CurrentLevel.Grid[NextGridPosition].TileType == TileType.Floor || Context.GameStateManager.Game.CurrentLevel.Grid[NextGridPosition].TileType == TileType.Empty)
+            if (Context.GameStateManager.Game.CurrentLevel.Grid[NextGridPosition].TileType == TileType.Floor || Context.GameStateManager.Game.CurrentLevel.Grid[NextGridPosition].TileType == TileType.Empty)
             {
                 LastNonWallTraversed = new Point(NextGridPosition.X, NextGridPosition.Y);
             }
@@ -92,12 +104,19 @@ namespace Gamepackage
         {
             base.Do();
             ElapsedTime += Time.deltaTime;
-            if (ElapsedTime > Duration)
+            var perTileTravelTime = 0.5f;
+
+            if(ProjectileAppearance.ProjectileDefinition != null)
             {
-                ElapsedTime = Duration;
+                perTileTravelTime = ProjectileAppearance.ProjectileDefinition.PerTileTravelTime;
             }
 
-            var lerpPercent = ElapsedTime / Duration;
+            if (ElapsedTime > perTileTravelTime)
+            {
+                ElapsedTime = perTileTravelTime;
+            }
+
+            var lerpPercent = ElapsedTime / perTileTravelTime;
             LerpCurrentPosition = Vector2.Lerp(LerpCurrentPosition, LerpCurrentNextPosition, lerpPercent);
             if (ProjectileView != null)
             {
@@ -108,23 +127,22 @@ namespace Gamepackage
                 var level = Context.GameStateManager.Game.CurrentLevel;
                 var targets = CombatUtil.HittableEntitiesInPositionsOnLevel(NextGridPosition, level);
                 var hitTarget = targets.Count > 0;
-                var hitWall = level.Grid.PointInGrid(NextGridPosition) && !level.Grid[NextGridPosition].Walkable;
+                var hitWall = level.Grid.PointInGrid(NextGridPosition) && level.Grid[NextGridPosition].TileType == TileType.Wall;
                 var hitMaxRange = RangeTraversed > CombatContextCapability.Range;
+                var movedThisPass = false;
+
+                if(!hitWall && ProjectileAppearance.OnEnterDefinition != null)
+                {
+                    ProjectileAppearance.OnEnterDefinition.Instantiate(NextGridPosition, Direction);
+                }
 
                 if (hitTarget)
                 {
                     foreach (var target in targets)
                     {
-                        if (CombatContextCapability.OnHitPrefabs.Count > 0)
+                        if (ProjectileAppearance.OnHitDefinition != null)
                         {
-                            foreach (var onHitPrefab in CombatContextCapability.OnHitPrefabs)
-                            {
-                                if (onHitPrefab != null)
-                                {
-                                    var onHitInstance = GameObject.Instantiate<GameObject>(onHitPrefab);
-                                    onHitInstance.transform.position = MathUtil.MapToWorld(target.Position);
-                                }
-                            }
+                            ProjectileAppearance.OnHitDefinition.Instantiate(NextGridPosition, Direction);
                         }
 
                         NumberOfTargetsHit += targets.Count;
@@ -135,14 +153,22 @@ namespace Gamepackage
                         }
                     }
                     MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
+                    movedThisPass = true;
                     LastNonWallTraversed = new Point(targets[0].Position.X, targets[0].Position.Y);
                 }
+
                 var canHitMoreTargets = NumberOfTargetsHit < CombatContextCapability.NumberOfTargetsToPierce;
                 if (!canHitMoreTargets || hitWall || hitMaxRange)
                 {
                     isDoneInternal = true;
+                    if(CombatContextCapability.AttackParameters.ExplosionParameters != null)
+                    {
+                        var explosionAction = new Explosion(CombatContextCapability.Source, CombatContextCapability.AttackParameters, NextGridPosition);
+                        var currentStep = Context.FlowSystem.Steps.First.Value;
+                        var currentAction = currentStep.Actions.AddAfter(currentStep.Actions.First, explosionAction);
+                    }
                 }
-                else
+                else if (!movedThisPass)
                 {
                     MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
                 }
@@ -203,26 +229,13 @@ namespace Gamepackage
 
         private void BuildProjectileViewIfNeeded()
         {
-            if (CombatContextCapability.OnSwingPrefabs.Count > 0)
+            if (ProjectileAppearance.OnSwingDefinition != null)
             {
-                foreach (var onSwingPrefab in CombatContextCapability.OnSwingPrefabs)
-                {
-                    if (onSwingPrefab != null)
-                    {
-                        var onSwingInstance = GameObject.Instantiate<GameObject>(onSwingPrefab);
-                        onSwingInstance.transform.position = MathUtil.MapToWorld(CombatContextCapability.Source.Position);
-                    }
-                }
+                ProjectileAppearance.OnSwingDefinition.Instantiate(SourceGridPosition, Direction);
             }
-            if (CombatContextCapability.ProjectilePrefab)
+            if (ProjectileAppearance.ProjectileDefinition != null)
             {
-                ProjectileView = GameObject.Instantiate<GameObject>(CombatContextCapability.ProjectilePrefab);
-                ProjectileView.transform.eulerAngles = MathUtil.GetProjectileRotation(Direction);
-                var projectileItem = GetItemBeingLaunched(AttackCapabilities[CombatContext]);
-                if(projectileItem.ItemAppearance.ShouldSpinWhenThrown)
-                {
-                    ProjectileView.AddComponent<ProjectileRotator>();
-                }
+                ProjectileView = ProjectileAppearance.ProjectileDefinition.Instantiate(SourceGridPosition, Direction);
             }
         }
     }

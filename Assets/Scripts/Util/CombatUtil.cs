@@ -11,6 +11,7 @@ namespace Gamepackage
         public static Predicate<Effect> AppliedEffects = (effectInQuestion) => { return effectInQuestion is AppliedEffect; };
         public static Predicate<Entity> HittableEntities = (t) => t.IsCombatant && t.Body != null && !t.Body.IsDead;
         public static Predicate<Entity> LootableEntities = (ent) => { return ent.PrototypeIdentifier == UniqueIdentifier.ENTITY_GROUND_DROP || (ent.Body != null && ent.Body.IsDead && ent.Inventory.HasAnyItems); };
+        public static Predicate<Point> FloorTiles = (t) => Context.GameStateManager.Game.CurrentLevel.Grid[t].TileType == TileType.Floor;
 
         public static List<Entity> HittableEntitiesInPositionsOnLevel(Point point, Level level)
         {
@@ -100,7 +101,7 @@ namespace Gamepackage
                 }
                 else
                 {
-                    if (result.AttackParameters != null)
+                    if (result.AttackParameters != null && damage != 0)
                     {
                         result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                         target.Body.CurrentHealth = target.Body.CurrentHealth - damage;

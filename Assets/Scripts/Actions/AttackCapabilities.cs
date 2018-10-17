@@ -9,12 +9,8 @@ namespace Gamepackage
         public CombatContext CombatContext;
         public Item MainHand;
         public Item Ammo;
-        public GameObject ProjectilePrefab;
-        public List<GameObject> OnHitPrefabs = new List<GameObject>();
-        public List<GameObject> OnSwingPrefabs = new List<GameObject>();
         public List<Effect> AppliedEffects = new List<Effect>();
         public AttackParameters AttackParameters;
-        public float ProjectileTravelTime;
         public int Range;
         public int NumberOfTargetsToPierce;
         public bool CanPerform
@@ -85,11 +81,6 @@ namespace Gamepackage
                     Range = MainHand.MeleeRange;
                     NumberOfTargetsToPierce = MainHand.MeleeTargetsPierced;
 
-                    ProjectilePrefab = MainHand.ItemAppearance.MeleeProjectilePrefab;
-                    OnHitPrefabs.Add(MainHand.ItemAppearance.MeleeOnHitPrefab);
-                    OnSwingPrefabs.Add(MainHand.ItemAppearance.MeleeOnSwingPrefab);
-                    ProjectileTravelTime = MainHand.ItemAppearance.MeleeProjectileTravelTime;
-
                     AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(MainHand.MeleeParameters);
                     AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
@@ -98,11 +89,6 @@ namespace Gamepackage
                 {
                     Range = source.Body.MeleeRange;
                     NumberOfTargetsToPierce = source.Body.MeleeTargetsPierced;
-
-                    ProjectilePrefab = source.Body.MeleeProjectilePrefab;
-                    OnHitPrefabs.Add(source.Body.MeleeOnHitPrefab);
-                    OnSwingPrefabs.Add(source.Body.MeleeOnSwingPrefab);
-                    ProjectileTravelTime = source.Body.MeleeProjectileTravelTime;
 
                     AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(source.Body.MeleeParameters);
                     AppliedEffects.AddRange(source.Body.Effects.FindAll(CombatUtil.AppliedEffects));
@@ -113,28 +99,27 @@ namespace Gamepackage
 
             else if (combatContext == CombatContext.Ranged)
             {
-                if (MainHand != null && MainHand.CanBeUsedForZap)
+                if (MainHand != null && MainHand.CanBeUsedForRanged)
                 {
                     Range = MainHand.RangedRange;
                     NumberOfTargetsToPierce = MainHand.RangedTargetsPierced;
-
-                    if (MainHand.AmmoType != AmmoType.None)
+                    var rangedAttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(MainHand.RangedParameters);
+                    var ammoAttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Ammo.RangedParameters);
+                    AttackParameters = new AttackParameters()
                     {
-                        ProjectilePrefab = Ammo.ItemAppearance.RangedProjectilePrefab;
-                        ProjectileTravelTime = Ammo.ItemAppearance.RangedProjectileTravelTime;
-                    }
-                    else
-                    {
-                        ProjectilePrefab = MainHand.ItemAppearance.RangedProjectilePrefab;
-                        ProjectileTravelTime = MainHand.ItemAppearance.RangedProjectileTravelTime;
+                        AttackMessage = ammoAttackParameters.AttackMessage,
+                        Bonus = rangedAttackParameters.Bonus + ammoAttackParameters.Bonus,
+                        DamageType = ammoAttackParameters.DamageType,
+                        DyeNumber = ammoAttackParameters.DyeNumber,
+                        DyeSize = ammoAttackParameters.DyeSize,
+                        ExplosionParameters = ammoAttackParameters.ExplosionParameters,
+                        ProjectileAppearanceIdentifier = ammoAttackParameters.ProjectileAppearanceIdentifier,
+                    };
 
-                    }
-
-                    OnHitPrefabs.Add(MainHand.ItemAppearance.RangedOnHitPrefab);
-                    OnSwingPrefabs.Add(MainHand.ItemAppearance.RangedOnSwingPrefab);
-                    AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(MainHand.MeleeParameters);
                     AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
-                    AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
+                    AppliedEffects.AddRange(Ammo.Effects.FindAll(CombatUtil.AppliedEffects));
+                    AppliedEffects.AddRange(rangedAttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
+                    AppliedEffects.AddRange(ammoAttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                 }
             }
             else if (combatContext == CombatContext.Thrown)
@@ -146,11 +131,6 @@ namespace Gamepackage
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                     Range = MainHand.ThrownRange;
                     NumberOfTargetsToPierce = MainHand.ThrownTargetsPierced;
-
-                    ProjectilePrefab = MainHand.ItemAppearance.ThrownProjectilePrefab;
-                    OnHitPrefabs.Add(MainHand.ItemAppearance.ThrownOnHitPrefab);
-                    OnSwingPrefabs.Add(MainHand.ItemAppearance.ThrownOnSwingPrefab);
-                    ProjectileTravelTime = MainHand.ItemAppearance.ThrownProjectileTravelTime;
                 }
             }
             else if (combatContext == CombatContext.Zapped)
@@ -162,11 +142,6 @@ namespace Gamepackage
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                     Range = MainHand.ZapRange;
                     NumberOfTargetsToPierce = MainHand.ZappedTargetsPierced;
-
-                    ProjectilePrefab = MainHand.ItemAppearance.ZappedProjectilePrefab;
-                    OnHitPrefabs.Add(MainHand.ItemAppearance.ZappedOnHitPrefab);
-                    OnSwingPrefabs.Add(MainHand.ItemAppearance.ZappedOnSwingPrefab);
-                    ProjectileTravelTime = MainHand.ItemAppearance.ZappedProjectileTravelTime;
                 }
             }
             // If we fall through here we aren't dealing with a attack
@@ -199,7 +174,7 @@ namespace Gamepackage
     public class AttackCapabilities
     {
         // Inputs
-        private Entity Source;
+        public Entity Source;
         private Dictionary<CombatContext, CombatContextCapability> AttackCapabilitiesPerType = new Dictionary<CombatContext, CombatContextCapability>();
         private AttackCapabilities() { }
 

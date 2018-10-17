@@ -28,7 +28,10 @@ namespace Gamepackage
         {
             base.Enter();
             var effectsThatShouldExpire = new List<Effect>(0);
-            Source.Behaviour.IsDoneThisTurn = true;
+            if(Source.Behaviour != null)
+            {
+                Source.Behaviour.IsDoneThisTurn = true;
+            }
 
             var onTickEffects = Source.GetEffects((effectInQuestion) => { return effectInQuestion.CanTick; });
             foreach(var effect in onTickEffects)

@@ -56,6 +56,8 @@ attacks.humanoid.1: "{0} punches {1} for {2} points of {3} damage!"
 attacks.dog.1: "{0} bites {1} for {2} points of {3} damage!"
 attacks.bee.1: "{0} strings {1} for {2} points of {3} damage!"
 attacks.slashing.1: "{0} slashes {1} for {2} points of {3} damage!"
+attacks.bludgeoning.1: "{0} slashes {1} for {2} points of {3} damage!"
+attacks.fire.1: "{0} burns {1} for {2} points of {3} damage!"
 
 attacks.throw.useless.1: "{0} throws an item clumbsily at {1} for {2} points of {3} damage!"
 
@@ -103,6 +105,12 @@ item.no.description: No set description
 
 item.longsword.name: Longsword
 item.longsword.description: This is a simple longsword.
+
+item.staff.of.fireballs.name: Staff of fireballs
+item.staff.of.fireballs.description: This enchanted staff is hot to the touch
+
+item.wand.of.lightning.name: Wand of Lightning
+item.wand.of.lightning.description: "A zappy wand"
 
 item.antidote.name: "Antidote"
 item.antidote.description: "A bubbling vial of viscous green liquid."
