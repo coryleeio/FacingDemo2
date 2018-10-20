@@ -31,6 +31,10 @@ namespace Gamepackage
             var bigFirePrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/BigFire"));
             var greenPotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/GreenPotion"));
             var arrowPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Arrow"));
+            var coinPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/LuckyCoin"));
+            var bowPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Bow"));
+            var swirlPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/SwirlStaff"));
+            var actionStaffPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/ActionStaff"));
 
             var retVal = new List<ProjectileAppearance>();
             var none = new ProjectileAppearance()
@@ -129,6 +133,54 @@ namespace Gamepackage
                 }
             };
             retVal.Add(arrowSpin);
+            var coin = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_COIN,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = coinPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(coin);
+
+            var swirlStaff = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_SWIRL_STAFF,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = swirlPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(swirlStaff);
+
+            var actionStaff = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ACTION_STAFF,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = actionStaffPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(actionStaff);
+
+            var bow = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_BOW,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = bowPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(bow);
+
             return retVal;
         }
     }

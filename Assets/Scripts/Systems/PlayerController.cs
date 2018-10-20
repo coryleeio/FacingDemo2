@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -427,6 +426,11 @@ namespace Gamepackage
                 isAiming = true;
                 AimingCombatContext = combatContext;
                 Context.UIController.InputHint.ShowText(("player.controller.select.direction." + combatContext.ToString().ToLower()).Localize());
+            }
+            else if (combatContext == CombatContext.Ranged && attackCapability.MainHand != null && (attackCapability.Ammo == null || attackCapability.Ammo.NumberOfItems <= 0))
+            {
+                var outOfAmmoString = "player.controller.cannot.do.out.of.ammo".Localize();
+                Context.UIController.InputHint.ShowText(outOfAmmoString);
             }
             else if (attackCapability.MainHand != null)
             {

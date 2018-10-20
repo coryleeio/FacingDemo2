@@ -38,6 +38,9 @@ namespace Gamepackage
             var longsword = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_LONGSWORD, "Sprites/Longsword");
             retVal.Add(longsword);
 
+            var shortbow = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_BOW, "Sprites/Bow");
+            retVal.Add(shortbow);
+
             var luckyCoin = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN, "Sprites/LuckyCoin");
             retVal.Add(luckyCoin);
 
@@ -46,6 +49,12 @@ namespace Gamepackage
 
             var arrow = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ARROW, "Sprites/Arrow");
             retVal.Add(arrow);
+
+            var actionStaff = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ACTION_STAFF, "Sprites/ActionStaff");
+            retVal.Add(actionStaff);
+
+            var swirlStaff = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_SWIRL_STAFF, "Sprites/SwirlStaff");
+            retVal.Add(swirlStaff);
 
             return retVal;
         }

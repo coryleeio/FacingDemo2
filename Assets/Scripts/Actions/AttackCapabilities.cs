@@ -99,7 +99,7 @@ namespace Gamepackage
 
             else if (combatContext == CombatContext.Ranged)
             {
-                if (MainHand != null && MainHand.CanBeUsedForRanged)
+                if (MainHand != null && MainHand.CanBeUsedForRanged && Ammo != null)
                 {
                     Range = MainHand.RangedRange;
                     NumberOfTargetsToPierce = MainHand.RangedTargetsPierced;

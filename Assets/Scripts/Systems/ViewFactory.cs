@@ -5,12 +5,12 @@ using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class PrototypeFactory
+    public class ViewFactory
     {
         private Material DefaultSpriteMaterial;
         private Sprite MissingSprite;
 
-        public PrototypeFactory()
+        public ViewFactory()
         {
             if (DefaultSpriteMaterial == null)
             {

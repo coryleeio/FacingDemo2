@@ -25,6 +25,7 @@ player.controller.select.direction.zapped: Select which direction to zap
 
 player.controller.cannot.do.melee: "You cannot use {0} in melee"
 player.controller.cannot.do.ranged: "You cannot shoot with {0}"
+player.controller.cannot.do.out.of.ammo: "You are out of ammo..."
 player.controller.cannot.do.thrown: "You cannot throw {0}"
 player.controller.cannot.do.zapped: "You cannot zap with {0}"
 
@@ -57,6 +58,7 @@ attacks.dog.1: "{0} bites {1} for {2} points of {3} damage!"
 attacks.bee.1: "{0} strings {1} for {2} points of {3} damage!"
 attacks.slashing.1: "{0} slashes {1} for {2} points of {3} damage!"
 attacks.bludgeoning.1: "{0} slashes {1} for {2} points of {3} damage!"
+attacks.piercing.1: "{0} pierces {1} for {2} points of {3} damage!"
 attacks.fire.1: "{0} burns {1} for {2} points of {3} damage!"
 
 attacks.throw.useless.1: "{0} throws an item clumbsily at {1} for {2} points of {3} damage!"
@@ -123,5 +125,6 @@ item.lucky.coin.description: "This coin is particularly lucky, and is probably d
 item.arrow.name: "Arrow"
 item.arrow.description: "People have been using this to kill each other literally forever. The only thing they used before this was a rock. Arrows are considered by many to be more civil."
 
-
+item.shortbow.name: Shortbow
+item.shortbow.description: A shortbow
 

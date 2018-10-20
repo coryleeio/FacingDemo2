@@ -86,7 +86,7 @@ namespace Gamepackage
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_STAFF_OF_FIREBALLS)
             {
-                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LONGSWORD;
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ACTION_STAFF;
                 item.DisplayName = "item.staff.of.fireballs.name".Localize();
                 item.Description = "item.staff.of.fireballs.description".Localize();
                 item.MeleeParameters = new List<AttackParameters>() {
@@ -107,7 +107,7 @@ namespace Gamepackage
                         DyeNumber = 1,
                         DyeSize = 3,
                         DamageType = DamageTypes.BLUDGEONING,
-                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_LONGSWORD
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ACTION_STAFF
                     }
                 };
                 item.ZapParameters = new List<AttackParameters>()
@@ -137,9 +137,49 @@ namespace Gamepackage
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
             }
+
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_SHORTBOW)
+            {
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_BOW;
+                item.DisplayName = "item.shortbow.name".Localize();
+                item.Description = "item.shortbow.description".Localize();
+                item.MeleeParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.bludgeoning.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 3,
+                        DamageType = DamageTypes.BLUDGEONING,
+                    }
+                };
+                item.ThrowParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.throw.useless.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 3,
+                        DamageType = DamageTypes.BLUDGEONING,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_BOW
+                    }
+                };
+                item.RangedParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.piercing.1".Localize(),
+                        Bonus = 4,
+                        DamageType = DamageTypes.PIERCING,
+                    }
+                };
+                item.AmmoType = AmmoType.Arrow;
+                item.RangedRange = 5;
+                item.SlotsWearable.Add(ItemSlot.MainHand);
+                item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
+            }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_WAND_OF_LIGHTNING)
             {
-                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LONGSWORD;
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_SWIRL_STAFF;
                 item.DisplayName = "item.wand.of.lightning.name".Localize();
                 item.Description = "item.wand.of.lightning.description".Localize();
                 item.MeleeParameters = new List<AttackParameters>() {
@@ -160,7 +200,7 @@ namespace Gamepackage
                         DyeNumber = 1,
                         DyeSize = 3,
                         DamageType = DamageTypes.BLUDGEONING,
-                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_LONGSWORD
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_SWIRL_STAFF
                     }
                 };
                 item.ZapParameters = new List<AttackParameters>()
@@ -214,6 +254,18 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN;
                 item.DisplayName = "item.lucky.coin.name".Localize();
                 item.Description = "item.lucky.coin.description".Localize();
+                item.ThrowParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.throw.useless.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 0,
+                        DyeSize = 0,
+                        DamageType = DamageTypes.BLUDGEONING,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_COIN,
+                    }
+                };
+
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ARROW)
@@ -221,7 +273,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;
                 item.DisplayName = "item.arrow.name".Localize();
                 item.Description = "item.arrow.description".Localize();
-                item.MaxStackSize = 20;
+                item.MaxStackSize = 60;
                 item.ChanceToSurviveLaunch = 50;
                 item.ThrowParameters = new List<AttackParameters>()
                 {
@@ -236,8 +288,20 @@ namespace Gamepackage
                     },
                 };
 
+                item.RangedParameters = new List<AttackParameters>()
+                {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.piercing.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 8,
+                        DamageType = DamageTypes.PIERCING,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ARROW,
+                    },
+                };
 
-
+                item.AmmoType = AmmoType.Arrow;
                 item.NumberOfItems = MathUtil.ChooseRandomIntInRange(5, item.MaxStackSize / 2 - 1);
                 item.SlotsWearable.Add(ItemSlot.Ammo);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.Ammo);
