@@ -19,7 +19,7 @@ namespace Gamepackage
 
         private Texture2D RevealMask;
         private LayerMask FogLayer;
-        private const int _numberOfPixelsPerTile = 64;
+        private const int _numberOfPixelsPerTile = 32;
         private Texture2D _texture;
         private int _mapSize;
         private Point[,] _tileCenterPointForCoordinates;
