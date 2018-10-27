@@ -18,8 +18,8 @@
         public static FlowController FlowSystem = new FlowController();
         public static PlayerController PlayerController = new PlayerController();
 
-        public static Application Application; // mono
-        public static UIController UIController; // mono
-        public static MainMenu MainMenu; //mono
+        public static Application Application;
+        public static UIController UIController;
+        public static MainMenu MainMenu;
     }
 }
