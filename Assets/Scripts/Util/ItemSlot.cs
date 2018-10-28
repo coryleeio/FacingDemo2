@@ -8,7 +8,7 @@ namespace Gamepackage
         Cloak,
         Helmet,
         Shoes,
-        Offhand,
+        OffHand,
         MainHand,
         Ammo,
         Ring,

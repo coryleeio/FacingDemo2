@@ -44,7 +44,7 @@ namespace Gamepackage
                     var numberOfSpawnTablesToSpawn = 5;
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        var entitiesInEncounter = Context.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
+                        var entitiesInEncounter = Context.ViewFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
@@ -54,7 +54,7 @@ namespace Gamepackage
                     var numberOfSpawnTablesToSpawn = 3;
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        var entitiesInEncounter = Context.PrototypeFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
+                        var entitiesInEncounter = Context.ViewFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
@@ -189,7 +189,7 @@ namespace Gamepackage
                 possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
             }
             var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
-            var thing = Context.PrototypeFactory.BuildEntity(identifier);
+            var thing = Context.ViewFactory.BuildEntity(identifier);
             thing.Position = spawnPoint;
             level.Entitys.Add(thing);
             return thing;

@@ -75,11 +75,38 @@ namespace Gamepackage
         {
             base.Enter();
             Assert.IsNotNull(AttackCapabilities);
+
+            CombatContextCapability.Source.Direction = Direction;
+            if (CombatContextCapability.Source.View != null && CombatContextCapability.Source.View.SkeletonAnimation != null)
+            {
+                var skeletonAnimation = CombatContextCapability.Source.View.SkeletonAnimation;
+                skeletonAnimation.AnimationState.ClearTracks();
+                skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
+                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Attack, Direction), false);
+                skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
+            }
+
             SourceGridPosition = new Point(CombatContextCapability.Source.Position.X, CombatContextCapability.Source.Position.Y);
             LastNonWallTraversed = new Point(SourceGridPosition.X, SourceGridPosition.Y);
             NumberOfTargetsHit = 0;
             BuildProjectileViewIfNeeded();
             MoveProjectileTowardNextPositionFromHere(MathUtil.MapToWorld(CombatContextCapability.Source.Position));
+
+            // Remove the item from the view if it is the last item being thrown
+            // and the character is not throwing an item from their inventory.
+            if (CombatContext == CombatContext.Thrown)
+            {
+                var capability = AttackCapabilities[CombatContext];
+                var itemBeingLaunched = GetItemBeingLaunched(capability);
+                if(itemBeingLaunched.NumberOfItems == 1)
+                {
+                    if(capability.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
+                    {
+                        capability.Source.Inventory.UnequipItemInSlot(ItemSlot.MainHand);
+                        Context.ViewFactory.BuildView(AttackCapabilities.Source);
+                    }
+                }
+            }
         }
 
         private void MoveProjectileTowardNextPositionFromHere(Vector2 currentPosition)
@@ -104,9 +131,9 @@ namespace Gamepackage
         {
             base.Do();
             ElapsedTime += Time.deltaTime;
-            var perTileTravelTime = 0.5f;
+            var perTileTravelTime = 1.00f;
 
-            if(ProjectileAppearance.ProjectileDefinition != null)
+            if (ProjectileAppearance.ProjectileDefinition != null)
             {
                 perTileTravelTime = ProjectileAppearance.ProjectileDefinition.PerTileTravelTime;
             }
@@ -131,7 +158,7 @@ namespace Gamepackage
                 var hitMaxRange = RangeTraversed > CombatContextCapability.Range;
                 var movedThisPass = false;
 
-                if(!hitWall && ProjectileAppearance.OnEnterDefinition != null)
+                if (!hitWall && ProjectileAppearance.OnEnterDefinition != null)
                 {
                     ProjectileAppearance.OnEnterDefinition.Instantiate(NextGridPosition, Direction);
                 }
@@ -161,7 +188,7 @@ namespace Gamepackage
                 if (!canHitMoreTargets || hitWall || hitMaxRange)
                 {
                     isDoneInternal = true;
-                    if(CombatContextCapability.AttackParameters.ExplosionParameters != null)
+                    if (CombatContextCapability.AttackParameters.ExplosionParameters != null)
                     {
                         var explosionAction = new Explosion(CombatContextCapability.Source, CombatContextCapability.AttackParameters, NextGridPosition);
                         var currentStep = Context.FlowSystem.Steps.First.Value;
@@ -199,7 +226,7 @@ namespace Gamepackage
                 if (shouldSpawnItemOnGround)
                 {
                     var placeItemLanded = LastNonWallTraversed;
-                    var groundDrop = Context.PrototypeFactory.BuildEntity(UniqueIdentifier.ENTITY_GROUND_DROP);
+                    var groundDrop = Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_GROUND_DROP);
                     groundDrop.Position = new Point(placeItemLanded.X, placeItemLanded.Y);
                     groundDrop.Name = itemBeingLaunched.DisplayName;
                     var level = Context.GameStateManager.Game.CurrentLevel;
@@ -207,7 +234,7 @@ namespace Gamepackage
                     var itemCopy = ItemFactory.Build(itemBeingLaunched.UniqueIdentifier);
                     itemCopy.NumberOfItems = 1;
                     groundDrop.Inventory.AddItem(itemCopy);
-                    Context.PrototypeFactory.BuildView(groundDrop);
+                    Context.ViewFactory.BuildView(groundDrop);
                 }
                 capability.Source.Inventory.ConsumeItem(itemBeingLaunched);
             }

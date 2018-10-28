@@ -9,10 +9,10 @@ namespace Gamepackage
             var retvals = new List<Entity>();
             if (identifier == UniqueIdentifier.ENCOUNTER_BEE_SWARM)
             {
-                retvals.Add(Context.PrototypeFactory.BuildEntity(UniqueIdentifier.ENTITY_GIANT_BEE));
-                retvals.Add(Context.PrototypeFactory.BuildEntity(UniqueIdentifier.ENTITY_GIANT_BEE));
-                retvals.Add(Context.PrototypeFactory.BuildEntity(UniqueIdentifier.ENTITY_GIANT_BEE));
-                retvals.Add(Context.PrototypeFactory.BuildEntity(UniqueIdentifier.ENTITY_QUEEN_BEE));
+                retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_GIANT_BEE));
+                retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_GIANT_BEE));
+                retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_GIANT_BEE));
+                retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_QUEEN_BEE));
             }
             else
             {

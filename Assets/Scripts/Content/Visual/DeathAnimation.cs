@@ -6,6 +6,8 @@ namespace Gamepackage
     {
         float ElapsedTime = 0.0f;
         private static Color DeathColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0f);
+        MaterialPropertyBlock mpb;
+        public string colorPropertyName = "_Color";
 
         public void Start()
         {
@@ -14,6 +16,7 @@ namespace Gamepackage
             {
                 healthBar.gameObject.SetActive(false);
             }
+            mpb = new MaterialPropertyBlock();
         }
 
         public void Update()
@@ -28,11 +31,32 @@ namespace Gamepackage
 
                 if (firstPhasePercentage < 1.0f)
                 {
-                    spriteRenderer.color = Color.Lerp(Color.white, Color.black, firstPhasePercentage);
+                    var color = Color.Lerp(Color.white, Color.black, firstPhasePercentage);
+                    if (spriteRenderer == null)
+                    {
+                        var meshRenderer = GetComponentInChildren<MeshRenderer>();
+                        mpb.SetColor(colorPropertyName, color);
+                        meshRenderer.SetPropertyBlock(mpb);
+                    }
+                    else
+                    {
+                        spriteRenderer.color = color;
+                    }
+                    
                 }
                 else if (secondPhasePErcentage < 1.0f)
                 {
-                    spriteRenderer.color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
+                    var color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
+                    if (spriteRenderer == null)
+                    {
+                        var meshRenderer = GetComponentInChildren<MeshRenderer>();
+                        mpb.SetColor(colorPropertyName, color);
+                        meshRenderer.SetPropertyBlock(mpb);
+                    }
+                    else
+                    {
+                        spriteRenderer.color = color;
+                    }
                 }
                 else
                 {

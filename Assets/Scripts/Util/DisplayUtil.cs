@@ -93,7 +93,7 @@ namespace Gamepackage
             {
                 return "item.slot.display.mainhand".Localize();
             }
-            else if (slot == ItemSlot.Offhand)
+            else if (slot == ItemSlot.OffHand)
             {
                 return "item.slot.display.offhand".Localize();
             }
@@ -214,6 +214,34 @@ namespace Gamepackage
                 retVal.Add(string.Format("{0} - {1}", ability.DisplayName, ability.Description));
             }
             return retVal;
+        }
+
+        public static string GetAnimationNameForDirection(Animations animation, Direction direction)
+        {
+            var output = animation.ToString();
+            var directionComponent = "";
+
+            if (direction == Direction.SouthEast)
+            {
+                directionComponent += "SE";
+            }
+            else if (direction == Direction.NorthEast)
+            {
+                directionComponent += "NE";
+            }
+            else if (direction == Direction.NorthWest)
+            {
+                directionComponent += "NW";
+            }
+            else if (direction == Direction.SouthWest)
+            {
+                directionComponent += "SW";
+            }
+            else
+            {
+                directionComponent += "SE";
+            }
+            return output += directionComponent;
         }
     }
 }

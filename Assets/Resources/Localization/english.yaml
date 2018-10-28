@@ -57,7 +57,7 @@ attacks.humanoid.1: "{0} punches {1} for {2} points of {3} damage!"
 attacks.dog.1: "{0} bites {1} for {2} points of {3} damage!"
 attacks.bee.1: "{0} strings {1} for {2} points of {3} damage!"
 attacks.slashing.1: "{0} slashes {1} for {2} points of {3} damage!"
-attacks.bludgeoning.1: "{0} slashes {1} for {2} points of {3} damage!"
+attacks.bludgeoning.1: "{0} crushes {1} for {2} points of {3} damage!"
 attacks.piercing.1: "{0} pierces {1} for {2} points of {3} damage!"
 attacks.fire.1: "{0} burns {1} for {2} points of {3} damage!"
 
@@ -107,6 +107,9 @@ item.no.description: No set description
 
 item.longsword.name: Longsword
 item.longsword.description: This is a simple longsword.
+
+item.robe.of.wonders.name: Robe of Wonders
+item.robe.of.wonders.description: a Robe of Wonders
 
 item.staff.of.fireballs.name: Staff of fireballs
 item.staff.of.fireballs.description: This enchanted staff is hot to the touch

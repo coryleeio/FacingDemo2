@@ -53,6 +53,25 @@ namespace Gamepackage
             {
                 Context.UIController.LootWindow.Hide();
             }
+            var targetOldPosition = Targets[0].Position;
+            var oldSourcePos = new Point(Source.Position.X, Source.Position.Y);
+            var sourceDirection = MathUtil.RelativeDirection(Source.Position, targetOldPosition);
+            if (Source.View != null && Source.View.SkeletonAnimation != null)
+            {
+                var skeletonAnimation = Source.View.SkeletonAnimation;
+                skeletonAnimation.AnimationState.ClearTracks();
+                skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
+                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, sourceDirection), true);
+            }
+
+            var targetDirection = MathUtil.RelativeDirection(Targets[0].Position, oldSourcePos);
+            if (Targets[0].View != null && Targets[0].View.SkeletonAnimation != null)
+            {
+                var skeletonAnimation = Targets[0].View.SkeletonAnimation;
+                skeletonAnimation.AnimationState.ClearTracks();
+                skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
+                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, targetDirection), true);
+            }
         }
 
 
@@ -91,7 +110,11 @@ namespace Gamepackage
             base.Exit();
             Context.EntitySystem.Deregister(Source, Context.GameStateManager.Game.CurrentLevel);
             Context.EntitySystem.Deregister(Targets[0], Context.GameStateManager.Game.CurrentLevel);
+
+            var targetOldPosition = Targets[0].Position;
             var oldSourcePos = new Point(Source.Position.X, Source.Position.Y);
+
+
             // Move the view to the new position
             if (Source.View != null && Source.View.ViewGameObject != null)
             {
@@ -104,7 +127,7 @@ namespace Gamepackage
 
             // Actually set new position
 
-            Source.Position = Targets[0].Position;
+            Source.Position = targetOldPosition;
             Targets[0].Position = oldSourcePos;
 
             Context.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = !Source.BlocksPathing;

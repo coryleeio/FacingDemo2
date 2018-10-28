@@ -268,6 +268,21 @@ namespace Gamepackage
 
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
             }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_ROBE_OF_WONDERS)
+            {
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ROBE_OF_WONDERS;
+                item.DisplayName = "item.robe.of.wonders.name".Localize();
+                item.Description = "item.robe.of.wonders.description".Localize();
+                item.SlotsOccupiedByWearing = new List<ItemSlot>()
+                {
+                    ItemSlot.Helmet,
+                    ItemSlot.Chest,
+                };
+                item.SlotsWearable = new List<ItemSlot>()
+                {
+                    ItemSlot.Chest,
+                };
+            }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ARROW)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;

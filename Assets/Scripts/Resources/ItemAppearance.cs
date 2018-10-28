@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -6,5 +7,6 @@ namespace Gamepackage
     {
         public UniqueIdentifier UniqueIdentifier { get; set; }
         public Sprite InventorySprite;
+        public Dictionary<SpriteAttachment, Sprite> WornItemSpritePerSlot;
     }
 }

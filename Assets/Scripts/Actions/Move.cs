@@ -41,7 +41,18 @@ namespace Gamepackage
             base.Enter();
             LerpCurrentPosition = MathUtil.MapToWorld(Source.Position);
             LerpTargetPosition = MathUtil.MapToWorld(TargetPosition);
-            if(Source.IsPlayer)
+            var newDirection = MathUtil.RelativeDirection(Source.Position, TargetPosition);
+            Source.Direction = newDirection;
+
+            if (Source.View != null && Source.View.SkeletonAnimation != null)
+            {
+                var skeletonAnimation = Source.View.SkeletonAnimation;
+                skeletonAnimation.AnimationState.ClearTracks();
+                skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
+                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newDirection), true);
+            }
+
+            if (Source.IsPlayer)
             {
                 Camera.main.GetComponent<GameSceneCameraDriver>().NewTarget(TargetPosition);
                 Context.UIController.LootWindow.Hide();

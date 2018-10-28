@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Spine.Unity;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -64,21 +65,21 @@ namespace Gamepackage
                     {
                         foreach(var entity in level.Grid[x,y].EntitiesInPosition)
                         {
-                            sortOrder = sortEntity(sortOrder, entity);
+                            sortOrder = SortEntity(sortOrder, entity);
                         }
                     }
                 }
             }
         }
 
-        private static int sortEntity(int sortOrder, Entity entity)
+        private static int SortEntity(int sortOrder, Entity entity)
         {
             if (entity.View.ViewType == ViewType.StaticSprite)
             {
                 if (entity.View != null && entity.View.ViewGameObject != null)
                 {
                     var spriteRenderer = entity.View.ViewGameObject.GetComponent<SpriteRenderer>();
-                    if(spriteRenderer != null)
+                    if (spriteRenderer != null)
                     {
                         spriteRenderer.sortingOrder = sortOrder;
                         return sortOrder + 1;
@@ -91,12 +92,26 @@ namespace Gamepackage
                 if (entity.View != null && entity.View.ViewGameObject != null)
                 {
                     var spriteRenderers = entity.View.ViewGameObject.GetComponentsInChildren<SpriteRenderer>();
-                    foreach(var renderer in spriteRenderers)
+                    foreach (var renderer in spriteRenderers)
                     {
                         renderer.sortingOrder = sortOrder;
                         sortOrder++;
                     }
                     return sortOrder;
+                }
+                return sortOrder;
+            }
+            else if (entity.View.ViewType == ViewType.Spine)
+            {
+                if (entity.View != null && entity.View.ViewGameObject != null)
+                {
+                    var meshRenderer = entity.View.ViewGameObject.GetComponentInChildren<MeshRenderer>();
+                    if (meshRenderer != null)
+                    {
+                        meshRenderer.sortingOrder = sortOrder;
+                        sortOrder++;
+                        return sortOrder;
+                    }
                 }
                 return sortOrder;
             }

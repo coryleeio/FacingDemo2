@@ -47,11 +47,7 @@ namespace Gamepackage
             var source = Source;
             var target = Targets[0];
             target.Inventory.RemoveItemStack(Item);
-            if(target.View.ViewGameObject != null)
-            {
-                UnityEngine.GameObject.Destroy(target.View.ViewGameObject);
-                Context.PrototypeFactory.BuildView(target);
-            }
+            Context.ViewFactory.BuildView(target);
             if(Index == -1)
             {
                source.Inventory.AddItem(Item);

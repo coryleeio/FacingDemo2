@@ -14,7 +14,7 @@ namespace Gamepackage
             Context.GameScene.Load();
             Context.VisibilitySystem.Init();
             Context.OverlaySystem.Init(Context.GameStateManager.Game.CurrentLevel.Grid.Width, Context.GameStateManager.Game.CurrentLevel.Grid.Height);
-            Context.PathFinder.Init(DiagonalOptions.DiagonalsWithoutCornerCutting, 5);
+            Context.PathFinder.Init(DiagonalOptions.NoDiagonals, 5);
             Context.FlowSystem.Init();
             Context.PlayerController.Init();
             CameraDriver = Context.GameScene.GetCamera();

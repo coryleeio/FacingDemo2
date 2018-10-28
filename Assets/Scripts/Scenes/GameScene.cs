@@ -25,12 +25,12 @@ namespace Gamepackage
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.1f, 0.15f, 0.15f);
 
-            Context.PrototypeFactory.BuildMapTiles(Context.GameStateManager.Game.CurrentLevel);
+            Context.ViewFactory.BuildMapTiles(Context.GameStateManager.Game.CurrentLevel);
             foreach (var entity in Context.GameStateManager.Game.CurrentLevel.Entitys)
             {
                 if(entity.View != null)
                 {
-                    Context.PrototypeFactory.BuildView(entity);
+                    Context.ViewFactory.BuildView(entity);
                 }
             }
             var player = Context.GameStateManager.Game.CurrentLevel.Player;

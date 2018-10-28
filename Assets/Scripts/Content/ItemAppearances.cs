@@ -29,6 +29,7 @@ namespace Gamepackage
             {
                 UniqueIdentifier = uniqueIdentifier,
                 InventorySprite = Resources.Load<Sprite>(inventorySpriteLocation),
+                WornItemSpritePerSlot = new Dictionary<SpriteAttachment, Sprite>(),
             };
         }
 
@@ -36,9 +37,11 @@ namespace Gamepackage
         {
             var retVal = new List<ItemAppearance>();
             var longsword = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_LONGSWORD, "Sprites/Longsword");
+            longsword.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/Longsword"));
             retVal.Add(longsword);
 
             var shortbow = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_BOW, "Sprites/Bow");
+            shortbow.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/Bow"));
             retVal.Add(shortbow);
 
             var luckyCoin = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN, "Sprites/LuckyCoin");
@@ -51,10 +54,24 @@ namespace Gamepackage
             retVal.Add(arrow);
 
             var actionStaff = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ACTION_STAFF, "Sprites/ActionStaff");
+            actionStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/ActionStaff"));
             retVal.Add(actionStaff);
 
             var swirlStaff = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_SWIRL_STAFF, "Sprites/SwirlStaff");
+            swirlStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/SwirlStaff"));
             retVal.Add(swirlStaff);
+
+            var robeOfWonders = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ROBE_OF_WONDERS, "Sprites/RobeOfWondersFrontSE");
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.ChestFrontNE, Resources.Load<Sprite>("Sprites/RobeOfWondersFrontNE"));
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.ChestFrontSE, Resources.Load<Sprite>("Sprites/RobeOfWondersFrontSE"));
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.HelmetBackSE, Resources.Load<Sprite>("Sprites/RobeOfWondersHoodBackSE"));
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.HelmetFrontNE, Resources.Load<Sprite>("Sprites/RobeOfWondersHoodFrontNE"));
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.HelmetFrontSE, Resources.Load<Sprite>("Sprites/RobeOfWondersHoodFrontSE"));
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.LeftArmFrontSE, Resources.Load<Sprite>("Sprites/RobeOfWondersLeftArmFront"));
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.LeftArmFrontNE, Resources.Load<Sprite>("Sprites/RobeOfWondersLeftArmFront"));
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.RightArmFrontSE, Resources.Load<Sprite>("Sprites/RobeOfWondersRightArmFront"));
+            robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.RightArmFrontNE, Resources.Load<Sprite>("Sprites/RobeOfWondersRightArmFront"));
+            retVal.Add(robeOfWonders);
 
             return retVal;
         }

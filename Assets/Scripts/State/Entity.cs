@@ -1,5 +1,6 @@
 
 using Newtonsoft.Json;
+using Spine.Unity;
 using System;
 using System.Collections.Generic;
 
@@ -15,6 +16,8 @@ namespace Gamepackage
         public string Name;
 
         public Point Position;
+
+        public Direction Direction;
 
         public Body Body;
 
@@ -87,7 +90,7 @@ namespace Gamepackage
                             total += attribute.Value;
                         }
                     }
-                    foreach(var effect in item.Effects)
+                    foreach (var effect in item.Effects)
                     {
                         int amountToAdd = 0;
                         effect.Attributes.TryGetValue(attr, out amountToAdd);

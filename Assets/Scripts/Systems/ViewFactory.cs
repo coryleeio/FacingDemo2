@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity.Modules.AttachmentTools;
+using Spine;
 using UnityEngine.Assertions;
+using Spine.Unity;
 
 namespace Gamepackage
 {
@@ -34,8 +37,28 @@ namespace Gamepackage
              return EncounterFactory.Build(identifier);
         }
 
-        public void BuildView(Entity entity)
+        public void BuildView(Entity entity, bool DestroyOldView = true)
         {
+            if (entity.View != null && entity.View.ViewGameObject != null && DestroyOldView)
+            {
+                UnityEngine.GameObject.Destroy(entity.View.ViewGameObject);
+            }
+            var itemsToEquip = new Dictionary<SpriteAttachment, Sprite>();
+            if(entity.Inventory != null)
+            {
+                var equippedItemsBySlot = entity.Inventory.EquippedItemBySlot;
+                foreach(var pair in equippedItemsBySlot)
+                {
+                    var item = pair.Value;
+                    foreach(var spriteSlotPair in item.ItemAppearance.WornItemSpritePerSlot)
+                    {
+                        var spriteSlot = spriteSlotPair.Key;
+                        var sprite = spriteSlotPair.Value;
+                        itemsToEquip[spriteSlot] = sprite;
+                    }
+                }
+            }
+
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var go = new GameObject();
             go.name = entity.PrototypeIdentifier.ToString();
@@ -87,7 +110,45 @@ namespace Gamepackage
                 spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
                 spriteRenderer.material = defaultMaterial;
             }
-            else if(entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CORPSE)
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_ASIAN)
+            {
+                var newGo = BuildSplineView("Spine/Humanoid/Export/Humanoid_SkeletonData", itemsToEquip, "HumanAsian", Animations.Idle, entity.Direction);
+                SetSpineDefaults(go, newGo);
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_WHITE)
+            {
+                var newGo = BuildSplineView("Spine/Humanoid/Export/Humanoid_SkeletonData", itemsToEquip, "HumanWhite", Animations.Idle, entity.Direction);
+                SetSpineDefaults(go, newGo);
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_BLACK)
+            {
+                var newGo = BuildSplineView("Spine/Humanoid/Export/Humanoid_SkeletonData", itemsToEquip, "HumanBlack", Animations.Idle, entity.Direction);
+                SetSpineDefaults(go, newGo);
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_SKELETON_WHITE)
+            {
+                var newGo = BuildSplineView("Spine/Humanoid/Export/Humanoid_SkeletonData", itemsToEquip, "SkeletonWhite", Animations.Idle, entity.Direction);
+                SetSpineDefaults(go, newGo);
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
+                spriteRenderer.material = defaultMaterial;
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
+                spriteRenderer.material = defaultMaterial;
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
+            {
+                var spriteRenderer = go.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
+                spriteRenderer.material = defaultMaterial;
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CORPSE)
             {
                 var relevantItems = entity.Inventory.ChooseRandomItemsFromInventory(3);
                 foreach (var item in relevantItems)
@@ -115,6 +176,13 @@ namespace Gamepackage
                     }
                 }
             }
+        }
+
+        private static void SetSpineDefaults(GameObject go, GameObject newGo)
+        {
+            newGo.transform.SetParent(go.transform, false);
+            newGo.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            newGo.transform.localPosition = new Vector3(0, -0.30f, 0);
         }
 
         public void BuildMapTiles(Level level)
@@ -272,6 +340,56 @@ namespace Gamepackage
             }
         }
 
+        public static GameObject BuildSplineView(string SkeletonDataPath, Dictionary<SpriteAttachment, Sprite> spritesBySlot, string SkinName = null, Animations beginningAnimation = Animations.Idle, Direction beginningDirection = Direction.SouthEast)
+        {
+            if(spritesBySlot == null)
+            {
+                spritesBySlot = new Dictionary<SpriteAttachment, Sprite>();
+            }
+            Texture2D runtimeAtlas;
+            Material runtimeMaterial;
+            var skeletonDataAsset = Resources.Load<SkeletonDataAsset>(SkeletonDataPath);
+            var skeletonData = skeletonDataAsset.GetSkeletonData(false);
+            var idleAnimation = skeletonData.FindAnimation(StringUtil.GetAnimationNameForDirection(beginningAnimation, beginningDirection));
+            var templateSkin = skeletonData.FindSkin("Template");
+            var bodySkin = SkinName != null ? skeletonData.FindSkin(SkinName) : skeletonData.DefaultSkin;
+            var skeletonAnimation = SkeletonAnimation.NewSkeletonAnimationGameObject(skeletonDataAsset);
+            skeletonAnimation.Initialize(false);
+
+            var sourceMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
+            var skeleton = skeletonAnimation.Skeleton;
+            var customSkin = new Skin("custom skin");
+
+            foreach (var pair in spritesBySlot)
+            {
+                var attachmentKey = pair.Key;
+                Sprite sprite = pair.Value;
+                int spriteSlotIndex = skeleton.FindSlotIndex(SpriteSlotFromAttachment(attachmentKey));
+
+                Attachment templateAttachment = templateSkin.GetAttachment(spriteSlotIndex, attachmentKey.ToString());
+                Attachment newAttachment = templateAttachment.GetRemappedClone(sprite, sourceMaterial, true, false, true);
+                RegionAttachment regionAttachment = newAttachment as RegionAttachment;
+                Assert.IsNotNull(regionAttachment);
+                regionAttachment.SetPositionOffset(sprite.textureRectOffset);
+                regionAttachment.UpdateOffset();
+                customSkin.SetAttachment(spriteSlotIndex, attachmentKey.ToString(), newAttachment);
+            }
+
+            var repackedSkin = new Skin("repacked skin");
+            repackedSkin.Append(templateSkin);
+            repackedSkin.Append(bodySkin);
+            repackedSkin.Append(customSkin);
+            repackedSkin = repackedSkin.GetRepackedSkin("repacked skin", sourceMaterial, out runtimeMaterial, out runtimeAtlas);
+
+            skeleton.SetSkin(repackedSkin); // Assign the repacked skin to your Skeleton.
+            skeleton.SetSlotsToSetupPose(); // Use the pose from setup pose.
+
+            skeletonAnimation.AnimationState.SetAnimation(0, idleAnimation, true);
+            skeletonAnimation.Update(0); // Use the pose in the currently active animation.
+            Resources.UnloadUnusedAssets();
+            return skeletonAnimation.gameObject;
+        }
+
         private static TileType GetTileInfoForOffset(Level level, Point position, Point offset)
         {
             var offsetPoint = MathUtil.GetPointByOffset(position, offset);
@@ -293,6 +411,95 @@ namespace Gamepackage
             o.transform.localPosition = MathUtil.MapToWorld(position);
             Context.SpriteSortingSystem.RegisterTile(renderer, position);
             return renderer;
+        }
+
+        private static string SpriteSlotFromAttachment(SpriteAttachment attachment)
+        {
+            if (attachment == SpriteAttachment.HelmetBackSE || attachment == SpriteAttachment.HelmetBackNE)
+            {
+                return SpriteSlot.HelmetBack.ToString();
+            }
+            else if (attachment == SpriteAttachment.HelmetFrontSE || attachment == SpriteAttachment.HelmetFrontNE)
+            {
+                return SpriteSlot.HelmetFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.ChestBackSE || attachment == SpriteAttachment.ChestBackNE)
+            {
+                return SpriteSlot.ChestBack.ToString();
+            }
+            else if (attachment == SpriteAttachment.ChestFrontSE || attachment == SpriteAttachment.ChestFrontNE)
+            {
+                return SpriteSlot.ChestFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.LeftArm)
+            {
+                return SpriteSlot.LeftArm.ToString();
+            }
+            else if (attachment == SpriteAttachment.LeftArmBackSE || attachment == SpriteAttachment.LeftArmBackNE)
+            {
+                return SpriteSlot.LeftArmBack.ToString();
+            }
+            else if (attachment == SpriteAttachment.LeftArmFrontSE || attachment == SpriteAttachment.LeftArmFrontNE)
+            {
+                return SpriteSlot.LeftArmFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.LeftLeg)
+            {
+                return SpriteSlot.LeftLeg.ToString();
+            }
+            else if (attachment == SpriteAttachment.LeftLegBackSE || attachment == SpriteAttachment.LeftLegBackNE)
+            {
+                return SpriteSlot.LeftLegBack.ToString();
+            }
+            else if (attachment == SpriteAttachment.LeftLegFrontSE || attachment == SpriteAttachment.LeftLegFrontNE)
+            {
+                return SpriteSlot.LeftLegFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.RightArm)
+            {
+                return SpriteSlot.RightArm.ToString();
+            }
+            else if (attachment == SpriteAttachment.RightArmBackSE || attachment == SpriteAttachment.RightArmBackNE)
+            {
+                return SpriteSlot.RightArmBack.ToString();
+            }
+            else if (attachment == SpriteAttachment.RightArmFrontSE || attachment == SpriteAttachment.RightArmFrontNE)
+            {
+                return SpriteSlot.RightArmFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.RightLeg)
+            {
+                return SpriteSlot.RightLeg.ToString();
+            }
+            else if (attachment == SpriteAttachment.RightLegBackSE || attachment == SpriteAttachment.RightLegBackNE)
+            {
+                return SpriteSlot.RightLegBack.ToString();
+            }
+            else if (attachment == SpriteAttachment.RightLegFrontSE || attachment == SpriteAttachment.RightLegFrontNE)
+            {
+                return SpriteSlot.RightLegFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.RightLegFrontSE || attachment == SpriteAttachment.RightLegFrontNE)
+            {
+                return SpriteSlot.RightLegFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.MainHandBack)
+            {
+                return SpriteSlot.MainHandBack.ToString();
+            }
+            else if (attachment == SpriteAttachment.MainHandFront)
+            {
+                return SpriteSlot.MainHandFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.OffHandFront)
+            {
+                return SpriteSlot.OffHandFront.ToString();
+            }
+            else if (attachment == SpriteAttachment.OffHandBack)
+            {
+                return SpriteSlot.OffHandBack.ToString();
+            }
+            else return attachment.ToString();
         }
     }
 }

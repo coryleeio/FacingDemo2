@@ -5,7 +5,7 @@
         public static GameStateManager GameStateManager = new GameStateManager();
         public static VisibilitySystem VisibilitySystem = new VisibilitySystem();
         public static ResourceManager ResourceManager = new ResourceManager();
-        public static ViewFactory PrototypeFactory = new ViewFactory();
+        public static ViewFactory ViewFactory = new ViewFactory();
         public static EntityManager EntitySystem = new EntityManager();
         public static Localizer Localizer = new Localizer();
         public static DungeonGenerator DungeonGenerator = new DungeonGenerator();

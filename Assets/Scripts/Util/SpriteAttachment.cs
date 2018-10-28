@@ -1,0 +1,40 @@
+﻿namespace Gamepackage
+{
+    public enum SpriteAttachment
+    {
+        HeadSE,
+        HeadNE,
+        HelmetBackSE,
+        HelmetBackNE,
+        HelmetFrontSE,
+        HelmetFrontNE,
+        ChestBackSE,
+        ChestBackNE,
+        ChestFrontSE,
+        ChestFrontNE,
+        LeftArm,
+        LeftArmBackSE,
+        LeftArmBackNE,
+        LeftArmFrontSE,
+        LeftArmFrontNE,
+        LeftLeg,
+        LeftLegBackSE,
+        LeftLegBackNE,
+        LeftLegFrontSE,
+        LeftLegFrontNE,
+        RightArm,
+        RightArmBackSE,
+        RightArmBackNE,
+        RightArmFrontSE,
+        RightArmFrontNE,
+        RightLeg,
+        RightLegBackSE,
+        RightLegBackNE,
+        RightLegFrontSE,
+        RightLegFrontNE,
+        MainHandBack,
+        MainHandFront,
+        OffHandFront,
+        OffHandBack
+    }
+}

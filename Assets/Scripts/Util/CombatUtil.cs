@@ -55,10 +55,24 @@ namespace Gamepackage
         {
             Assert.IsNotNull(result.Targets);
             Assert.IsNotNull(result.AppliedEffects);
+            
+
 
             foreach (var target in result.Targets)
             {
                 Assert.IsNotNull(target);
+                if (result.Source != null)
+                {
+                    var newFacingDirection = MathUtil.RelativeDirection(target.Position, result.Source.Position);
+                    if (target.View != null && target.View.SkeletonAnimation != null)
+                    {
+                        var skeletonAnimation = target.View.SkeletonAnimation;
+                        skeletonAnimation.AnimationState.ClearTracks();
+                        skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
+                        skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.GetHit, newFacingDirection), false);
+                        skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newFacingDirection), true, 0.0f);
+                    }
+                }
                 if (result.AttackParameters != null && result.AttackParameters.DamageType == DamageTypes.NOT_SET)
                 {
                     throw new NotImplementedException("You forgot to set the damage type on this attack");
@@ -124,6 +138,13 @@ namespace Gamepackage
 
                     if (target.Body.CurrentHealth <= 0)
                     {
+                        if (target.View != null && target.View.SkeletonAnimation != null)
+                        {
+                            var skeletonAnimation = target.View.SkeletonAnimation;
+                            skeletonAnimation.AnimationState.ClearTracks();
+                            skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
+                            skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.FallDown, target.Direction), false);
+                        }
                         result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                         {
                             Message = string.Format("Dead!", damage),
@@ -162,7 +183,7 @@ namespace Gamepackage
                         if (target.Inventory.HasAnyItems)
                         {
                             target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
-                            Context.PrototypeFactory.BuildView(target);
+                            Context.ViewFactory.BuildView(target, false);
                         }
                         if (!target.IsPlayer)
                         {
@@ -363,6 +384,7 @@ namespace Gamepackage
                 {
                     owner.Inventory.RemoveItemStack(item);
                     Context.UIController.Refresh();
+                    Context.ViewFactory.BuildView(owner);
                 }
             }
         }
