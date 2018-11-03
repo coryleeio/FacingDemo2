@@ -107,7 +107,26 @@ namespace Gamepackage
                             }
                         }
                     }
-                    if (swappers.Count != 0)
+                    if (everyoneElse.Count != 0)
+                    {
+                        // Enqueue a combat action
+                        var step = new Step();
+                        var endTurnStep = new Step();
+
+                        var entityToAct = everyoneElse[0];
+                        var nextAction = entityToAct.Behaviour.NextAction;
+                        step.Actions.AddLast(nextAction);
+                        var endTurn = new EndTurn
+                        {
+                            Source = entityToAct
+                        };
+                        endTurnStep.Actions.AddLast(endTurn);
+
+                        Steps.AddLast(step);
+                        Steps.AddLast(endTurnStep);
+                        ForceAIsToRecalculateMoves(entities);
+                    }
+                    else if (swappers.Count != 0)
                     {
                         var step = new Step();
                         var endTurnStep = new Step();
@@ -170,25 +189,6 @@ namespace Gamepackage
                         }
                         Steps.AddLast(moveStep);
                         Steps.AddLast(endTurnSTep);
-                        ForceAIsToRecalculateMoves(entities);
-                    }
-                    else if (everyoneElse.Count != 0)
-                    {
-                        // Enqueue a combat action
-                        var step = new Step();
-                        var endTurnStep = new Step();
-
-                        var entityToAct = everyoneElse[0];
-                        var nextAction = entityToAct.Behaviour.NextAction;
-                        step.Actions.AddLast(nextAction);
-                        var endTurn = new EndTurn
-                        {
-                            Source = entityToAct
-                        };
-                        endTurnStep.Actions.AddLast(endTurn);
-
-                        Steps.AddLast(step);
-                        Steps.AddLast(endTurnStep);
                         ForceAIsToRecalculateMoves(entities);
                     }
                 }
