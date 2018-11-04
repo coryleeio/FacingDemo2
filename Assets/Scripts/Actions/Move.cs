@@ -48,8 +48,8 @@ namespace Gamepackage
             {
                 var skeletonAnimation = Source.View.SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
-                skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
-                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newDirection), true);
+                skeletonAnimation.Skeleton.SetToSetupPose();
+                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Walk, newDirection), true);
             }
 
             if (Source.IsPlayer)

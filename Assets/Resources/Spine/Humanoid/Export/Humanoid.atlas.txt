@@ -4,6 +4,13 @@ size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+Bow
+  rotate: false
+  xy: 782, 522
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 Ghost
   rotate: false
   xy: 2, 782
@@ -154,13 +161,6 @@ HumanWhiteHeadSE
 HumanWhiteLeg
   rotate: false
   xy: 2, 2
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-Longsword
-  rotate: false
-  xy: 782, 522
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

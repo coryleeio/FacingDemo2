@@ -81,9 +81,21 @@ namespace Gamepackage
             {
                 var skeletonAnimation = CombatContextCapability.Source.View.SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
-                skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
-                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Attack, Direction), false);
-                skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
+                skeletonAnimation.Skeleton.SetToSetupPose();
+                if (CombatContext == CombatContext.Zapped)
+                {
+                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastStart, Direction), false);
+                }
+                else if (CombatContext == CombatContext.Ranged)
+                {
+                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Shoot, Direction), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
+                }
+                else
+                {
+                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Attack, Direction), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
+                }
             }
 
             SourceGridPosition = new Point(CombatContextCapability.Source.Position.X, CombatContextCapability.Source.Position.Y);
@@ -98,9 +110,9 @@ namespace Gamepackage
             {
                 var capability = AttackCapabilities[CombatContext];
                 var itemBeingLaunched = GetItemBeingLaunched(capability);
-                if(itemBeingLaunched.NumberOfItems == 1)
+                if (itemBeingLaunched.NumberOfItems == 1)
                 {
-                    if(capability.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
+                    if (capability.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
                     {
                         capability.Source.Inventory.UnequipItemInSlot(ItemSlot.MainHand);
                         Context.ViewFactory.BuildView(AttackCapabilities.Source);
@@ -187,6 +199,15 @@ namespace Gamepackage
                 var canHitMoreTargets = NumberOfTargetsHit < CombatContextCapability.NumberOfTargetsToPierce;
                 if (!canHitMoreTargets || hitWall || hitMaxRange)
                 {
+                    if (CombatContext == CombatContext.Zapped && CombatContextCapability.Source.View != null && CombatContextCapability.Source.View.SkeletonAnimation != null)
+                    {
+                        var skeletonAnimation = CombatContextCapability.Source.View.SkeletonAnimation;
+                        skeletonAnimation.AnimationState.ClearTracks();
+                        skeletonAnimation.Skeleton.SetToSetupPose();
+
+                        skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastEnd, Direction), false);
+                        skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
+                    }
                     isDoneInternal = true;
                     if (CombatContextCapability.AttackParameters.ExplosionParameters != null)
                     {

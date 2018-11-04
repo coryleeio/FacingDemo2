@@ -68,7 +68,7 @@ namespace Gamepackage
                     {
                         var skeletonAnimation = target.View.SkeletonAnimation;
                         skeletonAnimation.AnimationState.ClearTracks();
-                        skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
+                        skeletonAnimation.Skeleton.SetToSetupPose();
                         skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.GetHit, newFacingDirection), false);
                         skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newFacingDirection), true, 0.0f);
                     }
@@ -142,7 +142,7 @@ namespace Gamepackage
                         {
                             var skeletonAnimation = target.View.SkeletonAnimation;
                             skeletonAnimation.AnimationState.ClearTracks();
-                            skeletonAnimation.AnimationState.SetEmptyAnimations(0.0f);
+                            skeletonAnimation.Skeleton.SetToSetupPose();
                             skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.FallDown, target.Direction), false);
                         }
                         result.FloatingTextMessage.AddLast(new FloatingTextMessage()

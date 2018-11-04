@@ -14,24 +14,18 @@ namespace Gamepackage
         public GameObject ViewGameObject;
 
         [JsonIgnore]
-        private SkeletonAnimation _skeletonAnimation;
-
-        [JsonIgnore]
         public SkeletonAnimation SkeletonAnimation
         {
             get
             {
-                if(_skeletonAnimation == null)
+                if (ViewGameObject != null)
                 {
-                    if(ViewGameObject != null)
-                    {
-                        _skeletonAnimation = ViewGameObject.GetComponentInChildren<SkeletonAnimation>();
-                    }
+                    return ViewGameObject.GetComponentInChildren<SkeletonAnimation>();
                 }
-                return _skeletonAnimation;
+                return null;
             }
         }
 
-        public View() {}
+        public View() { }
     }
 }

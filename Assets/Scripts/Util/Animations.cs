@@ -8,5 +8,7 @@
         FallDown,
         GetHit,
         Idle,
+        Walk,
+        Shoot,
     }
 }

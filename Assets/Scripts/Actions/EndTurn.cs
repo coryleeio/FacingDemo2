@@ -45,6 +45,11 @@ namespace Gamepackage
             }
             // You dont need to use a state change to do this removal, because nothing should be preventing a ticking effect from expiring
             CombatUtil.RemoveEntityEffects(Source, effectsThatShouldExpire);
+            if (Source.View != null && Source.View.SkeletonAnimation != null)
+            {
+                var skeletonAnimation = Source.View.SkeletonAnimation;
+                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Source.Direction), true);
+            }
         }
     }
 }
