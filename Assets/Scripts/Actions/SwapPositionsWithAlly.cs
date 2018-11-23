@@ -62,6 +62,7 @@ namespace Gamepackage
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
                 skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Walk, sourceDirection), true);
+                Source.Direction = sourceDirection;
             }
 
             var targetDirection = MathUtil.RelativeDirection(Targets[0].Position, oldSourcePos);
@@ -71,6 +72,7 @@ namespace Gamepackage
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
                 skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Walk, targetDirection), true);
+                Targets[0].Direction = targetDirection;
             }
         }
 
