@@ -16,6 +16,12 @@ namespace Gamepackage
             {
                 healthBar.gameObject.SetActive(false);
             }
+            var floating = GetComponentInChildren<Floating>();
+
+            if (floating != null)
+            {
+                floating.gameObject.SetActive(false);
+            }
             mpb = new MaterialPropertyBlock();
         }
 
@@ -35,14 +41,14 @@ namespace Gamepackage
                     if (spriteRenderer == null)
                     {
                         var meshRenderer = GetComponentInChildren<MeshRenderer>();
-                        mpb.SetColor(colorPropertyName, color);
                         meshRenderer.SetPropertyBlock(mpb);
+                        mpb.SetColor(colorPropertyName, color);
                     }
                     else
                     {
                         spriteRenderer.color = color;
                     }
-                    
+
                 }
                 else if (secondPhasePErcentage < 1.0f)
                 {

@@ -178,6 +178,7 @@ namespace Gamepackage
                         if (target.View.ViewGameObject != null)
                         {
                             target.View.ViewGameObject.AddComponent<DeathAnimation>();
+
                         }
 
                         if (target.Inventory.HasAnyItems)

@@ -80,6 +80,7 @@ namespace Gamepackage
             {
                 entity.Name = "entity.bee.name".Localize();
                 entity.Body = BuildBody(DefaultBeeBodyAttacks());
+                entity.Body.Floating = true;
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
                    {Attributes.MAX_HEALTH, 10 },
@@ -88,7 +89,7 @@ namespace Gamepackage
                 entity.View = new View()
                 {
                     ViewType = ViewType.Spine,
-                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_SKELETON_WHITE,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_BEE,
                 };
                 entity.Behaviour = new AIBehaviour()
                 {
@@ -100,6 +101,7 @@ namespace Gamepackage
             {
                 entity.Name = "entity.queen.bee.name".Localize();
                 entity.Body = BuildBody(DefaultBeeBodyAttacks());
+                entity.Body.Floating = true;
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
                     {Attributes.MAX_HEALTH, 15 },
@@ -108,7 +110,7 @@ namespace Gamepackage
                 entity.View = new View()
                 {
                     ViewType = ViewType.Spine,
-                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_SKELETON_WHITE,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_BEE,
                 };
                 entity.Behaviour = new AIBehaviour()
                 {

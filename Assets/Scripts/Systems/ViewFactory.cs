@@ -112,22 +112,27 @@ namespace Gamepackage
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_ASIAN)
             {
-                var newGo = BuildSplineView("Spine/Humanoid/Export/Humanoid_SkeletonData", itemsToEquip, "HumanAsian", Animations.Idle, entity.Direction);
+                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "HumanAsian", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_WHITE)
             {
-                var newGo = BuildSplineView("Spine/Humanoid/Export/Humanoid_SkeletonData", itemsToEquip, "HumanWhite", Animations.Idle, entity.Direction);
+                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "HumanWhite", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_BLACK)
             {
-                var newGo = BuildSplineView("Spine/Humanoid/Export/Humanoid_SkeletonData", itemsToEquip, "HumanBlack", Animations.Idle, entity.Direction);
+                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "HumanBlack", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_SKELETON_WHITE)
             {
-                var newGo = BuildSplineView("Spine/Humanoid/Export/Humanoid_SkeletonData", itemsToEquip, "SkeletonWhite", Animations.Idle, entity.Direction);
+                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "SkeletonWhite", Animations.Idle, entity.Direction);
+                SetSpineDefaults(go, newGo);
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_BEE)
+            {
+                var newGo = BuildSplineView("Spine/Export/Bee_SkeletonData", itemsToEquip, "Template", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
@@ -163,6 +168,13 @@ namespace Gamepackage
                     spriteRenderer.sprite = item.ItemAppearance.InventorySprite;
                     spriteRenderer.material = defaultMaterial;
                 }
+            }
+
+            if(entity.Body != null && entity.Body.Floating && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
+            {
+                var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
+                var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
+                target.AddComponent<Floating>();
             }
 
             if (entity.IsCombatant)
@@ -366,6 +378,11 @@ namespace Gamepackage
                 Sprite sprite = pair.Value;
                 int spriteSlotIndex = skeleton.FindSlotIndex(SpriteSlotFromAttachment(attachmentKey));
 
+                if(spriteSlotIndex == -1)
+                {
+                    Debug.LogWarning("Could not find sprite attachment on template: " + attachmentKey.ToString());
+                    continue;
+                }
                 Attachment templateAttachment = templateSkin.GetAttachment(spriteSlotIndex, attachmentKey.ToString());
                 Attachment newAttachment = templateAttachment.GetRemappedClone(sprite, sourceMaterial, true, false, true);
                 RegionAttachment regionAttachment = newAttachment as RegionAttachment;

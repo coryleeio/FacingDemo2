@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "nYvfk+l0oejItknQgtS1SyPDhKA", "spine": "3.6.53", "width": 190.37, "height": 193.06, "images": "../../Sprites/" },
+"skeleton": { "hash": "ijkKFTtSh8m9e5aVL2/G5MCIAKw", "spine": "3.6.53", "width": 190.37, "height": 193.06, "images": "../Sprites/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "Body", "parent": "root", "x": 1.15, "y": 32.04 },
