@@ -3,7 +3,7 @@
     using UnityEngine;
     public class Floating : MonoBehaviour
     {
-        private float startingOffset;
+        public float startingOffset;
         public float frequency = 6.0f;
         public float amplitude = 0.01f;
         void Start()

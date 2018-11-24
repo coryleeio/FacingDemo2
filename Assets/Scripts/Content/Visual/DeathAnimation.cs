@@ -20,7 +20,7 @@ namespace Gamepackage
 
             if (floating != null)
             {
-                floating.gameObject.SetActive(false);
+                floating.enabled = false;
             }
             mpb = new MaterialPropertyBlock();
         }

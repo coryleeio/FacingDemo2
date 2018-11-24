@@ -27,11 +27,15 @@ namespace Gamepackage
         {
             var longswordPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Longsword"));
             var lightningPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Lightning"));
+            lightningPrefab.transform.localScale = new Vector3(1f, 1f, 1f);
             var fireballPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Fireball"));
             var bigFirePrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/BigFire"));
             var greenPotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/GreenPotion"));
+            greenPotionPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             var arrowPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Arrow"));
+            arrowPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             var coinPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/LuckyCoin"));
+            coinPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             var bowPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Bow"));
             var swirlPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/SwirlStaff"));
             var actionStaffPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/ActionStaff"));
