@@ -109,6 +109,21 @@ namespace Gamepackage
                         BuildDraggableItemForPlayerParentToTransform(inventory.Items[i], target, instance.transform);
                     }
                 }
+
+                foreach(var pair in inventory.EquippedItemBySlot)
+                {
+                    var slot = pair.Key;
+                    var item = pair.Value;
+
+                    if(item != null)
+                    {
+                        var instance = GameObject.Instantiate<InventoryDropSlot>(slotPrefab);
+                        instance.Index = -1;
+                        instance.Entity = target;
+                        instance.transform.SetParent(container.transform, false);
+                        BuildDraggableItemForPlayerParentToTransform(item, target, instance.transform);
+                    }
+                }
             }
 
             Show();
