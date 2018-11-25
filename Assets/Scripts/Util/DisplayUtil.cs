@@ -61,6 +61,10 @@ namespace Gamepackage
             {
                 return "damage.type.poison".Localize();
             }
+            else if (damageType == DamageTypes.HEALING)
+            {
+                return "damage.type.healing".Localize();
+            }
             else
             {
                 throw new NotImplementedException("Need to add a display string for this damage type: " + damageType);

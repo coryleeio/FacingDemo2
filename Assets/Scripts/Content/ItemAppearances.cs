@@ -50,12 +50,29 @@ namespace Gamepackage
             var greenPotion = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_GREEN_POTION, "Sprites/GreenPotion");
             retVal.Add(greenPotion);
 
+            var redPotion = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_RED_POTION, "Sprites/RedPotion");
+            retVal.Add(redPotion);
+
+            var purplePotion = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_PURPLE_POTION, "Sprites/PurplePotion");
+            retVal.Add(purplePotion);
+
+            var bluePotion = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_BLUE_POTION, "Sprites/BluePotion");
+            retVal.Add(bluePotion);
+
             var arrow = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ARROW, "Sprites/Arrow");
             retVal.Add(arrow);
 
             var actionStaff = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ACTION_STAFF, "Sprites/ActionStaff");
             actionStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/ActionStaff"));
             retVal.Add(actionStaff);
+
+            var dagger = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_DAGGER, "Sprites/Dagger");
+            dagger.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/Dagger"));
+            retVal.Add(dagger);
+
+            var mace = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_MACE, "Sprites/Mace");
+            mace.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/Mace"));
+            retVal.Add(mace);
 
             var swirlStaff = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_SWIRL_STAFF, "Sprites/SwirlStaff");
             swirlStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/SwirlStaff"));

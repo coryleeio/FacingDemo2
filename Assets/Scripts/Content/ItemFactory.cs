@@ -75,14 +75,75 @@ namespace Gamepackage
                         Bonus = 0,
                         DyeNumber = 1,
                         DyeSize = 3,
-                        DamageType = DamageTypes.PIERCING,
+                        DamageType = DamageTypes.SLASHING,
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_LONGSWORD
                     }
                 };
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_POISON_DAGGER)
+            {
+                item = ItemFactory.Build(UniqueIdentifier.ITEM_DAGGER);
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<CombatContext>() { CombatContext.Melee, CombatContext.Thrown }));
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_STRENGTH_OF_GIANTS));
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_DAGGER)
+            {
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_DAGGER;
+                item.DisplayName = "item.dagger.name".Localize();
+                item.Description = "item.dagger.description".Localize();
+                item.MeleeParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.piercing.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 8,
+                        DamageType = DamageTypes.PIERCING
+                    }
+                };
+                item.ThrowParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.throw.useless.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 3,
+                        DamageType = DamageTypes.PIERCING,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_DAGGER
+                    }
+                };
+                item.SlotsWearable.Add(ItemSlot.MainHand);
+                item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_MACE)
+            {
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_MACE;
+                item.DisplayName = "item.mace.name".Localize();
+                item.Description = "item.mace.description".Localize();
+                item.MeleeParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.crushing.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 8,
+                        DamageType = DamageTypes.BLUDGEONING
+                    }
+                };
+                item.ThrowParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.throw.useless.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 3,
+                        DamageType = DamageTypes.BLUDGEONING,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_MACE
+                    }
+                };
+                item.SlotsWearable.Add(ItemSlot.MainHand);
+                item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_STAFF_OF_FIREBALLS)
             {
@@ -222,7 +283,7 @@ namespace Gamepackage
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ANTIDOTE)
             {
-                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_GREEN_POTION;
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_PURPLE_POTION;
                 item.DisplayName = "item.antidote.name".Localize();
                 item.Description = "item.antidote.description".Localize();
                 item.CustomOnUseText = "item.antidote.action".Localize();
@@ -239,7 +300,7 @@ namespace Gamepackage
                         DyeNumber = 0,
                         DyeSize = 0,
                         DamageType = DamageTypes.BLUDGEONING,
-                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_GREEN_POTION,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_PURPLE_POTION,
                     },
                 };
 
@@ -247,6 +308,7 @@ namespace Gamepackage
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
                 item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY, new List<CombatContext>() { CombatContext.OnUse, CombatContext.Thrown }));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_REGENERATION, new List<CombatContext>() { CombatContext.OnUse, CombatContext.Thrown }));
                 item.IsUsable = true;
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_LUCKY_COIN)

@@ -46,13 +46,6 @@ namespace Gamepackage
         public virtual void OnApply(Entity owner)
         {
             ApplyPersistentVisualEffects(owner);
-            if (owner.Body != null)
-            {
-                if (owner.Body.CurrentHealth > owner.CalculateValueOfAttribute(Gamepackage.Attributes.MAX_HEALTH))
-                {
-                    owner.Body.CurrentHealth = owner.CalculateValueOfAttribute(Gamepackage.Attributes.MAX_HEALTH);
-                }
-            }
         }
 
         // When an effect is removed, perform any state changes, and remove the persistent visual effects

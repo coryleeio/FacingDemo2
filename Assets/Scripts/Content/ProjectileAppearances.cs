@@ -26,11 +26,16 @@ namespace Gamepackage
         public static List<ProjectileAppearance> LoadAll()
         {
             var longswordPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Longsword"));
+            var daggerPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Dagger"));
+            var macePrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Mace"));
             var lightningPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Lightning"));
             lightningPrefab.transform.localScale = new Vector3(1f, 1f, 1f);
             var fireballPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Fireball"));
             var bigFirePrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/BigFire"));
             var greenPotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/GreenPotion"));
+            var redPotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/RedPotion"));
+            var purplePotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/PurplePotion"));
+            var bluePotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/BluePotion"));
             greenPotionPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             var arrowPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Arrow"));
             arrowPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -102,6 +107,30 @@ namespace Gamepackage
             };
             retVal.Add(longsword);
 
+            var mace = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_MACE,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = macePrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(mace);
+
+            var dagger = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_DAGGER,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = daggerPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(dagger);
+
             var greenPotion = new ProjectileAppearance()
             {
                 UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_GREEN_POTION,
@@ -113,6 +142,40 @@ namespace Gamepackage
                 }
             };
             retVal.Add(greenPotion);
+
+            var redPotion = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_RED_POTION,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = redPotionPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(redPotion);
+            var purplePotion = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_PURPLE_POTION,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = purplePotionPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(purplePotion);
+            var bluePotion = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_BLUE_POTION,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = bluePotionPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(bluePotion);
 
             var arrow = new ProjectileAppearance()
             {

@@ -52,7 +52,10 @@ namespace Gamepackage
                 entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_SHORTBOW));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_LIGHTNING));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_STAFF_OF_FIREBALLS));
-                entity.Inventory.AddItem(ItemFactory.Build(Tables.BanditWeapons.NextSingleItem()));
+                entity.Inventory.AddItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
+                entity.Inventory.AddItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
+                entity.Inventory.AddItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
+                entity.Inventory.AddItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));
@@ -96,6 +99,32 @@ namespace Gamepackage
                     Team = Team.ENEMY,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
+            }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_SKELETON)
+            {
+                entity.Name = "entity.skeleton.name".Localize();
+                entity.Body = BuildBody(DefaultHumanoidBodyAttacks());
+                entity.Body.Attributes = new Dictionary<Attributes, int>
+                {
+                   {Attributes.MAX_HEALTH, 10 },
+                };
+                entity.BlocksPathing = true;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.Spine,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_SKELETON_WHITE,
+                };
+                entity.Behaviour = new AIBehaviour()
+                {
+                    Team = Team.ENEMY,
+                };
+                var itemIds = new List<UniqueIdentifier>();
+                itemIds.AddRange(Tables.HumanoidClothing.Next());
+                itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
+                foreach(var itemId in itemIds)
+                {
+                    entity.Inventory.EquipItem(ItemFactory.Build(itemId));
+                }
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
             {

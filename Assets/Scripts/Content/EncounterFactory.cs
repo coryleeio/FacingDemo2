@@ -14,6 +14,13 @@ namespace Gamepackage
                 retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_GIANT_BEE));
                 retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_QUEEN_BEE));
             }
+            else if (identifier == UniqueIdentifier.ENCOUNTER_SKELETONS)
+            {
+                retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_SKELETON));
+                retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_SKELETON));
+                retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_SKELETON));
+                retvals.Add(Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_SKELETON));
+            }
             else
             {
                 throw new NotImplementedException();

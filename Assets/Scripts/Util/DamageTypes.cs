@@ -12,6 +12,7 @@
         ARCANE,
         NEGATIVE,
         HOLY,
+        HEALING,
         POISON,
     }
 }

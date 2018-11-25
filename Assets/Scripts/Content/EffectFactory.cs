@@ -74,6 +74,27 @@ namespace Gamepackage
                     }
                 };
             }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_WEAK_REGENERATION)
+            {
+                retVal = new Regeneration()
+                {
+                    Ticker = new Ticker()
+                    {
+                        TurnsRemaining = 20
+                    }
+                };
+            }
+
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_REGENERATION)
+            {
+                retVal = new AppliedEffect()
+                {
+                    EffectAppliedId = UniqueIdentifier.EFFECT_WEAK_REGENERATION,
+                    AppliedDisplayName = "effect.applied.regen.name".Localize(),
+                    AppliedDisplayDescription = "effect.applied.regen.description".Localize(),
+                };
+            }
+
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_STRENGTH_OF_GIANTS)
             {
                 retVal = new StrengthOfGiants()

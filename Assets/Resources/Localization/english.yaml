@@ -41,6 +41,7 @@ damage.type.arcane: "arcane"
 damage.type.negative: "negative"
 damage.type.holy: "holy"
 damage.type.poison: "poison"
+damage.type.healing: "healing"
 
 item.slot.display.none: None
 item.slot.display.chest: Chest
@@ -66,6 +67,7 @@ attacks.throw.useless.1: "{0} throws an item clumbsily at {1} for {2} points of 
 entity.player.name.default: "Poncy"
 entity.dog.name.default: "Maslow"
 entity.bee.name: "Giant Bee"
+entity.skeleton.name: "Brittle Skeleton"
 entity.queen.bee.name: "Giant Bee"
 entity.stairs.up.name: "Stairs (Up)"
 entity.stairs.down.name: "Stairs (Down)"
@@ -79,7 +81,13 @@ effect.poison.name: "Poison"
 effect.poison.description: "You are poisoned..."
 effect.poison.apply.message: "{0} is now poisoned..."
 effect.poison.remove.message: "{0} is no longer poisoned!"
-effect.poison.tick.message: "Poison hurts {1} for {2} point of damage!"
+effect.poison.tick.message: "Poison hurts {1} for {2} points of damage!"
+
+effect.regen.name: "Regeneration"
+effect.regen.description: "You begin regenerating..."
+effect.regen.apply.message: "{0} is now regenerating!"
+effect.regen.remove.message: "{0} is no longer regenerating..."
+effect.regen.tick.message: "{1} heals for {2} points of damage!"
 
 effect.poison.immunity.name: "Cures poison"
 effect.poison.immunity.description: "Removes all poisons from your body."
@@ -101,12 +109,20 @@ effect.applied.strong.poison.name: "Applied strong poison"
 effect.applied.strong.poison.description: "The business end of this is coated in a viscous poison..."
 effect.applied.poison.immunity.name: "Applied poison immunity"
 effect.applied.poison.immunity.description: "This makes you immune to poison..."
+effect.applied.regen.name: Applied regeneration
+effect.applied.regen.description: This causes you to regenerate faster...
 
 item.no.name: No name
 item.no.description: No set description
 
 item.longsword.name: Longsword
 item.longsword.description: This is a simple longsword.
+
+item.mace.name: Mace
+item.mace.description: This is a simple mace.
+
+item.dagger.name: Dagger
+item.dagger.description: This is a simple dagger.
 
 item.robe.of.wonders.name: Robe of Wonders
 item.robe.of.wonders.description: a Robe of Wonders

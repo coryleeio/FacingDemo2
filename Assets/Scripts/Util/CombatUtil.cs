@@ -88,15 +88,20 @@ namespace Gamepackage
                     continue;
                 }
 
-                var damage = 0;
+                var heathChange = 0;
                 if (result.AttackParameters != null)
                 {
                     for (var numDyeRolled = 0; numDyeRolled < result.AttackParameters.DyeNumber; numDyeRolled++)
                     {
-                        damage += UnityEngine.Random.Range(1, result.AttackParameters.DyeSize + 1);
+                        heathChange += UnityEngine.Random.Range(1, result.AttackParameters.DyeSize + 1);
                     }
-                    damage += result.AttackParameters.Bonus;
-                    result.Damage = damage;
+                    heathChange += result.AttackParameters.Bonus;
+
+                    if(result.AttackParameters.DamageType == DamageTypes.HEALING)
+                    {
+                        heathChange *= -1;
+                    }
+                    result.Damage = heathChange;
                 }
 
                 HandleModifyOutgoingAttack(result);
@@ -111,19 +116,49 @@ namespace Gamepackage
 
                 if (result.WasShortCircuited)
                 {
-                    result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                    result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, heathChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                 }
                 else
                 {
-                    if (result.AttackParameters != null && damage != 0)
+                    if (result.AttackParameters != null && heathChange != 0)
                     {
-                        result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, damage, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
-                        target.Body.CurrentHealth = target.Body.CurrentHealth - damage;
+                        result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, heathChange < 0 ? heathChange * -1 : heathChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                        target.Body.CurrentHealth = target.Body.CurrentHealth - heathChange;
+
+                        var healthChangePositive = Math.Abs(heathChange);
+                        Color healthChangeColor = Color.black;
+
+                        if(target.IsPlayer)
+                        {
+                            if ( heathChange > 0)
+                            {
+                                // Damage to player
+                                healthChangeColor = Color.red;
+                            }
+                            else
+                            {
+                                // Healing to player
+                                healthChangeColor = Color.green;
+                            }
+                        }
+                        else
+                        {
+                            if (heathChange > 0)
+                            {
+                                // Damage to NPC
+                                healthChangeColor = Color.magenta;
+                            }
+                            else
+                            {
+                                // Healing to NPC
+                                healthChangeColor = Color.blue;
+                            }
+                        }
 
                         result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                         {
-                            Message = string.Format("{0}", damage),
-                            Color = target.IsPlayer ? Color.red : Color.magenta,
+                            Message = string.Format("{0}", healthChangePositive),
+                            Color = healthChangeColor,
                             target = target,
                         });
 
@@ -135,6 +170,7 @@ namespace Gamepackage
 
                     HandleAppliedEffects(result);
                     HandleRemovedEffects(result);
+                    CombatUtil.CapAttributes(target);
 
                     if (target.Body.CurrentHealth <= 0)
                     {
@@ -147,7 +183,7 @@ namespace Gamepackage
                         }
                         result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                         {
-                            Message = string.Format("Dead!", damage),
+                            Message = string.Format("Dead!", heathChange),
                             Color = Color.black,
                             target = target,
                         });
@@ -301,6 +337,18 @@ namespace Gamepackage
                 }
             }
         }
+
+        public static void CapAttributes(Entity entity)
+        {
+            if (entity.Body != null)
+            {
+                if (entity.Body.CurrentHealth > entity.CalculateValueOfAttribute(Gamepackage.Attributes.MAX_HEALTH))
+                {
+                    entity.Body.CurrentHealth = entity.CalculateValueOfAttribute(Gamepackage.Attributes.MAX_HEALTH);
+                }
+            }
+        }
+
         private static void HandleAppliedEffects(EntityStateChange ctx)
         {
             if (!ctx.WasShortCircuited)

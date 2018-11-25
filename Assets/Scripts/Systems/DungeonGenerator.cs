@@ -54,7 +54,7 @@ namespace Gamepackage
                     var numberOfSpawnTablesToSpawn = 3;
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        var entitiesInEncounter = Context.ViewFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
+                        var entitiesInEncounter = Context.ViewFactory.BuildEncounter(UniqueIdentifier.ENCOUNTER_SKELETONS);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }

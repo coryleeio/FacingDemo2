@@ -54,8 +54,8 @@ namespace Gamepackage
                 foreach (var tuple in Values)
                 {
                     Assert.IsTrue(tuple.NumberOfRolls == 1);
-                    probabilitySum += (tuple.Weight / 100);
-                    if (randomValue <= probabilitySum)
+                    probabilitySum += (tuple.Weight / 100.0f);
+                    if (randomValue < probabilitySum)
                     {
                         aggregate.Add(tuple.Value);
                         Assert.IsTrue(aggregate.Count == 1);
