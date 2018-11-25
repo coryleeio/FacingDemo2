@@ -125,7 +125,8 @@ namespace Gamepackage
                         result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, heathChange < 0 ? heathChange * -1 : heathChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                         target.Body.CurrentHealth = target.Body.CurrentHealth - heathChange;
 
-                        var healthChangePositive = Math.Abs(heathChange);
+                        var healthChangeDisplay = heathChange > 0 ? "-" : "+";
+                        healthChangeDisplay += Math.Abs(heathChange).ToString();
                         Color healthChangeColor = Color.black;
 
                         if(target.IsPlayer)
@@ -157,7 +158,7 @@ namespace Gamepackage
 
                         result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                         {
-                            Message = string.Format("{0}", healthChangePositive),
+                            Message = string.Format("{0}", healthChangeDisplay),
                             Color = healthChangeColor,
                             target = target,
                         });

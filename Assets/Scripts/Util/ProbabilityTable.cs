@@ -39,7 +39,7 @@ namespace Gamepackage
                 {
                     for (var numberOfRolls = 0; numberOfRolls < tuple.NumberOfRolls; numberOfRolls++)
                     {
-                        if (Random.Range(0.0f, 1.0f) <= (tuple.Weight / 100))
+                        if (Random.Range(0.0f, 1.0f) <= (tuple.Weight / 100.0f))
                         {
                             aggregate.Add(tuple.Value);
                         }
