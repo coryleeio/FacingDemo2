@@ -121,11 +121,66 @@ namespace Gamepackage
                 var itemIds = new List<UniqueIdentifier>();
                 itemIds.AddRange(Tables.HumanoidClothing.Next());
                 itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
-                foreach(var itemId in itemIds)
+                foreach (var itemId in itemIds)
                 {
                     entity.Inventory.EquipItem(ItemFactory.Build(itemId));
                 }
             }
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GHOST)
+            {
+                entity.Name = "entity.ghost.name".Localize();
+                entity.Body = BuildBody(DefaultHumanoidBodyAttacks());
+                entity.Body.Floating = true;
+                entity.Body.Attributes = new Dictionary<Attributes, int>
+                {
+                   {Attributes.MAX_HEALTH, 10 },
+                };
+                entity.BlocksPathing = true;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.Spine,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_GHOST,
+                };
+                entity.Behaviour = new AIBehaviour()
+                {
+                    Team = Team.ENEMY,
+                };
+                var itemIds = new List<UniqueIdentifier>();
+                itemIds.AddRange(Tables.HumanoidClothing.Next());
+                itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
+                foreach (var itemId in itemIds)
+                {
+                    entity.Inventory.EquipItem(ItemFactory.Build(itemId));
+                }
+            }
+
+            else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_ANIMATED_WEAPON)
+            {
+                entity.Name = "entity.animated.weapon.name".Localize();
+                entity.Body = BuildBody(DefaultHumanoidBodyAttacks());
+                entity.Body.Floating = true;
+                entity.Body.Attributes = new Dictionary<Attributes, int>
+                {
+                   {Attributes.MAX_HEALTH, 10 },
+                };
+                entity.BlocksPathing = true;
+                entity.View = new View()
+                {
+                    ViewType = ViewType.Spine,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_GHOST,
+                };
+                entity.Behaviour = new AIBehaviour()
+                {
+                    Team = Team.ENEMY,
+                };
+                var itemIds = new List<UniqueIdentifier>();
+                itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
+                foreach (var itemId in itemIds)
+                {
+                    entity.Inventory.EquipItem(ItemFactory.Build(itemId));
+                }
+            }
+
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
             {
                 entity.Name = "entity.queen.bee.name".Localize();

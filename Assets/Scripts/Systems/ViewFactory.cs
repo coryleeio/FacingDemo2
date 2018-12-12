@@ -120,6 +120,11 @@ namespace Gamepackage
                 var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "HumanWhite", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
             }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_GHOST)
+            {
+                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "Ghost", Animations.Idle, entity.Direction);
+                SetSpineDefaults(go, newGo);
+            }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_BLACK)
             {
                 var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "HumanBlack", Animations.Idle, entity.Direction);
