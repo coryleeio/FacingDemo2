@@ -4,8 +4,8 @@
     public class Floating : MonoBehaviour
     {
         public float startingOffset;
-        public float frequency = 6.0f;
-        public float amplitude = 0.01f;
+        public float frequency = 3.0f;
+        public float amplitude = 0.005f;
         void Start()
         {
             startingOffset = Random.Range(0.0f, 1.0f);
