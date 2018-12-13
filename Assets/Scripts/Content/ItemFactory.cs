@@ -237,6 +237,7 @@ namespace Gamepackage
                 item.RangedRange = 5;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
+                item.SlotsOccupiedByWearing.Add(ItemSlot.OffHand);
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_WAND_OF_LIGHTNING)
             {

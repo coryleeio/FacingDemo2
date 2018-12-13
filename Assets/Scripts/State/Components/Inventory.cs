@@ -151,13 +151,27 @@ namespace Gamepackage
         public void EquipItemToSlot(Item item, ItemSlot slot)
         {
             Assert.IsNotNull(item);
-            if (item.SlotsWearable.Contains(slot))
+            var itemsThatMustBeRemoved = new List<Item>();
+            foreach(var pair in EquippedItemBySlot)
             {
-                foreach (var slotCollision in item.SlotsOccupiedByWearing)
+                foreach (var slotOccupied in item.SlotsOccupiedByWearing)
                 {
-                    UnequipItemInSlot(slot);
+                    var slotOfEquippedItem = pair.Key;
+                    var equippedItem = pair.Value;
+                    if(equippedItem.SlotsOccupiedByWearing.Contains(slotOccupied))
+                    {
+                        if(!itemsThatMustBeRemoved.Contains(equippedItem))
+                        {
+                            itemsThatMustBeRemoved.Add(equippedItem);
+                        }
+                    }
                 }
             }
+            foreach(var itemThatMustBeRemoved in itemsThatMustBeRemoved)
+            {
+                UnequipItemInSlot(GetItemSlotOfEquippedItem(itemThatMustBeRemoved));
+            }
+
             RemoveItemStack(item);
             EquippedItemBySlot[slot] = item;
             if (Entity != null)
