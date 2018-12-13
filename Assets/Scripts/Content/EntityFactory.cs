@@ -49,6 +49,7 @@ namespace Gamepackage
                     Team = Team.PLAYER,
                 };
                 entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_ROBE_OF_WONDERS));
+                entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_SANDALS));
                 entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_SHORTBOW));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_LIGHTNING));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_STAFF_OF_FIREBALLS));

@@ -78,6 +78,13 @@ namespace Gamepackage
             swirlStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/SwirlStaff"));
             retVal.Add(swirlStaff);
 
+            var sandals = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_SANDALS, "Sprites/SandalsIcon");
+            sandals.WornItemSpritePerSlot.Add(SpriteAttachment.LeftLegFrontSE, Resources.Load<Sprite>("Sprites/ShoeFrontSE"));
+            sandals.WornItemSpritePerSlot.Add(SpriteAttachment.RightLegFrontSE, Resources.Load<Sprite>("Sprites/ShoeFrontSE"));
+            sandals.WornItemSpritePerSlot.Add(SpriteAttachment.LeftLegFrontNE, Resources.Load<Sprite>("Sprites/ShoeFrontNE"));
+            sandals.WornItemSpritePerSlot.Add(SpriteAttachment.RightLegFrontNE, Resources.Load<Sprite>("Sprites/ShoeFrontNE"));
+            retVal.Add(sandals);
+
             var shieldOfAmalure = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_SHIELD_OF_AMALURE, "Sprites/ShieldOfAmalureSE");
             shieldOfAmalure.WornItemSpritePerSlot.Add(SpriteAttachment.OffHandFrontSE, Resources.Load<Sprite>("Sprites/ShieldOfAmalureSE"));
             shieldOfAmalure.WornItemSpritePerSlot.Add(SpriteAttachment.OffHandFrontNE, Resources.Load<Sprite>("Sprites/ShieldOfAmalureNE"));

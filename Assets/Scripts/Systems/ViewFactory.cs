@@ -391,7 +391,7 @@ namespace Gamepackage
                 Attachment templateAttachment = templateSkin.GetAttachment(spriteSlotIndex, attachmentKey.ToString());
                 Attachment newAttachment = templateAttachment.GetRemappedClone(sprite, sourceMaterial, true, false, true);
                 RegionAttachment regionAttachment = newAttachment as RegionAttachment;
-                Assert.IsNotNull(regionAttachment);
+                Assert.IsNotNull(regionAttachment, "If this is null there is a decent chance you forgot to set the Ghost image to the slot your looking for on the template skin in spine.");
                 regionAttachment.SetPositionOffset(sprite.textureRectOffset);
                 regionAttachment.UpdateOffset();
                 customSkin.SetAttachment(spriteSlotIndex, attachmentKey.ToString(), newAttachment);
@@ -496,10 +496,6 @@ namespace Gamepackage
             else if (attachment == SpriteAttachment.RightLegBackSE || attachment == SpriteAttachment.RightLegBackNE)
             {
                 return SpriteSlot.RightLegBack.ToString();
-            }
-            else if (attachment == SpriteAttachment.RightLegFrontSE || attachment == SpriteAttachment.RightLegFrontNE)
-            {
-                return SpriteSlot.RightLegFront.ToString();
             }
             else if (attachment == SpriteAttachment.RightLegFrontSE || attachment == SpriteAttachment.RightLegFrontNE)
             {

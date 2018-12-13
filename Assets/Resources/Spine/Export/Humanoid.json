@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "pHADzQcHWK1WEFoB0PVjIJE/OJ8", "spine": "3.6.53", "width": 190.37, "height": 200.31, "images": "../Sprites/" },
+"skeleton": { "hash": "KIn8wcuaX6Sp4uJQ7JQCc4NnNAo", "spine": "3.6.53", "width": 190.37, "height": 193.06, "images": "../Sprites/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "Body", "parent": "root", "x": 1.15, "y": 32.04 },
@@ -27,8 +27,8 @@
 	{ "name": "LeftLegFront", "bone": "LeftLeg", "attachment": "LeftLegFrontSE" },
 	{ "name": "RightArmBack", "bone": "RightArm", "attachment": "RightArmBackSE" },
 	{ "name": "RightArmFront", "bone": "RightArm", "attachment": "RightArmFrontSE" },
-	{ "name": "RightLegBack", "bone": "RightLeg", "attachment": "RightLegBackSE" },
-	{ "name": "RightLegFront", "bone": "RightLeg", "attachment": "RightLegFrontSE" },
+	{ "name": "RightLegBack", "bone": "RightLeg", "attachment": "RightLegBackNE" },
+	{ "name": "RightLegFront", "bone": "RightLeg", "attachment": "RightLegFrontNE" },
 	{ "name": "MainHandFront", "bone": "MainHand", "attachment": "MainHandFront" },
 	{ "name": "ChestBack", "bone": "Body", "attachment": "ChestBackSE" },
 	{ "name": "ChestFront", "bone": "Body", "attachment": "ChestFrontSE" },
@@ -294,6 +294,14 @@
 		},
 		"RightLeg": {
 			"RightLeg": { "name": "HumanWhiteLeg", "width": 128, "height": 128 }
+		},
+		"RightLegBack": {
+			"RightLegBackSE": { "name": "Ghost", "width": 128, "height": 128 },
+			"RightLegBackNE": { "name": "Ghost", "width": 128, "height": 128 }
+		},
+		"RightLegFront": {
+			"RightLegFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
+			"RightLegFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
 		}
 	}
 },

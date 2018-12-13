@@ -216,77 +216,77 @@ RobeOfWondersRightArmFront
   index: -1
 ShieldOfAmalureNE
   rotate: false
-  xy: 522, 132
+  xy: 392, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ShieldOfAmalureSE
   rotate: false
-  xy: 392, 262
+  xy: 522, 392
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ShoeFrontNE
   rotate: false
-  xy: 522, 392
+  xy: 652, 522
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ShoeFrontSE
   rotate: false
-  xy: 652, 522
+  xy: 782, 652
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 SkeletonWhiteArmLeft
   rotate: false
-  xy: 782, 652
+  xy: 262, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 SkeletonWhiteArmRight
   rotate: false
-  xy: 262, 2
+  xy: 392, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 SkeletonWhiteBodyNE
   rotate: false
-  xy: 392, 132
+  xy: 522, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 SkeletonWhiteBodySE
   rotate: false
-  xy: 522, 262
+  xy: 652, 392
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 SkeletonWhiteHeadNE
   rotate: false
-  xy: 652, 392
+  xy: 782, 522
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 SkeletonWhiteHeadSE
   rotate: false
-  xy: 782, 522
+  xy: 392, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 SkeletonWhiteLeg
   rotate: false
-  xy: 392, 2
+  xy: 522, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

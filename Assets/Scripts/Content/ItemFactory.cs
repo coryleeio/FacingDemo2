@@ -346,6 +346,20 @@ namespace Gamepackage
                     ItemSlot.Chest,
                 };
             }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_SANDALS)
+            {
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_SANDALS;
+                item.DisplayName = "item.sandals.name".Localize();
+                item.Description = "item.sandals.description".Localize();
+                item.SlotsOccupiedByWearing = new List<ItemSlot>()
+                {
+                    ItemSlot.Shoes,
+                };
+                item.SlotsWearable = new List<ItemSlot>()
+                {
+                    ItemSlot.Shoes,
+                };
+            }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_SHIELD_OF_AMALURE)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_SHIELD_OF_AMALURE;
