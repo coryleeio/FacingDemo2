@@ -174,13 +174,13 @@ namespace Gamepackage
                 GenerateAttackOverlayOffsets(player.Position, aimingAttackCapability.Range, hoverDirection);
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (player.Position.IsOrthogonalTo(mousePos))
+                    if(aimingAttackCapability.CanPerform && aimingAttackCapability.IsInRange(mousePos))
                     {
                         var direction = MathUtil.RelativeDirection(player.Position, mousePos);
                         Attack attack = new Attack(AimingAttackCapabilities, AimingCombatContext, direction);
                         player.Behaviour.NextAction = attack;
-                        StopAiming();
                     }
+                    StopAiming();
                 }
                 if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
                 {

@@ -10,6 +10,7 @@ namespace Gamepackage
             UniqueIdentifier.ITEM_LONGSWORD,
             UniqueIdentifier.ITEM_MACE,
             UniqueIdentifier.ITEM_POISON_DAGGER,
+            UniqueIdentifier.ITEM_SHORTBOW,
         };
 
         public static ProbabilityTable<UniqueIdentifier> HumanoidClothing = new ProbabilityTable<UniqueIdentifier>()

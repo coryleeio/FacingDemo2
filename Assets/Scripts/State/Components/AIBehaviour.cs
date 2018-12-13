@@ -34,6 +34,8 @@ namespace Gamepackage
             var target = FindTarget(Entity);
             var capabilities = new AttackCapabilities(Entity);
             var meleeCapabilities = capabilities[CombatContext.Melee];
+            var rangedCapabilities = capabilities[CombatContext.Ranged];
+            var ZappedCapabilities = capabilities[CombatContext.Zapped];
             NextAction = null;
 
             if (target == null)
@@ -48,8 +50,19 @@ namespace Gamepackage
             }
             else
             {
-                // If we see the target move toward it or attack him
-                if (meleeCapabilities.CanPerform && meleeCapabilities.IsInRange(target))
+                if (ZappedCapabilities.CanPerform && ZappedCapabilities.IsInRange(target))
+                {
+                    var direction = MathUtil.RelativeDirection(Entity.Position, target.Position);
+                    var attack = new Attack(capabilities, CombatContext.Zapped, direction);
+                    NextAction = attack;
+                }
+                else if (rangedCapabilities.CanPerform && rangedCapabilities.IsInRange(target))
+                {
+                    var direction = MathUtil.RelativeDirection(Entity.Position, target.Position);
+                    var attack = new Attack(capabilities, CombatContext.Ranged, direction);
+                    NextAction = attack;
+                }
+                else if (meleeCapabilities.CanPerform && meleeCapabilities.IsInRange(target))
                 {
                     var direction = MathUtil.RelativeDirection(Entity.Position, target.Position);
                     var attack = new Attack(capabilities, CombatContext.Melee, direction);
