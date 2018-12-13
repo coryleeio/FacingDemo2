@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "ijkKFTtSh8m9e5aVL2/G5MCIAKw", "spine": "3.6.53", "width": 190.37, "height": 193.06, "images": "../Sprites/" },
+"skeleton": { "hash": "pHADzQcHWK1WEFoB0PVjIJE/OJ8", "spine": "3.6.53", "width": 190.37, "height": 200.31, "images": "../Sprites/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "Body", "parent": "root", "x": 1.15, "y": 32.04 },
@@ -30,10 +30,10 @@
 	{ "name": "RightLegBack", "bone": "RightLeg", "attachment": "RightLegBackSE" },
 	{ "name": "RightLegFront", "bone": "RightLeg", "attachment": "RightLegFrontSE" },
 	{ "name": "MainHandFront", "bone": "MainHand", "attachment": "MainHandFront" },
-	{ "name": "OffHandBack", "bone": "OffHand", "attachment": "OffHandBack" },
-	{ "name": "OffHandFront", "bone": "OffHand", "attachment": "OffHandFront" },
 	{ "name": "ChestBack", "bone": "Body", "attachment": "ChestBackSE" },
-	{ "name": "ChestFront", "bone": "Body", "attachment": "ChestFrontSE" }
+	{ "name": "ChestFront", "bone": "Body", "attachment": "ChestFrontSE" },
+	{ "name": "OffHandBack", "bone": "OffHand", "attachment": "OffHandBack" },
+	{ "name": "OffHandFront", "bone": "OffHand", "attachment": "OffHandFrontSE" }
 ],
 "skins": {
 	"default": {
@@ -88,13 +88,14 @@
 			"MainHandBack": { "name": "Ghost", "width": 128, "height": 128 }
 		},
 		"MainHandFront": {
-			"MainHandFront": { "name": "Bow", "x": 8.61, "width": 128, "height": 128 }
+			"MainHandFront": { "name": "Longsword", "y": 39.75, "width": 128, "height": 128 }
 		},
 		"OffHandBack": {
 			"OffHandBack": { "name": "Ghost", "width": 128, "height": 128 }
 		},
 		"OffHandFront": {
-			"OffHandFront": { "name": "Ghost", "y": 0.23, "width": 128, "height": 128 }
+			"OffHandFrontNE": { "name": "ShieldOfAmalureNE", "width": 128, "height": 128 },
+			"OffHandFrontSE": { "name": "ShieldOfAmalureSE", "width": 128, "height": 128 }
 		},
 		"RightArm": {
 			"RightArm": { "name": "HumanWhiteArmRight", "width": 128, "height": 128 }
@@ -281,7 +282,8 @@
 			"OffHandBack": { "name": "Ghost", "width": 128, "height": 128 }
 		},
 		"OffHandFront": {
-			"OffHandFront": { "name": "Ghost", "width": 128, "height": 128 }
+			"OffHandFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
+			"OffHandFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
 		},
 		"RightArm": {
 			"RightArm": { "name": "HumanWhiteArmRight", "width": 128, "height": 128 }
@@ -344,6 +346,11 @@
 				"attachment": [
 					{ "time": 0, "name": "LeftLegBackNE" },
 					{ "time": 0.6667, "name": "LeftLegBackNE" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "time": 0, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -433,31 +440,38 @@
 					{ "time": 0.3333, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.6667, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 64.46 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 3 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -7 },
+					{ "slot": "LeftLegBack", "offset": -4 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandFront", "offset": -21 }
 				]
 			},
 			{
 				"time": 0.6667,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 3 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -7 },
+					{ "slot": "LeftLegBack", "offset": -4 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandFront", "offset": -21 }
 				]
 			}
 		]
@@ -504,6 +518,11 @@
 				"attachment": [
 					{ "time": 0, "name": "LeftLegBackNE" },
 					{ "time": 0.6667, "name": "LeftLegBackNE" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "time": 0, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -596,19 +615,25 @@
 					{ "time": 0.5, "angle": 48.38 },
 					{ "time": 0.6667, "angle": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 123.67 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 4 },
+					{ "slot": "Body", "offset": 5 },
 					{ "slot": "LeftArm", "offset": 19 },
 					{ "slot": "LeftArmBack", "offset": 10 },
 					{ "slot": "LeftArmFront", "offset": 11 },
-					{ "slot": "RightArmBack", "offset": -12 },
-					{ "slot": "RightArmFront", "offset": -11 },
-					{ "slot": "MainHandFront", "offset": -17 }
+					{ "slot": "RightArmBack", "offset": -11 },
+					{ "slot": "RightArmFront", "offset": -10 },
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "OffHandFront", "offset": -20 }
 				]
 			},
 			{
@@ -760,6 +785,11 @@
 				"shear": [
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.6667, "x": 0, "y": 0 }
+				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 86.02 }
 				]
 			}
 		},
@@ -932,43 +962,46 @@
 					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
 					{ "time": 0.6667, "x": -180, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 88.65 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 14 },
-					{ "slot": "LeftLeg", "offset": 13 },
-					{ "slot": "RightLeg", "offset": 15 },
+					{ "slot": "Body", "offset": 13 },
+					{ "slot": "LeftLeg", "offset": 11 },
+					{ "slot": "RightLeg", "offset": 13 },
 					{ "slot": "LeftArmBack", "offset": -8 },
 					{ "slot": "LeftArmFront", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": 6 },
-					{ "slot": "RightArmBack", "offset": -6 },
-					{ "slot": "RightArmFront", "offset": -9 },
-					{ "slot": "RightLegBack", "offset": 5 },
-					{ "slot": "MainHandFront", "offset": -8 },
-					{ "slot": "OffHandBack", "offset": -15 },
-					{ "slot": "OffHandFront", "offset": -15 },
-					{ "slot": "ChestBack", "offset": -10 }
+					{ "slot": "LeftLegBack", "offset": 5 },
+					{ "slot": "RightArmBack", "offset": -7 },
+					{ "slot": "RightArmFront", "offset": -10 },
+					{ "slot": "RightLegBack", "offset": 4 },
+					{ "slot": "MainHandFront", "offset": -9 },
+					{ "slot": "ChestBack", "offset": -9 },
+					{ "slot": "OffHandBack", "offset": -17 }
 				]
 			},
 			{
 				"time": 0.6667,
 				"offsets": [
-					{ "slot": "Body", "offset": 14 },
-					{ "slot": "LeftLeg", "offset": 13 },
-					{ "slot": "RightLeg", "offset": 15 },
+					{ "slot": "Body", "offset": 13 },
+					{ "slot": "LeftLeg", "offset": 11 },
+					{ "slot": "RightLeg", "offset": 13 },
 					{ "slot": "LeftArmBack", "offset": -8 },
 					{ "slot": "LeftArmFront", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": 6 },
-					{ "slot": "RightArmBack", "offset": -6 },
-					{ "slot": "RightArmFront", "offset": -9 },
-					{ "slot": "RightLegBack", "offset": 5 },
-					{ "slot": "MainHandFront", "offset": -8 },
-					{ "slot": "OffHandBack", "offset": -15 },
-					{ "slot": "OffHandFront", "offset": -15 },
-					{ "slot": "ChestBack", "offset": -10 }
+					{ "slot": "LeftLegBack", "offset": 5 },
+					{ "slot": "RightArmBack", "offset": -7 },
+					{ "slot": "RightArmFront", "offset": -10 },
+					{ "slot": "RightLegBack", "offset": 4 },
+					{ "slot": "MainHandFront", "offset": -9 },
+					{ "slot": "ChestBack", "offset": -9 },
+					{ "slot": "OffHandBack", "offset": -17 }
 				]
 			}
 		]
@@ -1022,6 +1055,11 @@
 					{ "time": 0.3333, "name": "LeftLegBackNE" }
 				]
 			},
+			"OffHandFront": {
+				"attachment": [
+					{ "time": 0, "name": "OffHandFrontNE" }
+				]
+			},
 			"RightArmBack": {
 				"attachment": [
 					{ "time": 0, "name": "RightArmBackNE" },
@@ -1057,8 +1095,8 @@
 					{ "time": 0.3333, "x": 0, "y": 0 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
+					{ "time": 0.3333, "x": -180, "y": 0 }
 				]
 			},
 			"LeftArm": {
@@ -1098,31 +1136,43 @@
 					{ "time": 0, "angle": 51.87 },
 					{ "time": 0.3333, "angle": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 72.61 }
+				],
+				"translate": [
+					{ "time": 0, "x": -3.77, "y": 5.82 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -20 },
+					{ "slot": "OffHandFront", "offset": -20 }
 				]
 			},
 			{
 				"time": 0.3333,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -20 },
+					{ "slot": "OffHandFront", "offset": -20 }
 				]
 			}
 		]
@@ -1169,6 +1219,12 @@
 				"attachment": [
 					{ "time": 0, "name": "LeftLegBackNE" },
 					{ "time": 0.3333, "name": "LeftLegBackNE" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 0.3333, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -1246,6 +1302,12 @@
 					{ "time": 0, "angle": 84.63 },
 					{ "time": 0.3333, "angle": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 118.72, "curve": "stepped" },
+					{ "time": 0.3333, "angle": 118.72 }
+				]
 			}
 		},
 		"drawOrder": [
@@ -1270,7 +1332,8 @@
 					{ "slot": "LeftArmFront", "offset": 11 },
 					{ "slot": "RightArmBack", "offset": -12 },
 					{ "slot": "RightArmFront", "offset": -11 },
-					{ "slot": "MainHandFront", "offset": -17 }
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "ChestFront", "offset": -1 }
 				]
 			}
 		]
@@ -1392,6 +1455,12 @@
 				"shear": [
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.3333, "x": 0, "y": 0 }
+				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 84.27, "curve": "stepped" },
+					{ "time": 0.3333, "angle": 84.27 }
 				]
 			}
 		},
@@ -1538,63 +1607,64 @@
 					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
 					{ "time": 0.3333, "x": -180, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 90.62, "curve": "stepped" },
+					{ "time": 0.3333, "angle": 90.62 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 11 },
-					{ "slot": "LeftArm", "offset": 18 },
-					{ "slot": "LeftLeg", "offset": 10 },
-					{ "slot": "RightLeg", "offset": 12 },
-					{ "slot": "LeftArmBack", "offset": 11 },
-					{ "slot": "LeftArmFront", "offset": 11 },
-					{ "slot": "LeftLegBack", "offset": 3 },
-					{ "slot": "RightArmBack", "offset": -9 },
-					{ "slot": "RightArmFront", "offset": -12 },
-					{ "slot": "RightLegBack", "offset": 2 },
-					{ "slot": "MainHandFront", "offset": -11 },
-					{ "slot": "OffHandBack", "offset": -18 },
-					{ "slot": "OffHandFront", "offset": -18 },
+					{ "slot": "Body", "offset": 9 },
+					{ "slot": "LeftArm", "offset": 16 },
+					{ "slot": "LeftLeg", "offset": 8 },
+					{ "slot": "RightLeg", "offset": 10 },
+					{ "slot": "LeftArmBack", "offset": 9 },
+					{ "slot": "LeftArmFront", "offset": 9 },
+					{ "slot": "LeftLegBack", "offset": 1 },
+					{ "slot": "RightArmBack", "offset": -11 },
+					{ "slot": "RightArmFront", "offset": -14 },
+					{ "slot": "RightLegBack", "offset": 0 },
+					{ "slot": "MainHandFront", "offset": -13 },
 					{ "slot": "ChestBack", "offset": -13 }
 				]
 			},
 			{
 				"time": 0.2,
 				"offsets": [
-					{ "slot": "Body", "offset": 7 },
-					{ "slot": "LeftArm", "offset": 14 },
+					{ "slot": "Body", "offset": 5 },
+					{ "slot": "LeftArm", "offset": 12 },
 					{ "slot": "RightArm", "offset": 16 },
-					{ "slot": "LeftLeg", "offset": 6 },
-					{ "slot": "RightLeg", "offset": 8 },
+					{ "slot": "LeftLeg", "offset": 4 },
+					{ "slot": "RightLeg", "offset": 6 },
 					{ "slot": "MainHandBack", "offset": 15 },
-					{ "slot": "LeftLegBack", "offset": -1 },
-					{ "slot": "LeftLegFront", "offset": -4 },
-					{ "slot": "RightArmFront", "offset": -12 },
-					{ "slot": "RightLegBack", "offset": -2 },
-					{ "slot": "RightLegFront", "offset": -5 },
-					{ "slot": "OffHandBack", "offset": -18 },
-					{ "slot": "OffHandFront", "offset": -18 },
-					{ "slot": "ChestBack", "offset": -17 },
-					{ "slot": "ChestFront", "offset": -7 }
+					{ "slot": "LeftArmBack", "offset": 5 },
+					{ "slot": "LeftArmFront", "offset": 5 },
+					{ "slot": "LeftLegBack", "offset": -3 },
+					{ "slot": "RightArmBack", "offset": 6 },
+					{ "slot": "RightArmFront", "offset": -14 },
+					{ "slot": "RightLegBack", "offset": -4 },
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "ChestBack", "offset": -17 }
 				]
 			},
 			{
 				"time": 0.3333,
 				"offsets": [
-					{ "slot": "Body", "offset": 14 },
-					{ "slot": "LeftLeg", "offset": 13 },
-					{ "slot": "RightLeg", "offset": 15 },
+					{ "slot": "Body", "offset": 12 },
+					{ "slot": "LeftLeg", "offset": 11 },
+					{ "slot": "RightLeg", "offset": 13 },
 					{ "slot": "LeftArmBack", "offset": -8 },
 					{ "slot": "LeftArmFront", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": 6 },
-					{ "slot": "RightArmBack", "offset": -6 },
-					{ "slot": "RightArmFront", "offset": -9 },
-					{ "slot": "RightLegBack", "offset": 5 },
-					{ "slot": "MainHandFront", "offset": -8 },
-					{ "slot": "OffHandBack", "offset": -15 },
-					{ "slot": "OffHandFront", "offset": -15 },
+					{ "slot": "LeftLegBack", "offset": 4 },
+					{ "slot": "RightArmBack", "offset": -8 },
+					{ "slot": "RightArmFront", "offset": -11 },
+					{ "slot": "RightLegBack", "offset": 3 },
+					{ "slot": "MainHandFront", "offset": -10 },
 					{ "slot": "ChestBack", "offset": -10 }
 				]
 			}
@@ -1640,6 +1710,11 @@
 			"LeftLegBack": {
 				"attachment": [
 					{ "time": 0, "name": "LeftLegBackNE" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "time": 0, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -1718,19 +1793,26 @@
 					{ "time": 0, "angle": 0 },
 					{ "time": 0.6667, "angle": 51.87 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 68.04 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -20 },
+					{ "slot": "OffHandFront", "offset": -20 }
 				]
 			}
 		]
@@ -1770,6 +1852,11 @@
 			"LeftLegBack": {
 				"attachment": [
 					{ "time": 0, "name": "LeftLegBackNE" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "time": 0, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -1845,6 +1932,11 @@
 				"rotate": [
 					{ "time": 0, "angle": 0 },
 					{ "time": 0.6667, "angle": 84.63 }
+				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 116.59 }
 				]
 			}
 		},
@@ -1972,6 +2064,11 @@
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.6667, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 80.41 }
+				]
 			}
 		},
 		"drawOrder": [
@@ -2026,7 +2123,7 @@
 			},
 			"RightLegBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" }
+					{ "time": 0, "name": null }
 				]
 			},
 			"RightLegFront": {
@@ -2091,45 +2188,46 @@
 					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
 					{ "time": 0.6667, "x": -180, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 95.44 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 14 },
-					{ "slot": "LeftLeg", "offset": 13 },
-					{ "slot": "RightLeg", "offset": 15 },
+					{ "slot": "Body", "offset": 13 },
+					{ "slot": "LeftLeg", "offset": 11 },
+					{ "slot": "RightLeg", "offset": 13 },
 					{ "slot": "LeftArmBack", "offset": -8 },
 					{ "slot": "LeftArmFront", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": 6 },
-					{ "slot": "RightArmBack", "offset": -6 },
-					{ "slot": "RightArmFront", "offset": -9 },
-					{ "slot": "RightLegBack", "offset": 5 },
-					{ "slot": "MainHandFront", "offset": -8 },
-					{ "slot": "OffHandBack", "offset": -15 },
-					{ "slot": "OffHandFront", "offset": -15 },
-					{ "slot": "ChestBack", "offset": -10 }
+					{ "slot": "RightArmBack", "offset": -7 },
+					{ "slot": "RightArmFront", "offset": -10 },
+					{ "slot": "MainHandFront", "offset": -9 },
+					{ "slot": "ChestBack", "offset": -9 },
+					{ "slot": "OffHandBack", "offset": -17 }
 				]
 			},
 			{
 				"time": 0.3333,
 				"offsets": [
-					{ "slot": "Body", "offset": 7 },
-					{ "slot": "LeftArm", "offset": 14 },
-					{ "slot": "RightArm", "offset": 16 },
-					{ "slot": "LeftLeg", "offset": 6 },
-					{ "slot": "RightLeg", "offset": 8 },
-					{ "slot": "MainHandBack", "offset": 15 },
-					{ "slot": "LeftLegBack", "offset": -1 },
+					{ "slot": "Body", "offset": 6 },
+					{ "slot": "LeftArm", "offset": 13 },
+					{ "slot": "RightArm", "offset": 15 },
+					{ "slot": "LeftLeg", "offset": 4 },
+					{ "slot": "RightLeg", "offset": 6 },
+					{ "slot": "MainHandBack", "offset": 14 },
+					{ "slot": "LeftLegBack", "offset": -2 },
 					{ "slot": "LeftLegFront", "offset": -4 },
-					{ "slot": "RightArmFront", "offset": -12 },
-					{ "slot": "RightLegBack", "offset": -2 },
+					{ "slot": "RightArmFront", "offset": -13 },
+					{ "slot": "RightLegBack", "offset": -3 },
 					{ "slot": "RightLegFront", "offset": -5 },
-					{ "slot": "OffHandBack", "offset": -18 },
-					{ "slot": "OffHandFront", "offset": -18 },
-					{ "slot": "ChestBack", "offset": -17 },
-					{ "slot": "ChestFront", "offset": -7 }
+					{ "slot": "ChestBack", "offset": -16 },
+					{ "slot": "ChestFront", "offset": -6 },
+					{ "slot": "OffHandBack", "offset": -20 }
 				]
 			}
 		]
@@ -2182,6 +2280,12 @@
 				"attachment": [
 					{ "time": 0, "name": "LeftLegBackNE" },
 					{ "time": 0.5, "name": "LeftLegBackNE" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 0.6667, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -2288,31 +2392,54 @@
 				"shear": [
 					{ "time": 0, "x": -180, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 72.04 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -20 },
+					{ "slot": "OffHandFront", "offset": -20 }
 				]
 			},
 			{
 				"time": 0.5,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -19 },
+					{ "slot": "OffHandFront", "offset": -19 }
+				]
+			},
+			{
+				"time": 0.6667,
+				"offsets": [
+					{ "slot": "Body", "offset": 4 },
+					{ "slot": "RightArm", "offset": 17 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
+					{ "slot": "RightArmBack", "offset": 5 },
+					{ "slot": "RightArmFront", "offset": 6 },
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -19 },
+					{ "slot": "OffHandFront", "offset": -19 }
 				]
 			}
 		]
@@ -2352,6 +2479,12 @@
 			"LeftLegBack": {
 				"attachment": [
 					{ "time": 0, "name": "LeftLegBackNE" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 0.6667, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -2467,7 +2600,23 @@
 					{ "slot": "LeftArmFront", "offset": 9 },
 					{ "slot": "RightArmBack", "offset": -12 },
 					{ "slot": "RightArmFront", "offset": -11 },
-					{ "slot": "MainHandFront", "offset": -17 }
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "ChestBack", "offset": 2 },
+					{ "slot": "ChestFront", "offset": 2 }
+				]
+			},
+			{
+				"time": 0.6667,
+				"offsets": [
+					{ "slot": "Body", "offset": 4 },
+					{ "slot": "LeftArm", "offset": 17 },
+					{ "slot": "LeftArmBack", "offset": 8 },
+					{ "slot": "LeftArmFront", "offset": 9 },
+					{ "slot": "RightArmBack", "offset": -12 },
+					{ "slot": "RightArmFront", "offset": -11 },
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "ChestBack", "offset": 2 },
+					{ "slot": "ChestFront", "offset": 2 }
 				]
 			}
 		]
@@ -2638,6 +2787,11 @@
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.6667, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 83.61 }
+				]
 			}
 		}
 	},
@@ -2687,9 +2841,10 @@
 				"translate": [
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.1667, "x": 0, "y": 0 },
-					{ "time": 0.5, "x": -19.46, "y": 19.54 },
-					{ "time": 0.5667, "x": -17.74, "y": 17.04 },
-					{ "time": 0.6667, "x": -19.12, "y": 19.04 }
+					{ "time": 0.5, "x": 9.03, "y": -13 },
+					{ "time": 0.5667, "x": 13.75, "y": -17.06 },
+					{ "time": 0.6, "x": 11.62, "y": -15.23 },
+					{ "time": 0.6667, "x": 13.75, "y": -17.06 }
 				],
 				"shear": [
 					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
@@ -2745,24 +2900,30 @@
 					{ "time": 0.5, "x": 0, "y": 0.04 },
 					{ "time": 0.5667, "x": -3.81, "y": -0.29 }
 				]
+			},
+			"OffHand": {
+				"translate": [
+					{ "time": 0.1667, "x": 0, "y": -7.44 },
+					{ "time": 0.6, "x": 0, "y": 28.71 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "LeftArm", "offset": 18 },
-					{ "slot": "LeftArmFront", "offset": 10 },
-					{ "slot": "LeftLegBack", "offset": 10 }
+					{ "slot": "LeftArm", "offset": 16 },
+					{ "slot": "LeftArmFront", "offset": 8 },
+					{ "slot": "LeftLegBack", "offset": 8 }
 				]
 			},
 			{
 				"time": 0.1667,
 				"offsets": [
-					{ "slot": "LeftArm", "offset": 16 },
+					{ "slot": "LeftArm", "offset": 14 },
 					{ "slot": "RightArm", "offset": 7 },
 					{ "slot": "MainHandBack", "offset": 15 },
-					{ "slot": "LeftArmFront", "offset": 8 },
+					{ "slot": "LeftArmFront", "offset": 6 },
 					{ "slot": "LeftLegBack", "offset": 8 },
 					{ "slot": "MainHandFront", "offset": 4 }
 				]
@@ -2856,7 +3017,8 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 0.5, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArm": {
@@ -2966,31 +3128,40 @@
 					{ "time": 0.1667, "x": -0.02, "y": 2.67 },
 					{ "time": 0.5, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 64.05 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -20 },
+					{ "slot": "OffHandFront", "offset": -20 }
 				]
 			},
 			{
 				"time": 0.5,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -20 },
+					{ "slot": "OffHandFront", "offset": -20 }
 				]
 			}
 		]
@@ -3081,7 +3252,8 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 0.5, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -3196,6 +3368,11 @@
 					{ "time": 0, "angle": 0, "curve": "stepped" },
 					{ "time": 0.5, "angle": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 107.31 }
+				]
 			}
 		},
 		"drawOrder": [
@@ -3208,7 +3385,9 @@
 					{ "slot": "LeftArmFront", "offset": 11 },
 					{ "slot": "RightArmBack", "offset": -12 },
 					{ "slot": "RightArmFront", "offset": -11 },
-					{ "slot": "MainHandFront", "offset": -17 }
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "OffHandBack", "offset": -9 },
+					{ "slot": "OffHandFront", "offset": -9 }
 				]
 			},
 			{
@@ -3220,7 +3399,9 @@
 					{ "slot": "LeftArmFront", "offset": 11 },
 					{ "slot": "RightArmBack", "offset": -12 },
 					{ "slot": "RightArmFront", "offset": -11 },
-					{ "slot": "MainHandFront", "offset": -17 }
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "OffHandBack", "offset": -9 },
+					{ "slot": "OffHandFront", "offset": -9 }
 				]
 			}
 		]
@@ -3310,7 +3491,7 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArm": {
@@ -3422,6 +3603,11 @@
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.5, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 84.08 }
+				]
 			}
 		}
 	},
@@ -3501,7 +3687,7 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArm": {
@@ -3616,6 +3802,11 @@
 					{ "time": 0.1667, "x": 0, "y": 0.04 },
 					{ "time": 0.5, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 94.56 }
+				]
 			}
 		}
 	},
@@ -3688,7 +3879,8 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 1, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -3754,19 +3946,26 @@
 				"translate": [
 					{ "time": 0, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 71.67 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -6 },
+					{ "slot": "LeftLegBack", "offset": -3 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandBack", "offset": -20 },
+					{ "slot": "OffHandFront", "offset": -20 }
 				]
 			}
 		]
@@ -3840,7 +4039,8 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 1, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -3906,6 +4106,11 @@
 				"translate": [
 					{ "time": 0, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 106.94 }
+				]
 			}
 		},
 		"drawOrder": [
@@ -3915,7 +4120,9 @@
 					{ "slot": "RightArm", "offset": 0 },
 					{ "slot": "RightArmBack", "offset": -12 },
 					{ "slot": "RightArmFront", "offset": -11 },
-					{ "slot": "MainHandFront", "offset": -17 }
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "OffHandBack", "offset": -16 },
+					{ "slot": "OffHandFront", "offset": -16 }
 				]
 			}
 		]
@@ -3989,7 +4196,7 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArmBack": {
@@ -4061,6 +4268,11 @@
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 1, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 75.84 }
+				]
 			}
 		}
 	},
@@ -4128,7 +4340,7 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArmBack": {
@@ -4190,6 +4402,11 @@
 				"shear": [
 					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
 					{ "time": 1, "x": -180, "y": 0 }
+				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 91.28 }
 				]
 			},
 			"LeftLeg": {
@@ -4279,7 +4496,7 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArmBack": {
@@ -4438,7 +4655,7 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArmBack": {
@@ -4724,7 +4941,7 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArmBack": {
@@ -4812,12 +5029,12 @@
 				"time": 0,
 				"offsets": [
 					{ "slot": "LeftArm", "offset": 17 },
-					{ "slot": "RightArm", "offset": 12 },
+					{ "slot": "RightArm", "offset": 10 },
 					{ "slot": "MainHandBack", "offset": 15 },
 					{ "slot": "LeftArmBack", "offset": 8 },
 					{ "slot": "LeftArmFront", "offset": 9 },
-					{ "slot": "RightArmBack", "offset": 0 },
-					{ "slot": "RightArmFront", "offset": 1 },
+					{ "slot": "RightArmBack", "offset": -2 },
+					{ "slot": "RightArmFront", "offset": -1 },
 					{ "slot": "MainHandFront", "offset": 4 }
 				]
 			},
@@ -4915,8 +5132,8 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" },
-					{ "time": 0.5333, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 0.5333, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -5007,31 +5224,38 @@
 					{ "time": 0.2667, "x": 5.42, "y": 2.11 },
 					{ "time": 0.5333, "x": 0, "y": 3.23 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 71.12 }
+				]
 			}
 		},
 		"drawOrder": [
 			{
 				"time": 0,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 3 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -7 },
+					{ "slot": "LeftLegBack", "offset": -4 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandFront", "offset": -21 }
 				]
 			},
 			{
 				"time": 0.5333,
 				"offsets": [
-					{ "slot": "Body", "offset": 2 },
+					{ "slot": "Body", "offset": 3 },
 					{ "slot": "RightArm", "offset": 17 },
-					{ "slot": "LeftArmBack", "offset": -8 },
-					{ "slot": "LeftLegBack", "offset": -5 },
+					{ "slot": "LeftArmBack", "offset": -7 },
+					{ "slot": "LeftLegBack", "offset": -4 },
 					{ "slot": "RightArmBack", "offset": 5 },
 					{ "slot": "RightArmFront", "offset": 6 },
-					{ "slot": "MainHandFront", "offset": 4 }
+					{ "slot": "MainHandFront", "offset": 4 },
+					{ "slot": "OffHandFront", "offset": -21 }
 				]
 			}
 		]
@@ -5118,8 +5342,8 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" },
-					{ "time": 0.5333, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "time": 0.5333, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
@@ -5210,6 +5434,11 @@
 					{ "time": 0.2667, "x": 6.19, "y": 0.54 },
 					{ "time": 0.5333, "x": -1.14, "y": 3.43 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 101.39 }
+				]
 			}
 		},
 		"drawOrder": [
@@ -5218,8 +5447,9 @@
 				"offsets": [
 					{ "slot": "RightArm", "offset": 0 },
 					{ "slot": "RightArmBack", "offset": -12 },
-					{ "slot": "RightArmFront", "offset": -11 },
-					{ "slot": "MainHandFront", "offset": -17 }
+					{ "slot": "RightArmFront", "offset": -10 },
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "OffHandFront", "offset": -18 }
 				]
 			},
 			{
@@ -5227,8 +5457,9 @@
 				"offsets": [
 					{ "slot": "RightArm", "offset": 0 },
 					{ "slot": "RightArmBack", "offset": -12 },
-					{ "slot": "RightArmFront", "offset": -11 },
-					{ "slot": "MainHandFront", "offset": -17 }
+					{ "slot": "RightArmFront", "offset": -10 },
+					{ "slot": "MainHandFront", "offset": -17 },
+					{ "slot": "OffHandFront", "offset": -18 }
 				]
 			}
 		]
@@ -5315,8 +5546,8 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" },
-					{ "time": 0.5333, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" },
+					{ "time": 0.5333, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArmBack": {
@@ -5417,6 +5648,11 @@
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.5333, "x": 0, "y": 0 }
 				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 78.33 }
+				]
 			}
 		}
 	},
@@ -5496,8 +5732,8 @@
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFront" },
-					{ "time": 0.5333, "name": "OffHandFront" }
+					{ "time": 0, "name": "OffHandFrontSE" },
+					{ "time": 0.5333, "name": "OffHandFrontSE" }
 				]
 			},
 			"RightArmBack": {
@@ -5579,6 +5815,11 @@
 				"shear": [
 					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
 					{ "time": 0.5333, "x": -180, "y": 0 }
+				]
+			},
+			"OffHand": {
+				"rotate": [
+					{ "time": 0, "angle": 80.29 }
 				]
 			},
 			"LeftLeg": {

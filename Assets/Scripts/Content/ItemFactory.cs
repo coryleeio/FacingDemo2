@@ -345,6 +345,20 @@ namespace Gamepackage
                     ItemSlot.Chest,
                 };
             }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_SHIELD_OF_AMALURE)
+            {
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_SHIELD_OF_AMALURE;
+                item.DisplayName = "item.shield.of.amalure.name".Localize();
+                item.Description = "item.shield.of.amalure.description".Localize();
+                item.SlotsOccupiedByWearing = new List<ItemSlot>()
+                {
+                    ItemSlot.OffHand,
+                };
+                item.SlotsWearable = new List<ItemSlot>()
+                {
+                    ItemSlot.OffHand,
+                };
+            }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ARROW)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;

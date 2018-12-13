@@ -78,6 +78,11 @@ namespace Gamepackage
             swirlStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/SwirlStaff"));
             retVal.Add(swirlStaff);
 
+            var shieldOfAmalure = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_SHIELD_OF_AMALURE, "Sprites/ShieldOfAmalureSE");
+            shieldOfAmalure.WornItemSpritePerSlot.Add(SpriteAttachment.OffHandFrontSE, Resources.Load<Sprite>("Sprites/ShieldOfAmalureSE"));
+            shieldOfAmalure.WornItemSpritePerSlot.Add(SpriteAttachment.OffHandFrontNE, Resources.Load<Sprite>("Sprites/ShieldOfAmalureNE"));
+            retVal.Add(shieldOfAmalure);
+
             var robeOfWonders = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ROBE_OF_WONDERS, "Sprites/RobeOfWondersFrontSE");
             robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.ChestFrontNE, Resources.Load<Sprite>("Sprites/RobeOfWondersFrontNE"));
             robeOfWonders.WornItemSpritePerSlot.Add(SpriteAttachment.ChestFrontSE, Resources.Load<Sprite>("Sprites/RobeOfWondersFrontSE"));

@@ -34,7 +34,9 @@
         RightLegFrontNE,
         MainHandBack,
         MainHandFront,
-        OffHandFront,
-        OffHandBack
+        OffHandFrontSE,
+        OffHandFrontNE,
+        OffHandBackSE,
+        OffHandBackNE,
     }
 }

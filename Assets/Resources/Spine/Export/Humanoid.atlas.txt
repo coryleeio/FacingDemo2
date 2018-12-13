@@ -4,13 +4,6 @@ size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-Bow
-  rotate: false
-  xy: 782, 522
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
 Ghost
   rotate: false
   xy: 2, 782
@@ -165,114 +158,135 @@ HumanWhiteLeg
   orig: 128, 128
   offset: 0, 0
   index: -1
-RobeOfWondersFrontNE
+Longsword
   rotate: false
   xy: 132, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-RobeOfWondersFrontSE
+RobeOfWondersFrontNE
   rotate: false
   xy: 262, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-RobeOfWondersHoodBackSE
+RobeOfWondersFrontSE
   rotate: false
   xy: 392, 392
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-RobeOfWondersHoodFrontNE
+RobeOfWondersHoodBackSE
   rotate: false
   xy: 522, 522
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-RobeOfWondersHoodFrontSE
+RobeOfWondersHoodFrontNE
   rotate: false
   xy: 652, 652
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-RobeOfWondersLeftArmFront
+RobeOfWondersHoodFrontSE
   rotate: false
   xy: 782, 782
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-RobeOfWondersRightArmFront
+RobeOfWondersLeftArmFront
   rotate: false
   xy: 132, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-ShoeFrontNE
+RobeOfWondersRightArmFront
   rotate: false
   xy: 262, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-ShoeFrontSE
+ShieldOfAmalureNE
+  rotate: false
+  xy: 522, 132
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ShieldOfAmalureSE
   rotate: false
   xy: 392, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-SkeletonWhiteArmLeft
+ShoeFrontNE
   rotate: false
   xy: 522, 392
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-SkeletonWhiteArmRight
+ShoeFrontSE
   rotate: false
   xy: 652, 522
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-SkeletonWhiteBodyNE
+SkeletonWhiteArmLeft
   rotate: false
   xy: 782, 652
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-SkeletonWhiteBodySE
+SkeletonWhiteArmRight
   rotate: false
   xy: 262, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-SkeletonWhiteHeadNE
+SkeletonWhiteBodyNE
   rotate: false
   xy: 392, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-SkeletonWhiteHeadSE
+SkeletonWhiteBodySE
   rotate: false
   xy: 522, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-SkeletonWhiteLeg
+SkeletonWhiteHeadNE
   rotate: false
   xy: 652, 392
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+SkeletonWhiteHeadSE
+  rotate: false
+  xy: 782, 522
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+SkeletonWhiteLeg
+  rotate: false
+  xy: 392, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

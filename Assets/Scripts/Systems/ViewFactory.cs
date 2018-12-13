@@ -513,11 +513,11 @@ namespace Gamepackage
             {
                 return SpriteSlot.MainHandFront.ToString();
             }
-            else if (attachment == SpriteAttachment.OffHandFront)
+            else if (attachment == SpriteAttachment.OffHandFrontSE || attachment == SpriteAttachment.OffHandFrontNE)
             {
                 return SpriteSlot.OffHandFront.ToString();
             }
-            else if (attachment == SpriteAttachment.OffHandBack)
+            else if (attachment == SpriteAttachment.OffHandBackSE || attachment == SpriteAttachment.OffHandBackNE)
             {
                 return SpriteSlot.OffHandBack.ToString();
             }
