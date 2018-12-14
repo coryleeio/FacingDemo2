@@ -58,6 +58,31 @@ namespace Gamepackage
             return Source.Position.IsOrthogonalTo(target) && Source.Position.Distance(target) <= Range;
         }
 
+        public bool HasAClearShot(Point target)
+        {
+            var isOrthogonal = Source.Position.IsOrthogonalTo(target);
+            var distance = (int)Source.Position.Distance(target); // whole number bc grid coords
+
+            var coordsToCheck = MathUtil.LineInDirection(Source.Position, MathUtil.RelativeDirection(Source.Position, target), distance);
+            foreach(var point in coordsToCheck)
+            {
+                var game = Context.GameStateManager.Game;
+                var level = game.CurrentLevel;
+                if (point != target)
+                {
+                    var entitiesInPosition = level.Grid[point].EntitiesInPosition;
+                    foreach(var entityInPosition in entitiesInPosition)
+                    {
+                        if(entityInPosition.IsCombatant && entityInPosition.Behaviour != null && Source.Behaviour  != null && entityInPosition.Behaviour.Team == Source.Behaviour.Team)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         public CombatContextCapability(Entity source, CombatContext combatContext, Item mainhandOverride = null)
         {
             this.Source = source;

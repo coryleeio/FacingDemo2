@@ -139,6 +139,13 @@ namespace Gamepackage
             {
                 var newGo = BuildSplineView("Spine/Export/Bee_SkeletonData", itemsToEquip, "Template", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
+                newGo.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_LARGE_BEE)
+            {
+                var newGo = BuildSplineView("Spine/Export/Bee_SkeletonData", itemsToEquip, "Template", Animations.Idle, entity.Direction);
+                SetSpineDefaults(go, newGo);
+                newGo.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
             {

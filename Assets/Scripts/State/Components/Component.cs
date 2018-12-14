@@ -5,11 +5,11 @@ namespace Gamepackage
     public abstract class Component
     {
         [JsonIgnore]
-        public Entity Entity;
+        public Entity entity;
 
         public virtual void Rewire(Entity entity)
         {
-            Entity = entity;
+            this.entity = entity;
         }
     }
 }

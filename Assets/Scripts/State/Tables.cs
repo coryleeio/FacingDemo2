@@ -13,6 +13,11 @@ namespace Gamepackage
             UniqueIdentifier.ITEM_SHORTBOW,
         };
 
+        public static List<UniqueIdentifier> RandomArrows = new List<UniqueIdentifier>()
+        {
+            UniqueIdentifier.ITEM_ARROW,
+        };
+
         public static ProbabilityTable<UniqueIdentifier> HumanoidClothing = new ProbabilityTable<UniqueIdentifier>()
         {
             Resolution = TableResolutionStrategy.AnyOf,

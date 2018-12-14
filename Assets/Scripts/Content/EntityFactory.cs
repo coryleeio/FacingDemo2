@@ -185,7 +185,7 @@ namespace Gamepackage
 
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_QUEEN_BEE)
             {
-                entity.Name = "entity.queen.bee.name".Localize();
+                entity.Name = (MathUtil.PercentageChanceEventOccurs(10) ? "entity.queen.bee.special.name" : "entity.queen.bee.name").Localize();
                 entity.Body = BuildBody(DefaultBeeBodyAttacks());
                 entity.Body.Floating = true;
                 entity.Body.Attributes = new Dictionary<Attributes, int>
@@ -196,7 +196,7 @@ namespace Gamepackage
                 entity.View = new View()
                 {
                     ViewType = ViewType.Spine,
-                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_BEE,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_LARGE_BEE,
                 };
                 entity.Behaviour = new AIBehaviour()
                 {
@@ -255,11 +255,31 @@ namespace Gamepackage
             if (entity.Body != null)
             {
                 Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.MAX_HEALTH), "Entities must have a value for maximum health if they have a body.");
-                entity.Body.Entity = entity; // Needed for the recursive calculation.
+                entity.Body.entity = entity; // Needed for the recursive calculation.
                 entity.Body.CurrentHealth = entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
             }
 
             entity.Direction = MathUtil.ChooseRandomElement<Direction>(new List<Direction>() { Direction.SouthEast, Direction.SouthWest, Direction.NorthEast, Direction.NorthWest });
+
+            if(entity.Inventory != null)
+            {
+                var mainHand = entity.Inventory.GetItemBySlot(ItemSlot.MainHand);
+                var ammo = entity.Inventory.GetItemBySlot(ItemSlot.Ammo);
+                if (mainHand != null)
+                {
+                    if(mainHand.CanBeUsedForRanged && mainHand.AmmoType == AmmoType.Arrow && ammo == null)
+                    {
+                        // If we've got a ranged weapon equipped that is a bow, 
+                        // but no arrows equipped, go ahead and spawn some default arrows
+                        // and equip them
+                        entity.Inventory.EquipItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.RandomArrows)));
+                    }
+                }
+            }
+
+
+
+
             return entity;
         }
 

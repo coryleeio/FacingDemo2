@@ -31,9 +31,10 @@ namespace Gamepackage
         public override void FigureOutNextAction()
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
-            var target = FindTarget(Entity);
-            var capabilities = new AttackCapabilities(Entity);
+            var target = FindTarget(entity);
+            var capabilities = new AttackCapabilities(entity);
             var meleeCapabilities = capabilities[CombatContext.Melee];
+            var thrownCapabilities = capabilities[CombatContext.Thrown];
             var rangedCapabilities = capabilities[CombatContext.Ranged];
             var ZappedCapabilities = capabilities[CombatContext.Zapped];
             NextAction = null;
@@ -44,30 +45,37 @@ namespace Gamepackage
                 return;
             }
 
-            if (!Context.VisibilitySystem.CanSee(level, Entity, target))
+            if (!Context.VisibilitySystem.CanSee(level, entity, target))
             {
                 DefaultBehaviour();
             }
             else
             {
-                if (ZappedCapabilities.CanPerform && ZappedCapabilities.IsInRange(target))
+                if (meleeCapabilities.CanPerform && meleeCapabilities.IsInRange(target))
                 {
-                    var direction = MathUtil.RelativeDirection(Entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Zapped, direction);
-                    NextAction = attack;
-                }
-                else if (rangedCapabilities.CanPerform && rangedCapabilities.IsInRange(target))
-                {
-                    var direction = MathUtil.RelativeDirection(Entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Ranged, direction);
-                    NextAction = attack;
-                }
-                else if (meleeCapabilities.CanPerform && meleeCapabilities.IsInRange(target))
-                {
-                    var direction = MathUtil.RelativeDirection(Entity.Position, target.Position);
+                    var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
                     var attack = new Attack(capabilities, CombatContext.Melee, direction);
                     NextAction = attack;
                 }
+                else if (ZappedCapabilities.CanPerform && ZappedCapabilities.IsInRange(target) && ZappedCapabilities.HasAClearShot(target.Position))
+                {
+                    var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
+                    var attack = new Attack(capabilities, CombatContext.Zapped, direction);
+                    NextAction = attack;
+                }
+                else if(thrownCapabilities.CanPerform && thrownCapabilities.IsInRange(target) && thrownCapabilities.HasAClearShot(target.Position) && thrownCapabilities.MainHand != null && thrownCapabilities.MainHand.NumberOfItems > 1)
+                {
+                    var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
+                    var attack = new Attack(capabilities, CombatContext.Thrown, direction);
+                    NextAction = attack;
+                }
+                else if (rangedCapabilities.CanPerform && rangedCapabilities.IsInRange(target) && rangedCapabilities.HasAClearShot(target.Position))
+                {
+                    var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
+                    var attack = new Attack(capabilities, CombatContext.Ranged, direction);
+                    NextAction = attack;
+                }
+
                 else
                 {
                     Context.Application.StartCoroutine(MoveToward(target.Position));
@@ -119,7 +127,7 @@ namespace Gamepackage
 
         private void DefaultBehaviour()
         {
-            if (Entity.Behaviour.Team == Team.PLAYER)
+            if (entity.Behaviour.Team == Team.PLAYER)
             {
                 // Default for allies is follow player
                 var player = Context.GameStateManager.Game.CurrentLevel.Player;
@@ -130,7 +138,7 @@ namespace Gamepackage
                 // Default for monsters is waiting
                 var wait = new Wait
                 {
-                    Source = Entity
+                    Source = entity
                 };
                 NextAction = wait;
             }
@@ -143,22 +151,22 @@ namespace Gamepackage
 
             var level = Context.GameStateManager.Game.CurrentLevel;
             var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll((p) => { return level.Grid[p].Walkable; });
-            var PointsAroundMe = MathUtil.OrthogonalPoints(Entity.Position).FindAll((p) => { return level.Grid[p].Walkable && Point.DistanceSquared(p, targetPosition) < Point.DistanceSquared(Entity.Position, targetPosition); });
+            var PointsAroundMe = MathUtil.OrthogonalPoints(entity.Position).FindAll((p) => { return level.Grid[p].Walkable && Point.DistanceSquared(p, targetPosition) < Point.DistanceSquared(entity.Position, targetPosition); });
 
             PathsExpected = PointsAroundTarget.Count + PointsAroundMe.Count;
             PointsAroundMe.Sort(new PointDistanceComparer()
             {
-                Source = Entity.Position
+                Source = entity.Position
             });
 
             foreach (var pointAroundTarget in PointsAroundTarget)
             {
-                Context.PathFinder.StartPath(Entity.Position, pointAroundTarget, Context.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
+                Context.PathFinder.StartPath(entity.Position, pointAroundTarget, Context.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
             }
 
             foreach (var pointAroundMe in PointsAroundMe)
             {
-                Context.PathFinder.StartPath(Entity.Position, pointAroundMe, Context.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
+                Context.PathFinder.StartPath(entity.Position, pointAroundMe, Context.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
             }
 
             while (NextAction == null)
@@ -167,7 +175,7 @@ namespace Gamepackage
                 {
                     var wait = new Wait
                     {
-                        Source = Entity
+                        Source = entity
                     };
                     NextAction = wait;
                     break; // done
@@ -188,7 +196,7 @@ namespace Gamepackage
                 }
                 var move = new Move
                 {
-                    Source = Entity,
+                    Source = entity,
                     TargetPosition = new Point(path.Nodes[0].Position.X, path.Nodes[0].Position.Y)
                 };
                 NextAction = move;
