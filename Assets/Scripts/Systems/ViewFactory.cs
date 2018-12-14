@@ -70,7 +70,7 @@ namespace Gamepackage
                 var healthbarPrefab = Resources.Load<GameObject>("UI/Healthbar/Healthbar");
                 var healthbarGameObject = GameObject.Instantiate(healthbarPrefab);
                 healthbarGameObject.transform.SetParent(go.transform);
-                healthbarGameObject.transform.localPosition = Vector3.zero;
+                healthbarGameObject.transform.localPosition = new Vector3(0, 0.35f, 0);
                 healthbarGameObject.GetComponent<HealthBar>().Entity = entity;
             }
 
