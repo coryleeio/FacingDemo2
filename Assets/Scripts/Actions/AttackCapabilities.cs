@@ -86,7 +86,7 @@ namespace Gamepackage
                 outputRange.AddRange(MathUtil.LineInDirection(Source.Position, Direction.NorthEast, Range));
                 outputRange.AddRange(MathUtil.LineInDirection(Source.Position, Direction.NorthWest, Range));
             }
-            else if (AttackTargetingType == AttackTargetingType.PositionsInRange)
+            else if (AttackTargetingType == AttackTargetingType.SelectTarget)
             {
                 outputRange.AddRange(MathUtil.FloodFill(Source.Position, Range, ref outputRange, MathUtil.FloodFillType.Surrounding));
             }

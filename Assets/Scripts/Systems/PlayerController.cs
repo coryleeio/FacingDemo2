@@ -114,7 +114,7 @@ namespace Gamepackage
                 CurrentProposedAttackPlacement.OffsetPoints = lineOffsets;
                 PossibleAttackPositions.OffsetPoints = capability.PointsInRange();
             }
-            else if (capability.AttackTargetingType == AttackTargetingType.PositionsInRange)
+            else if (capability.AttackTargetingType == AttackTargetingType.SelectTarget)
             {
                 CurrentProposedAttackPlacement.OffsetPoints = new List<Point>()
                 {
@@ -125,13 +125,21 @@ namespace Gamepackage
 
             if (capability.AttackParameters != null && capability.AttackParameters.ExplosionParameters != null)
             {
-                var endpoint = CalculateEndpointOfSkillshot(position, capability, direction);
 
                 if (capability.PointsInRange().Contains(mousePos))
                 {
                     var explosionParameters = capability.AttackParameters.ExplosionParameters;
-                    CurrentProposedAttackExplosionPlacement.Position = endpoint;
-                    CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(endpoint, capability.PointsInExplosionRange(endpoint));
+                    if (capability.AttackTargetingType == AttackTargetingType.Line)
+                    {
+                        var endpoint = CalculateEndpointOfSkillshot(position, capability, direction);
+                        CurrentProposedAttackExplosionPlacement.Position = endpoint;
+                        CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(endpoint, capability.PointsInExplosionRange(endpoint));
+                    }
+                    else if(capability.AttackTargetingType == AttackTargetingType.SelectTarget)
+                    {
+                        CurrentProposedAttackExplosionPlacement.Position = mousePos;
+                        CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(mousePos, capability.PointsInExplosionRange(mousePos));
+                    }
                 }
                 else
                 {

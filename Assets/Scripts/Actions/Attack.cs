@@ -141,7 +141,7 @@ namespace Gamepackage
             {
                 NextGridPosition = SourceGridPosition + (MathUtil.OffsetForDirection(Direction) * RangeTraversed);
             }
-            if(CombatContextCapability.AttackTargetingType == AttackTargetingType.PositionsInRange)
+            if(CombatContextCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
             {
                 NextGridPosition = AimedTarget;
             }
@@ -212,7 +212,7 @@ namespace Gamepackage
                             break;
                         }
                     }
-                    if(CombatContextCapability.AttackTargetingType != AttackTargetingType.PositionsInRange)
+                    if(CombatContextCapability.AttackTargetingType != AttackTargetingType.SelectTarget)
                     {
                         MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
                     }
@@ -220,7 +220,7 @@ namespace Gamepackage
                     LastNonWallTraversed = new Point(targets[0].Position.X, targets[0].Position.Y);
                 }
 
-                var canHitMoreTargets = NumberOfTargetsHit < CombatContextCapability.NumberOfTargetsToPierce && CombatContextCapability.AttackTargetingType != AttackTargetingType.PositionsInRange;
+                var canHitMoreTargets = NumberOfTargetsHit < CombatContextCapability.NumberOfTargetsToPierce && CombatContextCapability.AttackTargetingType != AttackTargetingType.SelectTarget;
 
                 if (!canHitMoreTargets || hitWall || hitMaxRange)
                 {

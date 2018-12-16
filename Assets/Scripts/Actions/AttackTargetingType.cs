@@ -4,6 +4,6 @@
     {
         NotSet,
         Line,
-        PositionsInRange,
+        SelectTarget,
     }
 }
