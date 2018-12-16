@@ -65,7 +65,7 @@ namespace Gamepackage
                         Bonus = 0,
                         DyeNumber = 1,
                         DyeSize = 8,
-                        DamageType = DamageTypes.SLASHING
+                        DamageType = DamageTypes.SLASHING,
                     }
                 };
                 item.ThrowParameters = new List<AttackParameters>() {
@@ -99,7 +99,7 @@ namespace Gamepackage
                         Bonus = 0,
                         DyeNumber = 1,
                         DyeSize = 8,
-                        DamageType = DamageTypes.PIERCING
+                        DamageType = DamageTypes.PIERCING,
                     }
                 };
                 item.ThrowParameters = new List<AttackParameters>() {
@@ -110,7 +110,7 @@ namespace Gamepackage
                         DyeNumber = 1,
                         DyeSize = 3,
                         DamageType = DamageTypes.PIERCING,
-                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_DAGGER
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_DAGGER,
                     }
                 };
                 item.SlotsWearable.Add(ItemSlot.MainHand);
@@ -128,7 +128,7 @@ namespace Gamepackage
                         Bonus = 0,
                         DyeNumber = 1,
                         DyeSize = 8,
-                        DamageType = DamageTypes.BLUDGEONING
+                        DamageType = DamageTypes.BLUDGEONING,
                     }
                 };
                 item.ThrowParameters = new List<AttackParameters>() {
@@ -139,7 +139,7 @@ namespace Gamepackage
                         DyeNumber = 1,
                         DyeSize = 3,
                         DamageType = DamageTypes.BLUDGEONING,
-                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_MACE
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_MACE,
                     }
                 };
                 item.SlotsWearable.Add(ItemSlot.MainHand);
@@ -168,7 +168,7 @@ namespace Gamepackage
                         DyeNumber = 1,
                         DyeSize = 3,
                         DamageType = DamageTypes.BLUDGEONING,
-                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ACTION_STAFF
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ACTION_STAFF,
                     }
                 };
                 item.ZapParameters = new List<AttackParameters>()
@@ -181,6 +181,7 @@ namespace Gamepackage
                         DyeSize = 0,
                         DamageType = DamageTypes.FIRE,
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_FIREBALL,
+                        AttackTargetingType = AttackTargetingType.Line,
                         ExplosionParameters = new ExplosionParameters()
                         {
                             AttackMessage = "attacks.fire.1".Localize(),
@@ -222,7 +223,7 @@ namespace Gamepackage
                         DyeNumber = 1,
                         DyeSize = 3,
                         DamageType = DamageTypes.BLUDGEONING,
-                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_BOW
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_BOW,
                     }
                 };
                 item.RangedParameters = new List<AttackParameters>() {
@@ -262,7 +263,7 @@ namespace Gamepackage
                         DyeNumber = 1,
                         DyeSize = 3,
                         DamageType = DamageTypes.BLUDGEONING,
-                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_SWIRL_STAFF
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_SWIRL_STAFF,
                     }
                 };
                 item.ZapParameters = new List<AttackParameters>()
@@ -275,6 +276,7 @@ namespace Gamepackage
                         DyeSize = 8,
                         DamageType = DamageTypes.FIRE,
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_LIGHTNING_JET,
+                        AttackTargetingType = AttackTargetingType.Line,
                     }
                 };
                 item.HasUnlimitedCharges = true;

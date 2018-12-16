@@ -33,7 +33,11 @@ namespace Gamepackage
         {
             get
             {
-                return CombatContextCapability.AttackParameters.ProjectileAppearance;
+                if(CombatContextCapability != null && CombatContextCapability.AttackParameters != null)
+                {
+                    return CombatContextCapability.AttackParameters.ProjectileAppearance;
+                }
+                return null;
             }
         }
 
@@ -47,15 +51,17 @@ namespace Gamepackage
         private Point LastNonWallTraversed;
         private Vector2 LerpCurrentPosition;
         private Vector2 LerpCurrentNextPosition;
+        private Point AimedTarget;
         private bool isDoneInternal = false;
 
         private Attack() { }
 
-        public Attack(AttackCapabilities attackCapabilities, CombatContext combatContext, Direction direction)
+        public Attack(AttackCapabilities attackCapabilities, CombatContext combatContext, Direction direction, Point aimedTarget)
         {
             this.AttackCapabilities = attackCapabilities;
             this.CombatContext = combatContext;
             this.Direction = direction;
+            this.AimedTarget = aimedTarget;
         }
 
         public override int TimeCost
@@ -131,8 +137,17 @@ namespace Gamepackage
             ElapsedTime = 0.0f;
             RangeTraversed++;
             LerpCurrentPosition = currentPosition;
-            NextGridPosition = SourceGridPosition + (MathUtil.OffsetForDirection(Direction) * RangeTraversed);
+            if (CombatContextCapability.AttackTargetingType == AttackTargetingType.Line)
+            {
+                NextGridPosition = SourceGridPosition + (MathUtil.OffsetForDirection(Direction) * RangeTraversed);
+            }
+            if(CombatContextCapability.AttackTargetingType == AttackTargetingType.PositionsInRange)
+            {
+                NextGridPosition = AimedTarget;
+            }
             LerpCurrentNextPosition = MathUtil.MapToWorld(NextGridPosition);
+
+
             if (Context.GameStateManager.Game.CurrentLevel.Grid[NextGridPosition].TileType == TileType.Floor || Context.GameStateManager.Game.CurrentLevel.Grid[NextGridPosition].TileType == TileType.Empty)
             {
                 LastNonWallTraversed = new Point(NextGridPosition.X, NextGridPosition.Y);
@@ -142,10 +157,16 @@ namespace Gamepackage
         public override void Do()
         {
             base.Do();
+            if(isDoneInternal)
+            {
+                // if this is not here, when applying spells to individual targets directly without the line fire
+                // you will double tap them as do will be called once more than you will expect.
+                return;
+            }
             ElapsedTime += Time.deltaTime;
             var perTileTravelTime = 1.00f;
 
-            if (ProjectileAppearance.ProjectileDefinition != null)
+            if (ProjectileAppearance != null && ProjectileAppearance.ProjectileDefinition != null)
             {
                 perTileTravelTime = ProjectileAppearance.ProjectileDefinition.PerTileTravelTime;
             }
@@ -191,12 +212,16 @@ namespace Gamepackage
                             break;
                         }
                     }
-                    MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
+                    if(CombatContextCapability.AttackTargetingType != AttackTargetingType.PositionsInRange)
+                    {
+                        MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
+                    }
                     movedThisPass = true;
                     LastNonWallTraversed = new Point(targets[0].Position.X, targets[0].Position.Y);
                 }
 
-                var canHitMoreTargets = NumberOfTargetsHit < CombatContextCapability.NumberOfTargetsToPierce;
+                var canHitMoreTargets = NumberOfTargetsHit < CombatContextCapability.NumberOfTargetsToPierce && CombatContextCapability.AttackTargetingType != AttackTargetingType.PositionsInRange;
+
                 if (!canHitMoreTargets || hitWall || hitMaxRange)
                 {
                     if (CombatContext == CombatContext.Zapped && CombatContextCapability.Source.View != null && CombatContextCapability.Source.View.SkeletonAnimation != null)

@@ -250,7 +250,7 @@ namespace Gamepackage
             }
             else
             {
-                throw new NotImplementedException("Cannot resolve projectile direction for direction: " + direction);
+                return Vector3.zero;
             }
         }
 

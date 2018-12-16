@@ -7,12 +7,14 @@ namespace Gamepackage
     {
         public Entity Source;
         public CombatContext CombatContext;
+        public AttackTargetingType AttackTargetingType;
         public Item MainHand;
         public Item Ammo;
         public List<Effect> AppliedEffects = new List<Effect>();
         public AttackParameters AttackParameters;
         public int Range;
         public int NumberOfTargetsToPierce;
+        public List<Point> CachedPointsInRange = null;
         public bool CanPerform
         {
             get
@@ -55,14 +57,49 @@ namespace Gamepackage
 
         public bool IsInRange(Point target)
         {
-            return Source.Position.IsOrthogonalTo(target) && Source.Position.Distance(target) <= Range;
+            return PointsInRange().Contains(target);
+        }
+
+        public List<Point> PointsInRange()
+        {
+            if(CachedPointsInRange == null)
+            {
+                CachedPointsInRange = new List<Point>();
+            }
+            else
+            {
+                return CachedPointsInRange;
+            }
+            List<Point> outputRange = new List<Point>();
+            if (AttackTargetingType == AttackTargetingType.Line)
+            {
+                outputRange.AddRange(MathUtil.LineInDirection(Source.Position, Direction.SouthEast, Range));
+                outputRange.AddRange(MathUtil.LineInDirection(Source.Position, Direction.SouthWest, Range));
+                outputRange.AddRange(MathUtil.LineInDirection(Source.Position, Direction.NorthEast, Range));
+                outputRange.AddRange(MathUtil.LineInDirection(Source.Position, Direction.NorthWest, Range));
+            }
+            else if(AttackTargetingType == AttackTargetingType.PositionsInRange)
+            {
+                outputRange.AddRange(MathUtil.FloodFill(Source.Position, Range, ref outputRange, MathUtil.FloodFillType.Surrounding));
+            }
+            else
+            {
+                throw new NotImplementedException("AttackTargetingType not implemented: " + AttackTargetingType);
+            }
+            CachedPointsInRange.AddRange(outputRange);
+            return outputRange;
         }
 
         public bool HasAClearShot(Point target)
         {
-            var isOrthogonal = Source.Position.IsOrthogonalTo(target);
-            var distance = (int)Source.Position.Distance(target); // whole number bc grid coords
+            var canHitFromHere = Source.Position.IsOrthogonalTo(target) || AttackTargetingType != AttackTargetingType.Line;
 
+            if(!canHitFromHere)
+            {
+                return false;
+            }
+
+            var distance = (int)Source.Position.Distance(target); // whole number bc grid coords
             var coordsToCheck = MathUtil.LineInDirection(Source.Position, MathUtil.RelativeDirection(Source.Position, target), distance);
             foreach(var point in coordsToCheck)
             {
@@ -107,6 +144,7 @@ namespace Gamepackage
                     NumberOfTargetsToPierce = MainHand.MeleeTargetsPierced;
 
                     AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(MainHand.MeleeParameters);
+                    AttackTargetingType = AttackParameters.AttackTargetingType;
                     AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                 }
@@ -116,6 +154,7 @@ namespace Gamepackage
                     NumberOfTargetsToPierce = source.Body.MeleeTargetsPierced;
 
                     AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(source.Body.MeleeParameters);
+                    AttackTargetingType = AttackParameters.AttackTargetingType;
                     AppliedEffects.AddRange(source.Body.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                 }
@@ -139,8 +178,9 @@ namespace Gamepackage
                         DyeSize = ammoAttackParameters.DyeSize,
                         ExplosionParameters = ammoAttackParameters.ExplosionParameters,
                         ProjectileAppearanceIdentifier = ammoAttackParameters.ProjectileAppearanceIdentifier,
-                    };
-
+                        AttackTargetingType = rangedAttackParameters.AttackTargetingType,
+                };
+                    AttackTargetingType = AttackTargetingType.Line;
                     AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(Ammo.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(rangedAttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
@@ -155,6 +195,7 @@ namespace Gamepackage
                     AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                     Range = MainHand.ThrownRange;
+                    AttackTargetingType = AttackParameters.AttackTargetingType;
                     NumberOfTargetsToPierce = MainHand.ThrownTargetsPierced;
                 }
             }
@@ -166,6 +207,7 @@ namespace Gamepackage
                     AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                     Range = MainHand.ZapRange;
+                    AttackTargetingType = AttackParameters.AttackTargetingType;
                     NumberOfTargetsToPierce = MainHand.ZappedTargetsPierced;
                 }
             }
@@ -198,29 +240,19 @@ namespace Gamepackage
 
     public class AttackCapabilities
     {
-        // Inputs
         public Entity Source;
-        private Dictionary<CombatContext, CombatContextCapability> AttackCapabilitiesPerType = new Dictionary<CombatContext, CombatContextCapability>();
+        public Item MainHandOverride = null;
         private AttackCapabilities() { }
 
         public AttackCapabilities(Entity source, Item mainhandOverride = null)
         {
             this.Source = source;
-            foreach (var enumVal in System.Enum.GetValues(typeof(CombatContext)))
-            {
-                var combatContext = (CombatContext)enumVal;
-                if (combatContext == CombatContext.NotSet)
-                {
-                    continue;
-                }
-                AttackCapabilitiesPerType[combatContext] = new CombatContextCapability(Source, combatContext, mainhandOverride);
-            }
+            this.MainHandOverride = mainhandOverride;
         }
 
         public CombatContextCapability this[CombatContext inp]
         {
-            get { return this.AttackCapabilitiesPerType[inp]; }
-            set { this.AttackCapabilitiesPerType[inp] = value; }
+            get { return new CombatContextCapability(Source, inp, MainHandOverride); }
         }
     }
 }

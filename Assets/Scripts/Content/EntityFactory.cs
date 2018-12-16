@@ -76,7 +76,7 @@ namespace Gamepackage
                     ViewType = ViewType.StaticSprite,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
                 };
-                entity.Behaviour = new AIBehaviour()
+                entity.Behaviour = new AIController()
                 {
                     Team = Team.PLAYER,
                 };
@@ -96,7 +96,7 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_BEE,
                 };
-                entity.Behaviour = new AIBehaviour()
+                entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
                 };
@@ -116,7 +116,7 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_SKELETON_WHITE,
                 };
-                entity.Behaviour = new AIBehaviour()
+                entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
                 };
@@ -143,7 +143,7 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_GHOST,
                 };
-                entity.Behaviour = new AIBehaviour()
+                entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
                 };
@@ -171,7 +171,7 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_GHOST,
                 };
-                entity.Behaviour = new AIBehaviour()
+                entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
                 };
@@ -198,7 +198,7 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_LARGE_BEE,
                 };
-                entity.Behaviour = new AIBehaviour()
+                entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
                 };

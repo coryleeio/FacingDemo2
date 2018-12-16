@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class AIBehaviour : Behaviour
+    public class AIController : Behaviour
     {
         public override bool IsPlayer
         {
@@ -33,10 +33,6 @@ namespace Gamepackage
             var level = Context.GameStateManager.Game.CurrentLevel;
             var target = FindTarget(entity);
             var capabilities = new AttackCapabilities(entity);
-            var meleeCapabilities = capabilities[CombatContext.Melee];
-            var thrownCapabilities = capabilities[CombatContext.Thrown];
-            var rangedCapabilities = capabilities[CombatContext.Ranged];
-            var ZappedCapabilities = capabilities[CombatContext.Zapped];
             NextAction = null;
 
             if (target == null)
@@ -51,29 +47,37 @@ namespace Gamepackage
             }
             else
             {
+                var meleeCapabilities = capabilities[CombatContext.Melee];
                 if (meleeCapabilities.CanPerform && meleeCapabilities.IsInRange(target))
                 {
                     var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Melee, direction);
+                    var attack = new Attack(capabilities, CombatContext.Melee, direction, target.Position);
                     NextAction = attack;
+                    return;
                 }
-                else if (ZappedCapabilities.CanPerform && ZappedCapabilities.IsInRange(target) && ZappedCapabilities.HasAClearShot(target.Position))
+                var ZappedCapabilities = capabilities[CombatContext.Zapped];
+                if (ZappedCapabilities.CanPerform && ZappedCapabilities.IsInRange(target) && ZappedCapabilities.HasAClearShot(target.Position))
                 {
                     var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Zapped, direction);
+                    var attack = new Attack(capabilities, CombatContext.Zapped, direction, target.Position);
                     NextAction = attack;
+                    return;
                 }
-                else if(thrownCapabilities.CanPerform && thrownCapabilities.IsInRange(target) && thrownCapabilities.HasAClearShot(target.Position) && thrownCapabilities.MainHand != null && thrownCapabilities.MainHand.NumberOfItems > 1)
+                var thrownCapabilities = capabilities[CombatContext.Thrown];
+                if (thrownCapabilities.CanPerform && thrownCapabilities.IsInRange(target) && thrownCapabilities.HasAClearShot(target.Position) && thrownCapabilities.MainHand != null && thrownCapabilities.MainHand.NumberOfItems > 1)
                 {
                     var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Thrown, direction);
+                    var attack = new Attack(capabilities, CombatContext.Thrown, direction, target.Position);
                     NextAction = attack;
+                    return;
                 }
-                else if (rangedCapabilities.CanPerform && rangedCapabilities.IsInRange(target) && rangedCapabilities.HasAClearShot(target.Position))
+                var rangedCapabilities = capabilities[CombatContext.Ranged];
+                if (rangedCapabilities.CanPerform && rangedCapabilities.IsInRange(target) && rangedCapabilities.HasAClearShot(target.Position))
                 {
                     var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Ranged, direction);
+                    var attack = new Attack(capabilities, CombatContext.Ranged, direction, target.Position);
                     NextAction = attack;
+                    return;
                 }
 
                 else

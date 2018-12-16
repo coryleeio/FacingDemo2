@@ -93,17 +93,21 @@ namespace Gamepackage
             };
         }
 
-        public void GenerateAttackOverlayOffsets(Point position, int Range, Direction direction)
+        public void GenerateAttackOverlayOffsets(Point mousePos, Point position, CombatContextCapability capability, Direction direction)
         {
-            if (direction == Direction.SouthEast || direction == Direction.SouthWest || direction == Direction.NorthEast || direction == Direction.NorthWest)
+            if (capability.AttackTargetingType == AttackTargetingType.Line && (direction == Direction.SouthEast || direction == Direction.SouthWest || direction == Direction.NorthEast || direction == Direction.NorthWest))
             {
-                var lineOffsets = MathUtil.LineInDirection(position, direction, Range);
+                var lineOffsets = MathUtil.LineInDirection(position, direction, capability.Range);
                 AttackMouseOverlayConfig.OffsetPoints = lineOffsets;
-                AttackOverlayConfig.OffsetPoints = new List<Point>(0);
-                AttackOverlayConfig.OffsetPoints.AddRange(MathUtil.LineInDirection(position, Direction.SouthEast, Range));
-                AttackOverlayConfig.OffsetPoints.AddRange(MathUtil.LineInDirection(position, Direction.SouthWest, Range));
-                AttackOverlayConfig.OffsetPoints.AddRange(MathUtil.LineInDirection(position, Direction.NorthEast, Range));
-                AttackOverlayConfig.OffsetPoints.AddRange(MathUtil.LineInDirection(position, Direction.NorthWest, Range));
+                AttackOverlayConfig.OffsetPoints = capability.PointsInRange();
+            }
+            else if(capability.AttackTargetingType == AttackTargetingType.PositionsInRange)
+            {
+                AttackMouseOverlayConfig.OffsetPoints = new List<Point>()
+                {
+                    mousePos,
+                };
+                AttackOverlayConfig.OffsetPoints = capability.PointsInRange();
             }
         }
 
@@ -171,13 +175,13 @@ namespace Gamepackage
                 // otherwise you will throw nothing, or whatever is equipped when throwing 
                 // from inventory.
                 var aimingAttackCapability = AimingAttackCapabilities[AimingCombatContext];
-                GenerateAttackOverlayOffsets(player.Position, aimingAttackCapability.Range, hoverDirection);
+                GenerateAttackOverlayOffsets(mousePos, player.Position, aimingAttackCapability, hoverDirection);
                 if (Input.GetMouseButtonDown(0))
                 {
                     if(aimingAttackCapability.CanPerform && aimingAttackCapability.IsInRange(mousePos))
                     {
                         var direction = MathUtil.RelativeDirection(player.Position, mousePos);
-                        Attack attack = new Attack(AimingAttackCapabilities, AimingCombatContext, direction);
+                        Attack attack = new Attack(AimingAttackCapabilities, AimingCombatContext, direction, mousePos);
                         player.Behaviour.NextAction = attack;
                     }
                     StopAiming();
@@ -483,7 +487,7 @@ namespace Gamepackage
         private void QueueAttack(Entity player, Point mousePos, AttackCapabilities attackCapabilities, CombatContext combatContext)
         {
             var direction = MathUtil.RelativeDirection(player.Position, mousePos);
-            Attack attack = new Attack(attackCapabilities, combatContext, direction);
+            Attack attack = new Attack(attackCapabilities, combatContext, direction, mousePos);
             player.Behaviour.NextAction = attack;
         }
 

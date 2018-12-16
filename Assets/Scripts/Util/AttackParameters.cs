@@ -10,6 +10,7 @@ namespace Gamepackage
         public int Bonus;
         public DamageTypes DamageType;
         public List<Effect> AttackSpecificEffects = new List<Effect>();
+        public AttackTargetingType AttackTargetingType = AttackTargetingType.Line;
         public string AttackMessage = null;
         public UniqueIdentifier ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_NONE;
         public ExplosionParameters ExplosionParameters;
