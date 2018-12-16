@@ -59,10 +59,18 @@ namespace Gamepackage
         {
             return PointsInRange().Contains(target);
         }
-
+        public List<Point> PointsInExplosionRange(Point placementPosition)
+        {
+            List<Point> outputRange = new List<Point>();
+            if(AttackParameters.ExplosionParameters != null)
+            {
+                MathUtil.FloodFill(placementPosition, AttackParameters.ExplosionParameters.Radius, ref outputRange, MathUtil.FloodFillType.Surrounding, CombatUtil.FloorTiles);
+            }
+            return outputRange;
+        }
         public List<Point> PointsInRange()
         {
-            if(CachedPointsInRange == null)
+            if (CachedPointsInRange == null)
             {
                 CachedPointsInRange = new List<Point>();
             }
@@ -78,7 +86,7 @@ namespace Gamepackage
                 outputRange.AddRange(MathUtil.LineInDirection(Source.Position, Direction.NorthEast, Range));
                 outputRange.AddRange(MathUtil.LineInDirection(Source.Position, Direction.NorthWest, Range));
             }
-            else if(AttackTargetingType == AttackTargetingType.PositionsInRange)
+            else if (AttackTargetingType == AttackTargetingType.PositionsInRange)
             {
                 outputRange.AddRange(MathUtil.FloodFill(Source.Position, Range, ref outputRange, MathUtil.FloodFillType.Surrounding));
             }
@@ -94,23 +102,23 @@ namespace Gamepackage
         {
             var canHitFromHere = Source.Position.IsOrthogonalTo(target) || AttackTargetingType != AttackTargetingType.Line;
 
-            if(!canHitFromHere)
+            if (!canHitFromHere)
             {
                 return false;
             }
 
             var distance = (int)Source.Position.Distance(target); // whole number bc grid coords
             var coordsToCheck = MathUtil.LineInDirection(Source.Position, MathUtil.RelativeDirection(Source.Position, target), distance);
-            foreach(var point in coordsToCheck)
+            foreach (var point in coordsToCheck)
             {
                 var game = Context.GameStateManager.Game;
                 var level = game.CurrentLevel;
                 if (point != target)
                 {
                     var entitiesInPosition = level.Grid[point].EntitiesInPosition;
-                    foreach(var entityInPosition in entitiesInPosition)
+                    foreach (var entityInPosition in entitiesInPosition)
                     {
-                        if(entityInPosition.IsCombatant && entityInPosition.Behaviour != null && Source.Behaviour  != null && entityInPosition.Behaviour.Team == Source.Behaviour.Team)
+                        if (entityInPosition.IsCombatant && entityInPosition.Behaviour != null && Source.Behaviour != null && entityInPosition.Behaviour.Team == Source.Behaviour.Team)
                         {
                             return false;
                         }
@@ -179,7 +187,7 @@ namespace Gamepackage
                         ExplosionParameters = ammoAttackParameters.ExplosionParameters,
                         ProjectileAppearanceIdentifier = ammoAttackParameters.ProjectileAppearanceIdentifier,
                         AttackTargetingType = rangedAttackParameters.AttackTargetingType,
-                };
+                    };
                     AttackTargetingType = AttackTargetingType.Line;
                     AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(Ammo.Effects.FindAll(CombatUtil.AppliedEffects));

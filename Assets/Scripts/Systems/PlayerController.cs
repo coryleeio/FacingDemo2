@@ -9,8 +9,9 @@ namespace Gamepackage
         private Overlay AimingOverlay;
         private OverlayConfig MouseHoverOverlayConfig;
         private OverlayConfig PathOverlayConfig;
-        private OverlayConfig AttackOverlayConfig;
-        private OverlayConfig AttackMouseOverlayConfig;
+        private OverlayConfig PossibleAttackPositions;
+        private OverlayConfig CurrentProposedAttackPlacement;
+        private OverlayConfig CurrentProposedAttackExplosionPlacement;
         private bool waitingForPath = false;
 
         private Color DefaultHoverColor = new Color(0, 213, 255);
@@ -62,33 +63,45 @@ namespace Gamepackage
                 }
             };
 
-            AttackOverlayConfig = new OverlayConfig()
+            PossibleAttackPositions = new OverlayConfig()
             {
                 Name = "AttackOverlayConfig",
                 Position = new Point(0, 0),
                 DefaultColor = Color.green,
-                RelativeSortOrder = 2,
-                WalkableTilesOnly = true,
-                ConstrainToLevel = true,
-                Sprite = Resources.Load<Sprite>("Overlay/Square"),
-            };
-            AttackMouseOverlayConfig = new OverlayConfig
-            {
-                Name = "MouseHover",
-                Position = new Point(0, 0),
-                OffsetPoints = new List<Point>() { new Point(0, 0) },
-                DefaultColor = Color.yellow,
                 RelativeSortOrder = 1,
                 WalkableTilesOnly = true,
                 ConstrainToLevel = true,
                 Sprite = Resources.Load<Sprite>("Overlay/Square"),
             };
+            CurrentProposedAttackPlacement = new OverlayConfig
+            {
+                Name = "AttackPlacementHover",
+                Position = new Point(0, 0),
+                OffsetPoints = new List<Point>() { new Point(0, 0) },
+                DefaultColor = Color.yellow,
+                RelativeSortOrder = 2,
+                WalkableTilesOnly = true,
+                ConstrainToLevel = true,
+                Sprite = Resources.Load<Sprite>("Overlay/Square"),
+            };
+            CurrentProposedAttackExplosionPlacement = new OverlayConfig
+            {
+                Name = "ExplosionHover",
+                Position = new Point(0, 0),
+                OffsetPoints = new List<Point>() { },
+                DefaultColor = Color.red,
+                RelativeSortOrder = 3,
+                WalkableTilesOnly = true,
+                ConstrainToLevel = true,
+                Sprite = Resources.Load<Sprite>("Overlay/AoeIndicator"),
+            };
             AimingOverlay = new Overlay()
             {
                 Configs = new List<OverlayConfig>()
                 {
-                    AttackOverlayConfig,
-                    AttackMouseOverlayConfig,
+                    PossibleAttackPositions,
+                    CurrentProposedAttackPlacement,
+                    CurrentProposedAttackExplosionPlacement,
                 }
             };
         }
@@ -97,18 +110,64 @@ namespace Gamepackage
         {
             if (capability.AttackTargetingType == AttackTargetingType.Line && (direction == Direction.SouthEast || direction == Direction.SouthWest || direction == Direction.NorthEast || direction == Direction.NorthWest))
             {
-                var lineOffsets = MathUtil.LineInDirection(position, direction, capability.Range);
-                AttackMouseOverlayConfig.OffsetPoints = lineOffsets;
-                AttackOverlayConfig.OffsetPoints = capability.PointsInRange();
+                var lineOffsets = MathUtil.LineInDirection(position, direction, capability.Range + 1);
+                CurrentProposedAttackPlacement.OffsetPoints = lineOffsets;
+                PossibleAttackPositions.OffsetPoints = capability.PointsInRange();
             }
-            else if(capability.AttackTargetingType == AttackTargetingType.PositionsInRange)
+            else if (capability.AttackTargetingType == AttackTargetingType.PositionsInRange)
             {
-                AttackMouseOverlayConfig.OffsetPoints = new List<Point>()
+                CurrentProposedAttackPlacement.OffsetPoints = new List<Point>()
                 {
                     mousePos,
                 };
-                AttackOverlayConfig.OffsetPoints = capability.PointsInRange();
+                PossibleAttackPositions.OffsetPoints = capability.PointsInRange();
             }
+
+            if (capability.AttackParameters != null && capability.AttackParameters.ExplosionParameters != null)
+            {
+                var endpoint = CalculateEndpointOfSkillshot(position, capability, direction);
+
+                if (capability.PointsInRange().Contains(mousePos))
+                {
+                    var explosionParameters = capability.AttackParameters.ExplosionParameters;
+                    CurrentProposedAttackExplosionPlacement.Position = endpoint;
+                    CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(endpoint, capability.PointsInExplosionRange(endpoint));
+                }
+                else
+                {
+                    CurrentProposedAttackExplosionPlacement.OffsetPoints.Clear();
+                }
+
+            }
+            else
+            {
+                CurrentProposedAttackExplosionPlacement.OffsetPoints = new List<Point>();
+            }
+        }
+
+        private static Point CalculateEndpointOfSkillshot(Point position, CombatContextCapability capability, Direction direction)
+        {
+            var pointsInLine = MathUtil.LineInDirection(position, direction, capability.Range + 1);
+            var numberOfThingsCanPierce = capability.NumberOfTargetsToPierce;
+            var numberOfThingsPierced = 0;
+
+            var game = Context.GameStateManager.Game;
+            var level = game.CurrentLevel;
+            var grid = level.Grid;
+
+            foreach (var point in pointsInLine)
+            {
+                numberOfThingsPierced += grid[point].EntitiesInPosition.Count;
+                if (numberOfThingsPierced == numberOfThingsCanPierce)
+                {
+                    return point;
+                }
+                if (grid[point].TileType != TileType.Floor)
+                {
+                    return point;
+                }
+            }
+            return pointsInLine[pointsInLine.Count - 1];
         }
 
         public void Process()
@@ -178,7 +237,7 @@ namespace Gamepackage
                 GenerateAttackOverlayOffsets(mousePos, player.Position, aimingAttackCapability, hoverDirection);
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if(aimingAttackCapability.CanPerform && aimingAttackCapability.IsInRange(mousePos))
+                    if (aimingAttackCapability.CanPerform && aimingAttackCapability.IsInRange(mousePos))
                     {
                         var direction = MathUtil.RelativeDirection(player.Position, mousePos);
                         Attack attack = new Attack(AimingAttackCapabilities, AimingCombatContext, direction, mousePos);
