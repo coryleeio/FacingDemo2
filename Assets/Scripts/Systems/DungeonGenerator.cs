@@ -66,6 +66,7 @@ namespace Gamepackage
 
             ConnectLevelsByStairway(levels[0], levels[1]);
             var playerSpawn = SpawnOnLevel(UniqueIdentifier.ENTITY_PONCY, levels[0]);
+            playerSpawn.Behaviour.IsPlayer = true;
             var playerPos = playerSpawn.Position;
             SpawnInBounds(UniqueIdentifier.ENTITY_MASLOW, levels[0], new Rectangle() {
                 Position = new Point(playerPos.X - 2, playerPos.Y - 2),

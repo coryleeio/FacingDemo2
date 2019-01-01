@@ -44,8 +44,9 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_HUMAN_WHITE,
                 };
-                entity.Behaviour = new PlayerBehaviour()
+                entity.Behaviour = new Behaviour()
                 {
+                    AI = AIType.None,
                     Team = Team.PLAYER,
                 };
                 entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_ROBE_OF_WONDERS));
@@ -76,10 +77,10 @@ namespace Gamepackage
                     ViewType = ViewType.StaticSprite,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
                 };
-                entity.Behaviour = new AIController()
+                entity.Behaviour = new Behaviour()
                 {
+                    AI = AIType.DumbMelee,
                     Team = Team.PLAYER,
-                    AI = AIController.AIType.DumbMelee,
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
@@ -97,10 +98,10 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_BEE,
                 };
-                entity.Behaviour = new AIController()
+                entity.Behaviour = new Behaviour()
                 {
+                    AI = AIType.DumbMelee,
                     Team = Team.ENEMY,
-                    AI = AIController.AIType.DumbMelee,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
             }
@@ -118,10 +119,10 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_SKELETON_WHITE,
                 };
-                entity.Behaviour = new AIController()
+                entity.Behaviour = new Behaviour()
                 {
                     Team = Team.ENEMY,
-                    AI = AIController.AIType.Archer,
+                    AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
                 itemIds.AddRange(Tables.HumanoidClothing.Next());
@@ -146,10 +147,10 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_GHOST,
                 };
-                entity.Behaviour = new AIController()
+                entity.Behaviour = new Behaviour()
                 {
                     Team = Team.ENEMY,
-                    AI = AIController.AIType.Archer,
+                    AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
                 itemIds.AddRange(Tables.HumanoidClothing.Next());
@@ -175,10 +176,10 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_GHOST,
                 };
-                entity.Behaviour = new AIController()
+                entity.Behaviour = new Behaviour()
                 {
                     Team = Team.ENEMY,
-                    AI = AIController.AIType.Archer,
+                    AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
                 itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
@@ -203,10 +204,10 @@ namespace Gamepackage
                     ViewType = ViewType.Spine,
                     ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_LARGE_BEE,
                 };
-                entity.Behaviour = new AIController()
+                entity.Behaviour = new Behaviour()
                 {
                     Team = Team.ENEMY,
-                    AI = AIController.AIType.DumbMelee,
+                    AI = AIType.DumbMelee,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LONGSWORD));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));
@@ -282,16 +283,6 @@ namespace Gamepackage
                     }
                 }
             }
-
-
-            if (entity.Behaviour != null && !entity.IsPlayer)
-            {
-                if (entity.Behaviour.AI == AIController.AIType.None)
-                {
-                    throw new NotImplementedException("An NPC was created with an undefined behaviour: " + entity.PrototypeIdentifier.ToString());
-                }
-            }
-
             return entity;
         }
 
