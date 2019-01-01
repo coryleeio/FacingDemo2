@@ -1,5 +1,6 @@
 ﻿using KDSharp.KDTree;
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,12 @@ namespace Gamepackage
             }
         }
 
-        private static List<CombatContext> AIRelevantCombatContexts = new List<CombatContext>()
+        private static List<CombatContext> MeleeAIRelevantContexts = new List<CombatContext>()
+        {
+            CombatContext.Melee,
+        };
+
+        private static List<CombatContext> RangedAIRelevantContexts = new List<CombatContext>()
         {
             CombatContext.Melee,
             CombatContext.Zapped,
@@ -33,29 +39,60 @@ namespace Gamepackage
         public override void FigureOutNextAction()
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
-            var target = FindTarget(entity);
             var capabilities = new AttackCapabilities(entity);
             NextAction = null;
 
-            if (target == null)
+            if(entity.Behaviour.AI == AIType.DumbMelee)
+            {
+                DoMeleeAI(level, capabilities);
+            }
+            else if (entity.Behaviour.AI == AIType.Archer)
+            {
+                DoRangedAI(level, capabilities);
+            }
+        }
+
+
+        private void DoMeleeAI(Level level, AttackCapabilities capabilities)
+        {
+            var hostileTarget = FindTarget(entity);
+            if (hostileTarget == null)
             {
                 EnqueueDefaultBehaviour();
                 return;
             }
 
-            if (!Context.VisibilitySystem.CanSee(level, entity, target))
+            if (!Context.VisibilitySystem.CanSee(level, entity, hostileTarget))
             {
                 EnqueueDefaultBehaviour();
             }
             else
             {
-                EnqueueAttackOrApproach(capabilities, target);
+                EnqueueBasicAttackOrApproach(capabilities, MeleeAIRelevantContexts, hostileTarget);
             }
         }
 
-        private void EnqueueAttackOrApproach(AttackCapabilities capabilities, Entity target)
+        private void DoRangedAI(Level level, AttackCapabilities capabilities)
         {
-            foreach (var combatContext in AIRelevantCombatContexts)
+            var hostileTarget = FindTarget(entity);
+            if (hostileTarget == null)
+            {
+                EnqueueDefaultBehaviour();
+                return;
+            }
+
+            if (!Context.VisibilitySystem.CanSee(level, entity, hostileTarget))
+            {
+                EnqueueDefaultBehaviour();
+            }
+            else
+            {
+                EnqueueBasicAttackOrApproach(capabilities, RangedAIRelevantContexts, hostileTarget);
+            }
+        }
+        private void EnqueueBasicAttackOrApproach(AttackCapabilities capabilities, List<CombatContext> relevantContexts, Entity target)
+        {
+            foreach (var combatContext in relevantContexts)
             {
                 if (AbleAndWillingToPerformAttackTypeOnTarget(capabilities, combatContext, target))
                 {

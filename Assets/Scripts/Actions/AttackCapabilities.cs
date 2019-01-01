@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public class CombatContextCapability
+    public class AttackCapability
     {
         public Entity Source;
         public CombatContext CombatContext;
@@ -127,7 +127,7 @@ namespace Gamepackage
             return true;
         }
 
-        public CombatContextCapability(Entity source, CombatContext combatContext, Item mainhandOverride = null)
+        public AttackCapability(Entity source, CombatContext combatContext, Item mainhandOverride = null)
         {
             this.Source = source;
             this.CombatContext = combatContext;
@@ -249,9 +249,9 @@ namespace Gamepackage
             this.MainHandOverride = mainhandOverride;
         }
 
-        public CombatContextCapability this[CombatContext inp]
+        public AttackCapability this[CombatContext inp]
         {
-            get { return new CombatContextCapability(Source, inp, MainHandOverride); }
+            get { return new AttackCapability(Source, inp, MainHandOverride); }
         }
     }
 }

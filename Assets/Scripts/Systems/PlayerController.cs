@@ -106,7 +106,7 @@ namespace Gamepackage
             };
         }
 
-        public void GenerateAttackOverlayOffsets(Point mousePos, Point position, CombatContextCapability capability, Direction direction)
+        public void GenerateAttackOverlayOffsets(Point mousePos, Point position, AttackCapability capability, Direction direction)
         {
             if (capability.AttackTargetingType == AttackTargetingType.Line && (direction == Direction.SouthEast || direction == Direction.SouthWest || direction == Direction.NorthEast || direction == Direction.NorthWest))
             {
@@ -153,7 +153,7 @@ namespace Gamepackage
             }
         }
 
-        private static Point CalculateEndpointOfSkillshot(Point position, CombatContextCapability capability, Direction direction)
+        private static Point CalculateEndpointOfSkillshot(Point position, AttackCapability capability, Direction direction)
         {
             var pointsInLine = MathUtil.LineInDirection(position, direction, capability.Range);
             var numberOfThingsCanPierce = capability.NumberOfTargetsToPierce;
@@ -220,7 +220,7 @@ namespace Gamepackage
 
             var isHoveringOnEnemyCombatant = hoverIsValidPoint && mousePos != player.Position && hoverContainsCombatant && tileContainsEnemy;
             var isHoveringOnAlly = hoverIsValidPoint && mousePos != player.Position && hoverContainsAlly;
-            CombatContextCapability meleeAttackCapability = playerAttackCapabilities[CombatContext.Melee];
+            AttackCapability meleeAttackCapability = playerAttackCapabilities[CombatContext.Melee];
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && meleeAttackCapability.CanPerform && meleeAttackCapability.IsInRange(mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             var hoverDirection = MathUtil.RelativeDirection(player.Position, mousePos);

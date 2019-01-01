@@ -21,7 +21,7 @@ namespace Gamepackage
         private CombatContext CombatContext;
         private Direction Direction;
 
-        private CombatContextCapability CombatContextCapability
+        private AttackCapability CombatContextCapability
         {
             get
             {
@@ -287,7 +287,7 @@ namespace Gamepackage
 
         }
 
-        private Item GetItemBeingLaunched(CombatContextCapability capability)
+        private Item GetItemBeingLaunched(AttackCapability capability)
         {
             return CombatContext == CombatContext.Ranged ? capability.Ammo : capability.MainHand;
         }

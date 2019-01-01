@@ -9,6 +9,14 @@ namespace Gamepackage
         public Team Team;
         public bool IsThinking = false;
 
+        public enum AIType
+        {
+            None,
+            DumbMelee,
+            Archer,
+        }
+        public AIType AI;
+
         [JsonIgnore]
         public Action NextAction = null;
 

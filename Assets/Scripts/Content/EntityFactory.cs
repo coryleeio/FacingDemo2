@@ -79,6 +79,7 @@ namespace Gamepackage
                 entity.Behaviour = new AIController()
                 {
                     Team = Team.PLAYER,
+                    AI = AIController.AIType.DumbMelee,
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
@@ -99,6 +100,7 @@ namespace Gamepackage
                 entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
+                    AI = AIController.AIType.DumbMelee,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
             }
@@ -119,6 +121,7 @@ namespace Gamepackage
                 entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
+                    AI = AIController.AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
                 itemIds.AddRange(Tables.HumanoidClothing.Next());
@@ -146,6 +149,7 @@ namespace Gamepackage
                 entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
+                    AI = AIController.AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
                 itemIds.AddRange(Tables.HumanoidClothing.Next());
@@ -174,6 +178,7 @@ namespace Gamepackage
                 entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
+                    AI = AIController.AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
                 itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
@@ -201,6 +206,7 @@ namespace Gamepackage
                 entity.Behaviour = new AIController()
                 {
                     Team = Team.ENEMY,
+                    AI = AIController.AIType.DumbMelee,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LONGSWORD));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));
@@ -261,13 +267,13 @@ namespace Gamepackage
 
             entity.Direction = MathUtil.ChooseRandomElement<Direction>(new List<Direction>() { Direction.SouthEast, Direction.SouthWest, Direction.NorthEast, Direction.NorthWest });
 
-            if(entity.Inventory != null)
+            if (entity.Inventory != null)
             {
                 var mainHand = entity.Inventory.GetItemBySlot(ItemSlot.MainHand);
                 var ammo = entity.Inventory.GetItemBySlot(ItemSlot.Ammo);
                 if (mainHand != null)
                 {
-                    if(mainHand.CanBeUsedForRanged && mainHand.AmmoType == AmmoType.Arrow && ammo == null)
+                    if (mainHand.CanBeUsedForRanged && mainHand.AmmoType == AmmoType.Arrow && ammo == null)
                     {
                         // If we've got a ranged weapon equipped that is a bow, 
                         // but no arrows equipped, go ahead and spawn some default arrows
@@ -278,7 +284,13 @@ namespace Gamepackage
             }
 
 
-
+            if (entity.Behaviour != null && !entity.IsPlayer)
+            {
+                if (entity.Behaviour.AI == AIController.AIType.None)
+                {
+                    throw new NotImplementedException("An NPC was created with an undefined behaviour: " + entity.PrototypeIdentifier.ToString());
+                }
+            }
 
             return entity;
         }
