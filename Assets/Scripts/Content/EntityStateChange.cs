@@ -6,7 +6,7 @@ namespace Gamepackage
     public class EntityStateChange
     {
         public Entity Source;
-        public List<Entity> Targets = new List<Entity>();
+        public Entity Target;
 
         // Some effects look at this to decide if they should modify incoming or outbound attacks
         // this is mostly set by the attack action and shouldn't need to be set most of the time 
@@ -15,7 +15,8 @@ namespace Gamepackage
         public AttackParameters AttackParameters;
         public List<Effect> AppliedEffects = new List<Effect>();
         public List<Effect> RemovedEffects = new List<Effect>();
-        public int Damage;
+        public int HealthChange;
+        public bool isResolved = false;
         public bool WasShortCircuited = false;
         public LinkedList<string> LogMessages = new LinkedList<string>();
 
@@ -26,13 +27,68 @@ namespace Gamepackage
 
         public void ShortCircuit()
         {
-            Damage = 0;
+            HealthChange = 0;
             WasShortCircuited = true;
             LogMessages.Clear();
             LateMessages.Clear();
             FloatingTextMessage.Clear();
         }
+
+        public void Resolve()
+        {
+            if(!isResolved)
+            {
+                var heathChange = 0;
+                if (AttackParameters != null)
+                {
+                    for (var numDyeRolled = 0; numDyeRolled < AttackParameters.DyeNumber; numDyeRolled++)
+                    {
+                        heathChange += UnityEngine.Random.Range(1, AttackParameters.DyeSize + 1);
+                    }
+                    heathChange += AttackParameters.Bonus;
+
+                    if (AttackParameters.DamageType == DamageTypes.HEALING)
+                    {
+                        heathChange *= -1;
+                    }
+                    HealthChange = heathChange;
+                }
+
+                CalculateAffectOutgoingAttack();
+                CalculateAffectIncomingAttackEffects();
+            }
+            isResolved = true;
+        }
+
+        private void CalculateAffectOutgoingAttack()
+        {
+            if (Source != null)
+            {
+                var sourceEffects = Source.GetEffects();
+                foreach (var effect in sourceEffects)
+                {
+                    if (effect.CanAffectOutgoingAttack(this))
+                    {
+                        effect.CalculateAffectOutgoingAttack(this);
+                    }
+                }
+            }
+        }
+
+        private void CalculateAffectIncomingAttackEffects()
+        {
+            var targetEffects = Target.GetEffects();
+            foreach (var effect in targetEffects)
+            {
+                if (effect.CanAffectIncomingAttack(this))
+                {
+                    effect.CalculateAffectIncomingAttackEffects(this);
+                }
+            }
+        }
     }
+
+
 
     public class FloatingTextMessage
     {

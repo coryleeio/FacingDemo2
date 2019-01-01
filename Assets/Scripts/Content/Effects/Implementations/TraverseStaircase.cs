@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -36,14 +37,11 @@ namespace Gamepackage
         public override EntityStateChange TriggerOnPress(EntityStateChange ctx)
         {
             var foundPlayer = false;
-            foreach (var target in ctx.Targets)
+            if (ctx.Target != null && ctx.Target.IsPlayer)
             {
-                if (target.IsPlayer)
-                {
-                    foundPlayer = true;
-                }
+                foundPlayer = true;
             }
-            if(!foundPlayer)
+            if (!foundPlayer)
             {
                 return ctx;
             }
@@ -52,15 +50,18 @@ namespace Gamepackage
             var levelId = Convert.ToInt32(Parameters[Params.TARGET_LEVEL_ID.ToString()]);
             var posX = Convert.ToInt32(Parameters[Params.TARGET_POSX.ToString()]);
             var posY = Convert.ToInt32(Parameters[Params.TARGET_POSY.ToString()]);
-            var targetIncludesPlayer = false;
-            foreach (var target in ctx.Targets)
+            var targetIsPlayer = false;
+            if (ctx.Target != null && ctx.Target.IsPlayer)
             {
-                if (target.IsPlayer)
-                {
-                    targetIncludesPlayer = true;
-                }
+                targetIsPlayer = true;
             }
-            if (targetIncludesPlayer)
+
+            var realTargets = new List<Entity>
+            {
+                ctx.Target
+            };
+
+            if (targetIsPlayer)
             {
                 var oldLevel = Context.GameStateManager.Game.CurrentLevel;
                 foreach (var entityInLevel in oldLevel.Entitys)
@@ -68,20 +69,20 @@ namespace Gamepackage
                     if (entityInLevel.Behaviour != null && entityInLevel.Behaviour.Team == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
                     {
                         // Add player followers to list of targets
-                        ctx.Targets.Add(entityInLevel);
+                        realTargets.Add(entityInLevel);
                     }
                 }
                 Context.GameStateManager.Game.CurrentLevel.UnindexAll();
             }
 
-            foreach (var target in ctx.Targets)
+            foreach (var target in realTargets)
             {
                 target.Behaviour.NextAction = null;
-                if(Context.FlowSystem.Steps.First != null)
+                if (Context.FlowSystem.Steps.First != null)
                 {
                     Context.FlowSystem.Steps.First.Value.Actions.Clear();
                 }
-                
+
                 var oldLevel = Context.GameStateManager.Game.CurrentLevel;
                 if (target.BlocksPathing)
                 {
@@ -97,7 +98,7 @@ namespace Gamepackage
                 target.Position = pos;
                 newLevel.Entitys.Add(target);
             }
-            if (targetIncludesPlayer)
+            if (targetIsPlayer)
             {
                 Context.PlayerController.ActionList.Clear();
                 Context.GameStateManager.Game.CurrentLevelIndex = levelId;

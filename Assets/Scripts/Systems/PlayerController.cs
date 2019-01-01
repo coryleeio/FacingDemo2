@@ -528,7 +528,7 @@ namespace Gamepackage
         {
             EntityStateChange ctx = new EntityStateChange();
             ctx.Source = triggerEntity;
-            ctx.Targets.Add(player);
+            ctx.Target = player;
             triggerEffect.TriggerOnPress(ctx);
         }
 

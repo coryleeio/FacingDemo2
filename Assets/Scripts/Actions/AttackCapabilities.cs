@@ -62,7 +62,7 @@ namespace Gamepackage
         public List<Point> PointsInExplosionRange(Point placementPosition)
         {
             List<Point> outputRange = new List<Point>();
-            if(AttackParameters.ExplosionParameters != null)
+            if (AttackParameters.ExplosionParameters != null)
             {
                 MathUtil.FloodFill(placementPosition, AttackParameters.ExplosionParameters.Radius, ref outputRange, MathUtil.FloodFillType.Surrounding, CombatUtil.FloorTiles);
             }
@@ -222,12 +222,7 @@ namespace Gamepackage
             // If we fall through here we aren't dealing with a attack
         }
 
-        public EntityStateChange AttackTarget(Entity target)
-        {
-            return AttackTargets(new List<Entity>() { target });
-        }
-
-        public EntityStateChange AttackTargets(List<Entity> targets)
+        public EntityStateChange PerformOnTarget(Entity target)
         {
             var stateChange = new EntityStateChange
             {
@@ -238,10 +233,7 @@ namespace Gamepackage
             stateChange.AttackParameters = AttackParameters;
             stateChange.AppliedEffects.AddRange(AppliedEffects);
 
-            foreach (var target in targets)
-            {
-                stateChange.Targets.Add(target);
-            }
+            stateChange.Target = target;
             return stateChange;
         }
     }

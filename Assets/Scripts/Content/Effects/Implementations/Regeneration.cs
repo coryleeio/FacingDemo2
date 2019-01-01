@@ -45,7 +45,7 @@
                     Bonus = 0
                 }
             };
-            ctx.Targets.Add(entity);
+            ctx.Target = entity;
             CombatUtil.ApplyEntityStateChange(ctx);
             base.Tick(entity);
         }

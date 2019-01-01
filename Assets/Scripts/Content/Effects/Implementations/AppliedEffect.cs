@@ -27,18 +27,15 @@ namespace Gamepackage
 
         public bool CanApply(EntityStateChange ctx)
         {
-            return ctx.Targets.Count >= 1 && ValidCombatContextsForApplication.Contains(ctx.CombatContext);
+            return ctx.Target != null && ValidCombatContextsForApplication.Contains(ctx.CombatContext);
         }
 
         public EntityStateChange Apply(EntityStateChange usageContext)
         {
-            foreach (var target in usageContext.Targets)
-            {
-                EntityStateChange applyToTargetContext = new EntityStateChange();
-                applyToTargetContext.Targets.Add(usageContext.Targets[0]);
-                applyToTargetContext.AppliedEffects.Add(EffectFactory.Build(EffectAppliedId));
-                CombatUtil.ApplyEntityStateChange(applyToTargetContext);
-            }
+            EntityStateChange applyToTargetContext = new EntityStateChange();
+            applyToTargetContext.Target = usageContext.Target;
+            applyToTargetContext.AppliedEffects.Add(EffectFactory.Build(EffectAppliedId));
+            CombatUtil.ApplyEntityStateChange(applyToTargetContext);
             return usageContext;
         }
     }

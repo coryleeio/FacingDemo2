@@ -24,7 +24,7 @@
             Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.apply.message".Localize(), owner.Name));
             EntityStateChange ctx = new EntityStateChange();
             ctx.Source = owner;
-            ctx.Targets.Add(owner);
+            ctx.Target = owner;
             var effectsToAttemptRemoval = CombatUtil.GetEntityEffectsByType(owner, (effectInQuestion) => { return effectInQuestion is Poison; });
             ctx.RemovedEffects.AddRange(effectsToAttemptRemoval);
             CombatUtil.ApplyEntityStateChange(ctx);
@@ -46,20 +46,17 @@
             return true;
         }
 
-        public override EntityStateChange AffectIncomingAttackEffects(EntityStateChange ctx)
+        public override EntityStateChange CalculateAffectIncomingAttackEffects(EntityStateChange ctx)
         {
-            foreach(var target in ctx.Targets)
-            {
-                var effectsBlocked = ctx.AppliedEffects.FindAll((effectInQuestion) => { return effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON || effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON; });
+            var effectsBlocked = ctx.AppliedEffects.FindAll((effectInQuestion) => { return effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON || effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON; });
 
-                foreach(var effect in effectsBlocked)
-                {
-                    ctx.AppliedEffects.Remove(effect);
-                }
-                if (effectsBlocked.Count > 0)
-                {
-                    ctx.LateMessages.AddLast(string.Format("effect.poison.immunity.block.message".Localize(), target.Name));
-                }
+            foreach(var effect in effectsBlocked)
+            {
+                ctx.AppliedEffects.Remove(effect);
+            }
+            if (effectsBlocked.Count > 0)
+            {
+                ctx.LateMessages.AddLast(string.Format("effect.poison.immunity.block.message".Localize(), ctx.Target.Name));
             }
             return ctx;
         }

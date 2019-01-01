@@ -206,7 +206,7 @@ namespace Gamepackage
                         }
 
                         NumberOfTargetsHit += targets.Count;
-                        CombatUtil.ApplyEntityStateChange(CombatContextCapability.AttackTarget(target));
+                        CombatUtil.ApplyEntityStateChange(CombatContextCapability.PerformOnTarget(target));
                         if (NumberOfTargetsHit == CombatContextCapability.NumberOfTargetsToPierce)
                         {
                             break;

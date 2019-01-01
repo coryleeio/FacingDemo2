@@ -106,7 +106,7 @@ namespace Gamepackage
                                     esc.CombatContext = CombatContext.Zapped;
                                     esc.AttackParameters = ExplosionParameters;
                                     esc.AppliedEffects.AddRange(ExplosionParameters.AppliedEffects);
-                                    esc.Targets.Add(target);
+                                    esc.Target = target;
                                     CombatUtil.ApplyEntityStateChange(esc);
                                 }
                             }

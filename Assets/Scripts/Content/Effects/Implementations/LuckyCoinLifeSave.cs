@@ -22,19 +22,18 @@ namespace Gamepackage
 
         public override bool CanAffectIncomingAttack(EntityStateChange ctx)
         {
-            if (ctx.Targets.Count > 1)
+            if (ctx.Target == null)
             {
                 return false;
             }
-            var target = ctx.Targets[0];
-            var item = target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
+            var item = ctx.Target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
             return item != null;
         }
 
-        public override EntityStateChange AffectIncomingAttackEffects(EntityStateChange ctx)
+        public override EntityStateChange CalculateAffectIncomingAttackEffects(EntityStateChange ctx)
         {
-            var target = ctx.Targets[0];
-            var isLethal = target.Body.CurrentHealth - ctx.Damage <= 0;
+            var target = ctx.Target;
+            var isLethal = target.Body.CurrentHealth - ctx.HealthChange <= 0;
             if (isLethal && MathUtil.ChanceToOccur(50))
             {
                 var item = target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);

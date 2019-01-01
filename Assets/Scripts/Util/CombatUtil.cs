@@ -30,20 +30,17 @@ namespace Gamepackage
 
         public static void ShowMessages(EntityStateChange result)
         {
-            foreach (var target in result.Targets)
+            foreach (var msg in result.LogMessages)
             {
-                foreach (var msg in result.LogMessages)
-                {
-                    Context.UIController.TextLog.AddText(msg);
-                }
-                foreach (var msg in result.LateMessages)
-                {
-                    Context.UIController.TextLog.AddText(msg);
-                }
-                foreach (var msg in result.FloatingTextMessage)
-                {
-                    Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(target.Position));
-                }
+                Context.UIController.TextLog.AddText(msg);
+            }
+            foreach (var msg in result.LateMessages)
+            {
+                Context.UIController.TextLog.AddText(msg);
+            }
+            foreach (var msg in result.FloatingTextMessage)
+            {
+                Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(result.Target.Position));
             }
             // Because in some circumstances this can be caused twice, clear the buffer.
             result.LogMessages.Clear();
@@ -53,189 +50,168 @@ namespace Gamepackage
 
         public static void ApplyEntityStateChange(EntityStateChange result)
         {
-            Assert.IsNotNull(result.Targets);
+            Assert.IsNotNull(result.Target);
             Assert.IsNotNull(result.AppliedEffects);
-            
+            result.Resolve();
+            var target = result.Target;
 
-
-            foreach (var target in result.Targets)
+            Assert.IsNotNull(target);
+            if (result.Source != null)
             {
-                Assert.IsNotNull(target);
-                if (result.Source != null)
+                var newFacingDirection = MathUtil.RelativeDirection(target.Position, result.Source.Position);
+                if (target.View != null && target.View.SkeletonAnimation != null)
                 {
-                    var newFacingDirection = MathUtil.RelativeDirection(target.Position, result.Source.Position);
+                    var skeletonAnimation = target.View.SkeletonAnimation;
+                    skeletonAnimation.AnimationState.ClearTracks();
+                    skeletonAnimation.Skeleton.SetToSetupPose();
+                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.GetHit, newFacingDirection), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newFacingDirection), true, 0.0f);
+                }
+            }
+            if (result.AttackParameters != null && result.AttackParameters.DamageType == DamageTypes.NOT_SET)
+            {
+                throw new NotImplementedException("You forgot to set the damage type on this attack");
+            }
+
+            if (!target.IsCombatant)
+            {
+                throw new NotImplementedException("Cannot deal damage to non combatants");
+            }
+
+            if (target.Body.CurrentHealth <= 0)
+            {
+                // if you keep hitting him he doesn't get dead-er..
+                return;
+            }
+
+            var sourceName = "";
+            if (result.Source != null)
+            {
+                sourceName = result.Source.Name;
+            }
+            var targetName = target.Name;
+
+            if (result.WasShortCircuited)
+            {
+                result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, result.HealthChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+            }
+            else
+            {
+                if (result.AttackParameters != null && result.HealthChange != 0)
+                {
+                    result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, result.HealthChange < 0 ? result.HealthChange * -1 : result.HealthChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                    target.Body.CurrentHealth = target.Body.CurrentHealth - result.HealthChange;
+
+                    var healthChangeDisplay = result.HealthChange > 0 ? "-" : "+";
+                    healthChangeDisplay += Math.Abs(result.HealthChange).ToString();
+                    Color healthChangeColor = Color.black;
+
+                    if (target.IsPlayer)
+                    {
+                        if (result.HealthChange > 0)
+                        {
+                            // Damage to player
+                            healthChangeColor = Color.red;
+                        }
+                        else
+                        {
+                            // Healing to player
+                            healthChangeColor = Color.green;
+                        }
+                    }
+                    else
+                    {
+                        if (result.HealthChange > 0)
+                        {
+                            // Damage to NPC
+                            healthChangeColor = Color.magenta;
+                        }
+                        else
+                        {
+                            // Healing to NPC
+                            healthChangeColor = Color.blue;
+                        }
+                    }
+
+                    result.FloatingTextMessage.AddLast(new FloatingTextMessage()
+                    {
+                        Message = string.Format("{0}", healthChangeDisplay),
+                        Color = healthChangeColor,
+                        target = target,
+                    });
+
+                    // Go ahead and show messages so that onApply messages appear in the correct order
+                    // onapply lacks a combat context so its messages appear immediately
+                    // We do this here so that the messages appear before the effect messages
+                    ShowMessages(result);
+                }
+
+                HandleAppliedEffects(result);
+                HandleRemovedEffects(result);
+                CombatUtil.CapAttributes(target);
+
+                if (target.Body.CurrentHealth <= 0)
+                {
                     if (target.View != null && target.View.SkeletonAnimation != null)
                     {
                         var skeletonAnimation = target.View.SkeletonAnimation;
                         skeletonAnimation.AnimationState.ClearTracks();
                         skeletonAnimation.Skeleton.SetToSetupPose();
-                        skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.GetHit, newFacingDirection), false);
-                        skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newFacingDirection), true, 0.0f);
+                        skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.FallDown, target.Direction), false);
                     }
-                }
-                if (result.AttackParameters != null && result.AttackParameters.DamageType == DamageTypes.NOT_SET)
-                {
-                    throw new NotImplementedException("You forgot to set the damage type on this attack");
-                }
-
-                if (!target.IsCombatant)
-                {
-                    throw new NotImplementedException("Cannot deal damage to non combatants");
-                }
-                if (target.Body.CurrentHealth <= 0)
-                {
-                    // if you keep hitting him he doesn't get dead-er..
-                    continue;
-                }
-
-                var heathChange = 0;
-                if (result.AttackParameters != null)
-                {
-                    for (var numDyeRolled = 0; numDyeRolled < result.AttackParameters.DyeNumber; numDyeRolled++)
+                    result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                     {
-                        heathChange += UnityEngine.Random.Range(1, result.AttackParameters.DyeSize + 1);
-                    }
-                    heathChange += result.AttackParameters.Bonus;
+                        Message = string.Format("Dead!", result.HealthChange),
+                        Color = Color.black,
+                        target = target,
+                    });
+                    result.LogMessages.AddLast(string.Format("{0} has been slain!", targetName));
+                    target.Name = string.Format("( Corpse ) {0}", target.Name);
+                    target.Body.IsDead = true;
+                    target.Body.DeadForTurns = 0;
+                    Context.EntitySystem.MarkAsDead(target);
+                    target.Behaviour = null;
+                    var game = Context.GameStateManager.Game;
+                    var level = game.CurrentLevel;
 
-                    if(result.AttackParameters.DamageType == DamageTypes.HEALING)
+                    foreach (var pair in target.Inventory.EquippedItemBySlot)
                     {
-                        heathChange *= -1;
+                        var item = pair.Value;
+                        foreach (var effect in item.Effects)
+                        {
+                            effect.RemovePersistantVisualEffects(target);
+                        }
                     }
-                    result.Damage = heathChange;
+
+                    if (target.BlocksPathing)
+                    {
+                        Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
+                        target.BlocksPathing = false;
+                    }
+
+                    if (target.View.ViewGameObject != null)
+                    {
+                        target.View.ViewGameObject.AddComponent<DeathAnimation>();
+
+                    }
+
+                    if (target.Inventory.HasAnyItems)
+                    {
+                        target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
+                        Context.ViewFactory.BuildView(target, false);
+                    }
+                    if (!target.IsPlayer)
+                    {
+                        game.MonstersKilled++;
+                    }
                 }
 
-                HandleModifyOutgoingAttack(result);
-                HandleModifyIncomingAttack(result);
-
-                var sourceName = "";
-                if (result.Source != null)
+                if (target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)
                 {
-                    sourceName = result.Source.Name;
+                    Context.UIController.Refresh();
                 }
-                var targetName = target.Name;
-
-                if (result.WasShortCircuited)
-                {
-                    result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, heathChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
-                }
-                else
-                {
-                    if (result.AttackParameters != null && heathChange != 0)
-                    {
-                        result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, heathChange < 0 ? heathChange * -1 : heathChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
-                        target.Body.CurrentHealth = target.Body.CurrentHealth - heathChange;
-
-                        var healthChangeDisplay = heathChange > 0 ? "-" : "+";
-                        healthChangeDisplay += Math.Abs(heathChange).ToString();
-                        Color healthChangeColor = Color.black;
-
-                        if(target.IsPlayer)
-                        {
-                            if ( heathChange > 0)
-                            {
-                                // Damage to player
-                                healthChangeColor = Color.red;
-                            }
-                            else
-                            {
-                                // Healing to player
-                                healthChangeColor = Color.green;
-                            }
-                        }
-                        else
-                        {
-                            if (heathChange > 0)
-                            {
-                                // Damage to NPC
-                                healthChangeColor = Color.magenta;
-                            }
-                            else
-                            {
-                                // Healing to NPC
-                                healthChangeColor = Color.blue;
-                            }
-                        }
-
-                        result.FloatingTextMessage.AddLast(new FloatingTextMessage()
-                        {
-                            Message = string.Format("{0}", healthChangeDisplay),
-                            Color = healthChangeColor,
-                            target = target,
-                        });
-
-                        // Go ahead and show messages so that onApply messages appear in the correct order
-                        // onapply lacks a combat context so its messages appear immediately
-                        // We do this here so that the messages appear before the effect messages
-                        ShowMessages(result);
-                    }
-
-                    HandleAppliedEffects(result);
-                    HandleRemovedEffects(result);
-                    CombatUtil.CapAttributes(target);
-
-                    if (target.Body.CurrentHealth <= 0)
-                    {
-                        if (target.View != null && target.View.SkeletonAnimation != null)
-                        {
-                            var skeletonAnimation = target.View.SkeletonAnimation;
-                            skeletonAnimation.AnimationState.ClearTracks();
-                            skeletonAnimation.Skeleton.SetToSetupPose();
-                            skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.FallDown, target.Direction), false);
-                        }
-                        result.FloatingTextMessage.AddLast(new FloatingTextMessage()
-                        {
-                            Message = string.Format("Dead!", heathChange),
-                            Color = Color.black,
-                            target = target,
-                        });
-                        result.LogMessages.AddLast(string.Format("{0} has been slain!", targetName));
-                        target.Name = string.Format("( Corpse ) {0}", target.Name);
-                        target.Body.IsDead = true;
-                        target.Body.DeadForTurns = 0;
-                        Context.EntitySystem.MarkAsDead(target);
-                        target.Behaviour = null;
-                        var game = Context.GameStateManager.Game;
-                        var level = game.CurrentLevel;
-
-                        foreach (var pair in target.Inventory.EquippedItemBySlot)
-                        {
-                            var item = pair.Value;
-                            foreach (var effect in item.Effects)
-                            {
-                                effect.RemovePersistantVisualEffects(target);
-                            }
-                        }
-
-                        if (target.BlocksPathing)
-                        {
-                            Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
-                            target.BlocksPathing = false;
-                        }
-
-                        if (target.View.ViewGameObject != null)
-                        {
-                            target.View.ViewGameObject.AddComponent<DeathAnimation>();
-
-                        }
-
-                        if (target.Inventory.HasAnyItems)
-                        {
-                            target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
-                            Context.ViewFactory.BuildView(target, false);
-                        }
-                        if (!target.IsPlayer)
-                        {
-                            game.MonstersKilled++;
-                        }
-                    }
-
-                    if (target.IsPlayer && Context.UIController.InventoryWindow.isActiveAndEnabled)
-                    {
-                        Context.UIController.Refresh();
-                    }
-                }
-                ShowMessages(result);
             }
+            ShowMessages(result);
         }
 
         public static List<Effect> GetEntityEffectsByType(Entity entity, Predicate<Effect> filter = null)
@@ -331,10 +307,7 @@ namespace Gamepackage
             {
                 foreach (var effect in ctx.RemovedEffects)
                 {
-                    foreach (var target in ctx.Targets)
-                    {
-                        RemoveEntityEffects(target, ctx.RemovedEffects);
-                    }
+                    RemoveEntityEffects(ctx.Target, ctx.RemovedEffects);
                 }
             }
         }
@@ -366,41 +339,7 @@ namespace Gamepackage
                     }
                     else
                     {
-                        foreach (var target in ctx.Targets)
-                        {
-                            effect.HandleStacking(target);
-                        }
-                    }
-                }
-            }
-        }
-        
-
-        private static void HandleModifyOutgoingAttack(EntityStateChange result)
-        {
-            if(result.Source != null)
-            {
-                var sourceEffects = result.Source.GetEffects();
-                foreach (var effect in sourceEffects)
-                {
-                    if (effect.CanAffecOutgoingAttack(result))
-                    {
-                        effect.AffectOutgoingAttack(result);
-                    }
-                }
-            }
-        }
-
-        private static void HandleModifyIncomingAttack(EntityStateChange result)
-        {
-            foreach (var target in result.Targets)
-            {
-                var targetEffects = target.GetEffects();
-                foreach (var effect in targetEffects)
-                {
-                    if (effect.CanAffectIncomingAttack(result))
-                    {
-                        effect.AffectIncomingAttackEffects(result);
+                        effect.HandleStacking(ctx.Target);
                     }
                 }
             }
@@ -415,7 +354,7 @@ namespace Gamepackage
                 {
                     var attack = new EntityStateChange();
                     attack.Source = potentialTrigger;
-                    attack.Targets.Add(Source);
+                    attack.Target = Source;
                     effect.TriggerOnStep(attack);
                 }
             }

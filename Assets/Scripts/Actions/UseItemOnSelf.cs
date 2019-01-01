@@ -32,7 +32,7 @@ namespace Gamepackage
             var stateChange = new EntityStateChange();
             stateChange.CombatContext = CombatContext.OnUse;
             stateChange.Source = Source;
-            stateChange.Targets.Add(Source);
+            stateChange.Target = Source;
             stateChange.AppliedEffects.AddRange(Item.Effects);
 
             if(Item.OnUseText != null)

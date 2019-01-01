@@ -82,16 +82,16 @@ namespace Gamepackage
         {
             return false;
         }
-        public virtual EntityStateChange AffectIncomingAttackEffects(EntityStateChange ctx)
+        public virtual EntityStateChange CalculateAffectIncomingAttackEffects(EntityStateChange ctx)
         {
             return ctx;
         }
 
-        public virtual bool CanAffecOutgoingAttack(EntityStateChange abilityTriggerContext)
+        public virtual bool CanAffectOutgoingAttack(EntityStateChange abilityTriggerContext)
         {
             return false;
         }
-        public virtual EntityStateChange AffectOutgoingAttack(EntityStateChange ctx)
+        public virtual EntityStateChange CalculateAffectOutgoingAttack(EntityStateChange ctx)
         {
             return ctx;
         }
