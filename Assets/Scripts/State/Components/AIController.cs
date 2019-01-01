@@ -16,11 +16,13 @@ namespace Gamepackage
             }
         }
 
-        [JsonIgnore]
-        public List<Point> PointsAroundTarget = new List<Point>();
-
-        [JsonIgnore]
-        public List<Point> PointsAroundMe = new List<Point>();
+        private static List<CombatContext> AIRelevantCombatContexts = new List<CombatContext>()
+        {
+            CombatContext.Melee,
+            CombatContext.Zapped,
+            CombatContext.Thrown,
+            CombatContext.Ranged,
+        };
 
         public int PathsExpected = 0;
         public int PathsReturned = 0;
@@ -37,54 +39,63 @@ namespace Gamepackage
 
             if (target == null)
             {
-                DefaultBehaviour();
+                EnqueueDefaultBehaviour();
                 return;
             }
 
             if (!Context.VisibilitySystem.CanSee(level, entity, target))
             {
-                DefaultBehaviour();
+                EnqueueDefaultBehaviour();
             }
             else
             {
-                var meleeCapabilities = capabilities[CombatContext.Melee];
-                if (meleeCapabilities.CanPerform && meleeCapabilities.IsInRange(target))
-                {
-                    var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Melee, direction, target.Position);
-                    NextAction = attack;
-                    return;
-                }
-                var ZappedCapabilities = capabilities[CombatContext.Zapped];
-                if (ZappedCapabilities.CanPerform && ZappedCapabilities.IsInRange(target) && ZappedCapabilities.HasAClearShot(target.Position))
-                {
-                    var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Zapped, direction, target.Position);
-                    NextAction = attack;
-                    return;
-                }
-                var thrownCapabilities = capabilities[CombatContext.Thrown];
-                if (thrownCapabilities.CanPerform && thrownCapabilities.IsInRange(target) && thrownCapabilities.HasAClearShot(target.Position) && thrownCapabilities.MainHand != null && thrownCapabilities.MainHand.NumberOfItems > 1)
-                {
-                    var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Thrown, direction, target.Position);
-                    NextAction = attack;
-                    return;
-                }
-                var rangedCapabilities = capabilities[CombatContext.Ranged];
-                if (rangedCapabilities.CanPerform && rangedCapabilities.IsInRange(target) && rangedCapabilities.HasAClearShot(target.Position))
-                {
-                    var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-                    var attack = new Attack(capabilities, CombatContext.Ranged, direction, target.Position);
-                    NextAction = attack;
-                    return;
-                }
+                EnqueueAttackOrApproach(capabilities, target);
+            }
+        }
 
-                else
+        private void EnqueueAttackOrApproach(AttackCapabilities capabilities, Entity target)
+        {
+            foreach (var combatContext in AIRelevantCombatContexts)
+            {
+                if (AbleAndWillingToPerformAttackTypeOnTarget(capabilities, combatContext, target))
                 {
-                    Context.Application.StartCoroutine(MoveToward(target.Position));
+                    EnqueueAttackType(capabilities, combatContext, target);
                 }
             }
+
+            if (NextAction == null) // was never able to resolve a thing to do
+            {
+                Context.Application.StartCoroutine(MoveToward(target.Position));
+            }
+        }
+
+        private void EnqueueAttackType(AttackCapabilities capabilities, CombatContext combatContext, Entity target)
+        {
+            var capability = capabilities[combatContext];
+            var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
+            var attack = new Attack(capabilities, combatContext, direction, target.Position);
+            NextAction = attack;
+        }
+
+        public bool AbleAndWillingToPerformAttackTypeOnTarget(AttackCapabilities capabilities, CombatContext combatContext, Entity target)
+        {
+            var capability = capabilities[combatContext];
+            var isAbleToPerform = capability.CanPerform && capability.IsInRange(target) && capability.HasAClearShot(target.Position);
+
+            if (!isAbleToPerform)
+            {
+                return isAbleToPerform;
+            }
+
+            // There are certain things the AI CAN do, but it should NOT do.
+            // those go here.
+            var isWillingToPerform = true;
+            if (combatContext == CombatContext.Thrown)
+            {
+                // Dont throw my only weapon
+                isWillingToPerform = capability.MainHand.NumberOfItems > 1;
+            }
+            return isAbleToPerform && isWillingToPerform;
         }
 
         public static NearestNeighbour<Entity> NearestTargets(Entity entity)
@@ -129,7 +140,7 @@ namespace Gamepackage
             return null;
         }
 
-        private void DefaultBehaviour()
+        private void EnqueueDefaultBehaviour()
         {
             if (entity.Behaviour.Team == Team.PLAYER)
             {
