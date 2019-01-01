@@ -25,14 +25,14 @@ namespace Gamepackage
             }
         }
 
-        public bool CanApply(EntityStateChange ctx)
+        public bool CanApply(ActionOutcome outcome)
         {
-            return ctx.Target != null && ValidCombatContextsForApplication.Contains(ctx.CombatContext);
+            return outcome.Target != null && ValidCombatContextsForApplication.Contains(outcome.CombatContext);
         }
 
-        public EntityStateChange Apply(EntityStateChange usageContext)
+        public ActionOutcome Apply(ActionOutcome usageContext)
         {
-            EntityStateChange applyToTargetContext = new EntityStateChange();
+            ActionOutcome applyToTargetContext = new ActionOutcome();
             applyToTargetContext.Target = usageContext.Target;
             applyToTargetContext.AppliedEffects.Add(EffectFactory.Build(EffectAppliedId));
             CombatUtil.ApplyEntityStateChange(applyToTargetContext);

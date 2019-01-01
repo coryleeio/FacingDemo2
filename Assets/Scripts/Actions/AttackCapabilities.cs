@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace Gamepackage
 {
@@ -222,9 +221,9 @@ namespace Gamepackage
             // If we fall through here we aren't dealing with a attack
         }
 
-        public EntityStateChange PerformOnTarget(Entity target)
+        public ActionOutcome PerformOnTarget(Entity target)
         {
-            var stateChange = new EntityStateChange
+            var stateChange = new ActionOutcome
             {
                 Source = Source,
                 CombatContext = CombatContext,

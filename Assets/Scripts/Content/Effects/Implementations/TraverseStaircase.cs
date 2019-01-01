@@ -34,31 +34,31 @@ namespace Gamepackage
             return true;
         }
 
-        public override EntityStateChange TriggerOnPress(EntityStateChange ctx)
+        public override ActionOutcome TriggerOnPress(ActionOutcome outcome)
         {
             var foundPlayer = false;
-            if (ctx.Target != null && ctx.Target.IsPlayer)
+            if (outcome.Target != null && outcome.Target.IsPlayer)
             {
                 foundPlayer = true;
             }
             if (!foundPlayer)
             {
-                return ctx;
+                return outcome;
             }
 
-            var Parameters = ctx.Source.Trigger.TriggerParameters;
+            var Parameters = outcome.Source.Trigger.TriggerParameters;
             var levelId = Convert.ToInt32(Parameters[Params.TARGET_LEVEL_ID.ToString()]);
             var posX = Convert.ToInt32(Parameters[Params.TARGET_POSX.ToString()]);
             var posY = Convert.ToInt32(Parameters[Params.TARGET_POSY.ToString()]);
             var targetIsPlayer = false;
-            if (ctx.Target != null && ctx.Target.IsPlayer)
+            if (outcome.Target != null && outcome.Target.IsPlayer)
             {
                 targetIsPlayer = true;
             }
 
             var realTargets = new List<Entity>
             {
-                ctx.Target
+                outcome.Target
             };
 
             if (targetIsPlayer)
@@ -108,7 +108,7 @@ namespace Gamepackage
                 }
                 Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             }
-            return ctx;
+            return outcome;
         }
     }
 }

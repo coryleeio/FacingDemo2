@@ -28,7 +28,7 @@ namespace Gamepackage
             return entities;
         }
 
-        public static void ShowMessages(EntityStateChange result)
+        public static void ShowMessages(ActionOutcome result)
         {
             foreach (var msg in result.LogMessages)
             {
@@ -48,11 +48,11 @@ namespace Gamepackage
             result.FloatingTextMessage.Clear();
         }
 
-        public static void ApplyEntityStateChange(EntityStateChange result)
+        public static void ApplyEntityStateChange(ActionOutcome result)
         {
             Assert.IsNotNull(result.Target);
             Assert.IsNotNull(result.AppliedEffects);
-            result.Resolve();
+            result.Resolve(); // will not recalculate
             var target = result.Target;
 
             Assert.IsNotNull(target);
@@ -301,13 +301,13 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleRemovedEffects(EntityStateChange ctx)
+        private static void HandleRemovedEffects(ActionOutcome outcome)
         {
-            if (!ctx.WasShortCircuited)
+            if (!outcome.WasShortCircuited)
             {
-                foreach (var effect in ctx.RemovedEffects)
+                foreach (var effect in outcome.RemovedEffects)
                 {
-                    RemoveEntityEffects(ctx.Target, ctx.RemovedEffects);
+                    RemoveEntityEffects(outcome.Target, outcome.RemovedEffects);
                 }
             }
         }
@@ -323,23 +323,23 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleAppliedEffects(EntityStateChange ctx)
+        private static void HandleAppliedEffects(ActionOutcome outcome)
         {
-            if (!ctx.WasShortCircuited)
+            if (!outcome.WasShortCircuited)
             {
-                foreach (var effect in ctx.AppliedEffects)
+                foreach (var effect in outcome.AppliedEffects)
                 {
                     if (effect is AppliedEffect)
                     {
                         var appliedEffect = (AppliedEffect)effect;
-                        if (appliedEffect.CanApply(ctx))
+                        if (appliedEffect.CanApply(outcome))
                         {
-                            appliedEffect.Apply(ctx);
+                            appliedEffect.Apply(outcome);
                         }
                     }
                     else
                     {
-                        effect.HandleStacking(ctx.Target);
+                        effect.HandleStacking(outcome.Target);
                     }
                 }
             }
@@ -352,7 +352,7 @@ namespace Gamepackage
                 var abilities = potentialTrigger.Trigger.Effects;
                 foreach (var effect in abilities)
                 {
-                    var attack = new EntityStateChange();
+                    var attack = new ActionOutcome();
                     attack.Source = potentialTrigger;
                     attack.Target = Source;
                     effect.TriggerOnStep(attack);

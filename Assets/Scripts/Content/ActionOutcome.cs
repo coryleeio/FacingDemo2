@@ -3,7 +3,10 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class EntityStateChange
+    // Outcome of a given single action applied to a single target
+    // this may be a theoretical outcome, but the calculation method should be the same.
+    // actual damage and effects applied are calculated when resolve() is called.
+    public class ActionOutcome
     {
         public Entity Source;
         public Entity Target;
@@ -25,13 +28,15 @@ namespace Gamepackage
         public LinkedList<string> LateMessages = new LinkedList<string>();
         public LinkedList<FloatingTextMessage> FloatingTextMessage = new LinkedList<FloatingTextMessage>();
 
-        public void ShortCircuit()
+        public void StopThisAction()
         {
             HealthChange = 0;
             WasShortCircuited = true;
             LogMessages.Clear();
             LateMessages.Clear();
             FloatingTextMessage.Clear();
+            AppliedEffects.Clear();
+            RemovedEffects.Clear();
         }
 
         public void Resolve()

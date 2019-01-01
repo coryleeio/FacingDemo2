@@ -101,7 +101,7 @@ namespace Gamepackage
                             {
                                 if(target.IsCombatant)
                                 {
-                                    var esc = new EntityStateChange();
+                                    var esc = new ActionOutcome();
                                     esc.Source = Source;
                                     esc.CombatContext = CombatContext.Zapped;
                                     esc.AttackParameters = ExplosionParameters;

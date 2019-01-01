@@ -78,31 +78,31 @@ namespace Gamepackage
 
         }
 
-        public virtual bool CanAffectIncomingAttack(EntityStateChange abilityTriggerContext)
+        public virtual bool CanAffectIncomingAttack(ActionOutcome abilityTriggerContext)
         {
             return false;
         }
-        public virtual EntityStateChange CalculateAffectIncomingAttackEffects(EntityStateChange ctx)
+        public virtual ActionOutcome CalculateAffectIncomingAttackEffects(ActionOutcome outcome)
         {
-            return ctx;
+            return outcome;
         }
 
-        public virtual bool CanAffectOutgoingAttack(EntityStateChange abilityTriggerContext)
+        public virtual bool CanAffectOutgoingAttack(ActionOutcome abilityTriggerContext)
         {
             return false;
         }
-        public virtual EntityStateChange CalculateAffectOutgoingAttack(EntityStateChange ctx)
+        public virtual ActionOutcome CalculateAffectOutgoingAttack(ActionOutcome outcome)
         {
-            return ctx;
+            return outcome;
         }
 
         public virtual bool CanTriggerOnStep()
         {
             return false;
         }
-        public virtual EntityStateChange TriggerOnStep(EntityStateChange ctx)
+        public virtual ActionOutcome TriggerOnStep(ActionOutcome outcome)
         {
-            return ctx;
+            return outcome;
         }
 
         public virtual bool CanTriggerOnPress()
@@ -110,9 +110,9 @@ namespace Gamepackage
             return false;
         }
 
-        public virtual EntityStateChange TriggerOnPress(EntityStateChange ctx)
+        public virtual ActionOutcome TriggerOnPress(ActionOutcome outcome)
         {
-            return ctx;
+            return outcome;
         }
     }
 }

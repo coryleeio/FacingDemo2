@@ -22,12 +22,12 @@
         {
             base.OnApply(owner);
             Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.apply.message".Localize(), owner.Name));
-            EntityStateChange ctx = new EntityStateChange();
-            ctx.Source = owner;
-            ctx.Target = owner;
+            ActionOutcome outcome = new ActionOutcome();
+            outcome.Source = owner;
+            outcome.Target = owner;
             var effectsToAttemptRemoval = CombatUtil.GetEntityEffectsByType(owner, (effectInQuestion) => { return effectInQuestion is Poison; });
-            ctx.RemovedEffects.AddRange(effectsToAttemptRemoval);
-            CombatUtil.ApplyEntityStateChange(ctx);
+            outcome.RemovedEffects.AddRange(effectsToAttemptRemoval);
+            CombatUtil.ApplyEntityStateChange(outcome);
         }
 
         public override void OnRemove(Entity owner)
@@ -41,24 +41,24 @@
             StackingStrategies.AddDuration(entity, this);
         }
 
-        public override bool CanAffectIncomingAttack(EntityStateChange ctx)
+        public override bool CanAffectIncomingAttack(ActionOutcome outcome)
         {
             return true;
         }
 
-        public override EntityStateChange CalculateAffectIncomingAttackEffects(EntityStateChange ctx)
+        public override ActionOutcome CalculateAffectIncomingAttackEffects(ActionOutcome outcome)
         {
-            var effectsBlocked = ctx.AppliedEffects.FindAll((effectInQuestion) => { return effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON || effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON; });
+            var effectsBlocked = outcome.AppliedEffects.FindAll((effectInQuestion) => { return effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON || effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON; });
 
             foreach(var effect in effectsBlocked)
             {
-                ctx.AppliedEffects.Remove(effect);
+                outcome.AppliedEffects.Remove(effect);
             }
             if (effectsBlocked.Count > 0)
             {
-                ctx.LateMessages.AddLast(string.Format("effect.poison.immunity.block.message".Localize(), ctx.Target.Name));
+                outcome.LateMessages.AddLast(string.Format("effect.poison.immunity.block.message".Localize(), outcome.Target.Name));
             }
-            return ctx;
+            return outcome;
         }
     }
 }

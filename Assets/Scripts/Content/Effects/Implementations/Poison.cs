@@ -35,7 +35,7 @@
         public override void Tick(Entity entity)
         {
             base.Tick(entity);
-            EntityStateChange ctx = new EntityStateChange
+            ActionOutcome outcome = new ActionOutcome
             {
                 AttackParameters = new AttackParameters
                 {
@@ -46,8 +46,8 @@
                     Bonus = 0
                 }
             };
-            ctx.Target = entity;
-            CombatUtil.ApplyEntityStateChange(ctx);
+            outcome.Target = entity;
+            CombatUtil.ApplyEntityStateChange(outcome);
         }
 
         public override void HandleStacking(Entity entity)

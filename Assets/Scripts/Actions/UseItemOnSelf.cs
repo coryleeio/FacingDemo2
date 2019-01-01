@@ -29,7 +29,7 @@ namespace Gamepackage
         {
             base.Enter();
 
-            var stateChange = new EntityStateChange();
+            var stateChange = new ActionOutcome();
             stateChange.CombatContext = CombatContext.OnUse;
             stateChange.Source = Source;
             stateChange.Target = Source;

@@ -155,14 +155,14 @@ namespace Gamepackage
 
         private static Point CalculateEndpointOfSkillshot(Point position, CombatContextCapability capability, Direction direction)
         {
-            var pointsInLine = MathUtil.LineInDirection(position, direction, capability.Range + 1);
+            var pointsInLine = MathUtil.LineInDirection(position, direction, capability.Range);
             var numberOfThingsCanPierce = capability.NumberOfTargetsToPierce;
             var numberOfThingsPierced = 0;
 
             var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var grid = level.Grid;
-
+            var previouslyTraversedPoint = position;
             foreach (var point in pointsInLine)
             {
                 numberOfThingsPierced += grid[point].EntitiesInPosition.Count;
@@ -174,6 +174,7 @@ namespace Gamepackage
                 {
                     return point;
                 }
+                previouslyTraversedPoint = point;
             }
             return pointsInLine[pointsInLine.Count - 1];
         }
@@ -526,10 +527,10 @@ namespace Gamepackage
 
         private void QueueTriggerEffect(Entity triggerEntity, Effect triggerEffect, Entity player)
         {
-            EntityStateChange ctx = new EntityStateChange();
-            ctx.Source = triggerEntity;
-            ctx.Target = player;
-            triggerEffect.TriggerOnPress(ctx);
+            ActionOutcome outcome = new ActionOutcome();
+            outcome.Source = triggerEntity;
+            outcome.Target = player;
+            triggerEffect.TriggerOnPress(outcome);
         }
 
         private void QueueWait(Level level, Entity player)
