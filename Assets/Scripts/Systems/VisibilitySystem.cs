@@ -46,7 +46,7 @@ namespace Gamepackage
             }
 
             _mapSize = Context.GameStateManager.Game.CurrentLevel.BoundingBox.Width;
-
+            BuildFloodFillCache();
             _updatedVisibilityGrid = new bool[_mapSize, _mapSize];
             var textureX = _mapSize * _numberOfPixelsPerTile;
             var textureY = _mapSize * _numberOfPixelsPerTile;
@@ -63,6 +63,26 @@ namespace Gamepackage
             SetEntireTextureToHiddenColor();
             PaintInitialVisibility();
             _texture.Apply();
+        }
+
+        private void BuildFloodFillCache()
+        {
+            var level = Context.GameStateManager.Game.CurrentLevel;
+            for (var x = 0; x < _mapSize; x++)
+            {
+                for (var y = 0; y < _mapSize; y++)
+                {
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (!level.Grid[x, y].CachedFloodFills.ContainsKey(i))
+                        {
+                            level.Grid[x, y].CachedFloodFills[i] = new List<Point>();
+                        }
+                        List<Point> aggregate = level.Grid[x, y].CachedFloodFills[i];
+                        MathUtil.FloodFill(new Point(x, y), i, ref aggregate, MathUtil.FloodFillType.Orthogonal, (pointOnLevel) => { return level.BoundingBox.Contains(pointOnLevel) && level.Grid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; });
+                    }
+                }
+            }
         }
 
         private void PaintInitialVisibility()
@@ -213,9 +233,8 @@ namespace Gamepackage
 
         public List<Point> PointsVisibleFrom(Level level, Point start)
         {
-            var visiblePoints = new List<Point>();
-            MathUtil.FloodFill(start, 5, ref visiblePoints, MathUtil.FloodFillType.Orthogonal, (pointOnLevel) => { return level.BoundingBox.Contains(pointOnLevel) && level.Grid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; });
-            return visiblePoints;
+            var radius = 5;
+            return level.Grid[start].CachedFloodFills[radius];
         }
 
         public bool CanSee(Level level, Entity start, Entity end)

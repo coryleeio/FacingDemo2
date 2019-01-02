@@ -21,26 +21,6 @@ namespace Gamepackage
         private CombatContext CombatContext;
         private Direction Direction;
 
-        private AttackCapability CombatContextCapability
-        {
-            get
-            {
-                return AttackCapabilities[CombatContext];
-            }
-        }
-
-        private ProjectileAppearance ProjectileAppearance
-        {
-            get
-            {
-                if(CombatContextCapability != null && CombatContextCapability.AttackParameters != null)
-                {
-                    return CombatContextCapability.AttackParameters.ProjectileAppearance;
-                }
-                return null;
-            }
-        }
-
         // Book keeping values
         private float ElapsedTime = 0.0f;
         private GameObject ProjectileView;
@@ -53,6 +33,10 @@ namespace Gamepackage
         private Vector2 LerpCurrentNextPosition;
         private Point AimedTarget;
         private bool isDoneInternal = false;
+        private AttackParameters AttackParameters;
+        private ExplosionParameters ExplosionParameters;
+        private AttackCapability CombatContextCapability;
+        private ProjectileAppearance ProjectileAppearance;
 
         private Attack() { }
 
@@ -62,6 +46,17 @@ namespace Gamepackage
             this.CombatContext = combatContext;
             this.Direction = direction;
             this.AimedTarget = aimedTarget;
+
+            this.CombatContextCapability = attackCapabilities[CombatContext];
+            if (CombatContextCapability != null)
+            {
+                this.AttackParameters = CombatContextCapability.AttackParameters;
+            }
+            if (AttackParameters != null)
+            {
+                ProjectileAppearance = CombatContextCapability.AttackParameters.ProjectileAppearance;
+                ExplosionParameters = CombatContextCapability.AttackParameters.ExplosionParameters;
+            }
         }
 
         public override int TimeCost
@@ -141,7 +136,7 @@ namespace Gamepackage
             {
                 NextGridPosition = SourceGridPosition + (MathUtil.OffsetForDirection(Direction) * RangeTraversed);
             }
-            if(CombatContextCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
+            if (CombatContextCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
             {
                 NextGridPosition = AimedTarget;
             }
@@ -157,7 +152,7 @@ namespace Gamepackage
         public override void Do()
         {
             base.Do();
-            if(isDoneInternal)
+            if (isDoneInternal)
             {
                 // if this is not here, when applying spells to individual targets directly without the line fire
                 // you will double tap them as do will be called once more than you will expect.
@@ -212,7 +207,7 @@ namespace Gamepackage
                             break;
                         }
                     }
-                    if(CombatContextCapability.AttackTargetingType != AttackTargetingType.SelectTarget)
+                    if (CombatContextCapability.AttackTargetingType != AttackTargetingType.SelectTarget)
                     {
                         MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
                     }
@@ -234,9 +229,9 @@ namespace Gamepackage
                         skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
                     }
                     isDoneInternal = true;
-                    if (CombatContextCapability.AttackParameters.ExplosionParameters != null)
+                    if (ExplosionParameters != null)
                     {
-                        var explosionAction = new Explosion(CombatContextCapability.Source, CombatContextCapability.AttackParameters, NextGridPosition);
+                        var explosionAction = new Explosion(CombatContextCapability.Source, AttackParameters, NextGridPosition);
                         var currentStep = Context.FlowSystem.Steps.First.Value;
                         var currentAction = currentStep.Actions.AddAfter(currentStep.Actions.First, explosionAction);
                     }
@@ -266,8 +261,7 @@ namespace Gamepackage
         {
             if (CombatContext == CombatContext.Ranged || CombatContext == CombatContext.Thrown)
             {
-                var capability = AttackCapabilities[CombatContext];
-                Item itemBeingLaunched = GetItemBeingLaunched(capability);
+                Item itemBeingLaunched = GetItemBeingLaunched(CombatContextCapability);
                 var shouldSpawnItemOnGround = MathUtil.PercentageChanceEventOccurs(itemBeingLaunched.ChanceToSurviveLaunch);
                 if (shouldSpawnItemOnGround)
                 {
@@ -282,7 +276,7 @@ namespace Gamepackage
                     groundDrop.Inventory.AddItem(itemCopy);
                     Context.ViewFactory.BuildView(groundDrop);
                 }
-                capability.Source.Inventory.ConsumeItem(itemBeingLaunched);
+                CombatContextCapability.Source.Inventory.ConsumeItem(itemBeingLaunched);
             }
 
         }
