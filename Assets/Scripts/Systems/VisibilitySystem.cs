@@ -46,7 +46,7 @@ namespace Gamepackage
             }
 
             _mapSize = Context.GameStateManager.Game.CurrentLevel.BoundingBox.Width;
-            BuildFloodFillCache();
+            BuildFloodFillCaches();
             _updatedVisibilityGrid = new bool[_mapSize, _mapSize];
             var textureX = _mapSize * _numberOfPixelsPerTile;
             var textureY = _mapSize * _numberOfPixelsPerTile;
@@ -65,7 +65,7 @@ namespace Gamepackage
             _texture.Apply();
         }
 
-        private void BuildFloodFillCache()
+        private void BuildFloodFillCaches()
         {
             var level = Context.GameStateManager.Game.CurrentLevel;
             for (var x = 0; x < _mapSize; x++)
@@ -74,12 +74,19 @@ namespace Gamepackage
                 {
                     for (var i = 0; i < 6; i++)
                     {
-                        if (!level.Grid[x, y].CachedFloodFills.ContainsKey(i))
+                        if (!level.Grid[x, y].CachedVisibilityFloodFills.ContainsKey(i))
                         {
-                            level.Grid[x, y].CachedFloodFills[i] = new List<Point>();
+                            level.Grid[x, y].CachedVisibilityFloodFills[i] = new List<Point>();
                         }
-                        List<Point> aggregate = level.Grid[x, y].CachedFloodFills[i];
-                        MathUtil.FloodFill(new Point(x, y), i, ref aggregate, MathUtil.FloodFillType.Orthogonal, (pointOnLevel) => { return level.BoundingBox.Contains(pointOnLevel) && level.Grid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; });
+                        if (!level.Grid[x, y].CachedFloorFloodFills.ContainsKey(i))
+                        {
+                            level.Grid[x, y].CachedFloorFloodFills[i] = new List<Point>();
+                        }
+                        List<Point> visibilityAggregate = level.Grid[x, y].CachedVisibilityFloodFills[i];
+                        MathUtil.FloodFill(new Point(x, y), i, ref visibilityAggregate, MathUtil.FloodFillType.Orthogonal, CombatUtil.VisibleTiles);
+
+                        List<Point> floorAggregate = level.Grid[x, y].CachedFloorFloodFills[i];
+                        MathUtil.FloodFill(new Point(x, y), i, ref floorAggregate, MathUtil.FloodFillType.Surrounding, CombatUtil.FloorTiles);
                     }
                 }
             }
@@ -234,7 +241,7 @@ namespace Gamepackage
         public List<Point> PointsVisibleFrom(Level level, Point start)
         {
             var radius = 5;
-            return level.Grid[start].CachedFloodFills[radius];
+            return level.Grid[start].CachedVisibilityFloodFills[radius];
         }
 
         public bool CanSee(Level level, Entity start, Entity end)

@@ -67,7 +67,7 @@ namespace Gamepackage
             List<Point> outputRange = new List<Point>();
             if (AttackParameters.ExplosionParameters != null)
             {
-                MathUtil.FloodFill(placementPosition, AttackParameters.ExplosionParameters.Radius, ref outputRange, MathUtil.FloodFillType.Surrounding, CombatUtil.FloorTiles);
+                outputRange.AddRange(Context.GameStateManager.Game.CurrentLevel.Grid[placementPosition].CachedFloorFloodFills[AttackParameters.ExplosionParameters.Radius]);
             }
             return outputRange;
         }
@@ -91,7 +91,7 @@ namespace Gamepackage
             }
             else if (AttackTargetingType == AttackTargetingType.SelectTarget)
             {
-                outputRange.AddRange(MathUtil.FloodFill(Source.Position, Range, ref outputRange, MathUtil.FloodFillType.Surrounding));
+                outputRange.AddRange(Context.GameStateManager.Game.CurrentLevel.Grid[Source.Position].CachedFloorFloodFills[Range]);
             }
             else
             {

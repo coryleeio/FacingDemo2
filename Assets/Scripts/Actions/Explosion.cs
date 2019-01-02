@@ -65,6 +65,7 @@ namespace Gamepackage
                 ExplosionAppearance.OnSwingDefinition.Instantiate(Position, Direction.SouthEast);
             }
 
+            // Do a manual floodfill here bc we dont want to floor filter the initial explosion
             MathUtil.FloodFill(Position, Index, ref NextPoints, MathUtil.FloodFillType.Surrounding);
         }
 
@@ -82,7 +83,7 @@ namespace Gamepackage
                 {
                     ElapsedTimeThisTile = 0.0f;
                     Index++;
-                    MathUtil.FloodFill(Position, Index, ref NextPoints, MathUtil.FloodFillType.Surrounding, CombatUtil.FloorTiles);
+                    NextPoints.AddRange(Context.GameStateManager.Game.CurrentLevel.Grid[Position].CachedFloorFloodFills[Index]);
                     foreach(var point in NextPoints)
                     {
                         if (!DonePoints.Contains(point))

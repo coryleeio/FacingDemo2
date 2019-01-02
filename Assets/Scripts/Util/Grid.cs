@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -21,7 +22,9 @@ namespace Gamepackage
 
         public TGrid this[Point p]
         {
-            get { return this._grid[p.X, p.Y]; }
+            get {
+                return this._grid[p.X, p.Y];
+            }
             set { this._grid[p.X, p.Y] = value; }
         }
 
