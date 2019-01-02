@@ -31,7 +31,11 @@ namespace Gamepackage
                 else if (CombatContext == CombatContext.Ranged)
                 {
                     var hasRangedWeapon = hasBody && Source.Inventory != null && MainHand != null && MainHand.CanBeUsedForRanged;
-                    var hasAmmo = Ammo != null && MainHand.AmmoType == Ammo.AmmoType;
+                    var hasAmmo = false;
+                    if (hasRangedWeapon)
+                    {
+                        hasAmmo = Ammo != null && MainHand.AmmoType == Ammo.AmmoType;
+                    }
                     return hasRangedWeapon && hasAmmo;
                 }
                 else if (CombatContext == CombatContext.Thrown)

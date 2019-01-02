@@ -8,11 +8,11 @@ namespace Gamepackage
 {
     public class Behaviour : Component
     {
+        public Team Team;
+        public AIType AI;
         public bool IsDoneThisTurn = false;
         public int TimeAccrued = 0;
-        public Team Team;
         public bool IsThinking = false;
-        public AIType AI;
         public bool IsPlayer;
 
         [JsonIgnore]
@@ -111,7 +111,7 @@ namespace Gamepackage
             NextAction = attack;
         }
 
-        public bool AbleAndWillingToPerformAttackTypeOnTarget(AttackCapabilities capabilities, CombatContext combatContext, Entity target)
+        private bool AbleAndWillingToPerformAttackTypeOnTarget(AttackCapabilities capabilities, CombatContext combatContext, Entity target)
         {
             var capability = capabilities[combatContext];
             var isAbleToPerform = capability.CanPerform && capability.IsInRange(target) && capability.HasAClearShot(target.Position);
@@ -132,7 +132,7 @@ namespace Gamepackage
             return isAbleToPerform && isWillingToPerform;
         }
 
-        public static NearestNeighbour<Entity> NearestTargets(Entity entity)
+        private static NearestNeighbour<Entity> NearestTargets(Entity entity)
         {
             var entitySystem = Context.EntitySystem;
             KDTree<Entity> relevantTree = null;
@@ -193,7 +193,7 @@ namespace Gamepackage
             }
         }
 
-        IEnumerator MoveToward(Point targetPosition)
+        private IEnumerator MoveToward(Point targetPosition)
         {
             NextAction = null;
             PathsReturned = 0;
