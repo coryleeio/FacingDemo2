@@ -59,7 +59,9 @@ namespace Gamepackage
             Assert.IsNotNull(ExplosionAppearance);
             Assert.IsNotNull(Position);
             Assert.IsTrue(ExplosionParameters.Radius > 0, "An explosion with a radius of 0 does nothing");
-            
+
+            Debug.Log("Exploded at: " + Position);
+
             if(ExplosionAppearance != null && ExplosionAppearance.OnSwingDefinition != null)
             {
                 ExplosionAppearance.OnSwingDefinition.Instantiate(Position, Direction.SouthEast);

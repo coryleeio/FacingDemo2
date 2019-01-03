@@ -185,7 +185,7 @@ namespace Gamepackage
                         ExplosionParameters = new ExplosionParameters()
                         {
                             AttackMessage = "attacks.fire.1".Localize(),
-                            Radius = 5,
+                            Radius = 4,
                             Bonus = 0,
                             DyeNumber = 1,
                             DyeSize = 3,

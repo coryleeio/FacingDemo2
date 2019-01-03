@@ -183,7 +183,7 @@ namespace Gamepackage
                 var targets = CombatUtil.HittableEntitiesInPositionsOnLevel(NextGridPosition, level);
                 var hitTarget = targets.Count > 0;
                 var hitWall = level.Grid.PointInGrid(NextGridPosition) && level.Grid[NextGridPosition].TileType == TileType.Wall;
-                var hitMaxRange = RangeTraversed > CombatContextCapability.Range;
+                var hitMaxRange = RangeTraversed >= CombatContextCapability.Range;
                 var movedThisPass = false;
 
                 if (!hitWall && ProjectileAppearance.OnEnterDefinition != null)
