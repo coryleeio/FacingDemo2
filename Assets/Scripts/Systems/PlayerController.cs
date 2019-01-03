@@ -132,17 +132,8 @@ namespace Gamepackage
                     if (capability.AttackTargetingType == AttackTargetingType.Line)
                     {
                         var endpoint = CalculateEndpointOfSkillshot(position, capability, direction);
-                        Debug.Log("endpoint is: " + endpoint);
                         CurrentProposedAttackExplosionPlacement.Position = endpoint;
-                        Debug.Log("points in range of explosion at endpoint: " + endpoint);
-                        var points = capability.PointsInExplosionRange(endpoint);
-                        var agg = "";
-                        foreach(var point in points)
-                        {
-                            agg += point.ToString();
-                        }
-                        Debug.Log("hits: [ " + agg.ToString() + " ]");
-                        CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(endpoint, points);
+                        CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(endpoint, capability.PointsInExplosionRange(endpoint));
                     }
                     else if(capability.AttackTargetingType == AttackTargetingType.SelectTarget)
                     {
@@ -165,7 +156,6 @@ namespace Gamepackage
         private static Point CalculateEndpointOfSkillshot(Point position, AttackCapability capability, Direction direction)
         {
             var pointsInLine = MathUtil.LineInDirection(position, direction, capability.Range);
-            Debug.Log("Range: " + capability.Range);
             var numberOfThingsCanPierce = capability.NumberOfTargetsToPierce;
             var numberOfThingsPierced = 0;
 
@@ -191,6 +181,7 @@ namespace Gamepackage
 
         public void Process()
         {
+
             bool isAcceptingClickInput = !Context.UIController.EscapeMenu.isActiveAndEnabled &&
                 !Context.UIController.LootWindow.isActiveAndEnabled &&
                 !Context.UIController.InventoryWindow.isActiveAndEnabled;
@@ -198,6 +189,7 @@ namespace Gamepackage
             var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
+
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
             var hoverIsValidPoint = level.BoundingBox.Contains(mousePos);
 

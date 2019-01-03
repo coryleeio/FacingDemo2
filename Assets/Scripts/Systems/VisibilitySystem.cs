@@ -83,7 +83,27 @@ namespace Gamepackage
                             level.Grid[x, y].CachedFloorFloodFills[i] = new List<Point>();
                         }
                         List<Point> visibilityAggregate = level.Grid[x, y].CachedVisibilityFloodFills[i];
-                        MathUtil.FloodFill(new Point(x, y), i, ref visibilityAggregate, MathUtil.FloodFillType.Orthogonal, CombatUtil.VisibleTiles);
+                        //MathUtil.FloodFill(new Point(x, y), i, ref visibilityAggregate, MathUtil.FloodFillType.Orthogonal, CombatUtil.VisibleTiles);
+
+                        var pointsInCircle = MathUtil.PointsInCircleOfRadius(new Point(x, y), i);
+                        foreach (var pointInCircle in pointsInCircle)
+                        {
+                            var newPoints = MathUtil.BestLineBetweenTwoPoints(new Point(x, y), pointInCircle);
+                            foreach (var newPoint in newPoints)
+                            {
+                                if (level.BoundingBox.Contains(newPoint) && !visibilityAggregate.Contains(newPoint))
+                                {
+                                    if (level.Grid[newPoint].TileType == TileType.Wall || level.Grid[newPoint].TileType == TileType.Floor)
+                                    {
+                                        visibilityAggregate.Add(newPoint);
+                                    }
+                                    if (level.Grid[newPoint].TileType == TileType.Wall || level.Grid[newPoint].TileType == TileType.Empty)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
 
                         List<Point> floorAggregate = level.Grid[x, y].CachedFloorFloodFills[i];
                         MathUtil.FloodFill(new Point(x, y), i, ref floorAggregate, MathUtil.FloodFillType.Surrounding, CombatUtil.FloorTiles);
@@ -240,7 +260,7 @@ namespace Gamepackage
 
         public List<Point> PointsVisibleFrom(Level level, Point start)
         {
-            var radius = 5;
+            var radius = 4;
             return level.Grid[start].CachedVisibilityFloodFills[radius];
         }
 

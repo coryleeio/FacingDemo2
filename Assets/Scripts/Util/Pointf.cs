@@ -60,5 +60,10 @@ namespace Gamepackage
         {
             return new Vector2(X, Y);
         }
+
+        public Point Round()
+        {
+            return new Point(Mathf.RoundToInt(X), Mathf.RoundToInt(Y));
+        }
     }
 }

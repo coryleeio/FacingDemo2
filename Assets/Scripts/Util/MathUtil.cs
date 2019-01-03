@@ -40,6 +40,46 @@ namespace Gamepackage
             return returnValue;
         }
 
+        public static List<Point> BestLineBetweenTwoPoints(Point p1, Point p2, Predicate<Point> predicate = null)
+        {
+            var numPoints = p1.Distance(p2) + 1.0f;
+            var p1v = p1.ToVector2();
+            var p2v = p2.ToVector2();
+            var points = new List<Point>();
+            for (var step = 0; step <= numPoints; step++)
+            {
+                var t = numPoints == 0 ? 0.0f : step / numPoints;
+                var lerped = Vector2.Lerp(p1v, p2v, t);
+                var targetPoint = new Point(Mathf.RoundToInt(lerped.x), Mathf.RoundToInt(lerped.y));
+                if (predicate == null || predicate(targetPoint))
+                {
+                    if (!points.Contains(targetPoint))
+                    {
+                        points.Add(targetPoint);
+                    }
+                }
+            }
+            return points;
+        }
+
+        public static List<Point> PointsInCircleOfRadius(Point startPoint, int radius)
+        {
+            var points = new List<Point>();
+            var numPoints = (new Point(0, 0).Distance(new Point(radius, radius)) + 1) * 4;
+            var stepSize = 360 / (Mathf.RoundToInt(numPoints) + 6);
+            for (var step = 0; step <= 360; step += stepSize)
+            {
+                var x = Mathf.RoundToInt(Mathf.Cos(Mathf.Deg2Rad * step) * radius + startPoint.X);
+                var y = Mathf.RoundToInt(Mathf.Sin(Mathf.Deg2Rad * step) * radius + startPoint.Y);
+                var newpt = new Point(x, y);
+                if (!points.Contains(newpt))
+                {
+                    points.Add(newpt);
+                }
+            }
+            return points;
+        }
+
         public static Point RotatePointInDirection(Point center, Point pointToRotate, Direction dir)
         {
             var radians = 0.0f;
@@ -232,11 +272,11 @@ namespace Gamepackage
 
         public static Vector3 GetProjectileRotation(Direction direction)
         {
-            if(direction == Direction.NorthEast)
+            if (direction == Direction.NorthEast)
             {
                 return new Vector3(0, 0, -60f);
             }
-            else if(direction == Direction.NorthWest)
+            else if (direction == Direction.NorthWest)
             {
                 return new Vector3(0, 0, 60f);
             }
@@ -454,7 +494,7 @@ namespace Gamepackage
         {
             var retVal = new List<Point>();
             var offset = OffsetForDirection(direction);
-            for(var i = 1; i <= length; i++)
+            for (var i = 1; i <= length; i++)
             {
                 retVal.Add((offset * i) + origin);
             }
