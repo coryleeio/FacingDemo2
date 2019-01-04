@@ -209,7 +209,7 @@ namespace Gamepackage
                     {
                         hoverContainsCombatant = true;
                     }
-                    if (entity.Behaviour != null && entity.Behaviour.Team == Team.ENEMY)
+                    if (entity.Behaviour != null && (entity.Behaviour.Team == Team.VILLIAN || entity.Behaviour.Team == Team.ENEMY_OF_ALL))
                     {
                         tileContainsEnemy = true;
                     }
@@ -263,7 +263,7 @@ namespace Gamepackage
                 return;
             }
 
-            if (ActionList.Count > 0 && player.Behaviour.NextAction == null && Context.FlowSystem.CurrentPhase == TurnPhase.Player)
+            if (ActionList.Count > 0 && player.Behaviour.NextAction == null && Context.FlowSystem.CurrentlyActingTeam == Team.PLAYER)
             {
                 var nextAction = ActionList.Dequeue();
 

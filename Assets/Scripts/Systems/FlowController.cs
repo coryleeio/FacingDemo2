@@ -1,20 +1,24 @@
 ﻿
+using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
     public class FlowController
     {
         public LinkedList<Step> Steps = new LinkedList<Step>();
-        public TurnPhase CurrentPhase = TurnPhase.Player; // always start on player when changing scenes
+        public Team CurrentlyActingTeam = Team.PLAYER; // always start on player when changing scenes
 
         public void Init()
         {
-            ChangePhase(TurnPhase.Player);
+            ChangeCurrentlyActingTeam(Team.PLAYER); // always start on player when changing scenes
         }
 
         public void Process()
         {
+            // If any steps have been enqueued we perform them until there are no more
             if (Steps.Count != 0)
             {
                 Steps.First.Value.Do();
@@ -23,8 +27,10 @@ namespace Gamepackage
                     Steps.RemoveFirst();
                 }
             }
+            // Once there are no more steps...
             else
             {
+                // Take stock of who from the current team still needs to act
                 var entities = Context.GameStateManager.Game.CurrentLevel.Entitys;
                 var entitiesDoneThinking = 0;
                 var entitesThatStillNeedToACtBeforePhaseEnds = 0;
@@ -53,37 +59,48 @@ namespace Gamepackage
                     }
                 }
 
+                // If noone from the current team needs to act, end the phase
+                // you need to return here, because you must reevaluate who needs to act in the new phase
                 if (entitesThatStillNeedToACtBeforePhaseEnds == 0)
                 {
-                    // phase is over, nobbody else needs to act
-                    if (CurrentPhase == TurnPhase.Player)
+                    var vals = Enum.GetValues(typeof(Team));
+                    var numTeams = vals.Length;
+                    var currentTeamInt = (int)CurrentlyActingTeam;
+
+                    // Choose the next team.. if you are at the end loop back around and choose the first one again
+                    if(currentTeamInt == numTeams - 1)
                     {
-                        ChangePhase(TurnPhase.Enemies);
-                    }
-                    else if (CurrentPhase == TurnPhase.Enemies)
-                    {
-                        ChangePhase(TurnPhase.Player);
+                        ChangeCurrentlyActingTeam((Team)vals.GetValue(0));
                     }
                     else
                     {
-                        throw new NotImplementedException();
+                        ChangeCurrentlyActingTeam((Team)vals.GetValue(currentTeamInt + 1));
                     }
                     return;
                 }
 
+                // If everyone is done thinking (handled by another system)
+                // Enqueue their actions into steps and return to the beginning
+                // this will cause the steps to be processed before anything else happens.
+                // otherwise do nothing until everyone is done thinking.
                 if (entitiesDoneThinking == entitesThatStillNeedToACtBeforePhaseEnds)
                 {
                     // At this point all the actors have reevaluted their situation and know their next action.
                     // and we have actors that have actions to take
                     List<Entity> waiters = new List<Entity>(0);
                     List<Entity> movers = new List<Entity>(0);
-                    List<Entity> everyoneElse = new List<Entity>(0);
+                    List<Entity> combatants = new List<Entity>(0);
                     List<Entity> swappers = new List<Entity>(0);
 
                     foreach (var entity in entities)
                     {
                         if (entity.Behaviour != null && !entity.Behaviour.IsDoneThisTurn)
                         {
+                            if(entity.Behaviour.NextAction == null)
+                            {
+                                Debug.Log("it");
+                            }
+                            Assert.IsNotNull(entity.Behaviour.NextAction, "Any entity that is not done at this point should know what they would like to do, somehow an action was not chosen for: " + entity.PrototypeIdentifier.ToString());
                             if (!entity.Behaviour.NextAction.IsValid())
                             {
                                 entity.Behaviour.NextAction = null;
@@ -103,17 +120,17 @@ namespace Gamepackage
                             }
                             else
                             {
-                                everyoneElse.Add(entity);
+                                combatants.Add(entity);
                             }
                         }
                     }
-                    if (everyoneElse.Count != 0)
+                    if (combatants.Count != 0)
                     {
                         // Enqueue a combat action
                         var step = new Step();
                         var endTurnStep = new Step();
 
-                        var entityToAct = everyoneElse[0];
+                        var entityToAct = combatants[0];
                         var nextAction = entityToAct.Behaviour.NextAction;
                         step.Actions.AddLast(nextAction);
                         var endTurn = new EndTurn
@@ -215,9 +232,9 @@ namespace Gamepackage
             }
         }
 
-        public void ChangePhase(TurnPhase nextPhase)
+        public void ChangeCurrentlyActingTeam(Team nextPhase)
         {
-            CurrentPhase = nextPhase;
+            CurrentlyActingTeam = nextPhase;
             var entities = Context.GameStateManager.Game.CurrentLevel.Entitys;
             foreach (var entity in entities)
             {
@@ -232,10 +249,8 @@ namespace Gamepackage
 
         public bool ActsInPhase(Entity entity)
         {
-            var canAct = entity.Body != null && !entity.Body.IsDead;
-            var playerOrPlayerAllyOnPlayerPhase = entity.Behaviour.Team == Team.PLAYER && CurrentPhase == TurnPhase.Player;
-            var enemyOrNeutralOnEnemyPhase = (entity.Behaviour.Team == Team.ENEMY || entity.Behaviour.Team == Team.NEUTRAL) && CurrentPhase == TurnPhase.Enemies;
-            return canAct && (playerOrPlayerAllyOnPlayerPhase || enemyOrNeutralOnEnemyPhase);
+            var canAct = entity.Body != null && !entity.Body.IsDead && entity.Behaviour != null;
+            return canAct && (entity.Behaviour.Team == CurrentlyActingTeam);
         }
     }
 }

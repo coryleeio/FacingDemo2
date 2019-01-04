@@ -2,7 +2,8 @@
 {
     public enum Team
     {
-        ENEMY,
+        ENEMY_OF_ALL,
+        VILLIAN,
         NEUTRAL,
         PLAYER,
     }

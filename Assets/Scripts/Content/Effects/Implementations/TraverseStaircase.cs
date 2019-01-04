@@ -56,7 +56,7 @@ namespace Gamepackage
                 targetIsPlayer = true;
             }
 
-            var realTargets = new List<Entity>
+            var targetsForLevelChange = new List<Entity>
             {
                 outcome.Target
             };
@@ -66,16 +66,17 @@ namespace Gamepackage
                 var oldLevel = Context.GameStateManager.Game.CurrentLevel;
                 foreach (var entityInLevel in oldLevel.Entitys)
                 {
+                    // Add player followers to list of targets
+                    // we want to bring them along when we change levels
                     if (entityInLevel.Behaviour != null && entityInLevel.Behaviour.Team == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
                     {
-                        // Add player followers to list of targets
-                        realTargets.Add(entityInLevel);
+                        targetsForLevelChange.Add(entityInLevel);
                     }
                 }
                 Context.GameStateManager.Game.CurrentLevel.UnindexAll();
             }
 
-            foreach (var target in realTargets)
+            foreach (var target in targetsForLevelChange)
             {
                 target.Behaviour.NextAction = null;
                 if (Context.FlowSystem.Steps.First != null)
