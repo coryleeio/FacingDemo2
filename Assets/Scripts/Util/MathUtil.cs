@@ -42,7 +42,7 @@ namespace Gamepackage
 
         public static List<Point> BestLineBetweenTwoPoints(Point p1, Point p2, Predicate<Point> predicate = null)
         {
-            var numPoints = p1.Distance(p2) + 1.0f;
+            var numPoints = p1.Distance(p2) * 2 + 1.0f;
             var p1v = p1.ToVector2();
             var p2v = p2.ToVector2();
             var points = new List<Point>();

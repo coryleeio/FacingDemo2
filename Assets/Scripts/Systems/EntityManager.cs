@@ -1,4 +1,3 @@
-using KDSharp.KDTree;
 using System.Collections.Generic;
 
 namespace Gamepackage
@@ -8,8 +7,6 @@ namespace Gamepackage
         public EntityManager() { }
 
         private Dictionary<int, Entity> EntityMap = new Dictionary<int, Entity>();
-        public KDTree<Entity> PlayerTeamTree = new KDTree<Entity>(2, 5);
-        public KDTree<Entity> EnemyTeamTree = new KDTree<Entity>(2, 5);
 
         public void Register(Entity entity, Level level)
         {
@@ -27,32 +24,11 @@ namespace Gamepackage
             }
             entity.Rewire();
             level.IndexEntity(entity, entity.Position);
-            if (entity.Behaviour != null)
-            {
-                if(entity.Body != null && !entity.Body.IsDead)
-                {
-                    if (entity.Behaviour.Team == Team.PLAYER)
-                    {
-                        PlayerTeamTree.AddPoint(new double[] { entity.Position.X, entity.Position.Y }, entity);
-                    }
-                    else if (entity.Behaviour.Team == Team.ENEMY)
-                    {
-                        EnemyTeamTree.AddPoint(new double[] { entity.Position.X, entity.Position.Y }, entity);
-                    }
-                }
-            }
-        }
-
-        public void MarkAsDead(Entity entity)
-        {
-            RemoveFromTree(entity);
         }
 
         public void Clear()
         {
             EntityMap.Clear();
-            PlayerTeamTree.Clear();
-            EnemyTeamTree.Clear();
         }
 
         public Entity GetEntityById(int id)
@@ -75,22 +51,6 @@ namespace Gamepackage
                 level.Entitys.Remove(entity);
             }
             level.UnindexEntity(entity, entity.Position);
-            RemoveFromTree(entity);
-        }
-
-        private void RemoveFromTree(Entity entity)
-        {
-            if (entity.Behaviour != null)
-            {
-                if (entity.Behaviour.Team == Team.PLAYER)
-                {
-                    PlayerTeamTree.Remove(entity);
-                }
-                else if (entity.Behaviour.Team == Team.ENEMY)
-                {
-                    EnemyTeamTree.Remove(entity);
-                }
-            }
         }
 
         public void Init()

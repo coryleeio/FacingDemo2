@@ -1,5 +1,3 @@
-
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
@@ -91,16 +89,14 @@ namespace Gamepackage
                             var newPoints = MathUtil.BestLineBetweenTwoPoints(new Point(x, y), pointInCircle);
                             foreach (var newPoint in newPoints)
                             {
-                                if (level.BoundingBox.Contains(newPoint) && !visibilityAggregate.Contains(newPoint))
+                                var isValid = level.BoundingBox.Contains(newPoint) && !visibilityAggregate.Contains(newPoint);
+                                if (isValid && level.Grid[newPoint].TileType == TileType.Floor || level.Grid[newPoint].TileType == TileType.Wall)
                                 {
-                                    if (level.Grid[newPoint].TileType == TileType.Wall || level.Grid[newPoint].TileType == TileType.Floor)
-                                    {
-                                        visibilityAggregate.Add(newPoint);
-                                    }
-                                    if (level.Grid[newPoint].TileType == TileType.Wall || level.Grid[newPoint].TileType == TileType.Empty)
-                                    {
-                                        break;
-                                    }
+                                    visibilityAggregate.Add(newPoint);
+                                }
+                                if(isValid && level.Grid[newPoint].TileType == TileType.Empty || level.Grid[newPoint].TileType == TileType.Wall)
+                                {
+                                    break;
                                 }
                             }
                         }
@@ -258,15 +254,14 @@ namespace Gamepackage
             throw new NotImplementedException("Not implemented");
         }
 
-        public List<Point> PointsVisibleFrom(Level level, Point start)
+        public List<Point> PlacesVisibleFromLocation(Level level, Point location, int visionRadius)
         {
-            var radius = 4;
-            return level.Grid[start].CachedVisibilityFloodFills[radius];
+            return level.Grid[location].CachedVisibilityFloodFills[visionRadius];
         }
 
-        public bool CanSee(Level level, Entity start, Entity end)
+        public bool CanSee(Level level, Entity start, Entity end, int visionRadius)
         {
-            return PointsVisibleFrom(level, start.Position).Contains(end.Position);
+            return PlacesVisibleFromLocation(level, start.Position, visionRadius).Contains(end.Position);
         }
 
         public void Process()
@@ -284,7 +279,7 @@ namespace Gamepackage
                     }
                 }
 
-                var visiblePoints = PointsVisibleFrom(level, player.Position);
+                var visiblePoints = PlacesVisibleFromLocation(level, player.Position, player.CalculateValueOfAttribute(Attributes.VISION_RADIUS));
                 foreach (var tile in visiblePoints)
                 {
                     _updatedVisibilityGrid[tile.X, tile.Y] = true;

@@ -37,6 +37,7 @@ namespace Gamepackage
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
                     {Attributes.MAX_HEALTH, 10 },
+                    {Attributes.VISION_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -70,6 +71,7 @@ namespace Gamepackage
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
                     {Attributes.MAX_HEALTH, 45 },
+                    {Attributes.VISION_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -90,7 +92,8 @@ namespace Gamepackage
                 entity.Body.Floating = true;
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
-                   {Attributes.MAX_HEALTH, 10 },
+                    {Attributes.MAX_HEALTH, 10 },
+                    {Attributes.VISION_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -111,7 +114,8 @@ namespace Gamepackage
                 entity.Body = BuildBody(DefaultHumanoidBodyAttacks());
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
-                   {Attributes.MAX_HEALTH, 10 },
+                    {Attributes.MAX_HEALTH, 10 },
+                    {Attributes.VISION_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -140,6 +144,7 @@ namespace Gamepackage
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
                    {Attributes.MAX_HEALTH, 10 },
+                   {Attributes.VISION_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -169,6 +174,7 @@ namespace Gamepackage
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
                    {Attributes.MAX_HEALTH, 10 },
+                   {Attributes.VISION_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -197,6 +203,7 @@ namespace Gamepackage
                 entity.Body.Attributes = new Dictionary<Attributes, int>
                 {
                     {Attributes.MAX_HEALTH, 15 },
+                    {Attributes.VISION_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()

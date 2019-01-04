@@ -169,8 +169,7 @@ namespace Gamepackage
                     result.LogMessages.AddLast(string.Format("{0} has been slain!", targetName));
                     target.Name = string.Format("( Corpse ) {0}", target.Name);
                     target.Body.IsDead = true;
-                    target.Body.DeadForTurns = 0;
-                    Context.EntitySystem.MarkAsDead(target);
+                    // Is not deregistered because the corpse should still be available
                     target.Behaviour = null;
                     var game = Context.GameStateManager.Game;
                     var level = game.CurrentLevel;

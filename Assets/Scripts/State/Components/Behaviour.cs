@@ -1,5 +1,4 @@
-﻿using KDSharp.KDTree;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -77,7 +76,7 @@ namespace Gamepackage
                 return;
             }
 
-            if (!Context.VisibilitySystem.CanSee(level, entity, hostileTarget))
+            if (!Context.VisibilitySystem.CanSee(level, entity, hostileTarget, entity.CalculateValueOfAttribute(Attributes.VISION_RADIUS)))
             {
                 EnqueueDefaultBehaviour();
             }
@@ -132,42 +131,48 @@ namespace Gamepackage
             return isAbleToPerform && isWillingToPerform;
         }
 
-        private static NearestNeighbour<Entity> NearestTargets(Entity entity)
-        {
-            var entitySystem = Context.EntitySystem;
-            KDTree<Entity> relevantTree = null;
-
-            if (entity.Behaviour.Team == Team.PLAYER)
-            {
-                // If I am a member of the player's team - search for enemies.
-                relevantTree = entitySystem.EnemyTeamTree;
-            }
-            else if (entity.Behaviour.Team == Team.ENEMY)
-            {
-                // If I am a member of the enemy team - search for players.
-                relevantTree = entitySystem.PlayerTeamTree;
-            }
-            else if (entity.Behaviour.Team == Team.NEUTRAL)
-            {
-                // Neutrals dont have enemies.
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-            return relevantTree.NearestNeighbors(new double[2] { entity.Position.X, entity.Position.Y }, 10);
-        }
-
         private static Entity FindTarget(Entity entity)
         {
             var entitySystem = Context.EntitySystem;
-            var possibleTargets = NearestTargets(entity);
+            var level = Context.GameStateManager.Game.CurrentLevel;
+            var grid = level.Grid;
+            var points = Context.VisibilitySystem.PlacesVisibleFromLocation(level, entity.Position, entity.CalculateValueOfAttribute(Attributes.VISION_RADIUS));
+            var targets = new List<Entity>();
+            var player = level.Player;
 
-            if (possibleTargets == null)
+            foreach (var pos in points)
+            {
+                var entitiesInPos = grid[pos].EntitiesInPosition;
+                foreach(var entityInPos in entitiesInPos)
+                {
+                    if((entityInPos.Body != null && entityInPos.Body.IsDead) || !entityInPos.IsCombatant)
+                    {
+                        continue;
+                    }
+                    if (entity.Behaviour.Team == Team.PLAYER)
+                    {
+                        // If I am a member of the player's team - search for enemies.
+                        if(entityInPos.Behaviour != null && entityInPos.Behaviour.Team == Team.ENEMY)
+                        {
+                            targets.Add(entityInPos);
+                        }
+                    }
+                    else if (entity.Behaviour.Team == Team.ENEMY)
+                    {
+                        // If I am a member of the enemy's team - search for enemies
+                        if (entityInPos.Behaviour != null && entityInPos.Behaviour.Team == Team.PLAYER)
+                        {
+                            targets.Add(entityInPos);
+                        }
+                    }
+                }
+            }
+
+            if (targets == null || targets.Count == 0)
             {
                 return null;
             }
-            foreach (var target in possibleTargets)
+            foreach (var target in targets)
             {
                 return target;
             }
