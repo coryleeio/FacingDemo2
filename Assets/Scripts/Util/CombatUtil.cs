@@ -149,6 +149,19 @@ namespace Gamepackage
 
                 HandleAppliedEffects(result);
                 HandleRemovedEffects(result);
+
+                if(target.IsNPC)
+                {
+                    if((result.AppliedEffects.Count > 0 || result.HealthChange > 0) && result.Target.Behaviour != null && result.Source != null)
+                    {
+                        var level = Context.GameStateManager.Game.CurrentLevel;
+                        result.Target.Behaviour.ShoutAboutHostileTarget(level, result.Source, result.Target.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS));
+                        if(result.Target.Behaviour.LastKnownTargetPosition == null)
+                        {
+                            result.Target.Behaviour.LastKnownTargetPosition = new Point(result.Source.Position);
+                        }
+                    }
+                }
                 CombatUtil.CapAttributes(target);
 
                 if (target.Body.CurrentHealth <= 0)

@@ -38,6 +38,7 @@ namespace Gamepackage
                 {
                     {Attributes.MAX_HEALTH, 10 },
                     {Attributes.VISION_RADIUS, 4 },
+                    {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -72,6 +73,7 @@ namespace Gamepackage
                 {
                     {Attributes.MAX_HEALTH, 45 },
                     {Attributes.VISION_RADIUS, 4 },
+                    {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -94,6 +96,7 @@ namespace Gamepackage
                 {
                     {Attributes.MAX_HEALTH, 10 },
                     {Attributes.VISION_RADIUS, 4 },
+                    {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -116,6 +119,7 @@ namespace Gamepackage
                 {
                     {Attributes.MAX_HEALTH, 10 },
                     {Attributes.VISION_RADIUS, 4 },
+                    {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -145,6 +149,7 @@ namespace Gamepackage
                 {
                    {Attributes.MAX_HEALTH, 10 },
                    {Attributes.VISION_RADIUS, 4 },
+                    {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -175,6 +180,7 @@ namespace Gamepackage
                 {
                    {Attributes.MAX_HEALTH, 10 },
                    {Attributes.VISION_RADIUS, 4 },
+                   {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -204,6 +210,7 @@ namespace Gamepackage
                 {
                     {Attributes.MAX_HEALTH, 15 },
                     {Attributes.VISION_RADIUS, 4 },
+                    {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
                 entity.View = new View()
@@ -268,7 +275,9 @@ namespace Gamepackage
 
             if (entity.Body != null)
             {
-                Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.MAX_HEALTH), "Entities must have a value for maximum health if they have a body.");
+                Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.MAX_HEALTH), "Entities must have a value for MAX_HEALTH.");
+                Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.SHOUT_RADIUS), "Entities must have a value for SHOUT_RADIUS.");
+                Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.VISION_RADIUS), "Entities must have a value for VISION_RADIUS.");
                 entity.Body.entity = entity; // Needed for the recursive calculation.
                 entity.Body.CurrentHealth = entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
             }

@@ -4,5 +4,6 @@
     {
         MAX_HEALTH,
         VISION_RADIUS,
+        SHOUT_RADIUS,
     }
 }

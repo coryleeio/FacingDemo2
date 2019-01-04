@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Gamepackage
         public int TimeAccrued = 0;
         public bool IsThinking = false;
         public bool IsPlayer;
+
+        public Point LastKnownTargetPosition = null;
 
         [JsonIgnore]
         public Action NextAction = null;
@@ -69,20 +72,46 @@ namespace Gamepackage
 
         private void CommonAIAttackWithWeapon(Level level, AttackCapabilities capabilities, List<CombatContext> contexts)
         {
-            var hostileTarget = FindTarget(entity);
+            var hostileTarget = FindVisibleTargets(entity);
             if (hostileTarget == null)
             {
                 EnqueueDefaultBehaviour();
                 return;
             }
-
-            if (!Context.VisibilitySystem.CanSee(level, entity, hostileTarget, entity.CalculateValueOfAttribute(Attributes.VISION_RADIUS)))
-            {
-                EnqueueDefaultBehaviour();
-            }
             else
             {
-                EnqueueBasicAttackOrApproach(capabilities, contexts, hostileTarget);
+                LastKnownTargetPosition = new Point(hostileTarget.Position);
+                var shoutRadius = entity.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS);
+                ShoutAboutHostileTarget(level, hostileTarget, shoutRadius);
+            }
+            EnqueueBasicAttackOrApproach(capabilities, contexts, hostileTarget);
+        }
+
+        public void ShoutAboutHostileTarget(Level level, Entity hostileTarget, int shoutRadius)
+        {
+            MakeNoiseIndicatingLocation(level, entity.Position, hostileTarget.Position, shoutRadius, (possibleEntity) => { return possibleEntity.Behaviour != null && possibleEntity.Behaviour.Team == entity.Behaviour.Team; });
+        }
+
+        // Make a noise at a location, hearable by all entities that are within the radius and match the predicate.
+        private void MakeNoiseIndicatingLocation(Level level, Point soundOrigin, Point targetLocation, int radius, Predicate<Entity> predicate)
+        {
+            if(level.BoundingBox.Contains(soundOrigin))
+            {
+                var possibleLocations = level.Grid[soundOrigin].CachedFloorFloodFills[radius];
+                foreach(var posibleLocation in possibleLocations)
+                {
+                    var entitiesInLocation = level.Grid[posibleLocation].EntitiesInPosition;
+                    foreach(var entityInLocation in entitiesInLocation)
+                    {
+                        if(predicate == null || predicate(entityInLocation))
+                        {
+                            if(entityInLocation.Behaviour != null && entityInLocation.Behaviour.LastKnownTargetPosition == null)
+                            {
+                                entityInLocation.Behaviour.LastKnownTargetPosition = targetLocation;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -131,7 +160,7 @@ namespace Gamepackage
             return isAbleToPerform && isWillingToPerform;
         }
 
-        private static Entity FindTarget(Entity entity)
+        private static Entity FindVisibleTargets(Entity entity)
         {
             var entitySystem = Context.EntitySystem;
             var level = Context.GameStateManager.Game.CurrentLevel;
@@ -186,15 +215,36 @@ namespace Gamepackage
                 // Default for allies is follow player
                 var player = Context.GameStateManager.Game.CurrentLevel.Player;
                 Context.Application.StartCoroutine(MoveToward(player.Position));
+                return;
             }
             else
             {
-                // Default for monsters is waiting
-                var wait = new Wait
+                if(LastKnownTargetPosition != null)
                 {
-                    Source = entity
-                };
-                NextAction = wait;
+                    if(LastKnownTargetPosition.Distance(entity.Position) < 1.0f)
+                    {
+                        LastKnownTargetPosition = null;
+                        var wait = new Wait
+                        {
+                            Source = entity
+                        };
+                        NextAction = wait;
+                    }
+                    else
+                    {
+                        Context.Application.StartCoroutine(MoveToward(LastKnownTargetPosition));
+                        return;
+                    }
+                }
+                else
+                {
+                    // Default for monsters is waiting
+                    var wait = new Wait
+                    {
+                        Source = entity
+                    };
+                    NextAction = wait;
+                }
             }
         }
 

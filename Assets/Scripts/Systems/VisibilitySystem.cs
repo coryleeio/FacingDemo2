@@ -81,7 +81,6 @@ namespace Gamepackage
                             level.Grid[x, y].CachedFloorFloodFills[i] = new List<Point>();
                         }
                         List<Point> visibilityAggregate = level.Grid[x, y].CachedVisibilityFloodFills[i];
-                        //MathUtil.FloodFill(new Point(x, y), i, ref visibilityAggregate, MathUtil.FloodFillType.Orthogonal, CombatUtil.VisibleTiles);
 
                         var pointsInCircle = MathUtil.PointsInCircleOfRadius(new Point(x, y), i);
                         foreach (var pointInCircle in pointsInCircle)
@@ -94,7 +93,7 @@ namespace Gamepackage
                                 {
                                     visibilityAggregate.Add(newPoint);
                                 }
-                                if(isValid && level.Grid[newPoint].TileType == TileType.Empty || level.Grid[newPoint].TileType == TileType.Wall)
+                                if(isValid && (level.Grid[newPoint].TileType == TileType.Empty || level.Grid[newPoint].TileType == TileType.Wall))
                                 {
                                     break;
                                 }
