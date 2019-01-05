@@ -2,9 +2,9 @@
 {
     public static class StackingStrategies
     {
-        public static void AddDuration(Entity entity, Effect effect)
+        public static void AddDuration(ActionOutcome outcome, Effect effect)
         {
-            var matchingEffects = entity.Body.Effects.FindAll((x) => { return x.Identifier == effect.Identifier; });
+            var matchingEffects = outcome.Target.Body.Effects.FindAll((x) => { return x.Identifier == effect.Identifier; });
             if (matchingEffects.Count > 1)
             {
                 throw new NotImplementedException("If these effects add to the duration of a matching effect, how the hell did you get two of them?");
@@ -16,8 +16,8 @@
 
             if (matchingEffects.Count == 0)
             {
-                entity.Body.Effects.Add(effect);
-                effect.OnApply(entity);
+                outcome.Target.Body.Effects.Add(effect);
+                effect.OnApply(outcome);
                 return;
             }
             if (matchingEffects.Count == 1)
@@ -27,10 +27,10 @@
             }
         }
 
-        public static void AddDuplicate(Entity entity, Effect effect)
+        public static void AddDuplicate(ActionOutcome outcome, Effect effect)
         {
-            entity.Body.Effects.Add(effect);
-            effect.OnApply(entity);
+            outcome.Target.Body.Effects.Add(effect);
+            effect.OnApply(outcome);
         }
     }
 }

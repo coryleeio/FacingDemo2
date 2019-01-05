@@ -18,27 +18,27 @@
             }
         }
 
-        public override void OnApply(Entity owner)
+        public override void OnApply(ActionOutcome combatContext)
         {
-            base.OnApply(owner);
-            Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.apply.message".Localize(), owner.Name));
+            base.OnApply(combatContext);
+            Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.apply.message".Localize(), combatContext.Target.Name));
             ActionOutcome outcome = new ActionOutcome();
-            outcome.Source = owner;
-            outcome.Target = owner;
-            var effectsToAttemptRemoval = CombatUtil.GetEntityEffectsByType(owner, (effectInQuestion) => { return effectInQuestion is Poison; });
+            outcome.Source = combatContext.Source;
+            outcome.Target = combatContext.Target;
+            var effectsToAttemptRemoval = CombatUtil.GetEntityEffectsByType(outcome.Target, (effectInQuestion) => { return effectInQuestion is Poison; });
             outcome.RemovedEffects.AddRange(effectsToAttemptRemoval);
             CombatUtil.ApplyEntityStateChange(outcome);
         }
 
-        public override void OnRemove(Entity owner)
+        public override void OnRemove(Entity entity)
         {
-            base.OnRemove(owner);
-            Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.remove.message".Localize(), owner.Name));
+            base.OnRemove(entity);
+            Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.remove.message".Localize(), entity.Name));
         }
 
-        public override void HandleStacking(Entity entity)
+        public override void HandleStacking(ActionOutcome outcome)
         {
-            StackingStrategies.AddDuration(entity, this);
+            StackingStrategies.AddDuration(outcome, this);
         }
 
         public override bool CanAffectIncomingAttack(ActionOutcome outcome)

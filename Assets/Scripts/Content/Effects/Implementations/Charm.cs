@@ -1,12 +1,12 @@
 ﻿namespace Gamepackage
 {
-    public class Madness : Effect
+    public class Charm : Effect
     {
         public override string DisplayName
         {
             get
             {
-                return "effect.madness.name".Localize();
+                return "effect.charm.name".Localize();
             }
         }
 
@@ -14,19 +14,19 @@
         {
             get
             {
-                return "effect.madness.description".Localize();
+                return "effect.charm.description".Localize();
             }
         }
 
         public override void OnApply(ActionOutcome outcome)
         {
             base.OnApply(outcome);
-            Context.UIController.TextLog.AddText(string.Format("effect.madness.apply.message".Localize(), outcome.Target.Name));
+            Context.UIController.TextLog.AddText(string.Format("effect.domination.apply.message".Localize(), outcome.Target.Name));
             if (outcome.Target.Behaviour != null)
             {
-                outcome.Target.Behaviour.ActingTeam = Team.EnemyOfAll;
+                outcome.Target.Behaviour.ActingTeam = outcome.Source.Behaviour.ActingTeam;
                 outcome.Target.Behaviour.LastKnownTargetPosition = null;
-                if(outcome.Target.Behaviour.IsPlayer)
+                if (outcome.Target.Behaviour.IsPlayer)
                 {
                     outcome.Target.Behaviour.AI = AIType.Archer;
                 }
@@ -36,7 +36,7 @@
         public override void OnRemove(Entity entity)
         {
             base.OnRemove(entity);
-            Context.UIController.TextLog.AddText(string.Format("effect.madness.remove.message".Localize(), entity.Name));
+            Context.UIController.TextLog.AddText(string.Format("effect.domination.remove.message".Localize(), entity.Name));
             if (entity.Behaviour != null)
             {
                 entity.Behaviour.ActingTeam = entity.Behaviour.OriginalTeam;

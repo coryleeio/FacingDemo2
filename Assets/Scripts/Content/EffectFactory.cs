@@ -33,6 +33,24 @@ namespace Gamepackage
                     AppliedDisplayDescription = "effect.applied.madness.description".Localize(),
                 };
             }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_CHARM)
+            {
+                retVal = new AppliedEffect()
+                {
+                    EffectAppliedId = UniqueIdentifier.EFFECT_CHARM,
+                    AppliedDisplayName = "effect.applied.charm.name".Localize(),
+                    AppliedDisplayDescription = "effect.applied.charm.description".Localize(),
+                };
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_DOMINATION)
+            {
+                retVal = new AppliedEffect()
+                {
+                    EffectAppliedId = UniqueIdentifier.EFFECT_DOMINATION,
+                    AppliedDisplayName = "effect.applied.domination.name".Localize(),
+                    AppliedDisplayDescription = "effect.applied.domination.description".Localize(),
+                };
+            }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON)
             {
                 retVal = new AppliedEffect()
@@ -70,6 +88,22 @@ namespace Gamepackage
                     {
                         TurnsRemaining = 3
                     }
+                };
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_CHARM)
+            {
+                retVal = new Charm()
+                {
+                    Ticker = new Ticker()
+                    {
+                        TurnsRemaining = 3
+                    }
+                };
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_DOMINATION)
+            {
+                retVal = new Domination()
+                {
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_STRONG_POISON)

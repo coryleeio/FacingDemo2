@@ -90,9 +90,22 @@ effect.madness.name: "Madness"
 effect.madness.description: "You feel mad at everything"
 effect.madness.apply.message: "{0} has gone mad with power!"
 effect.madness.remove.message: "{0} has calmed down."
-
 effect.applied.madness.name: "Applied Madness"
 effect.applied.madness.description: "Causes the target to go mad and attack anyone near them."
+
+effect.charm.name: "Charm"
+effect.charm.description: "You feel head over heels in love"
+effect.charm.apply.message: "{0} has fallen madly in love!"
+effect.charm.remove.message: "{0} has decided that they should not live for another's affections, and instead should work on themself."
+effect.applied.charm.name: "Applied Charm"
+effect.applied.charm.description: "Causes the target to fall madly in love with the user for a brief time."
+
+effect.domination.name: "Domination"
+effect.domination.description: "You feel are enslaved by another"
+effect.domination.apply.message: "{0} has fallen victim to the will of another"
+effect.domination.remove.message: "{0} has broken free of their mental bonds!"
+effect.applied.domination.name: "Applied Domination"
+effect.applied.domination.description: "Makes the target faithfully serve as long as they shall live."
 
 effect.regen.name: "Regeneration"
 effect.regen.description: "You begin regenerating..."
@@ -152,6 +165,12 @@ item.wand.of.lightning.description: "A zappy wand"
 
 item.wand.of.madness.name: Wand of Madness
 item.wand.of.madness.description: "This wand makes you angry just looking at it."
+
+item.wand.of.charm.name: Wand of Charm
+item.wand.of.charm.description: "This wand gives you a funny feeling in your stomach."
+
+item.wand.of.domination.name: Wand of Domination
+item.wand.of.domination.description: "This wand has the scent of command."
 
 item.antidote.name: "Antidote"
 item.antidote.description: "A bubbling vial of viscous green liquid."

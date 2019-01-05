@@ -18,21 +18,21 @@
             }
         }
 
-        public override void HandleStacking(Entity entity)
+        public override void HandleStacking(ActionOutcome outcome)
         {
-            StackingStrategies.AddDuration(entity, this);
+            StackingStrategies.AddDuration(outcome, this);
         }
 
-        public override void OnApply(Entity owner)
+        public override void OnApply(ActionOutcome outcome)
         {
-            base.OnApply(owner);
-            Context.UIController.TextLog.AddText(string.Format("effect.strength.of.giants.apply".Localize(), owner.Name));
+            base.OnApply(outcome);
+            Context.UIController.TextLog.AddText(string.Format("effect.strength.of.giants.apply".Localize(), outcome.Target.Name));
         }
 
-        public override void OnRemove(Entity owner)
+        public override void OnRemove(Entity entity)
         {
-            base.OnRemove(owner);
-            Context.UIController.TextLog.AddText(string.Format("effect.strength.of.giants.remove".Localize(), owner.Name));
+            base.OnRemove(entity);
+            Context.UIController.TextLog.AddText(string.Format("effect.strength.of.giants.remove".Localize(), entity.Name));
         }
     }
 }

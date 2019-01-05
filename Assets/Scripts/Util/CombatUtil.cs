@@ -352,7 +352,7 @@ namespace Gamepackage
                     }
                     else
                     {
-                        effect.HandleStacking(outcome.Target);
+                        effect.HandleStacking(outcome);
                     }
                 }
             }

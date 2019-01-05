@@ -28,8 +28,15 @@ namespace Gamepackage
             var longswordPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Longsword"));
             var daggerPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Dagger"));
             var macePrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Mace"));
-            var lightningPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Lightning"));
+            var lightningPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Lightning1"));
             lightningPrefab.transform.localScale = new Vector3(1f, 1f, 1f);
+            var lightningSpriteChangerPrefab = lightningPrefab.AddComponent<SpriteChanger>();
+            lightningSpriteChangerPrefab.Sprites.Add(Resources.Load<Sprite>("Sprites/Lightning1"));
+            lightningSpriteChangerPrefab.Sprites.Add(Resources.Load<Sprite>("Sprites/Lightning2"));
+            lightningSpriteChangerPrefab.Sprites.Add(Resources.Load<Sprite>("Sprites/Lightning3"));
+            lightningSpriteChangerPrefab.timePerSprite = 0.25f;
+            lightningSpriteChangerPrefab.ChangeMethod = ChangeMethodType.Random;
+
             var fireballPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Fireball"));
             var bigFirePrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/BigFire"));
             var greenPotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/GreenPotion"));
@@ -47,6 +54,7 @@ namespace Gamepackage
             var swirlPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/SwirlStaff"));
             var hookStaffPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/HookStaff"));
             var actionStaffPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/ActionStaff"));
+            var orbScepterPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/OrbScepter"));
 
             var retVal = new List<ProjectileAppearance>();
             var none = new ProjectileAppearance()
@@ -252,6 +260,18 @@ namespace Gamepackage
                 }
             };
             retVal.Add(hookStaff);
+
+            var orbScepter = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ORB_SCEPTER,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = orbScepterPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(orbScepter);
 
             var actionStaff = new ProjectileAppearance()
             {

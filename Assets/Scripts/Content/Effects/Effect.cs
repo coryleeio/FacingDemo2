@@ -17,9 +17,9 @@ namespace Gamepackage
         public UniqueIdentifier Identifier;
         public Dictionary<Attributes, int> Attributes;
 
-        public virtual void HandleStacking(Entity entity)
+        public virtual void HandleStacking(ActionOutcome outcome)
         {
-            StackingStrategies.AddDuplicate(entity, this);
+            StackingStrategies.AddDuplicate(outcome, this);
         }
 
         public Ticker Ticker;
@@ -41,28 +41,38 @@ namespace Gamepackage
             }
         }
 
+        // For applying persistant visual effects from items, since this does not have a actionOutcome
+        // this should not be overwritten, only called.  It is just a work around for not having an
+        // action outcome for equiping an item.
+        public void OnApply(Entity entity)
+        {
+            ApplyPersistentVisualEffects(entity);
+        }
+
         // Call when applying for the first time, may actually do state changes, or apply 
         // non permanent visual effects on initial application
-        public virtual void OnApply(Entity owner)
+        public virtual void OnApply(ActionOutcome outcome)
         {
-            ApplyPersistentVisualEffects(owner);
+            ApplyPersistentVisualEffects(outcome.Target);
         }
 
         // When an effect is removed, perform any state changes, and remove the persistent visual effects
         // Do not remove temporary effects as they may not exist at this point
-        public virtual void OnRemove(Entity owner)
+        // This signature is different because you can have effects removed due to duration
+        // not just as the result of an action
+        public virtual void OnRemove(Entity target)
         {
-            RemovePersistantVisualEffects(owner);
-            if (owner.Body != null)
+            RemovePersistantVisualEffects(target);
+            if (target.Body != null)
             {
-                var aliveBeforeRemoval = owner.Body.CurrentHealth > 0;
+                var aliveBeforeRemoval = target.Body.CurrentHealth > 0;
                 if (Attributes.ContainsKey(Gamepackage.Attributes.MAX_HEALTH))
                 {
-                    owner.Body.CurrentHealth -= Attributes[Gamepackage.Attributes.MAX_HEALTH];
+                    target.Body.CurrentHealth -= Attributes[Gamepackage.Attributes.MAX_HEALTH];
                 }
-                if(aliveBeforeRemoval && owner.Body.CurrentHealth < 0)
+                if(aliveBeforeRemoval && target.Body.CurrentHealth < 0)
                 {
-                    owner.Body.CurrentHealth = 1;
+                    target.Body.CurrentHealth = 1;
                 }
             }
         }

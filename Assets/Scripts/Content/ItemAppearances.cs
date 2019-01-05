@@ -66,6 +66,10 @@ namespace Gamepackage
             actionStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/ActionStaff"));
             retVal.Add(actionStaff);
 
+            var orbScepter = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_ORB_SCEPTER, "Sprites/OrbScepter");
+            orbScepter.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/OrbScepter"));
+            retVal.Add(orbScepter);
+
             var dagger = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_DAGGER, "Sprites/Dagger");
             dagger.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/Dagger"));
             retVal.Add(dagger);

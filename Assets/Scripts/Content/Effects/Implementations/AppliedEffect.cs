@@ -33,6 +33,7 @@ namespace Gamepackage
         public ActionOutcome Apply(ActionOutcome usageContext)
         {
             ActionOutcome applyToTargetContext = new ActionOutcome();
+            applyToTargetContext.Source = usageContext.Source;
             applyToTargetContext.Target = usageContext.Target;
             applyToTargetContext.AppliedEffects.Add(EffectFactory.Build(EffectAppliedId));
             CombatUtil.ApplyEntityStateChange(applyToTargetContext);
