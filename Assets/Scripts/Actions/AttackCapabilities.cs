@@ -121,7 +121,7 @@ namespace Gamepackage
                     var entitiesInPosition = level.Grid[point].EntitiesInPosition;
                     foreach (var entityInPosition in entitiesInPosition)
                     {
-                        if (entityInPosition.IsCombatant && entityInPosition.Behaviour != null && Source.Behaviour != null && entityInPosition.Behaviour.Team == Source.Behaviour.Team)
+                        if (entityInPosition.IsCombatant && entityInPosition.Behaviour != null && Source.Behaviour != null && entityInPosition.Behaviour.ActingTeam == Source.Behaviour.ActingTeam)
                         {
                             return false;
                         }

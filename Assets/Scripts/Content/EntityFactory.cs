@@ -49,7 +49,8 @@ namespace Gamepackage
                 entity.Behaviour = new Behaviour()
                 {
                     AI = AIType.None,
-                    Team = Team.PLAYER,
+                    ActingTeam = Team.PLAYER,
+                    OriginalTeam = Team.PLAYER,
                 };
                 entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_ROBE_OF_WONDERS));
                 entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_SANDALS));
@@ -63,6 +64,7 @@ namespace Gamepackage
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));
+                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_MADNESS));
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_SHIELD_OF_AMALURE));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_MASLOW)
@@ -84,7 +86,8 @@ namespace Gamepackage
                 entity.Behaviour = new Behaviour()
                 {
                     AI = AIType.DumbMelee,
-                    Team = Team.PLAYER,
+                    ActingTeam = Team.PLAYER,
+                    OriginalTeam = Team.PLAYER,
                 };
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GIANT_BEE)
@@ -107,7 +110,8 @@ namespace Gamepackage
                 entity.Behaviour = new Behaviour()
                 {
                     AI = AIType.DumbMelee,
-                    Team = Team.Enemy,
+                    ActingTeam = Team.Enemy,
+                    OriginalTeam = Team.Enemy,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
             }
@@ -129,7 +133,8 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new Behaviour()
                 {
-                    Team = Team.Enemy,
+                    ActingTeam = Team.Enemy,
+                    OriginalTeam = Team.Enemy,
                     AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
@@ -159,7 +164,8 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new Behaviour()
                 {
-                    Team = Team.Enemy,
+                    ActingTeam = Team.Enemy,
+                    OriginalTeam = Team.Enemy,
                     AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
@@ -190,7 +196,8 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new Behaviour()
                 {
-                    Team = Team.Enemy,
+                    ActingTeam = Team.Enemy,
+                    OriginalTeam = Team.Enemy,
                     AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
@@ -220,7 +227,8 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new Behaviour()
                 {
-                    Team = Team.Enemy,
+                    ActingTeam = Team.Enemy,
+                    OriginalTeam = Team.Enemy,
                     AI = AIType.DumbMelee,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LONGSWORD));

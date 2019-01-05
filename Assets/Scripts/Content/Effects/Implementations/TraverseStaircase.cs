@@ -68,7 +68,7 @@ namespace Gamepackage
                 {
                     // Add player followers to list of targets
                     // we want to bring them along when we change levels
-                    if (entityInLevel.Behaviour != null && entityInLevel.Behaviour.Team == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
+                    if (entityInLevel.Behaviour != null && entityInLevel.Behaviour.ActingTeam == Team.PLAYER && !entityInLevel.Behaviour.IsPlayer)
                     {
                         targetsForLevelChange.Add(entityInLevel);
                     }

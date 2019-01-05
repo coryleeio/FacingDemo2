@@ -24,6 +24,15 @@ namespace Gamepackage
                     AppliedDisplayDescription = "effect.applied.weak.poison.description".Localize(),
                 };
             }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_MADNESS)
+            {
+                retVal = new AppliedEffect()
+                {
+                    EffectAppliedId = UniqueIdentifier.EFFECT_MADNESS,
+                    AppliedDisplayName = "effect.applied.madness.name".Localize(),
+                    AppliedDisplayDescription = "effect.applied.madness.description".Localize(),
+                };
+            }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON)
             {
                 retVal = new AppliedEffect()
@@ -47,6 +56,16 @@ namespace Gamepackage
                 retVal = new Poison()
                 {
                     PoisonAmount = 1,
+                    Ticker = new Ticker()
+                    {
+                        TurnsRemaining = 3
+                    }
+                };
+            }
+            else if (uniqueIdentifier == UniqueIdentifier.EFFECT_MADNESS)
+            {
+                retVal = new Madness()
+                {
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3

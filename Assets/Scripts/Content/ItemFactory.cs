@@ -284,6 +284,50 @@ namespace Gamepackage
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
             }
+            else if (uniqueIdentifier == UniqueIdentifier.ITEM_WAND_OF_MADNESS)
+            {
+                item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_HOOK_STAFF;
+                item.DisplayName = "item.wand.of.madness.name".Localize();
+                item.Description = "item.wand.of.madness.description".Localize();
+                item.MeleeParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.bludgeoning.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 8,
+                        DamageType = DamageTypes.BLUDGEONING,
+                    }
+                };
+                item.ThrowParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "attacks.throw.useless.1".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 1,
+                        DyeSize = 3,
+                        DamageType = DamageTypes.BLUDGEONING,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_HOOK_STAFF,
+                    }
+                };
+                item.ZapParameters = new List<AttackParameters>()
+                {
+                    new AttackParameters()
+                    {
+                        Bonus = 0,
+                        DyeNumber = 0,
+                        DyeSize = 0,
+                        DamageType = DamageTypes.NEGATIVE,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_PURPLE_BALL,
+                        AttackTargetingType = AttackTargetingType.SelectTarget,
+                    }
+                };
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_MADNESS, new List<CombatContext>() { CombatContext.Zapped }));
+                item.HasUnlimitedCharges = true;
+                item.ZappedTargetsPierced = 1;
+                item.SlotsWearable.Add(ItemSlot.MainHand);
+                item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
+            }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ANTIDOTE)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_PURPLE_POTION;

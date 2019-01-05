@@ -78,6 +78,10 @@ namespace Gamepackage
             swirlStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/SwirlStaff"));
             retVal.Add(swirlStaff);
 
+            var hookStaff = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_HOOK_STAFF, "Sprites/HookStaff");
+            hookStaff.WornItemSpritePerSlot.Add(SpriteAttachment.MainHandFront, Resources.Load<Sprite>("Sprites/HookStaff"));
+            retVal.Add(hookStaff);
+
             var sandals = BuildDefaultItemAppearance(UniqueIdentifier.ITEM_APPEARANCE_SANDALS, "Sprites/SandalsIcon");
             sandals.WornItemSpritePerSlot.Add(SpriteAttachment.LeftLegFrontSE, Resources.Load<Sprite>("Sprites/ShoeFrontSE"));
             sandals.WornItemSpritePerSlot.Add(SpriteAttachment.RightLegFrontSE, Resources.Load<Sprite>("Sprites/ShoeFrontSE"));

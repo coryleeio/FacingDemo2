@@ -209,11 +209,11 @@ namespace Gamepackage
                     {
                         hoverContainsCombatant = true;
                     }
-                    if (entity.Behaviour != null && (entity.Behaviour.Team == Team.Enemy || entity.Behaviour.Team == Team.EnemyOfAll))
+                    if (entity.Behaviour != null && (entity.Behaviour.ActingTeam == Team.Enemy || entity.Behaviour.ActingTeam == Team.EnemyOfAll))
                     {
                         tileContainsEnemy = true;
                     }
-                    if (entity.IsCombatant && entity.Behaviour != null && entity.Behaviour.Team == Team.PLAYER && !entity.IsPlayer)
+                    if (entity.IsCombatant && entity.Behaviour != null && entity.Behaviour.ActingTeam == Team.PLAYER && !entity.IsPlayer)
                     {
                         hoverContainsAlly = true;
                     }
@@ -277,7 +277,7 @@ namespace Gamepackage
                         Entity adjacentFriendlyBlocker = null;
                         foreach (var occupant in occupants)
                         {
-                            if (occupant.Behaviour != null && occupant.Behaviour.Team == Team.PLAYER && !occupant.IsPlayer && occupant.BlocksPathing)
+                            if (occupant.Behaviour != null && occupant.Behaviour.ActingTeam == Team.PLAYER && !occupant.IsPlayer && occupant.BlocksPathing)
                             {
                                 adjacentFriendlyBlocker = occupant;
                                 break;

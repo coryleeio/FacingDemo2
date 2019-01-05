@@ -38,7 +38,7 @@ namespace Gamepackage
                 {
                     if (entity.Behaviour != null)
                     {
-                        if (entity.Behaviour.IsPlayer)
+                        if (entity.Behaviour.IsPlayer && entity.Behaviour.AI == AIType.None)
                         {
                             entity.Behaviour.IsThinking = true;
                         }
@@ -250,7 +250,7 @@ namespace Gamepackage
         public bool ActsInPhase(Entity entity)
         {
             var canAct = entity.Body != null && !entity.Body.IsDead && entity.Behaviour != null;
-            return canAct && (entity.Behaviour.Team == CurrentlyActingTeam);
+            return canAct && (entity.Behaviour.ActingTeam == CurrentlyActingTeam);
         }
     }
 }

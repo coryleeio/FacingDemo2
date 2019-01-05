@@ -39,10 +39,13 @@ namespace Gamepackage
             greenPotionPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             var arrowPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Arrow"));
             arrowPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            var purpleBallPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/PurpleBall"));
+            purpleBallPrefab.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             var coinPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/LuckyCoin"));
             coinPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             var bowPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Bow"));
             var swirlPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/SwirlStaff"));
+            var hookStaffPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/HookStaff"));
             var actionStaffPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/ActionStaff"));
 
             var retVal = new List<ProjectileAppearance>();
@@ -200,6 +203,20 @@ namespace Gamepackage
                 }
             };
             retVal.Add(arrowSpin);
+
+            var purpleBall = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_PURPLE_BALL,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = purpleBallPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                    PerTileTravelTime = 4.0f
+                }
+            };
+            retVal.Add(purpleBall);
+
             var coin = new ProjectileAppearance()
             {
                 UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_COIN,
@@ -223,6 +240,18 @@ namespace Gamepackage
                 }
             };
             retVal.Add(swirlStaff);
+
+            var hookStaff = new ProjectileAppearance()
+            {
+                UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_HOOK_STAFF,
+                ProjectileDefinition = new ProjectileAppearanceDefinition()
+                {
+                    Prefab = hookStaffPrefab,
+                    Lifetime = 0.0f,
+                    ProjectileBehaviour = ProjectileBehaviour.Spin,
+                }
+            };
+            retVal.Add(hookStaff);
 
             var actionStaff = new ProjectileAppearance()
             {

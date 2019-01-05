@@ -8,7 +8,8 @@ namespace Gamepackage
 {
     public class Behaviour : Component
     {
-        public Team Team;
+        public Team OriginalTeam;
+        public Team ActingTeam;
         public AIType AI;
         public bool IsDoneThisTurn = false;
         public int TimeAccrued = 0;
@@ -46,11 +47,6 @@ namespace Gamepackage
 
         public void FigureOutNextAction()
         {
-            if (IsPlayer)
-            {
-                throw new NotImplementedException("AI Trying to act for player");
-            }
-
             if(AI == AIType.None)
             {
                 throw new NotImplementedException("AI with undefined behaviour: " + entity.PrototypeIdentifier.ToString());
@@ -89,7 +85,7 @@ namespace Gamepackage
 
         public void ShoutAboutHostileTarget(Level level, Entity hostileTarget, int shoutRadius)
         {
-            MakeNoiseIndicatingLocation(level, entity.Position, hostileTarget.Position, shoutRadius, (possibleEntity) => { return possibleEntity.Behaviour != null && possibleEntity.Behaviour.Team == entity.Behaviour.Team; });
+            MakeNoiseIndicatingLocation(level, entity.Position, hostileTarget.Position, shoutRadius, (possibleEntity) => { return possibleEntity.Behaviour != null && possibleEntity.Behaviour.ActingTeam == entity.Behaviour.ActingTeam; });
         }
 
         // Make a noise at a location, hearable by all entities that are within the radius and match the predicate.
@@ -174,37 +170,42 @@ namespace Gamepackage
                 var entitiesInPos = grid[pos].EntitiesInPosition;
                 foreach(var entityInPos in entitiesInPos)
                 {
+                    if(entityInPos == entity)
+                    {
+                        continue;
+                    }
                     if((entityInPos.Body != null && entityInPos.Body.IsDead) || !entityInPos.IsCombatant)
                     {
                         continue;
                     }
-                    if (entity.Behaviour.Team == Team.PLAYER)
+                    if (entity.Behaviour.ActingTeam == Team.PLAYER)
                     {
                         // If I am a member of the player's team - search for enemies.
-                        if(entityInPos.Behaviour != null && entityInPos.Behaviour.Team == Team.Enemy)
+                        if(entityInPos.Behaviour != null && (entityInPos.Behaviour.ActingTeam == Team.Enemy || entityInPos.Behaviour.ActingTeam == Team.EnemyOfAll))
                         {
                             targets.Add(entityInPos);
                         }
                     }
-                    else if (entity.Behaviour.Team == Team.Enemy)
+                    else if (entity.Behaviour.ActingTeam == Team.Enemy)
                     {
                         // If I am a member of the enemy's team - search for enemies
-                        if (entityInPos.Behaviour != null && entityInPos.Behaviour.Team == Team.PLAYER)
+                        if (entityInPos.Behaviour != null && (entityInPos.Behaviour.ActingTeam == Team.PLAYER || entityInPos.Behaviour.ActingTeam == Team.EnemyOfAll))
                         {
                             targets.Add(entityInPos);
                         }
                     }
-                    else if (entity.Behaviour.Team == Team.EnemyOfAll)
+                    else if (entity.Behaviour.ActingTeam == Team.EnemyOfAll)
                     {
                         // If I am a member of the ENEMY_OF_ALL team - everyone is an enemy, except neutrals
-                        if (entityInPos.Behaviour != null && entityInPos.Behaviour.Team != Team.Neutral)
+                        if (entityInPos.Behaviour != null && entityInPos.Behaviour.ActingTeam != Team.Neutral)
                         {
                             targets.Add(entityInPos);
                         }
                     }
+
                     else
                     {
-                        throw new NotImplementedException("Cant find targets for entity with team: " + entity.PrototypeIdentifier.ToString() + " " + entity.Behaviour.Team.ToString());
+                        throw new NotImplementedException("Cant find targets for entity with team: " + entity.PrototypeIdentifier.ToString() + " " + entity.Behaviour.ActingTeam.ToString());
                     }
                 }
             }
@@ -213,6 +214,10 @@ namespace Gamepackage
             {
                 return null;
             }
+            targets.Sort(delegate (Entity e1, Entity e2)
+            {
+                return Point.Distance(entity.Position, e1.Position).CompareTo(Point.Distance(entity.Position, e2.Position));
+            });
             foreach (var target in targets)
             {
                 return target;
@@ -222,7 +227,7 @@ namespace Gamepackage
 
         private void EnqueueDefaultBehaviour()
         {
-            if (entity.Behaviour.Team == Team.PLAYER)
+            if (entity.Behaviour.ActingTeam == Team.PLAYER)
             {
                 // Default for allies is follow player
                 var player = Context.GameStateManager.Game.CurrentLevel.Player;

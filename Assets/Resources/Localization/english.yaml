@@ -86,6 +86,14 @@ effect.poison.apply.message: "{0} is now poisoned..."
 effect.poison.remove.message: "{0} is no longer poisoned!"
 effect.poison.tick.message: "Poison hurts {1} for {2} points of damage!"
 
+effect.madness.name: "Madness"
+effect.madness.description: "You feel mad at everything"
+effect.madness.apply.message: "{0} has gone mad with power!"
+effect.madness.remove.message: "{0} has calmed down."
+
+effect.applied.madness.name: "Applied Madness"
+effect.applied.madness.description: "Causes the target to go mad and attack anyone near them."
+
 effect.regen.name: "Regeneration"
 effect.regen.description: "You begin regenerating..."
 effect.regen.apply.message: "{0} is now regenerating!"
@@ -141,6 +149,9 @@ item.staff.of.fireballs.description: This enchanted staff is hot to the touch
 
 item.wand.of.lightning.name: Wand of Lightning
 item.wand.of.lightning.description: "A zappy wand"
+
+item.wand.of.madness.name: Wand of Madness
+item.wand.of.madness.description: "This wand makes you angry just looking at it."
 
 item.antidote.name: "Antidote"
 item.antidote.description: "A bubbling vial of viscous green liquid."
