@@ -25,18 +25,6 @@ namespace Gamepackage
             }
         }
 
-        public Entity BuildEntity(UniqueIdentifier identifier)
-        {
-            var entity = EntityFactory.Build(identifier);
-            entity.Position = new Point(0, 0);
-            return entity;
-        }
-
-        public List<Entity> BuildEncounter(UniqueIdentifier identifier)
-        {
-             return EncounterFactory.Build(identifier);
-        }
-
         public void BuildView(Entity entity, bool DestroyOldView = true)
         {
             if (entity.View != null && entity.View.ViewGameObject != null && DestroyOldView)

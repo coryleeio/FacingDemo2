@@ -56,7 +56,7 @@ item.slot.display.neck: Neck
 
 attacks.humanoid.1: "{0} punches {1} for {2} points of {3} damage!"
 attacks.dog.1: "{0} bites {1} for {2} points of {3} damage!"
-attacks.bee.1: "{0} strings {1} for {2} points of {3} damage!"
+attacks.stinger.1: "{0} stings {1} for {2} points of {3} damage!"
 attacks.slashing.1: "{0} slashes {1} for {2} points of {3} damage!"
 attacks.bludgeoning.1: "{0} crushes {1} for {2} points of {3} damage!"
 attacks.piercing.1: "{0} pierces {1} for {2} points of {3} damage!"

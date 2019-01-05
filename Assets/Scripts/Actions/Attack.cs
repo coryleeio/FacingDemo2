@@ -266,7 +266,7 @@ namespace Gamepackage
                 if (shouldSpawnItemOnGround)
                 {
                     var placeItemLanded = LastNonWallTraversed;
-                    var groundDrop = Context.ViewFactory.BuildEntity(UniqueIdentifier.ENTITY_GROUND_DROP);
+                    var groundDrop = EntityFactory.Build(UniqueIdentifier.ENTITY_GROUND_DROP);
                     groundDrop.Position = new Point(placeItemLanded.X, placeItemLanded.Y);
                     groundDrop.Name = itemBeingLaunched.DisplayName;
                     var level = Context.GameStateManager.Game.CurrentLevel;

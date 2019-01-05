@@ -299,6 +299,7 @@ namespace Gamepackage
                     }
                 }
             }
+            entity.Position = new Point(0, 0);
             return entity;
         }
 
@@ -338,7 +339,7 @@ namespace Gamepackage
             effectList.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<CombatContext>() { CombatContext.Melee }));
             var attackParameters = new AttackParameters()
             {
-                AttackMessage = "attacks.bee.1".Localize(),
+                AttackMessage = "attacks.stinger.1".Localize(),
                 Bonus = 0,
                 DyeNumber = 1,
                 DyeSize = 1,
