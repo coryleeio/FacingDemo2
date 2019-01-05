@@ -209,7 +209,7 @@ namespace Gamepackage
                     {
                         hoverContainsCombatant = true;
                     }
-                    if (entity.Behaviour != null && (entity.Behaviour.Team == Team.VILLIAN || entity.Behaviour.Team == Team.ENEMY_OF_ALL))
+                    if (entity.Behaviour != null && (entity.Behaviour.Team == Team.Enemy || entity.Behaviour.Team == Team.EnemyOfAll))
                     {
                         tileContainsEnemy = true;
                     }

@@ -181,12 +181,12 @@ namespace Gamepackage
                     if (entity.Behaviour.Team == Team.PLAYER)
                     {
                         // If I am a member of the player's team - search for enemies.
-                        if(entityInPos.Behaviour != null && entityInPos.Behaviour.Team == Team.VILLIAN)
+                        if(entityInPos.Behaviour != null && entityInPos.Behaviour.Team == Team.Enemy)
                         {
                             targets.Add(entityInPos);
                         }
                     }
-                    else if (entity.Behaviour.Team == Team.VILLIAN)
+                    else if (entity.Behaviour.Team == Team.Enemy)
                     {
                         // If I am a member of the enemy's team - search for enemies
                         if (entityInPos.Behaviour != null && entityInPos.Behaviour.Team == Team.PLAYER)
@@ -194,10 +194,10 @@ namespace Gamepackage
                             targets.Add(entityInPos);
                         }
                     }
-                    else if (entity.Behaviour.Team == Team.ENEMY_OF_ALL)
+                    else if (entity.Behaviour.Team == Team.EnemyOfAll)
                     {
                         // If I am a member of the ENEMY_OF_ALL team - everyone is an enemy, except neutrals
-                        if (entityInPos.Behaviour != null && entityInPos.Behaviour.Team != Team.NEUTRAL)
+                        if (entityInPos.Behaviour != null && entityInPos.Behaviour.Team != Team.Neutral)
                         {
                             targets.Add(entityInPos);
                         }

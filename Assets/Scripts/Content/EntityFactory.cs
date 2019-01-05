@@ -107,7 +107,7 @@ namespace Gamepackage
                 entity.Behaviour = new Behaviour()
                 {
                     AI = AIType.DumbMelee,
-                    Team = Team.VILLIAN,
+                    Team = Team.Enemy,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
             }
@@ -129,7 +129,7 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new Behaviour()
                 {
-                    Team = Team.VILLIAN,
+                    Team = Team.Enemy,
                     AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
@@ -159,7 +159,7 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new Behaviour()
                 {
-                    Team = Team.VILLIAN,
+                    Team = Team.Enemy,
                     AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
@@ -190,7 +190,7 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new Behaviour()
                 {
-                    Team = Team.VILLIAN,
+                    Team = Team.Enemy,
                     AI = AIType.Archer,
                 };
                 var itemIds = new List<UniqueIdentifier>();
@@ -220,7 +220,7 @@ namespace Gamepackage
                 };
                 entity.Behaviour = new Behaviour()
                 {
-                    Team = Team.VILLIAN,
+                    Team = Team.Enemy,
                     AI = AIType.DumbMelee,
                 };
                 entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LONGSWORD));
