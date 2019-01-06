@@ -51,8 +51,8 @@ namespace Gamepackage
             {
                 level.Entitys.Remove(entity);
             }
-            level.ReleasePathfindingAtPosition(entity, entity.Position);
             level.UnindexEntity(entity, entity.Position);
+            level.ReleasePathfindingAtPosition(entity, entity.Position);
         }
 
         public void Init()

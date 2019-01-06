@@ -323,6 +323,8 @@ namespace Gamepackage
                 {
                     var surroundingPositions = MathUtil.OrthogonalPoints(mousePos).FindAll((p) => { return level.Grid[p].Walkable; });
 
+                    // If I am hovering over an enemy that is far away, enqueue a path
+                    // to move to the closest square adjacent to that enemy.
                     if (surroundingPositions.Count > 0)
                     {
                         surroundingPositions.Sort(delegate (Point p1, Point p2)
@@ -339,10 +341,12 @@ namespace Gamepackage
 
                     if (player.Behaviour.NextAction != null && player.Behaviour.NextAction.GetType() == typeof(Move))
                     {
+                        // If the player is currently moving into a target tile, Enqueue a path from there to their mouse hover
                         StartPathPlayerController(level, ((Move)player.Behaviour.NextAction).TargetPosition, mousePos);
                     }
                     else
                     {
+                        // Enqueue a path from where the player is to their mouse hover.
                         StartPathPlayerController(level, player.Position, mousePos);
                     }
                 }
