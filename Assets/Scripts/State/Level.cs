@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
+
 namespace Gamepackage
 {
     public class Level
@@ -9,6 +11,7 @@ namespace Gamepackage
         public List<Entity> Entitys;
         public List<Room> Rooms = new List<Room>(0);
         public Grid<Tile> Grid;
+        public Grid<Tile> GridWithoutPlayerUnits;
 
         [JsonIgnore]
         private Entity _player;
@@ -24,16 +27,6 @@ namespace Gamepackage
                 }
                 return _player;
             }
-        }
-
-        public Level()
-        {
-            
-        }
-
-        public Tile GetTileInfo(Point p)
-        {
-            return Grid[p.X, p.Y];
         }
 
         public void UnindexAll()
@@ -57,6 +50,24 @@ namespace Gamepackage
             if (!Grid[newPosition.X, newPosition.Y].EntitiesInPosition.Contains(entity))
             {
                 Grid[newPosition.X, newPosition.Y].EntitiesInPosition.Add(entity);
+            }
+        }
+
+        public void UpdatePathfindingForEntity(Entity entity)
+        {
+            Grid[entity.Position].Walkable = !entity.BlocksPathing;
+            if(entity.Behaviour == null || entity.Behaviour.ActingTeam != Team.PLAYER)
+            {
+                GridWithoutPlayerUnits[entity.Position].Walkable = !entity.BlocksPathing;
+            }
+        }
+
+        public void ReleasePathfindingAtPosition(Entity entity, Point oldPosition)
+        {
+            if(entity.BlocksPathing)
+            {
+                Grid[oldPosition].Walkable = true;
+                GridWithoutPlayerUnits[oldPosition].Walkable = true;
             }
         }
     }

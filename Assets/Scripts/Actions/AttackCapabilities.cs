@@ -118,6 +118,10 @@ namespace Gamepackage
                 var level = game.CurrentLevel;
                 if (point != target)
                 {
+                    if(level.Grid[point].TileType == TileType.Wall)
+                    {
+                        return false; // dont shoot through walls
+                    }
                     var entitiesInPosition = level.Grid[point].EntitiesInPosition;
                     foreach (var entityInPosition in entitiesInPosition)
                     {

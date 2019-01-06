@@ -330,11 +330,7 @@ namespace Gamepackage
                             return Point.Distance(player.Position, p1).CompareTo(Point.Distance(player.Position, p2));
                         });
                         waitingForPath = true;
-                        Context.PathFinder.StartPath(player.Position, surroundingPositions[0], level.Grid, (path) =>
-                        {
-                            CurrentPath = path;
-                            waitingForPath = false;
-                        });
+                        StartPathPlayerController(level, player.Position, surroundingPositions[0]);
                     }
                 }
                 else
@@ -343,19 +339,11 @@ namespace Gamepackage
 
                     if (player.Behaviour.NextAction != null && player.Behaviour.NextAction.GetType() == typeof(Move))
                     {
-                        Context.PathFinder.StartPath(((Move)player.Behaviour.NextAction).TargetPosition, mousePos, level.Grid, (path) =>
-                        {
-                            CurrentPath = path;
-                            waitingForPath = false;
-                        });
+                        StartPathPlayerController(level, ((Move)player.Behaviour.NextAction).TargetPosition, mousePos);
                     }
                     else
                     {
-                        Context.PathFinder.StartPath(player.Position, mousePos, level.Grid, (path) =>
-                        {
-                            CurrentPath = path;
-                            waitingForPath = false;
-                        });
+                        StartPathPlayerController(level, player.Position, mousePos);
                     }
                 }
             }
@@ -489,6 +477,18 @@ namespace Gamepackage
                     }
                 }
             }
+        }
+
+        private void StartPathPlayerController(Level level, Point from, Point to)
+        {
+            // We always use the level.GridWithoutPlayerUnits in the player controller for finding paths
+            // because we want to path through our friendly units and automatically swap places with them instead of having to get directly adjacent
+            // and click on them
+            Context.PathFinder.StartPath(from, to, level.GridWithoutPlayerUnits, (path) =>
+            {
+                CurrentPath = path;
+                waitingForPath = false;
+            });
         }
 
         public void StartAiming(AttackCapabilities attackCapabilities, CombatContext combatContext)

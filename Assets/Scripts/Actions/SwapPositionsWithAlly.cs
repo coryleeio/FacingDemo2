@@ -132,9 +132,7 @@ namespace Gamepackage
             Source.Position = targetOldPosition;
             Targets[0].Position = oldSourcePos;
 
-            Context.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = !Source.BlocksPathing;
-            Context.GameStateManager.Game.CurrentLevel.Grid[Targets[0].Position].Walkable = !Targets[0].BlocksPathing;
-
+            // Lock new positions
             Context.EntitySystem.Register(Source, Context.GameStateManager.Game.CurrentLevel);
             Context.EntitySystem.Register(Targets[0], Context.GameStateManager.Game.CurrentLevel);
 

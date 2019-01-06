@@ -24,6 +24,7 @@ namespace Gamepackage
             }
             entity.Rewire();
             level.IndexEntity(entity, entity.Position);
+            level.UpdatePathfindingForEntity(entity);
         }
 
         public void Clear()
@@ -50,6 +51,7 @@ namespace Gamepackage
             {
                 level.Entitys.Remove(entity);
             }
+            level.ReleasePathfindingAtPosition(entity, entity.Position);
             level.UnindexEntity(entity, entity.Position);
         }
 

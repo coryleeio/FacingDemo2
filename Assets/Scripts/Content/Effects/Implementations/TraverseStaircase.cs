@@ -85,10 +85,7 @@ namespace Gamepackage
                 }
 
                 var oldLevel = Context.GameStateManager.Game.CurrentLevel;
-                if (target.BlocksPathing)
-                {
-                    oldLevel.Grid[target.Position].Walkable = true;
-                }
+                oldLevel.ReleasePathfindingAtPosition(target, target.Position);
                 if (target.View.ViewGameObject != null)
                 {
                     GameObject.Destroy(target.View.ViewGameObject);

@@ -198,7 +198,8 @@ namespace Gamepackage
 
                     if (target.BlocksPathing)
                     {
-                        Context.GameStateManager.Game.CurrentLevel.Grid[target.Position].Walkable = true;
+                        // You cant deregister to ReleasePathfindingAtPosition bc we want to keep the corpse
+                        level.ReleasePathfindingAtPosition(target, target.Position);
                         target.BlocksPathing = false;
                     }
 

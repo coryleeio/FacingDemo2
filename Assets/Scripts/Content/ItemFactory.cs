@@ -124,7 +124,7 @@ namespace Gamepackage
                 item.MeleeParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
-                        AttackMessage = "attacks.crushing.1".Localize(),
+                        AttackMessage = "attacks.bludgeoning.1".Localize(),
                         Bonus = 0,
                         DyeNumber = 1,
                         DyeSize = 8,

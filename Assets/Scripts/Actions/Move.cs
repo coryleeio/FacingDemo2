@@ -87,12 +87,8 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            // Release old position
-            if (Source.BlocksPathing)
-            {
-                Context.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = true;
-            }
 
+            // Release old position
             Context.EntitySystem.Deregister(Source, Context.GameStateManager.Game.CurrentLevel);
 
             // Move the view to the new position
@@ -105,10 +101,6 @@ namespace Gamepackage
             Source.Position = TargetPosition;
 
             // Lock new position
-            if (Source.BlocksPathing)
-            {
-                Context.GameStateManager.Game.CurrentLevel.Grid[Source.Position].Walkable = false;
-            }
             Context.EntitySystem.Register(Source, Context.GameStateManager.Game.CurrentLevel);
 
             foreach (var triggerThatMightGoOff in Context.GameStateManager.Game.CurrentLevel.Entitys)

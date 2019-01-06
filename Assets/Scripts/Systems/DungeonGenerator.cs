@@ -37,6 +37,15 @@ namespace Gamepackage
                         TileType = TileType.Empty,
                     };
                 });
+                level.GridWithoutPlayerUnits = new Grid<Tile>(size, size);
+                level.GridWithoutPlayerUnits.Each((x, y, v) =>
+                {
+                    level.GridWithoutPlayerUnits[x, y] = new Tile()
+                    {
+                        TilesetIdentifier = UniqueIdentifier.TILESET_STONE,
+                        TileType = TileType.Empty,
+                    };
+                });
 
                 if (levelIndex == 0)
                 {
@@ -218,6 +227,13 @@ namespace Gamepackage
                 {
                     var occupied = level.Grid[x, y].EntitiesInPosition.FindAll((entity) => { return entity.BlocksPathing; }).Count > 0;
                     v.Walkable = level.Grid[x, y].TileType == TileType.Floor && !occupied;
+                    v.Weight = 1;
+                });
+
+                level.GridWithoutPlayerUnits.Each((x, y, v) =>
+                {
+                    var occupiedByNonFriendly = level.Grid[x, y].EntitiesInPosition.FindAll((entity) => { return entity.BlocksPathing && entity.Behaviour != null && entity.Behaviour.ActingTeam != Team.PLAYER; }).Count > 0;
+                    v.Walkable = level.Grid[x, y].TileType == TileType.Floor && !occupiedByNonFriendly;
                     v.Weight = 1;
                 });
             }
