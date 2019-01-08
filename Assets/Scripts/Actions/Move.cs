@@ -42,6 +42,17 @@ namespace Gamepackage
             LerpCurrentPosition = MathUtil.MapToWorld(Source.Position);
             LerpTargetPosition = MathUtil.MapToWorld(TargetPosition);
             var newDirection = MathUtil.RelativeDirection(Source.Position, TargetPosition);
+
+
+            var sortable = Source.Sortable;
+            if (sortable != null && TargetPosition != null && newDirection == Direction.SouthEast || newDirection == Direction.SouthWest || newDirection == Direction.East || newDirection == Direction.South)
+            {
+                // Sort these from the higher index position immediately before moving them so they are sorted
+                // corectly. Other directions should keep the higher index until the move is complete.
+                sortable.Position = TargetPosition;
+            }
+
+
             Source.Direction = newDirection;
 
             if (Source.View != null && Source.View.SkeletonAnimation != null)
@@ -100,6 +111,12 @@ namespace Gamepackage
             // Actually set new position
             Source.Position = TargetPosition;
 
+            var sortable = Source.Sortable;
+            if (sortable != null)
+            {
+                sortable.Position = TargetPosition;
+            }
+
             // Lock new position
             Context.EntitySystem.Register(Source, Context.GameStateManager.Game.CurrentLevel);
 
@@ -155,7 +172,7 @@ namespace Gamepackage
 
         public override bool IsValid()
         {
-            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].Walkable));
+            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].Walkable && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].EntitiesInPosition.FindAll(CombatUtil.HittableEntities).Count == 0));
         }
     }
 }

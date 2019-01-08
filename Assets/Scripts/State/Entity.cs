@@ -33,6 +33,8 @@ namespace Gamepackage
 
         public bool BlocksPathing = false;
 
+        public bool AlwaysVisible = false;
+
         [JsonIgnore]
         public bool IsPlayer
         {
@@ -57,6 +59,22 @@ namespace Gamepackage
             get
             {
                 return Body != null;
+            }
+        }
+
+        [JsonIgnore]
+        public Sortable Sortable
+        {
+            get
+            {
+                if(View == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return View.Sortable;
+                }
             }
         }
 

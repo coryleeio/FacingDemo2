@@ -62,7 +62,7 @@ namespace Gamepackage
 
             if(ExplosionAppearance != null && ExplosionAppearance.OnSwingDefinition != null)
             {
-                ExplosionAppearance.OnSwingDefinition.Instantiate(Position, Direction.SouthEast);
+                ExplosionAppearance.OnSwingDefinition.Instantiate(Position, Direction.SouthEast, null);
             }
 
             // Do a manual floodfill here bc we dont want to floor filter the initial explosion
@@ -90,7 +90,7 @@ namespace Gamepackage
                         {
                             if (ExplosionAppearance != null && ExplosionAppearance.OnEnterDefinition != null)
                             {
-                                ExplosionAppearance.OnEnterDefinition.Instantiate(point, Direction.SouthEast);
+                                ExplosionAppearance.OnEnterDefinition.Instantiate(point, Direction.SouthEast, null);
                             }
 
                             var game = Context.GameStateManager.Game;
@@ -121,7 +121,7 @@ namespace Gamepackage
                         {
                             if (ExplosionAppearance != null && ExplosionAppearance.OnLeaveDefinition != null)
                             {
-                                ExplosionAppearance.OnLeaveDefinition.Instantiate(donePoint, Direction.SouthEast);
+                                ExplosionAppearance.OnLeaveDefinition.Instantiate(donePoint, Direction.SouthEast, null);
                             }
                             RemnantPoints.Add(donePoint);
                         }

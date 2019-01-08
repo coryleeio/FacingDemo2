@@ -18,6 +18,6 @@ public class TestSpline : MonoBehaviour {
             }
         };
 
-        ViewFactory.BuildSplineView("Spine/Export/Bee_SkeletonData", spritesToEquip, "Template");
+        ViewFactory.BuildSplineView("Spine/Export/Humanoid_SkeletonData", spritesToEquip, "Template");
     }
 }

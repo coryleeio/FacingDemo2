@@ -127,11 +127,10 @@ namespace Gamepackage
                         continue;
                     }
                     var tile = GetTileFromPoolAndActivate(config);
-                    tile.SpriteRenderer.sortingOrder = overlay.SortOrder + config.RelativeSortOrder;
+                    tile.Sortable.Weight = overlay.SortOrder + config.RelativeSortOrder;
                     tile.transform.position = MathUtil.MapToWorld(point.X, point.Y);
                     tile.Position = new Point(point.X, point.Y);
                     tile.SpriteRenderer.color = config.DefaultColor;
-
                     if (BoundingBox.Contains(point))
                     {
                         AllOverlayTilesInUse[tile.Position.X, tile.Position.Y].Add(tile.SpriteRenderer);

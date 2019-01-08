@@ -126,7 +126,7 @@ namespace Gamepackage
         {
             if (ProjectileAppearance.OnLeaveDefinition != null)
             {
-                ProjectileAppearance.OnLeaveDefinition.Instantiate(NextGridPosition, Direction);
+                ProjectileAppearance.OnLeaveDefinition.Instantiate(NextGridPosition, Direction, ProjectileView);
             }
 
             ElapsedTime = 0.0f;
@@ -166,6 +166,16 @@ namespace Gamepackage
                 perTileTravelTime = ProjectileAppearance.ProjectileDefinition.PerTileTravelTime;
             }
 
+            if (CombatContextCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
+            {
+                // in this case - since we travel ALL the distance in 1 lerp, we want 
+                // to set the perTileTravelTime to distance * the per tile travel time
+                // to approximate how quickly to move the projectile
+                // so that it will look consistent independent of range
+                NextGridPosition = AimedTarget;
+                perTileTravelTime = perTileTravelTime * SourceGridPosition.Distance(NextGridPosition);
+            }
+
             if (ElapsedTime > perTileTravelTime)
             {
                 ElapsedTime = perTileTravelTime;
@@ -188,7 +198,7 @@ namespace Gamepackage
 
                 if (!hitWall && ProjectileAppearance.OnEnterDefinition != null)
                 {
-                    ProjectileAppearance.OnEnterDefinition.Instantiate(NextGridPosition, Direction);
+                    ProjectileAppearance.OnEnterDefinition.Instantiate(NextGridPosition, Direction, ProjectileView);
                 }
 
                 if (hitTarget)
@@ -197,7 +207,7 @@ namespace Gamepackage
                     {
                         if (ProjectileAppearance.OnHitDefinition != null)
                         {
-                            ProjectileAppearance.OnHitDefinition.Instantiate(NextGridPosition, Direction);
+                            ProjectileAppearance.OnHitDefinition.Instantiate(NextGridPosition, Direction, ProjectileView == null ? null : ProjectileView.gameObject);
                         }
 
                         NumberOfTargetsHit += targets.Count;
@@ -298,11 +308,11 @@ namespace Gamepackage
         {
             if (ProjectileAppearance.OnSwingDefinition != null)
             {
-                ProjectileAppearance.OnSwingDefinition.Instantiate(SourceGridPosition, Direction);
+                ProjectileAppearance.OnSwingDefinition.Instantiate(SourceGridPosition, Direction, ProjectileView);
             }
             if (ProjectileAppearance.ProjectileDefinition != null)
             {
-                ProjectileView = ProjectileAppearance.ProjectileDefinition.Instantiate(SourceGridPosition, Direction);
+                ProjectileView = ProjectileAppearance.ProjectileDefinition.Instantiate(SourceGridPosition, Direction, ProjectileView);
             }
         }
     }

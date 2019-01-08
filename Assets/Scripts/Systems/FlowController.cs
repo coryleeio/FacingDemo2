@@ -33,6 +33,7 @@ namespace Gamepackage
                 // Take stock of who from the current team still needs to act
                 var entities = Context.GameStateManager.Game.CurrentLevel.Entitys;
                 var entitiesDoneThinking = 0;
+                var entitiesNotDoneThinking = 0;
                 var entitesThatStillNeedToACtBeforePhaseEnds = 0;
                 foreach (var entity in entities)
                 {
@@ -54,6 +55,10 @@ namespace Gamepackage
                             if (entity.Behaviour.IsThinking && entity.Behaviour.NextAction != null)
                             {
                                 entitiesDoneThinking++;
+                            }
+                            else
+                            {
+                                entitiesNotDoneThinking++;
                             }
                         }
                     }
@@ -103,8 +108,35 @@ namespace Gamepackage
                             Assert.IsNotNull(entity.Behaviour.NextAction, "Any entity that is not done at this point should know what they would like to do, somehow an action was not chosen for: " + entity.PrototypeIdentifier.ToString());
                             if (!entity.Behaviour.NextAction.IsValid())
                             {
-                                entity.Behaviour.NextAction = null;
-                                continue;
+                                if(entity.Behaviour.NextAction.GetType() == typeof(Move))
+                                {
+                                    var castMove = (Move)entity.Behaviour.NextAction;
+                                    Debug.Log(string.Format("Entity {0} of type {1} discarded its next action of {2}", entity.Id.ToString(), entity.PrototypeIdentifier.ToString(), entity.Behaviour.NextAction.ToString()));
+                                    Debug.Log(string.Format("It was in position {0} trying to move to: {1}", entity.Position, castMove.TargetPosition));
+                                }
+                                else
+                                {
+                                    Debug.Log(string.Format("Entity {0} of type {1} discarded its next action of {2}", entity.Id.ToString(), entity.PrototypeIdentifier.ToString(), entity.Behaviour.NextAction.ToString()));
+                                }
+                                if(entity.IsPlayer)
+                                {
+                                    Debug.Log("Since it is the player the action will be cleared.");
+                                    entity.Behaviour.NextAction = null;
+                                    entity.Behaviour.IsThinking = false;
+                                    continue;
+                                }
+                                else
+                                {
+                                    Debug.Log("Since it was not the player, it will wait a turn...");
+                                    // Force it to wait, because it couldnt figure out 
+                                    // what to do.
+                                    var wait = new Wait
+                                    {
+                                        Source = entity
+                                    };
+                                    entity.Behaviour.NextAction = wait;
+                                    return;
+                                }
                             }
                             if (entity.Behaviour.NextAction.GetType() == typeof(Wait))
                             {

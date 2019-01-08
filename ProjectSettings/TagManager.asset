@@ -41,6 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Everything
-    uniqueID: 3082648743
+  - name: Ground
+    uniqueID: 3955817651
+    locked: 0
+  - name: Overlays
+    uniqueID: 3537133791
+    locked: 0
+  - name: EntitiesAndProps
+    uniqueID: 3049523431
     locked: 0

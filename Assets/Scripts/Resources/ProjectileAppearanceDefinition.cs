@@ -6,12 +6,13 @@ namespace Gamepackage
     {
         public GameObject Prefab;
         public float Lifetime = 0.5f;
+        public bool InheritRotation = false;
         public ProjectileBehaviour ProjectileBehaviour;
         public float PerTileTravelTime = 0.5f;
 
         public ProjectileAppearanceDefinition() { }
 
-        public GameObject Instantiate(Point position, Direction direction)
+        public GameObject Instantiate(Point position, Direction direction, GameObject referenceObject)
         {
             if(Prefab == null)
             {
@@ -29,6 +30,10 @@ namespace Gamepackage
             else if (ProjectileBehaviour == ProjectileBehaviour.FaceDirection)
             {
                 prefabInstance.transform.eulerAngles = MathUtil.GetProjectileRotation(direction);
+            }
+            if(InheritRotation)
+            {
+                prefabInstance.transform.localRotation = referenceObject.transform.localRotation;
             }
             if (Lifetime > 0.0f)
             {

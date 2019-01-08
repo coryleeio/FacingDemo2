@@ -128,9 +128,19 @@ namespace Gamepackage
             }
 
             // Actually set new position
-
             Source.Position = targetOldPosition;
+            var sourceSortable = Source.Sortable;
+            if (sourceSortable != null)
+            {
+                sourceSortable.Position = targetOldPosition;
+            }
+
             Targets[0].Position = oldSourcePos;
+            var targetSortable = Targets[0].Sortable;
+            if (targetSortable != null)
+            {
+                targetSortable.Position = oldSourcePos;
+            }
 
             // Lock new positions
             Context.EntitySystem.Register(Source, Context.GameStateManager.Game.CurrentLevel);

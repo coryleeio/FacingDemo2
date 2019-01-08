@@ -32,13 +32,13 @@ namespace Gamepackage
                 UnityEngine.GameObject.Destroy(entity.View.ViewGameObject);
             }
             var itemsToEquip = new Dictionary<SpriteAttachment, Sprite>();
-            if(entity.Inventory != null)
+            if (entity.Inventory != null)
             {
                 var equippedItemsBySlot = entity.Inventory.EquippedItemBySlot;
-                foreach(var pair in equippedItemsBySlot)
+                foreach (var pair in equippedItemsBySlot)
                 {
                     var item = pair.Value;
-                    foreach(var spriteSlotPair in item.ItemAppearance.WornItemSpritePerSlot)
+                    foreach (var spriteSlotPair in item.ItemAppearance.WornItemSpritePerSlot)
                     {
                         var spriteSlot = spriteSlotPair.Key;
                         var sprite = spriteSlotPair.Value;
@@ -48,12 +48,11 @@ namespace Gamepackage
             }
 
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
-            var go = new GameObject();
-            go.name = entity.PrototypeIdentifier.ToString();
-            go.transform.position = MathUtil.MapToWorld(entity.Position);
-            entity.View.ViewGameObject = go;
 
-            if(entity.IsCombatant && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
+            var go = BuildDefaultGameObject(entity);
+            var sortable = BuildDefaultSortable(entity);
+
+            if (entity.IsCombatant && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
             {
                 var healthbarPrefab = Resources.Load<GameObject>("UI/Healthbar/Healthbar");
                 var healthbarGameObject = GameObject.Instantiate(healthbarPrefab);
@@ -62,7 +61,7 @@ namespace Gamepackage
                 healthbarGameObject.GetComponent<HealthBar>().Entity = entity;
             }
 
-            if(entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
+            if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("RedMarker");
@@ -86,17 +85,33 @@ namespace Gamepackage
                 spriteRenderer.sprite = Resources.Load<Sprite>("BlueMarker");
                 spriteRenderer.material = defaultMaterial;
             }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CHESS_PIECE)
+            {
+                var pref = Resources.Load<GameObject>("Prefabs/ChessPiecePrefab");
+                var ch = GameObject.Instantiate<GameObject>(pref);
+                ch.transform.SetParent(go.transform, false);
+                ch.transform.localPosition = Vector3.zero;
+            }
+            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_RUG)
+            {
+                var pref = Resources.Load<GameObject>("Prefabs/RugPrefab");
+                var ch = GameObject.Instantiate<GameObject>(pref);
+                ch.transform.SetParent(go.transform, false);
+                ch.transform.localPosition = Vector3.zero;
+            }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_UP)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseUp");
                 spriteRenderer.material = defaultMaterial;
+                sortable.Weight = 0; // Behind walking combating entities, but still in the entity layer bc it rises up in front of walls behind it.
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
                 spriteRenderer.material = defaultMaterial;
+                sortable.Weight = 0;  // Behind walking combating entities, but still in the entity layer bc it rises up in front of walls behind it.
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_ASIAN)
             {
@@ -168,9 +183,10 @@ namespace Gamepackage
                     spriteRenderer.sprite = item.ItemAppearance.InventorySprite;
                     spriteRenderer.material = defaultMaterial;
                 }
+                sortable.Weight = 0;
             }
 
-            if(entity.Body != null && entity.Body.Floating && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
+            if (entity.Body != null && entity.Body.Floating && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
             {
                 var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
                 var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
@@ -188,6 +204,37 @@ namespace Gamepackage
                     }
                 }
             }
+        }
+
+        private static GameObject BuildDefaultGameObject(Entity entity)
+        {
+            var go = new GameObject();
+            go.name = entity.PrototypeIdentifier.ToString();
+            go.transform.position = MathUtil.MapToWorld(entity.Position);
+            entity.View.ViewGameObject = go;
+            return go;
+        }
+
+        private Sortable BuildDefaultSortable(Entity entity)
+        {
+            var sortable = entity.View.ViewGameObject.AddComponent<Sortable>();
+            sortable.Layer = SortingLayer.EntitiesAndProps;
+            if (entity.Position == null)
+            {
+                sortable.Position = new Point(0, 0);
+            }
+            else
+            {
+                sortable.Position = new Point(entity.Position);
+            }
+
+            sortable.PositionRelativeToParent = new Point(Point.Zero);
+            // Combatants appear in front of loot, objects on the floor.
+            if (entity.IsCombatant)
+            {
+                entity.Sortable.Weight = 1;
+            }
+            return sortable;
         }
 
         private static void SetSpineDefaults(GameObject go, GameObject newGo)
@@ -210,7 +257,7 @@ namespace Gamepackage
 
                     if (tileInfo.TileType == TileType.Floor)
                     {
-                        SpriteRenderer renderer = BuildTileSpriteRenderer(folder, tileSet.FloorSprite, point);
+                        BuildFloorTile(folder, tileSet.FloorSprite, point);
                     }
                     else if (tileInfo.TileType == TileType.Wall)
                     {
@@ -226,7 +273,7 @@ namespace Gamepackage
                             northWestPointTileType == TileType.Wall
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.TeeSprite, point);
+                            BuildWallTile(folder, tileSet.TeeSprite, point);
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -235,7 +282,7 @@ namespace Gamepackage
                              (northWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Empty)
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.SouthEastTeeSprite, point);
+                            BuildWallTile(folder, tileSet.SouthEastTeeSprite, point);
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -244,7 +291,7 @@ namespace Gamepackage
                              northWestPointTileType == TileType.Wall
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.NorthEastTeeSprite, point);
+                            BuildWallTile(folder, tileSet.NorthEastTeeSprite, point);
                         }
                         else if (
                              (northEastPointTileType == TileType.Floor || northEastPointTileType == TileType.Empty) &&
@@ -253,7 +300,7 @@ namespace Gamepackage
                              northWestPointTileType == TileType.Wall
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.SouthWestTeeSprite, point);
+                            BuildWallTile(folder, tileSet.SouthWestTeeSprite, point);
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -262,7 +309,7 @@ namespace Gamepackage
                              northWestPointTileType == TileType.Wall
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.NorthWestTeeSprite, point);
+                            BuildWallTile(folder, tileSet.NorthWestTeeSprite, point);
                         }
 
                         else if (
@@ -272,7 +319,7 @@ namespace Gamepackage
                              northWestPointTileType == TileType.Empty
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.NorthWestWallSprite, point);
+                            BuildWallTile(folder, tileSet.NorthWestWallSprite, point);
                         }
 
                         else if (
@@ -282,7 +329,7 @@ namespace Gamepackage
                             northWestPointTileType == TileType.Wall
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.NorthEastWallSprite, point);
+                            BuildWallTile(folder, tileSet.NorthEastWallSprite, point);
                         }
 
                         // We default to SE and SW incase we later want to shorten the walls on the southern side 
@@ -295,7 +342,7 @@ namespace Gamepackage
                              (northWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Empty)
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.SouthEastWallSprite, point);
+                            BuildWallTile(folder, tileSet.SouthEastWallSprite, point);
                         }
 
                         else if (
@@ -305,7 +352,7 @@ namespace Gamepackage
                              (northWestPointTileType == TileType.Wall || northWestPointTileType == TileType.Floor)
                         )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.SouthWestWallSprite, point);
+                            BuildWallTile(folder, tileSet.SouthWestWallSprite, point);
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -314,7 +361,7 @@ namespace Gamepackage
                              (northWestPointTileType == TileType.Empty || northWestPointTileType == TileType.Floor)
                          )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.WestCornerSprite, point);
+                            BuildWallTile(folder, tileSet.WestCornerSprite, point);
                         }
                         else if (
                              (northEastPointTileType == TileType.Empty || northEastPointTileType == TileType.Floor) &&
@@ -323,7 +370,7 @@ namespace Gamepackage
                              (northWestPointTileType == TileType.Empty || northWestPointTileType == TileType.Floor)
                          )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.NorthCornerSprite, point);
+                            BuildWallTile(folder, tileSet.NorthCornerSprite, point);
                         }
                         else if (
                              (northEastPointTileType == TileType.Empty || northEastPointTileType == TileType.Floor) &&
@@ -332,7 +379,7 @@ namespace Gamepackage
                              northWestPointTileType == TileType.Wall
                          )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.EastCornerSprite, point);
+                            BuildWallTile(folder, tileSet.EastCornerSprite, point);
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -341,12 +388,13 @@ namespace Gamepackage
                              northWestPointTileType == TileType.Wall
                          )
                         {
-                            BuildTileSpriteRenderer(folder, tileSet.SouthCornerSprite, point);
+                            BuildWallTile(folder, tileSet.SouthCornerSprite, point);
                         }
                         else
                         {
-                            BuildTileSpriteRenderer(folder, MissingSprite, point);
+                            BuildWallTile(folder, MissingSprite, point);
                         }
+                        BuildFloorTile(folder, tileSet.FloorSprite, point);
                     }
                 }
             }
@@ -354,7 +402,7 @@ namespace Gamepackage
 
         public static GameObject BuildSplineView(string SkeletonDataPath, Dictionary<SpriteAttachment, Sprite> spritesBySlot, string SkinName = null, Animations beginningAnimation = Animations.Idle, Direction beginningDirection = Direction.SouthEast)
         {
-            if(spritesBySlot == null)
+            if (spritesBySlot == null)
             {
                 spritesBySlot = new Dictionary<SpriteAttachment, Sprite>();
             }
@@ -378,7 +426,7 @@ namespace Gamepackage
                 Sprite sprite = pair.Value;
                 int spriteSlotIndex = skeleton.FindSlotIndex(SpriteSlotFromAttachment(attachmentKey));
 
-                if(spriteSlotIndex == -1)
+                if (spriteSlotIndex == -1)
                 {
                     Debug.LogWarning("Could not find sprite attachment on template: " + attachmentKey.ToString());
                     continue;
@@ -404,6 +452,7 @@ namespace Gamepackage
             skeletonAnimation.AnimationState.SetAnimation(0, idleAnimation, true);
             skeletonAnimation.Update(0); // Use the pose in the currently active animation.
             Resources.UnloadUnusedAssets();
+
             return skeletonAnimation.gameObject;
         }
 
@@ -417,17 +466,32 @@ namespace Gamepackage
             return level.Grid[offsetPoint.X, offsetPoint.Y].TileType;
         }
 
-        private SpriteRenderer BuildTileSpriteRenderer(GameObject folder, Sprite sprite, Point position)
+        private void BuildWallTile(GameObject folder, Sprite wallTile, Point position)
         {
             GameObject o = new GameObject();
             o.name = "Tile";
             var renderer = o.AddComponent<SpriteRenderer>();
+            var sortable = o.AddComponent<Sortable>();
             renderer.material = DefaultSpriteMaterial;
             o.transform.SetParent(folder.transform);
-            renderer.sprite = sprite;
+            renderer.sprite = wallTile;
             o.transform.localPosition = MathUtil.MapToWorld(position);
-            Context.SpriteSortingSystem.RegisterTile(renderer, position);
-            return renderer;
+            sortable.Position = new Point(position);
+            sortable.Layer = SortingLayer.EntitiesAndProps;
+        }
+
+        private void BuildFloorTile(GameObject folder, Sprite wallTile, Point position)
+        {
+            GameObject o = new GameObject();
+            o.name = "Ground";
+            var renderer = o.AddComponent<SpriteRenderer>();
+            var sortable = o.AddComponent<Sortable>();
+            renderer.material = DefaultSpriteMaterial;
+            o.transform.SetParent(folder.transform);
+            renderer.sprite = wallTile;
+            o.transform.localPosition = MathUtil.MapToWorld(position);
+            sortable.Position = new Point(position);
+            sortable.Layer = SortingLayer.Ground;
         }
 
         private static string SpriteSlotFromAttachment(SpriteAttachment attachment)

@@ -47,7 +47,8 @@ namespace Gamepackage
 
         public void FigureOutNextAction()
         {
-            if(AI == AIType.None)
+            PathsReturned = 0;
+            if (AI == AIType.None)
             {
                 throw new NotImplementedException("AI with undefined behaviour: " + entity.PrototypeIdentifier.ToString());
             }
@@ -91,17 +92,17 @@ namespace Gamepackage
         // Make a noise at a location, hearable by all entities that are within the radius and match the predicate.
         private void MakeNoiseIndicatingLocation(Level level, Point soundOrigin, Point targetLocation, int radius, Predicate<Entity> predicate)
         {
-            if(level.BoundingBox.Contains(soundOrigin))
+            if (level.BoundingBox.Contains(soundOrigin))
             {
                 var possibleLocations = level.Grid[soundOrigin].CachedFloorFloodFills[radius];
-                foreach(var posibleLocation in possibleLocations)
+                foreach (var posibleLocation in possibleLocations)
                 {
                     var entitiesInLocation = level.Grid[posibleLocation].EntitiesInPosition;
-                    foreach(var entityInLocation in entitiesInLocation)
+                    foreach (var entityInLocation in entitiesInLocation)
                     {
-                        if(predicate == null || predicate(entityInLocation))
+                        if (predicate == null || predicate(entityInLocation))
                         {
-                            if(entityInLocation.Behaviour != null && entityInLocation.Behaviour.LastKnownTargetPosition == null)
+                            if (entityInLocation.Behaviour != null && entityInLocation.Behaviour.LastKnownTargetPosition == null)
                             {
                                 entityInLocation.Behaviour.LastKnownTargetPosition = targetLocation;
                             }
@@ -168,20 +169,20 @@ namespace Gamepackage
             foreach (var pos in points)
             {
                 var entitiesInPos = grid[pos].EntitiesInPosition;
-                foreach(var entityInPos in entitiesInPos)
+                foreach (var entityInPos in entitiesInPos)
                 {
-                    if(entityInPos == entity)
+                    if (entityInPos == entity)
                     {
                         continue;
                     }
-                    if((entityInPos.Body != null && entityInPos.Body.IsDead) || !entityInPos.IsCombatant)
+                    if ((entityInPos.Body != null && entityInPos.Body.IsDead) || !entityInPos.IsCombatant)
                     {
                         continue;
                     }
                     if (entity.Behaviour.ActingTeam == Team.PLAYER)
                     {
                         // If I am a member of the player's team - search for enemies.
-                        if(entityInPos.Behaviour != null && (entityInPos.Behaviour.ActingTeam == Team.Enemy || entityInPos.Behaviour.ActingTeam == Team.EnemyOfAll))
+                        if (entityInPos.Behaviour != null && (entityInPos.Behaviour.ActingTeam == Team.Enemy || entityInPos.Behaviour.ActingTeam == Team.EnemyOfAll))
                         {
                             targets.Add(entityInPos);
                         }
@@ -231,14 +232,27 @@ namespace Gamepackage
             {
                 // Default for allies is follow player
                 var player = Context.GameStateManager.Game.CurrentLevel.Player;
-                Context.Application.StartCoroutine(MoveToward(player.Position));
+                if (player.Position.IsAdjacentTo(entity.Position))
+                {
+                    // Wait if we are already adjacent
+                    var wait = new Wait
+                    {
+                        Source = entity
+                    };
+                    NextAction = wait;
+                }
+                else
+                {
+                    // Otherwise move toward player
+                    Context.Application.StartCoroutine(MoveToward(player.Position));
+                }
                 return;
             }
             else
             {
-                if(LastKnownTargetPosition != null)
+                if (LastKnownTargetPosition != null)
                 {
-                    if(LastKnownTargetPosition.Distance(entity.Position) < 1.0f)
+                    if (LastKnownTargetPosition.Distance(entity.Position) < 1.0f)
                     {
                         LastKnownTargetPosition = null;
                         var wait = new Wait
@@ -268,11 +282,20 @@ namespace Gamepackage
         private IEnumerator MoveToward(Point targetPosition)
         {
             NextAction = null;
-            PathsReturned = 0;
-
             var level = Context.GameStateManager.Game.CurrentLevel;
-            var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll((p) => { return level.Grid[p].Walkable; });
-            var PointsAroundMe = MathUtil.OrthogonalPoints(entity.Position).FindAll((p) => { return level.Grid[p].Walkable && Point.DistanceSquared(p, targetPosition) < Point.DistanceSquared(entity.Position, targetPosition); });
+            var PointsAroundMe = MathUtil.OrthogonalPoints(entity.Position).FindAll(CombatUtil.NonoccupiedTiles);
+            var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll(CombatUtil.NonoccupiedTiles);
+            if (PointsAroundMe.Count == 0)
+            {
+                // If there are no positions around me available, I can just give up now, as I cannot move.
+                var wait = new Wait
+                {
+                    Source = entity
+                };
+                NextAction = wait;
+                yield break;
+            }
+            PointsAroundMe = PointsAroundMe.FindAll((poi) => { return Point.DistanceSquared(poi, targetPosition) < Point.DistanceSquared(entity.Position, targetPosition); });
 
             PathsExpected = PointsAroundTarget.Count + PointsAroundMe.Count;
             PointsAroundMe.Sort(new PointDistanceComparer()

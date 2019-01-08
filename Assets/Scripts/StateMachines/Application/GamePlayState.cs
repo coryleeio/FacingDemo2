@@ -38,7 +38,6 @@ namespace Gamepackage
             Context.OverlaySystem.Process();
             Context.PathFinder.Process();
             Context.FlowSystem.Process();
-            Context.SpriteSortingSystem.Process();
             Context.VisibilitySystem.Process();
             CameraDriver.MoveCamera();
         }

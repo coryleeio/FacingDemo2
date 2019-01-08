@@ -19,5 +19,8 @@ namespace Gamepackage
 
         [JsonIgnore]
         public List<Entity> EntitiesInPosition = new List<Entity>(0);
+
+        [JsonIgnore]
+        public Dictionary<SortingLayer, List<Sortable>> SortablesInPositionByLayer = new Dictionary<SortingLayer, List<Sortable>>();
     }
 }

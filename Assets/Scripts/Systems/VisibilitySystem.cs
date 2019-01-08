@@ -92,6 +92,11 @@ namespace Gamepackage
                                 if (isValid && level.Grid[newPoint].TileType == TileType.Floor || level.Grid[newPoint].TileType == TileType.Wall)
                                 {
                                     visibilityAggregate.Add(newPoint);
+                                    if(level.Grid[newPoint].TileType == TileType.Wall)
+                                    {
+                                        // Let them see the last wall, but points on the other side of that wall are not valid.
+                                        break;
+                                    }
                                 }
                                 if(isValid && (level.Grid[newPoint].TileType == TileType.Empty || level.Grid[newPoint].TileType == TileType.Wall))
                                 {
@@ -288,14 +293,7 @@ namespace Gamepackage
                 {
                     if (entity.View != null)
                     {
-                        if (entity.IsPlayer || (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_DOWN || entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_UP))
-                        {
-                            entity.View.IsVisible = true;
-                        }
-                        else
-                        {
-                            entity.View.IsVisible = _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
-                        }
+                        entity.View.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
                     }
 
                     if (entity.View.ViewGameObject != null)

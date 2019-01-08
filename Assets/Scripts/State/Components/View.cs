@@ -26,6 +26,19 @@ namespace Gamepackage
             }
         }
 
+        [JsonIgnore]
+        public Sortable Sortable
+        {
+            get
+            {
+                if (ViewGameObject != null)
+                {
+                    return ViewGameObject.GetComponentInChildren<Sortable>();
+                }
+                return null;
+            }
+        }
+
         public View() { }
     }
 }

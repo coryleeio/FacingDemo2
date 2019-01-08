@@ -12,6 +12,7 @@ namespace Gamepackage
             myGameObject.hideFlags = HideFlags.HideInHierarchy;
             var spriteRenderer = myGameObject.AddComponent<SpriteRenderer>();
             spriteRenderer.sortingOrder = 30000;
+            spriteRenderer.sortingLayerID = UnityEngine.SortingLayer.NameToID(SortingLayer.Overlays.ToString());
             spriteRenderer.sprite = sprite;
             myGameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
@@ -39,11 +40,23 @@ namespace Gamepackage
 
             var fireballPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Fireball"));
             var bigFirePrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/BigFire"));
+
+            var potionBreakPrefab = Resources.Load<GameObject>("Prefabs/PotionBreakPrefab");
+            potionBreakPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
             var greenPotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/GreenPotion"));
-            var redPotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/RedPotion"));
-            var purplePotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/PurplePotion"));
-            var bluePotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/BluePotion"));
             greenPotionPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+            var redPotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/RedPotion"));
+            redPotionPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+            var purplePotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/PurplePotion"));
+            purplePotionPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+            var bluePotionPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/BluePotion"));
+            bluePotionPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+
             var arrowPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/Arrow"));
             arrowPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             var purpleBallPrefab = BuildDefaultParticle(Resources.Load<Sprite>("Sprites/PurpleBall"));
@@ -142,6 +155,14 @@ namespace Gamepackage
             };
             retVal.Add(dagger);
 
+            var potionBreakDefinition = new ProjectileAppearanceDefinition()
+            {
+                Prefab = potionBreakPrefab,
+                Lifetime = 0.6f,
+                ProjectileBehaviour = ProjectileBehaviour.None,
+                InheritRotation = true,
+            };
+
             var greenPotion = new ProjectileAppearance()
             {
                 UniqueIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_GREEN_POTION,
@@ -149,8 +170,9 @@ namespace Gamepackage
                 {
                     Prefab = greenPotionPrefab,
                     Lifetime = 0.0f,
-                    ProjectileBehaviour = ProjectileBehaviour.Spin,
-                }
+                    ProjectileBehaviour = ProjectileBehaviour.Spin
+                },
+                OnHitDefinition = potionBreakDefinition
             };
             retVal.Add(greenPotion);
 
@@ -162,7 +184,8 @@ namespace Gamepackage
                     Prefab = redPotionPrefab,
                     Lifetime = 0.0f,
                     ProjectileBehaviour = ProjectileBehaviour.Spin,
-                }
+                },
+                OnHitDefinition = potionBreakDefinition
             };
             retVal.Add(redPotion);
             var purplePotion = new ProjectileAppearance()
@@ -173,7 +196,8 @@ namespace Gamepackage
                     Prefab = purplePotionPrefab,
                     Lifetime = 0.0f,
                     ProjectileBehaviour = ProjectileBehaviour.Spin,
-                }
+                },
+                OnHitDefinition = potionBreakDefinition
             };
             retVal.Add(purplePotion);
             var bluePotion = new ProjectileAppearance()
@@ -184,7 +208,8 @@ namespace Gamepackage
                     Prefab = bluePotionPrefab,
                     Lifetime = 0.0f,
                     ProjectileBehaviour = ProjectileBehaviour.Spin,
-                }
+                },
+                OnHitDefinition = potionBreakDefinition
             };
             retVal.Add(bluePotion);
 
@@ -220,7 +245,7 @@ namespace Gamepackage
                     Prefab = purpleBallPrefab,
                     Lifetime = 0.0f,
                     ProjectileBehaviour = ProjectileBehaviour.Spin,
-                    PerTileTravelTime = 4.0f
+                    PerTileTravelTime = 2.0f
                 }
             };
             retVal.Add(purpleBall);

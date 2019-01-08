@@ -31,14 +31,14 @@ namespace Gamepackage
 
             if (ElapsedTime > 1.0f)
             {
-                var spriteRenderer = GetComponent<SpriteRenderer>();
+                var spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
                 var firstPhasePercentage = (ElapsedTime - 1.0f) / 1f;
                 var secondPhasePErcentage = (ElapsedTime - 2f) / 1f;
 
                 if (firstPhasePercentage < 1.0f)
                 {
                     var color = Color.Lerp(Color.white, Color.black, firstPhasePercentage);
-                    if (spriteRenderer == null)
+                    if (spriteRenderers.Length == 0)
                     {
                         var meshRenderer = GetComponentInChildren<MeshRenderer>();
                         meshRenderer.SetPropertyBlock(mpb);
@@ -46,14 +46,17 @@ namespace Gamepackage
                     }
                     else
                     {
-                        spriteRenderer.color = color;
+                        foreach(var spriteRenderer in spriteRenderers)
+                        {
+                            spriteRenderer.color = color;
+                        }
                     }
 
                 }
                 else if (secondPhasePErcentage < 1.0f)
                 {
                     var color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
-                    if (spriteRenderer == null)
+                    if (spriteRenderers.Length == 0)
                     {
                         var meshRenderer = GetComponentInChildren<MeshRenderer>();
                         mpb.SetColor(colorPropertyName, color);
@@ -61,7 +64,10 @@ namespace Gamepackage
                     }
                     else
                     {
-                        spriteRenderer.color = color;
+                        foreach (var spriteRenderer in spriteRenderers)
+                        {
+                            spriteRenderer.color = color;
+                        }
                     }
                 }
                 else

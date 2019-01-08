@@ -15,7 +15,7 @@ namespace Gamepackage
         // Update is called once per frame
         public void Update()
         {
-            if (Slider != null && Entity != null)
+            if (Slider != null && Entity != null && Entity.Body != null)
             {
                 Slider.minValue = 0;
                 Slider.maxValue = Entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH);

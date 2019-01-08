@@ -240,6 +240,7 @@ namespace Gamepackage
             {
                 entity.Name = "entity.stairs.up.name".Localize();
                 entity.BlocksPathing = false;
+                entity.AlwaysVisible = true;
                 entity.View = new View()
                 {
                     ViewType = ViewType.StaticSprite,
@@ -255,6 +256,7 @@ namespace Gamepackage
             {
                 entity.Name = "entity.stairs.down.name".Localize();
                 entity.BlocksPathing = false;
+                entity.AlwaysVisible = true;
                 entity.View = new View()
                 {
                     ViewType = ViewType.StaticSprite,
