@@ -27,10 +27,14 @@ namespace Gamepackage
         private AttackCapabilities AimingAttackCapabilities;
         public Queue<Action> ActionList = new Queue<Action>();
 
+        public GameObject MovementIndicator;
+
         public void Init()
         {
             CurrentPath = null;
             waitingForPath = false;
+            MovementIndicator = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/MovementIndicator"));
+            ShowMovementIndicator(false);
 
             MouseHoverOverlayConfig = new OverlayConfig
             {
@@ -248,6 +252,7 @@ namespace Gamepackage
                 GenerateAttackOverlayOffsets(mousePos, player.Position, aimingAttackCapability, hoverDirection);
                 if (Input.GetMouseButtonDown(0))
                 {
+                    ShowMovementIndicator(false);
                     if (aimingAttackCapability.CanPerform && aimingAttackCapability.IsInRange(mousePos))
                     {
                         var direction = MathUtil.RelativeDirection(player.Position, mousePos);
@@ -299,6 +304,7 @@ namespace Gamepackage
                             // Action is blocked by a non friendly
                             nextAction = null;
                             ActionList.Clear();
+                            ShowMovementIndicator(false);
                         }
                     }
                 }
@@ -465,6 +471,7 @@ namespace Gamepackage
             if (Input.GetMouseButtonDown(0))
             {
                 ActionList.Clear();
+                ShowMovementIndicator(false);
                 if (isAbleToSwapWithHoveringAlly)
                 {
                     QueueSwapPosition(level, player, mousePos);
@@ -480,6 +487,16 @@ namespace Gamepackage
                         OnPathComplete(CurrentPath);
                     }
                 }
+            }
+        }
+
+        public void ShowMovementIndicator(bool show, Point position = null)
+        {
+            MovementIndicator.gameObject.SetActive(show);
+            var isValid = position != null && Context.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(position);
+            if (isValid && show)
+            {
+                MovementIndicator.gameObject.transform.position = MathUtil.MapToWorld(position);
             }
         }
 
@@ -579,6 +596,13 @@ namespace Gamepackage
                 };
                 ActionList.Enqueue(move);
             }
+            if(path.Nodes.Count > 0)
+            {
+                var hideMovementIndicator = new HideMovementIndicator();
+                ShowMovementIndicator(true, path.Nodes[path.Nodes.Count - 1].Position);
+                ActionList.Enqueue(hideMovementIndicator);
+            }
+
             waitingForPath = false;
         }
     }
