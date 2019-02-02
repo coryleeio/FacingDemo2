@@ -9,14 +9,6 @@ namespace Gamepackage
         public Entity Source;
         public Item Item;
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 250;
-            }
-        }
-
         public override bool IsEndable
         {
             get

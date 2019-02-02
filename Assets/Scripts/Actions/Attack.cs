@@ -59,14 +59,6 @@ namespace Gamepackage
             }
         }
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 250;
-            }
-        }
-
         public override bool IsValid()
         {
             return AttackCapabilities != null && AttackCapabilities[CombatContext].CanPerform;

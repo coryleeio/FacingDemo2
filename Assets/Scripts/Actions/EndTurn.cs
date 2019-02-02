@@ -8,14 +8,6 @@ namespace Gamepackage
         [JsonIgnore]
         public Entity Source;
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
         public override bool IsEndable
         {
             get

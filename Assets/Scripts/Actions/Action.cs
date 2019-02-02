@@ -4,11 +4,6 @@ namespace Gamepackage
 {
     public abstract class Action : IStateMachineState
     {
-        public abstract int TimeCost
-        {
-            get;
-        }
-
         public bool Started = false;
         public bool Done = false;
 

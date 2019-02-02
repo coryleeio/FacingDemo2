@@ -19,14 +19,6 @@ namespace Gamepackage
         // Source is the person picking up the item
         // Target is the thing having the item taken from it.
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 250;
-            }
-        }
-
         public override bool IsEndable
         {
             get

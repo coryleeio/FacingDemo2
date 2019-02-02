@@ -13,14 +13,6 @@ namespace Gamepackage
         [JsonIgnore]
         public List<Entity> Targets = new List<Entity>(0);
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 250;
-            }
-        }
-
         public override bool IsEndable
         {
             get

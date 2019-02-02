@@ -12,14 +12,6 @@ namespace Gamepackage
         public ItemSlot Slot;
         public int Index = -1;
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
         public override bool IsEndable
         {
             get

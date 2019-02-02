@@ -25,14 +25,6 @@ namespace Gamepackage
             }
         }
 
-        public override int TimeCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
         private Explosion() { }
 
         public Explosion(Entity source, AttackParameters triggeringAttackParameters, Point Location)
