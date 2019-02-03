@@ -18,13 +18,12 @@ namespace Gamepackage
         private Color EnemyHoverColor = Color.red;
         private Path CurrentPath;
         private bool isAiming = false;
-        private CombatContext AimingCombatContext = CombatContext.NotSet;
 
         // Use the capabilities that were established when we started aiming
         // this is important for throwing from inventory, otherwise they will get recalculated in the 
         // button down section of this and cause the primary weapon to be thrown if one exists
         // or it will cause you not to be able to throw if one does not.
-        private AttackCapabilities AimingAttackCapabilities;
+        private AttackCapability AimingAttackCapability;
         public Queue<Action> ActionList = new Queue<Action>();
 
         public void Init()
@@ -193,8 +192,6 @@ namespace Gamepackage
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
             var hoverIsValidPoint = level.BoundingBox.Contains(mousePos);
 
-            var playerAttackCapabilities = new AttackCapabilities(player);
-
             Context.UIController.TileHoverHint.ShowFor(mousePos);
 
             var tileContainsEnemy = false;
@@ -222,7 +219,7 @@ namespace Gamepackage
 
             var isHoveringOnEnemyCombatant = hoverIsValidPoint && mousePos != player.Position && hoverContainsCombatant && tileContainsEnemy;
             var isHoveringOnAlly = hoverIsValidPoint && mousePos != player.Position && hoverContainsAlly;
-            AttackCapability meleeAttackCapability = playerAttackCapabilities[CombatContext.Melee];
+            AttackCapability meleeAttackCapability = new AttackCapability(player, AttackType.Melee, player.Inventory.GetItemBySlot(ItemSlot.MainHand));
             var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && meleeAttackCapability.CanPerform && meleeAttackCapability.IsInRange(mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
             var hoverDirection = MathUtil.RelativeDirection(player.Position, mousePos);
@@ -244,14 +241,13 @@ namespace Gamepackage
                 // It is important you use the AIMING attack capabilities
                 // otherwise you will throw nothing, or whatever is equipped when throwing 
                 // from inventory.
-                var aimingAttackCapability = AimingAttackCapabilities[AimingCombatContext];
-                GenerateAttackOverlayOffsets(mousePos, player.Position, aimingAttackCapability, hoverDirection);
+                GenerateAttackOverlayOffsets(mousePos, player.Position, AimingAttackCapability, hoverDirection);
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (aimingAttackCapability.CanPerform && aimingAttackCapability.IsInRange(mousePos))
+                    if (AimingAttackCapability.CanPerform && AimingAttackCapability.IsInRange(mousePos))
                     {
                         var direction = MathUtil.RelativeDirection(player.Position, mousePos);
-                        Attack attack = new Attack(AimingAttackCapabilities, AimingCombatContext, direction, mousePos);
+                        Attack attack = new Attack(AimingAttackCapability, direction, mousePos);
                         player.Behaviour.NextAction = attack;
                     }
                     StopAiming();
@@ -354,22 +350,25 @@ namespace Gamepackage
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                StartAiming(playerAttackCapabilities, CombatContext.Melee);
+                StartAiming(meleeAttackCapability);
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                StartAiming(playerAttackCapabilities, CombatContext.Ranged);
+                var rangedAttackCapabilities = new AttackCapability(player, AttackType.Ranged, player.Inventory.GetItemBySlot(ItemSlot.MainHand));
+                StartAiming(rangedAttackCapabilities);
             }
 
             if (Input.GetKeyDown(KeyCode.T))
             {
-                StartAiming(playerAttackCapabilities, CombatContext.Thrown);
+                var thrownCapabilities = new AttackCapability(player, AttackType.Thrown, player.Inventory.GetItemBySlot(ItemSlot.MainHand));
+                StartAiming(thrownCapabilities);
             }
 
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                StartAiming(playerAttackCapabilities, CombatContext.Zapped);
+                var zapCapabilities = new AttackCapability(player, AttackType.Zapped, player.Inventory.GetItemBySlot(ItemSlot.MainHand));
+                StartAiming(zapCapabilities);
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -471,7 +470,7 @@ namespace Gamepackage
                 }
                 else if (isAbleToHitHoveringEnemyCombatant)
                 {
-                    QueueAttack(player, mousePos, playerAttackCapabilities, CombatContext.Melee);
+                    QueueAttack(player, mousePos, meleeAttackCapability);
                 }
                 else
                 {
@@ -495,25 +494,23 @@ namespace Gamepackage
             });
         }
 
-        public void StartAiming(AttackCapabilities attackCapabilities, CombatContext combatContext)
+        public void StartAiming(AttackCapability capability)
         {
-            AimingAttackCapabilities = attackCapabilities;
-            var attackCapability = attackCapabilities[combatContext];
-            if (!isAiming && attackCapability.CanPerform)
+            AimingAttackCapability = capability;
+            if (!isAiming && AimingAttackCapability.CanPerform)
             {
                 isAiming = true;
-                AimingCombatContext = combatContext;
-                Context.UIController.InputHint.ShowText(("player.controller.select.direction." + combatContext.ToString().ToLower()).Localize());
+                Context.UIController.InputHint.ShowText(("player.controller.select.direction." + AimingAttackCapability.AttackType.ToString().ToLower()).Localize());
             }
-            else if (combatContext == CombatContext.Ranged && attackCapability.MainHand != null && (attackCapability.Ammo == null || attackCapability.Ammo.NumberOfItems <= 0))
+            else if (AimingAttackCapability.AttackType == AttackType.Ranged && AimingAttackCapability.Item != null && (AimingAttackCapability.Ammo == null || AimingAttackCapability.Ammo.NumberOfItems <= 0))
             {
                 var outOfAmmoString = "player.controller.cannot.do.out.of.ammo".Localize();
                 Context.UIController.InputHint.ShowText(outOfAmmoString);
             }
-            else if (attackCapability.MainHand != null)
+            else if (AimingAttackCapability.Item != null)
             {
-                var cannotPerformString = ("player.controller.cannot.do." + combatContext.ToString().ToLower()).Localize();
-                Context.UIController.InputHint.ShowText(string.Format(cannotPerformString, attackCapability.MainHand.DisplayName));
+                var cannotPerformString = ("player.controller.cannot.do." + AimingAttackCapability.AttackType.ToString().ToLower()).Localize();
+                Context.UIController.InputHint.ShowText(string.Format(cannotPerformString, AimingAttackCapability.Item.DisplayName));
             }
             else
             {
@@ -525,7 +522,7 @@ namespace Gamepackage
         {
             if (isAiming)
             {
-                AimingAttackCapabilities = null;
+                AimingAttackCapability = null;
                 isAiming = false;
                 Context.UIController.InputHint.Hide();
             }
@@ -558,10 +555,10 @@ namespace Gamepackage
             player.Behaviour.NextAction = swapPositions;
         }
 
-        private void QueueAttack(Entity player, Point mousePos, AttackCapabilities attackCapabilities, CombatContext combatContext)
+        private void QueueAttack(Entity player, Point mousePos, AttackCapability attackCapability)
         {
             var direction = MathUtil.RelativeDirection(player.Position, mousePos);
-            Attack attack = new Attack(attackCapabilities, combatContext, direction, mousePos);
+            Attack attack = new Attack(attackCapability, direction, mousePos);
             player.Behaviour.NextAction = attack;
         }
 

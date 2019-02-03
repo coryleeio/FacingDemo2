@@ -7,7 +7,7 @@ namespace Gamepackage
         public UniqueIdentifier EffectAppliedId;
         public string AppliedDisplayName;
         public string AppliedDisplayDescription;
-        public List<CombatContext> ValidCombatContextsForApplication = new List<CombatContext>();
+        public List<AttackType> ValidCombatContextsForApplication = new List<AttackType>();
 
         public override string DisplayName
         {

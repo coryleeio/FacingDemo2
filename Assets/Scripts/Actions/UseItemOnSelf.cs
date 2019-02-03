@@ -22,7 +22,7 @@ namespace Gamepackage
             base.Enter();
 
             var stateChange = new ActionOutcome();
-            stateChange.CombatContext = CombatContext.OnUse;
+            stateChange.CombatContext = AttackType.OnUse;
             stateChange.Source = Source;
             stateChange.Target = Source;
             stateChange.AppliedEffects.AddRange(Item.Effects);

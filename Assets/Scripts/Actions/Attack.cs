@@ -4,21 +4,9 @@ using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public enum CombatContext
-    {
-        NotSet,
-        Melee,
-        Ranged,
-        Thrown,
-        Zapped,
-        OnUse,
-    }
-
     public class Attack : Action
     {
         // Inputs
-        private AttackCapabilities AttackCapabilities;
-        private CombatContext CombatContext;
         private Direction Direction;
 
         // Book keeping values
@@ -35,51 +23,50 @@ namespace Gamepackage
         private bool isDoneInternal = false;
         private AttackParameters AttackParameters;
         private ExplosionParameters ExplosionParameters;
-        private AttackCapability CombatContextCapability;
+        private AttackCapability AttackCapability;
         private ProjectileAppearance ProjectileAppearance;
 
         private Attack() { }
 
-        public Attack(AttackCapabilities attackCapabilities, CombatContext combatContext, Direction direction, Point aimedTarget)
+        public Attack(AttackCapability attackCapability, Direction direction, Point aimedTarget)
         {
-            this.AttackCapabilities = attackCapabilities;
-            this.CombatContext = combatContext;
+            this.AttackCapability = attackCapability;
             this.Direction = direction;
             this.AimedTarget = aimedTarget;
 
-            this.CombatContextCapability = attackCapabilities[CombatContext];
-            if (CombatContextCapability != null)
+            if (AttackCapability != null)
             {
-                this.AttackParameters = CombatContextCapability.AttackParameters;
+                this.AttackParameters = AttackCapability.AttackParameters;
             }
             if (AttackParameters != null)
             {
-                ProjectileAppearance = CombatContextCapability.AttackParameters.ProjectileAppearance;
-                ExplosionParameters = CombatContextCapability.AttackParameters.ExplosionParameters;
+                ProjectileAppearance = AttackCapability.AttackParameters.ProjectileAppearance;
+                ExplosionParameters = AttackCapability.AttackParameters.ExplosionParameters;
             }
         }
 
         public override bool IsValid()
         {
-            return AttackCapabilities != null && AttackCapabilities[CombatContext].CanPerform;
+            return AttackCapability != null && AttackCapability.CanPerform;
         }
 
         public override void Enter()
         {
             base.Enter();
-            Assert.IsNotNull(AttackCapabilities);
+            Assert.IsNotNull(AttackCapability);
+            Assert.AreNotEqual(AttackCapability.AttackType, AttackType.NotSet);
 
-            CombatContextCapability.Source.Direction = Direction;
-            if (CombatContextCapability.Source.View != null && CombatContextCapability.Source.View.SkeletonAnimation != null)
+            AttackCapability.Source.Direction = Direction;
+            if (AttackCapability.Source.View != null && AttackCapability.Source.View.SkeletonAnimation != null)
             {
-                var skeletonAnimation = CombatContextCapability.Source.View.SkeletonAnimation;
+                var skeletonAnimation = AttackCapability.Source.View.SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
-                if (CombatContext == CombatContext.Zapped)
+                if (AttackCapability.AttackType == AttackType.Zapped)
                 {
                     skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastStart, Direction), false);
                 }
-                else if (CombatContext == CombatContext.Ranged)
+                else if (AttackCapability.AttackType == AttackType.Ranged)
                 {
                     skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Shoot, Direction), false);
                     skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
@@ -91,24 +78,23 @@ namespace Gamepackage
                 }
             }
 
-            SourceGridPosition = new Point(CombatContextCapability.Source.Position.X, CombatContextCapability.Source.Position.Y);
+            SourceGridPosition = new Point(AttackCapability.Source.Position.X, AttackCapability.Source.Position.Y);
             LastNonWallTraversed = new Point(SourceGridPosition.X, SourceGridPosition.Y);
             NumberOfTargetsHit = 0;
             BuildProjectileViewIfNeeded();
-            MoveProjectileTowardNextPositionFromHere(MathUtil.MapToWorld(CombatContextCapability.Source.Position));
+            MoveProjectileTowardNextPositionFromHere(MathUtil.MapToWorld(AttackCapability.Source.Position));
 
             // Remove the item from the view if it is the last item being thrown
             // and the character is not throwing an item from their inventory.
-            if (CombatContext == CombatContext.Thrown)
+            if (AttackCapability.AttackType == AttackType.Thrown)
             {
-                var capability = AttackCapabilities[CombatContext];
-                var itemBeingLaunched = GetItemBeingLaunched(capability);
+                var itemBeingLaunched = GetItemBeingLaunched(AttackCapability);
                 if (itemBeingLaunched.NumberOfItems == 1)
                 {
-                    if (capability.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
+                    if (AttackCapability.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
                     {
-                        capability.Source.Inventory.UnequipItemInSlot(ItemSlot.MainHand);
-                        Context.ViewFactory.BuildView(AttackCapabilities.Source);
+                        AttackCapability.Source.Inventory.UnequipItemInSlot(ItemSlot.MainHand);
+                        Context.ViewFactory.BuildView(AttackCapability.Source);
                     }
                 }
             }
@@ -124,11 +110,11 @@ namespace Gamepackage
             ElapsedTime = 0.0f;
             RangeTraversed++;
             LerpCurrentPosition = currentPosition;
-            if (CombatContextCapability.AttackTargetingType == AttackTargetingType.Line)
+            if (AttackCapability.AttackTargetingType == AttackTargetingType.Line)
             {
                 NextGridPosition = SourceGridPosition + (MathUtil.OffsetForDirection(Direction) * RangeTraversed);
             }
-            if (CombatContextCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
+            if (AttackCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
             {
                 NextGridPosition = AimedTarget;
             }
@@ -158,7 +144,7 @@ namespace Gamepackage
                 perTileTravelTime = ProjectileAppearance.ProjectileDefinition.PerTileTravelTime;
             }
 
-            if (CombatContextCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
+            if (AttackCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
             {
                 // in this case - since we travel ALL the distance in 1 lerp, we want 
                 // to set the perTileTravelTime to distance * the per tile travel time
@@ -185,7 +171,7 @@ namespace Gamepackage
                 var targets = CombatUtil.HittableEntitiesInPositionsOnLevel(NextGridPosition, level);
                 var hitTarget = targets.Count > 0;
                 var hitWall = level.Grid.PointInGrid(NextGridPosition) && level.Grid[NextGridPosition].TileType == TileType.Wall;
-                var hitMaxRange = RangeTraversed >= CombatContextCapability.Range;
+                var hitMaxRange = RangeTraversed >= AttackCapability.Range;
                 var movedThisPass = false;
 
                 if (!hitWall && ProjectileAppearance.OnEnterDefinition != null)
@@ -203,13 +189,13 @@ namespace Gamepackage
                         }
 
                         NumberOfTargetsHit += targets.Count;
-                        CombatUtil.ApplyEntityStateChange(CombatContextCapability.PerformOnTarget(target));
-                        if (NumberOfTargetsHit == CombatContextCapability.NumberOfTargetsToPierce)
+                        CombatUtil.ApplyEntityStateChange(AttackCapability.PerformOnTarget(target));
+                        if (NumberOfTargetsHit == AttackCapability.NumberOfTargetsToPierce)
                         {
                             break;
                         }
                     }
-                    if (CombatContextCapability.AttackTargetingType != AttackTargetingType.SelectTarget)
+                    if (AttackCapability.AttackTargetingType != AttackTargetingType.SelectTarget)
                     {
                         MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
                     }
@@ -217,13 +203,13 @@ namespace Gamepackage
                     LastNonWallTraversed = new Point(targets[0].Position.X, targets[0].Position.Y);
                 }
 
-                var canHitMoreTargets = NumberOfTargetsHit < CombatContextCapability.NumberOfTargetsToPierce && CombatContextCapability.AttackTargetingType != AttackTargetingType.SelectTarget;
+                var canHitMoreTargets = NumberOfTargetsHit < AttackCapability.NumberOfTargetsToPierce && AttackCapability.AttackTargetingType != AttackTargetingType.SelectTarget;
 
                 if (!canHitMoreTargets || hitWall || hitMaxRange)
                 {
-                    if (CombatContext == CombatContext.Zapped && CombatContextCapability.Source.View != null && CombatContextCapability.Source.View.SkeletonAnimation != null)
+                    if (AttackCapability.AttackType == AttackType.Zapped && AttackCapability.Source.View != null && AttackCapability.Source.View.SkeletonAnimation != null)
                     {
-                        var skeletonAnimation = CombatContextCapability.Source.View.SkeletonAnimation;
+                        var skeletonAnimation = AttackCapability.Source.View.SkeletonAnimation;
                         skeletonAnimation.AnimationState.ClearTracks();
                         skeletonAnimation.Skeleton.SetToSetupPose();
 
@@ -233,7 +219,7 @@ namespace Gamepackage
                     isDoneInternal = true;
                     if (ExplosionParameters != null)
                     {
-                        var explosionAction = new Explosion(CombatContextCapability.Source, AttackParameters, NextGridPosition);
+                        var explosionAction = new Explosion(AttackCapability.Source, AttackParameters, NextGridPosition);
                         var currentStep = Context.FlowSystem.Steps.First.Value;
                         var currentAction = currentStep.Actions.AddAfter(currentStep.Actions.First, explosionAction);
                     }
@@ -248,7 +234,7 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            if (CombatContextCapability.Source.Body.MeleeParameters.Count == 0)
+            if (AttackCapability.Source.Body.MeleeParameters.Count == 0)
             {
                 throw new NotImplementedException("You don't have any attacks, but are trying to attack anyway?");
             }
@@ -261,9 +247,9 @@ namespace Gamepackage
 
         private void HandleSpawnItemOnGroundIfRelevant()
         {
-            if (CombatContext == CombatContext.Ranged || CombatContext == CombatContext.Thrown)
+            if (AttackCapability.AttackType == AttackType.Ranged || AttackCapability.AttackType == AttackType.Thrown)
             {
-                Item itemBeingLaunched = GetItemBeingLaunched(CombatContextCapability);
+                Item itemBeingLaunched = GetItemBeingLaunched(AttackCapability);
                 var shouldSpawnItemOnGround = MathUtil.PercentageChanceEventOccurs(itemBeingLaunched.ChanceToSurviveLaunch);
                 if (shouldSpawnItemOnGround)
                 {
@@ -278,14 +264,14 @@ namespace Gamepackage
                     groundDrop.Inventory.AddItem(itemCopy);
                     Context.ViewFactory.BuildView(groundDrop);
                 }
-                CombatContextCapability.Source.Inventory.ConsumeItem(itemBeingLaunched);
+                AttackCapability.Source.Inventory.ConsumeItem(itemBeingLaunched);
             }
 
         }
 
         private Item GetItemBeingLaunched(AttackCapability capability)
         {
-            return CombatContext == CombatContext.Ranged ? capability.Ammo : capability.MainHand;
+            return AttackCapability.AttackType == AttackType.Ranged ? capability.Ammo : capability.Item;
         }
 
         public override bool IsEndable

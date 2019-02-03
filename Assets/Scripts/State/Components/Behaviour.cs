@@ -22,18 +22,18 @@ namespace Gamepackage
         public Action NextAction = null;
 
         [JsonIgnore]
-        private static List<CombatContext> MeleeAIRelevantContexts = new List<CombatContext>()
+        private static List<AttackType> MeleeAIRelevantContexts = new List<AttackType>()
         {
-            CombatContext.Melee,
+            AttackType.Melee,
         };
 
         [JsonIgnore]
-        private static List<CombatContext> RangedAIRelevantContexts = new List<CombatContext>()
+        private static List<AttackType> RangedAIRelevantContexts = new List<AttackType>()
         {
-            CombatContext.Melee,
-            CombatContext.Zapped,
-            CombatContext.Thrown,
-            CombatContext.Ranged,
+            AttackType.Melee,
+            AttackType.Zapped,
+            AttackType.Thrown,
+            AttackType.Ranged,
         };
 
         [JsonIgnore]
@@ -54,7 +54,15 @@ namespace Gamepackage
             }
 
             var level = Context.GameStateManager.Game.CurrentLevel;
-            var capabilities = new AttackCapabilities(entity);
+
+            var relevantContexts = entity.Behaviour.AI == AIType.DumbMelee ? MeleeAIRelevantContexts : RangedAIRelevantContexts;
+            var capabilities = new Dictionary<AttackType, AttackCapability>();
+
+            foreach (var relevantContext in relevantContexts)
+            {
+                capabilities[relevantContext] = new AttackCapability(entity, relevantContext, entity.Inventory.GetItemBySlot(ItemSlot.MainHand));
+            }
+
             NextAction = null;
 
             if (entity.Behaviour.AI == AIType.DumbMelee)
@@ -67,7 +75,7 @@ namespace Gamepackage
             }
         }
 
-        private void CommonAIAttackWithWeapon(Level level, AttackCapabilities capabilities, List<CombatContext> contexts)
+        private void CommonAIAttackWithWeapon(Level level, Dictionary<AttackType, AttackCapability> capabilities, List<AttackType> contexts)
         {
             var hostileTarget = FindVisibleTargets(entity);
             if (hostileTarget == null)
@@ -112,13 +120,14 @@ namespace Gamepackage
             }
         }
 
-        private void EnqueueBasicAttackOrApproach(AttackCapabilities capabilities, List<CombatContext> relevantContexts, Entity target)
+        private void EnqueueBasicAttackOrApproach(Dictionary<AttackType, AttackCapability> capabilities, List<AttackType> relevantContexts, Entity target)
         {
             foreach (var combatContext in relevantContexts)
             {
-                if (AbleAndWillingToPerformAttackTypeOnTarget(capabilities, combatContext, target))
+                var capability = capabilities[combatContext];
+                if (AbleAndWillingToPerformAttackTypeOnTarget(capability, target))
                 {
-                    EnqueueAttackType(capabilities, combatContext, target);
+                    EnqueueAttackType(capability, target);
                 }
             }
 
@@ -128,17 +137,15 @@ namespace Gamepackage
             }
         }
 
-        private void EnqueueAttackType(AttackCapabilities capabilities, CombatContext combatContext, Entity target)
+        private void EnqueueAttackType(AttackCapability capability, Entity target)
         {
-            var capability = capabilities[combatContext];
             var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-            var attack = new Attack(capabilities, combatContext, direction, target.Position);
+            var attack = new Attack(capability, direction, target.Position);
             NextAction = attack;
         }
 
-        private bool AbleAndWillingToPerformAttackTypeOnTarget(AttackCapabilities capabilities, CombatContext combatContext, Entity target)
+        private bool AbleAndWillingToPerformAttackTypeOnTarget(AttackCapability capability, Entity target)
         {
-            var capability = capabilities[combatContext];
             var isAbleToPerform = capability.CanPerform && capability.IsInRange(target) && capability.HasAClearShot(target.Position);
 
             if (!isAbleToPerform)
@@ -149,10 +156,10 @@ namespace Gamepackage
             // There are certain things the AI CAN do, but it should NOT do.
             // those go here.
             var isWillingToPerform = true;
-            if (combatContext == CombatContext.Thrown)
+            if (capability.AttackType == AttackType.Thrown)
             {
                 // Dont throw my only weapon
-                isWillingToPerform = capability.MainHand.NumberOfItems > 1;
+                isWillingToPerform = capability.Item.NumberOfItems > 1;
             }
             return isAbleToPerform && isWillingToPerform;
         }

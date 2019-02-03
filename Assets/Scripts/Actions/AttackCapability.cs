@@ -5,9 +5,9 @@ namespace Gamepackage
     public class AttackCapability
     {
         public Entity Source;
-        public CombatContext CombatContext;
+        public AttackType AttackType;
         public AttackTargetingType AttackTargetingType;
-        public Item MainHand;
+        public Item Item;
         public Item Ammo;
         public List<Effect> AppliedEffects = new List<Effect>();
         public AttackParameters AttackParameters;
@@ -18,33 +18,33 @@ namespace Gamepackage
         {
             get
             {
-                if (CombatContext == CombatContext.NotSet)
+                if (AttackType == AttackType.NotSet)
                 {
                     return false;
                 }
                 var hasBody = Source.Body != null && Source.Body.CanAttackInMelee;
-                if (CombatContext == CombatContext.Melee)
+                if (AttackType == AttackType.Melee)
                 {
-                    var hasWeapon = hasBody && Source.Inventory != null && MainHand != null && MainHand.CanBeUsedInMelee;
+                    var hasWeapon = hasBody && Source.Inventory != null && Item != null && Item.CanBeUsedInMelee;
                     return hasBody || hasWeapon;
                 }
-                else if (CombatContext == CombatContext.Ranged)
+                else if (AttackType == AttackType.Ranged)
                 {
-                    var hasRangedWeapon = hasBody && Source.Inventory != null && MainHand != null && MainHand.CanBeUsedForRanged;
+                    var hasRangedWeapon = hasBody && Source.Inventory != null && Item != null && Item.CanBeUsedForRanged;
                     var hasAmmo = false;
                     if (hasRangedWeapon)
                     {
-                        hasAmmo = Ammo != null && MainHand.AmmoType == Ammo.AmmoType;
+                        hasAmmo = Ammo != null && Item.AmmoType == Ammo.AmmoType;
                     }
                     return hasRangedWeapon && hasAmmo;
                 }
-                else if (CombatContext == CombatContext.Thrown)
+                else if (AttackType == AttackType.Thrown)
                 {
-                    return hasBody && Source.Inventory != null && MainHand != null && MainHand.CanBeThrown;
+                    return hasBody && Source.Inventory != null && Item != null && Item.CanBeThrown;
                 }
-                else if (CombatContext == CombatContext.Zapped)
+                else if (AttackType == AttackType.Zapped)
                 {
-                    return hasBody && Source.Inventory != null && MainHand != null && MainHand.CanBeUsedForZap;
+                    return hasBody && Source.Inventory != null && Item != null && Item.CanBeUsedForZap;
                 }
                 else
                 {
@@ -135,32 +135,29 @@ namespace Gamepackage
             return true;
         }
 
-        public AttackCapability(Entity source, CombatContext combatContext, Item mainhandOverride = null)
+        private AttackCapability()
+        {
+
+        }
+
+        public AttackCapability(Entity source, AttackType combatContext, Item item)
         {
             this.Source = source;
-            this.CombatContext = combatContext;
+            this.AttackType = combatContext;
 
-            if (mainhandOverride == null)
-            {
-                MainHand = source.Inventory.GetItemBySlot(ItemSlot.MainHand);
-            }
-            else
-            {
-                MainHand = mainhandOverride;
-            }
-
+            Item = item;
             Ammo = source.Inventory.GetItemBySlot(ItemSlot.Ammo);
 
-            if (combatContext == CombatContext.Melee)
+            if (combatContext == AttackType.Melee)
             {
-                if (MainHand != null && MainHand.CanBeUsedInMelee)
+                if (Item != null && Item.CanBeUsedInMelee)
                 {
-                    Range = MainHand.MeleeRange;
-                    NumberOfTargetsToPierce = MainHand.MeleeTargetsPierced;
+                    Range = Item.MeleeRange;
+                    NumberOfTargetsToPierce = Item.MeleeTargetsPierced;
 
-                    AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(MainHand.MeleeParameters);
+                    AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Item.MeleeParameters);
                     AttackTargetingType = AttackParameters.AttackTargetingType;
-                    AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
+                    AppliedEffects.AddRange(Item.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                 }
                 else
@@ -176,13 +173,13 @@ namespace Gamepackage
 
             }
 
-            else if (combatContext == CombatContext.Ranged)
+            else if (combatContext == AttackType.Ranged)
             {
-                if (MainHand != null && MainHand.CanBeUsedForRanged && Ammo != null)
+                if (Item != null && Item.CanBeUsedForRanged && Ammo != null)
                 {
-                    Range = MainHand.RangedRange;
-                    NumberOfTargetsToPierce = MainHand.RangedTargetsPierced;
-                    var rangedAttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(MainHand.RangedParameters);
+                    Range = Item.RangedRange;
+                    NumberOfTargetsToPierce = Item.RangedTargetsPierced;
+                    var rangedAttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Item.RangedParameters);
                     var ammoAttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Ammo.RangedParameters);
                     AttackParameters = new AttackParameters()
                     {
@@ -196,34 +193,34 @@ namespace Gamepackage
                         AttackTargetingType = rangedAttackParameters.AttackTargetingType,
                     };
                     AttackTargetingType = AttackTargetingType.Line;
-                    AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
+                    AppliedEffects.AddRange(Item.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(Ammo.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(rangedAttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(ammoAttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
                 }
             }
-            else if (combatContext == CombatContext.Thrown)
+            else if (combatContext == AttackType.Thrown)
             {
-                if (MainHand != null && MainHand.CanBeThrown)
+                if (Item != null && Item.CanBeThrown)
                 {
-                    AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(MainHand.ThrowParameters);
-                    AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
+                    AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Item.ThrowParameters);
+                    AppliedEffects.AddRange(Item.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
-                    Range = MainHand.ThrownRange;
+                    Range = Item.ThrownRange;
                     AttackTargetingType = AttackParameters.AttackTargetingType;
-                    NumberOfTargetsToPierce = MainHand.ThrownTargetsPierced;
+                    NumberOfTargetsToPierce = Item.ThrownTargetsPierced;
                 }
             }
-            else if (combatContext == CombatContext.Zapped)
+            else if (combatContext == AttackType.Zapped)
             {
-                if (MainHand != null && MainHand.CanBeUsedForZap)
+                if (Item != null && Item.CanBeUsedForZap)
                 {
-                    AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(MainHand.ZapParameters);
-                    AppliedEffects.AddRange(MainHand.Effects.FindAll(CombatUtil.AppliedEffects));
+                    AttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(Item.ZapParameters);
+                    AppliedEffects.AddRange(Item.Effects.FindAll(CombatUtil.AppliedEffects));
                     AppliedEffects.AddRange(AttackParameters.AttackSpecificEffects.FindAll(CombatUtil.AppliedEffects));
-                    Range = MainHand.ZapRange;
+                    Range = Item.ZapRange;
                     AttackTargetingType = AttackParameters.AttackTargetingType;
-                    NumberOfTargetsToPierce = MainHand.ZappedTargetsPierced;
+                    NumberOfTargetsToPierce = Item.ZappedTargetsPierced;
                 }
             }
             // If we fall through here we aren't dealing with a attack
@@ -234,7 +231,7 @@ namespace Gamepackage
             var stateChange = new ActionOutcome
             {
                 Source = Source,
-                CombatContext = CombatContext,
+                CombatContext = AttackType,
             };
 
             stateChange.AttackParameters = AttackParameters;
@@ -242,24 +239,6 @@ namespace Gamepackage
 
             stateChange.Target = target;
             return stateChange;
-        }
-    }
-
-    public class AttackCapabilities
-    {
-        public Entity Source;
-        public Item MainHandOverride = null;
-        private AttackCapabilities() { }
-
-        public AttackCapabilities(Entity source, Item mainhandOverride = null)
-        {
-            this.Source = source;
-            this.MainHandOverride = mainhandOverride;
-        }
-
-        public AttackCapability this[CombatContext inp]
-        {
-            get { return new AttackCapability(Source, inp, MainHandOverride); }
         }
     }
 }

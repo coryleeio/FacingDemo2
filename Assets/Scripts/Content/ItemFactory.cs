@@ -85,7 +85,7 @@ namespace Gamepackage
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_POISON_DAGGER)
             {
                 item = ItemFactory.Build(UniqueIdentifier.ITEM_DAGGER);
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<CombatContext>() { CombatContext.Melee, CombatContext.Thrown }));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<AttackType>() { AttackType.Melee, AttackType.Thrown }));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_DAGGER)
             {
@@ -322,7 +322,7 @@ namespace Gamepackage
                         AttackTargetingType = AttackTargetingType.SelectTarget,
                     }
                 };
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_MADNESS, new List<CombatContext>() { CombatContext.Zapped }));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_MADNESS, new List<AttackType>() { AttackType.Zapped }));
                 item.HasUnlimitedCharges = true;
                 item.ZappedTargetsPierced = 1;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
@@ -366,7 +366,7 @@ namespace Gamepackage
                         AttackTargetingType = AttackTargetingType.SelectTarget,
                     }
                 };
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_CHARM, new List<CombatContext>() { CombatContext.Zapped }));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_CHARM, new List<AttackType>() { AttackType.Zapped }));
                 item.HasUnlimitedCharges = true;
                 item.ZappedTargetsPierced = 1;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
@@ -410,7 +410,7 @@ namespace Gamepackage
                         AttackTargetingType = AttackTargetingType.SelectTarget,
                     }
                 };
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_DOMINATION, new List<CombatContext>() { CombatContext.Zapped }));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_DOMINATION, new List<AttackType>() { AttackType.Zapped }));
                 item.HasUnlimitedCharges = true;
                 item.ZappedTargetsPierced = 1;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
@@ -442,8 +442,8 @@ namespace Gamepackage
                 item.ChanceToSurviveLaunch = 0;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY, new List<CombatContext>() { CombatContext.OnUse, CombatContext.Thrown }));
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_REGENERATION, new List<CombatContext>() { CombatContext.OnUse, CombatContext.Thrown }));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY, new List<AttackType>() { AttackType.OnUse, AttackType.Thrown }));
+                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_REGENERATION, new List<AttackType>() { AttackType.OnUse, AttackType.Thrown }));
                 item.IsUsable = true;
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_LUCKY_COIN)

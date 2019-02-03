@@ -58,8 +58,8 @@ namespace Gamepackage
             {
                 BuildButton("context.menu.buttons.throw".Localize(), () =>
                 {
-                    AttackCapabilities capabilities = new AttackCapabilities(player, item);
-                    Context.PlayerController.StartAiming(capabilities, CombatContext.Thrown);
+                    AttackCapability thrownCapability = new AttackCapability(player, AttackType.Thrown, item);
+                    Context.PlayerController.StartAiming(thrownCapability);
                     Context.UIController.InventoryWindow.Hide();
                 });
             }

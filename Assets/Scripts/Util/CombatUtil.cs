@@ -168,6 +168,7 @@ namespace Gamepackage
 
                 if (target.Body.CurrentHealth <= 0)
                 {
+
                     if (target.View != null && target.View.SkeletonAnimation != null)
                     {
                         var skeletonAnimation = target.View.SkeletonAnimation;

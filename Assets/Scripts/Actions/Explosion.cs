@@ -96,7 +96,7 @@ namespace Gamepackage
                                 {
                                     var esc = new ActionOutcome();
                                     esc.Source = Source;
-                                    esc.CombatContext = CombatContext.Zapped;
+                                    esc.CombatContext = AttackType.Zapped;
                                     esc.AttackParameters = ExplosionParameters;
                                     esc.AppliedEffects.AddRange(ExplosionParameters.AppliedEffects);
                                     esc.Target = target;

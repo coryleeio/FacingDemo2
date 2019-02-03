@@ -348,7 +348,7 @@ namespace Gamepackage
         private static List<AttackParameters> DefaultBeeBodyAttacks()
         {
             var effectList = new List<Effect>();
-            effectList.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<CombatContext>() { CombatContext.Melee }));
+            effectList.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<AttackType>() { AttackType.Melee }));
             var attackParameters = new AttackParameters()
             {
                 AttackMessage = "attacks.stinger.1".Localize(),

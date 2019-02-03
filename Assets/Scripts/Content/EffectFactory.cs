@@ -4,7 +4,7 @@ namespace Gamepackage
 {
     public static class EffectFactory
     {
-        public static Effect Build(UniqueIdentifier uniqueIdentifier, List<CombatContext> validCombatContexts = null)
+        public static Effect Build(UniqueIdentifier uniqueIdentifier, List<AttackType> validCombatContexts = null)
         {
             Effect retVal = null;
             if (uniqueIdentifier == UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE)
