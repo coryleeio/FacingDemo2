@@ -1,4 +1,6 @@
-﻿namespace Gamepackage
+﻿using System.Collections.Generic;
+
+namespace Gamepackage
 {
     public class Poison : Effect
     {
@@ -20,7 +22,7 @@
 
         public int PoisonAmount;
 
-        public override void OnApply(ActionOutcome outcome)
+        public override void OnApply(EntityStateChange outcome)
         {
             base.OnApply(outcome);
             Context.UIController.TextLog.AddText(string.Format("effect.poison.apply.message".Localize(), outcome.Target.Name));
@@ -35,22 +37,16 @@
         public override void Tick(Entity entity)
         {
             base.Tick(entity);
-            ActionOutcome outcome = new ActionOutcome
-            {
-                AttackParameters = new AttackParameters
-                {
-                    DamageType = DamageTypes.POISON,
-                    AttackMessage = "effect.poison.tick.message".Localize(),
-                    DyeNumber = 1,
-                    DyeSize = PoisonAmount,
-                    Bonus = 0
-                }
-            };
-            outcome.Target = entity;
-            CombatUtil.ApplyEntityStateChange(outcome);
+            var calculated = CombatUtil.CalculateSimpleDamage(
+                entity,
+                "effect.poison.tick.message",
+                PoisonAmount,
+                DamageTypes.POISON
+            );
+            CombatUtil.ApplyAttackInstantly(calculated);
         }
 
-        public override void HandleStacking(ActionOutcome outcome)
+        public override void HandleStacking(EntityStateChange outcome)
         {
             StackingStrategies.AddDuration(outcome, this);
         }

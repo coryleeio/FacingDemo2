@@ -10,9 +10,12 @@ namespace Gamepackage
         {
             Body body = new Body
             {
-                MeleeRange = 1,
-                MeleeTargetsPierced = 1,
-                MeleeParameters = attackParameters,
+                MeleeAttackTypeParameters = new AttackTypeParameters()
+                {
+                    Range = 1,
+                    NumberOfTargetsToPierce = 1,
+                    AttackParameters = attackParameters,
+                },
             };
             return body;
         }
@@ -302,7 +305,7 @@ namespace Gamepackage
                 var ammo = entity.Inventory.GetItemBySlot(ItemSlot.Ammo);
                 if (mainHand != null)
                 {
-                    if (mainHand.CanBeUsedForRanged && mainHand.AmmoType == AmmoType.Arrow && ammo == null)
+                    if (mainHand.CanBeUsedInAttackType(AttackType.Ranged) && mainHand.AmmoType == AmmoType.Arrow && ammo == null)
                     {
                         // If we've got a ranged weapon equipped that is a bow, 
                         // but no arrows equipped, go ahead and spawn some default arrows

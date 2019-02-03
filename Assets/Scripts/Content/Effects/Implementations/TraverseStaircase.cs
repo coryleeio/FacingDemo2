@@ -34,7 +34,7 @@ namespace Gamepackage
             return true;
         }
 
-        public override ActionOutcome TriggerOnPress(ActionOutcome outcome)
+        public override EntityStateChange TriggerOnPress(EntityStateChange outcome)
         {
             var foundPlayer = false;
             if (outcome.Target != null && outcome.Target.IsPlayer)

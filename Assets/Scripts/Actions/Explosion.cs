@@ -6,15 +6,15 @@ namespace Gamepackage
 {
     public class Explosion : Action
     {
-        private bool isDoneInternal = false;
-        private Entity Source;
+        // Inputs
+        private CalculatedAttack CalculatedAttack;
+
+        // Derived
         private ExplosionParameters ExplosionParameters;
-        private ProjectileAppearance ExplosionAppearance;
-        private Point Position;
-        private int Index;
-        private List<Point> NextPoints = new List<Point>();
-        private List<Point> DonePoints = new List<Point>();
-        private List<Point> RemnantPoints = new List<Point>();
+        private ProjectileAppearance ExplosionProjectileAppearance;
+
+        private bool isDoneInternal = false;
+        private int Index = 0;
         private float ElapsedTimeThisTile = 0.0f;
 
         public override bool IsEndable
@@ -27,15 +27,11 @@ namespace Gamepackage
 
         private Explosion() { }
 
-        public Explosion(Entity source, AttackParameters triggeringAttackParameters, Point Location)
+        public Explosion(CalculatedAttack calculatedAttack)
         {
-            this.Source = source;
-            this.ExplosionParameters = triggeringAttackParameters.ExplosionParameters;
-            if (ExplosionParameters.ProjectileAppearance != null)
-            {
-                ExplosionAppearance = ExplosionParameters.ProjectileAppearance;
-            }
-            this.Position = Location;
+            this.CalculatedAttack = calculatedAttack;
+            this.ExplosionParameters = calculatedAttack.AttackParameters.ExplosionParameters;
+            this.ExplosionProjectileAppearance = calculatedAttack.AttackParameters.ExplosionParameters.ProjectileAppearance;
         }
 
         public override bool IsValid()
@@ -46,28 +42,24 @@ namespace Gamepackage
         public override void Enter()
         {
             base.Enter();
-            Assert.IsNotNull(Source);
-            Assert.IsNotNull(ExplosionParameters);
-            Assert.IsNotNull(ExplosionAppearance);
-            Assert.IsNotNull(Position);
-            Assert.IsTrue(ExplosionParameters.Radius > 0, "An explosion with a radius of 0 does nothing");
-
-            if(ExplosionAppearance != null && ExplosionAppearance.OnSwingDefinition != null)
+            if (ExplosionParameters.ProjectileAppearance == null)
             {
-                ExplosionAppearance.OnSwingDefinition.Instantiate(Position, Direction.SouthEast, null);
+                Debug.LogWarning("Invisible explosion?");
             }
 
-            // Do a manual floodfill here bc we dont want to floor filter the initial explosion
-            MathUtil.FloodFill(Position, Index, ref NextPoints, MathUtil.FloodFillType.Surrounding);
+            if (ExplosionParameters.ProjectileAppearance != null && ExplosionParameters.ProjectileAppearance.OnSwingDefinition != null)
+            {
+                ExplosionParameters.ProjectileAppearance.OnSwingDefinition.Instantiate(CalculatedAttack.EndpointOfAttack, Direction.SouthEast, null);
+            }
         }
 
         public override void Do()
         {
             base.Do();
             ElapsedTimeThisTile += Time.deltaTime;
-            if(ElapsedTimeThisTile > ExplosionAppearance.OnEnterDefinition.PerTileTravelTime)
+            if (ElapsedTimeThisTile > ExplosionProjectileAppearance.OnEnterDefinition.PerTileTravelTime)
             {
-                if(Index >= ExplosionParameters.Radius)
+                if (Index == ExplosionParameters.Radius)
                 {
                     isDoneInternal = true;
                 }
@@ -75,56 +67,34 @@ namespace Gamepackage
                 {
                     ElapsedTimeThisTile = 0.0f;
                     Index++;
-                    NextPoints.AddRange(Context.GameStateManager.Game.CurrentLevel.Grid[Position].CachedFloorFloodFills[Index]);
-                    foreach(var point in NextPoints)
+                    var currentPoints = CalculatedAttack.ExplosionPointsByRadius[Index];
+                    var currentStateChanges = CalculatedAttack.ExplosionStateChangesByRadius[Index];
+                    foreach(var stateChange in currentStateChanges)
                     {
-                        if (!DonePoints.Contains(point))
+                        CombatUtil.ApplyEntityStateChange(stateChange);
+                    }
+
+                    foreach (var point in currentPoints)
+                    {
+                        if (ExplosionProjectileAppearance != null && ExplosionProjectileAppearance.OnEnterDefinition != null)
                         {
-                            if (ExplosionAppearance != null && ExplosionAppearance.OnEnterDefinition != null)
-                            {
-                                ExplosionAppearance.OnEnterDefinition.Instantiate(point, Direction.SouthEast, null);
-                            }
-
-                            var game = Context.GameStateManager.Game;
-                            var level = game.CurrentLevel;
-
-                            var entitiesInPosition = level.Grid[point].EntitiesInPosition;
-
-                            foreach (var target in entitiesInPosition)
-                            {
-                                if(target.IsCombatant)
-                                {
-                                    var esc = new ActionOutcome();
-                                    esc.Source = Source;
-                                    esc.CombatContext = AttackType.Zapped;
-                                    esc.AttackParameters = ExplosionParameters;
-                                    esc.AppliedEffects.AddRange(ExplosionParameters.AppliedEffects);
-                                    esc.Target = target;
-                                    CombatUtil.ApplyEntityStateChange(esc);
-                                }
-                            }
-                            DonePoints.Add(point);
+                            ExplosionProjectileAppearance.OnEnterDefinition.Instantiate(point, Direction.SouthEast, null);
                         }
                     }
 
-                    foreach(var donePoint in DonePoints)
+                    if (Index - 1 > 0)
                     {
-                        if(!RemnantPoints.Contains(donePoint))
+                        var previousPoints = CalculatedAttack.ExplosionPointsByRadius[Index - 1];
+                        foreach (var point in previousPoints)
                         {
-                            if (ExplosionAppearance != null && ExplosionAppearance.OnLeaveDefinition != null)
+                            if (ExplosionProjectileAppearance != null && ExplosionProjectileAppearance.OnLeaveDefinition != null)
                             {
-                                ExplosionAppearance.OnLeaveDefinition.Instantiate(donePoint, Direction.SouthEast, null);
+                                ExplosionProjectileAppearance.OnLeaveDefinition.Instantiate(point, Direction.SouthEast, null);
                             }
-                            RemnantPoints.Add(donePoint);
                         }
                     }
                 }
             }
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Gamepackage
             }
         }
 
-        public override bool CanAffectIncomingAttack(ActionOutcome outcome)
+        public override bool CanAffectIncomingAttack(CalculatedAttack calculatedAttack, EntityStateChange outcome)
         {
             if (outcome.Target == null)
             {
@@ -30,14 +30,15 @@ namespace Gamepackage
             return item != null;
         }
 
-        public override ActionOutcome CalculateAffectIncomingAttackEffects(ActionOutcome outcome)
+        public override EntityStateChange CalculateAffectIncomingAttackEffects(CalculatedAttack calculatedAttack, EntityStateChange outcome)
         {
             var target = outcome.Target;
             var isLethal = target.Body.CurrentHealth - outcome.HealthChange <= 0;
-            if (isLethal && MathUtil.ChanceToOccur(50))
+            if (isLethal && MathUtil.ChanceToOccur(100))
             {
                 var item = target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
-                outcome.StopThisAction();
+
+                CombatUtil.ShortCiruitAttack(outcome);
                 outcome.FloatingTextMessage.AddLast(new FloatingTextMessage()
                 {
                     Message = "effect.lucky.coin.lifesave.floating.message".Localize(),
@@ -45,7 +46,13 @@ namespace Gamepackage
                     target = target,
                 });
                 outcome.LateMessages.AddLast("effect.lucky.coin.lifesave.block.attack".Localize());
-                target.Inventory.RemoveItemStack(item);
+
+                calculatedAttack.ItemStateChanges.Add(new ItemStateChange()
+                {
+                    Owner = outcome.Target,
+                    Item = item,
+                    NumberOfItemsConsumed = item.NumberOfItems,
+                });
             }
             return outcome;
         }

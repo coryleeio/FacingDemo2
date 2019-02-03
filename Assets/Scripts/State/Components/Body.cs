@@ -11,9 +11,7 @@ namespace Gamepackage
         public bool IsDead = false;
         public bool Floating = false;
         public List<ItemSlot> UsableItemSlots = new List<ItemSlot>(0);
-        public List<AttackParameters> MeleeParameters = new List<AttackParameters>(0);
-        public int MeleeRange;
-        public int MeleeTargetsPierced;
+        public AttackTypeParameters MeleeAttackTypeParameters;
 
         public GameObject MeleeProjectilePrefab;
         public GameObject MeleeOnHitPrefab;
@@ -24,7 +22,7 @@ namespace Gamepackage
         {
             get
             {
-                return MeleeParameters.Count > 0;
+                return MeleeAttackTypeParameters != null && MeleeAttackTypeParameters.AttackParameters.Count > 0;
             }
         }
     }

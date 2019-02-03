@@ -14,35 +14,30 @@ namespace Gamepackage
         public List<ItemSlot> SlotsOccupiedByWearing;
         public int MaxStackSize;
         public Dictionary<Attributes, int> Attributes;
-        public List<Effect> Effects;
+
+        // Effects that are applied by all attacks no matter the type
+        // also includes stat changing effects, immunities etc
+        // anything that is not specific to a particular attack.
+        public List<Effect> EffectsGlobal;
 
         // Percentage chance /100 that the item survives being shot or thrown
         // if it survives it will appear on the ground wherever it was thrown or shot to
         public int ChanceToSurviveLaunch;
         
-
         // For ammo it determines what type of ammo the item is
         // For ranged items it determines what type of ammo is fired
         public AmmoType AmmoType;
 
-        public List<AttackParameters> MeleeParameters;
-        public int MeleeRange;
-        public int MeleeTargetsPierced;
+        public Dictionary<AttackType, AttackTypeParameters> AttackTypeParameters = new Dictionary<AttackType, AttackTypeParameters>();
 
-        public List<AttackParameters> ThrowParameters;
-        public int ThrownRange;
-        public int ThrownTargetsPierced;
+        public bool IsUsable
+        {
+            get
+            {
+                return AttackTypeParameters.ContainsKey(AttackType.ApplyToSelf) && AttackTypeParameters[AttackType.ApplyToSelf].AttackParameters.Count > 0;
+            }
+        }
 
-        public List<AttackParameters> RangedParameters;
-        public int RangedRange;
-        public int RangedTargetsPierced;
-
-        public List<AttackParameters> ZapParameters;
-        public int ZapRange;
-        public int ZappedTargetsPierced;
-
-        public bool IsUsable;
-        public string OnUseText;
         public string CustomOnUseText = null;
 
         public bool HasCharges
@@ -95,35 +90,35 @@ namespace Gamepackage
             }
         }
 
-        public bool CanBeUsedInMelee
+        public bool CanBeUsedInAttackType(AttackType attackType)
         {
-            get
+            if(attackType == AttackType.Melee)
             {
-                return MeleeParameters.Count > 0;
+                return AttackTypeParameters.ContainsKey(AttackType.Melee);
             }
-        }
-
-        public bool CanBeThrown
-        {
-            get
+            else if(attackType == AttackType.Ranged)
             {
-                return ThrowParameters.Count > 0;
+                return AttackTypeParameters.ContainsKey(AttackType.Ranged) && AmmoType != AmmoType.None;
             }
-        }
-
-        public bool CanBeUsedForRanged
-        {
-            get
+            else if(attackType == AttackType.Thrown)
             {
-                return RangedParameters.Count > 0 && AmmoType != AmmoType.None;
+                return AttackTypeParameters.ContainsKey(AttackType.Thrown);
             }
-        }
-
-        public bool CanBeUsedForZap
-        {
-            get
+            else if(attackType == AttackType.Zapped)
             {
-                return ZapParameters.Count > 0 && HasCharges;
+                return AttackTypeParameters.ContainsKey(AttackType.Zapped) && HasCharges;
+            }
+            else if (attackType == AttackType.ApplyToSelf)
+            {
+                return AttackTypeParameters.ContainsKey(AttackType.ApplyToSelf) && HasCharges;
+            }
+            else if(attackType == AttackType.ApplyToOther)
+            {
+                return AttackTypeParameters.ContainsKey(AttackType.ApplyToOther);
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
 

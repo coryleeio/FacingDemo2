@@ -76,6 +76,14 @@ namespace Gamepackage
 
         public void Register(Sortable spriteSortable)
         {
+            if(spriteSortable.Position == null)
+            {
+                spriteSortable.Position = new Point(0, 0);
+                if(spriteSortable.PositionRelativeToParent == null)
+                {
+                    spriteSortable.PositionRelativeToParent = new Point(0, 0);
+                }
+            }
             if (spriteSortable != null || spriteSortable.Registered)
             {
                 if (sortablesById.ContainsKey(spriteSortable.SpriteSortableId) &&
@@ -111,8 +119,8 @@ namespace Gamepackage
                             if(!child.Registered)
                             {
                                 Register(child);
-
                             }
+
                             child.RecalculatePositionRelativeToParent();
                         }
                     }

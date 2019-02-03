@@ -60,6 +60,10 @@ namespace Gamepackage
 
         public void Start()
         {
+            if(Position == null)
+            {
+                return;
+            }
             if (Context.SpriteSortingSystem != null)
             {
                 Context.SpriteSortingSystem.Register(this);

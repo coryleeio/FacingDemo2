@@ -18,12 +18,12 @@
             }
         }
 
-        public override void HandleStacking(ActionOutcome outcome)
+        public override void HandleStacking(EntityStateChange outcome)
         {
             StackingStrategies.AddDuration(outcome, this);
         }
 
-        public override void OnApply(ActionOutcome outcome)
+        public override void OnApply(EntityStateChange outcome)
         {
             base.OnApply(outcome);
             Context.UIController.TextLog.AddText(string.Format("effect.strength.of.giants.apply".Localize(), outcome.Target.Name));

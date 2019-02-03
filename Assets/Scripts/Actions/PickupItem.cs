@@ -38,7 +38,7 @@ namespace Gamepackage
 
             var source = Source;
             var target = Targets[0];
-            target.Inventory.RemoveItemStack(Item);
+            target.Inventory.RemoveWholeItemStack(Item);
             Context.ViewFactory.BuildView(target);
             if(Index == -1)
             {

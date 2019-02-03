@@ -8,13 +8,6 @@ namespace Gamepackage
 {
     public static class CombatUtil
     {
-        public static Predicate<Effect> AppliedEffects = (effectInQuestion) => { return effectInQuestion is AppliedEffect; };
-        public static Predicate<Entity> HittableEntities = (t) => t.IsCombatant && t.Body != null && !t.Body.IsDead;
-
-        public static Predicate<Point> NonoccupiedTiles = (t) => { return Context.GameStateManager.Game.CurrentLevel.Grid[t].Walkable && Context.GameStateManager.Game.CurrentLevel.Grid[t].EntitiesInPosition.FindAll(CombatUtil.HittableEntities).Count == 0; };
-        public static Predicate<Entity> LootableEntities = (ent) => { return ent.PrototypeIdentifier == UniqueIdentifier.ENTITY_GROUND_DROP || (ent.Body != null && ent.Body.IsDead && ent.Inventory.HasAnyItems); };
-        public static Predicate<Point> FloorTiles = (pointOnLevel) => { return Context.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(pointOnLevel) && Context.GameStateManager.Game.CurrentLevel.Grid[pointOnLevel.X, pointOnLevel.Y].TileType == TileType.Floor; };
-        public static Predicate<Point> VisibleTiles = (pointOnLevel) => { return Context.GameStateManager.Game.CurrentLevel.BoundingBox.Contains(pointOnLevel) && Context.GameStateManager.Game.CurrentLevel.Grid[pointOnLevel.X, pointOnLevel.Y].TileType != TileType.Empty; };
 
         public static List<Entity> HittableEntitiesInPositionsOnLevel(Point point, Level level)
         {
@@ -26,12 +19,400 @@ namespace Gamepackage
             List<Entity> entities = new List<Entity>();
             foreach (var point in points)
             {
-                entities.AddRange(level.Grid[point].EntitiesInPosition.FindAll(CombatUtil.HittableEntities));
+                entities.AddRange(level.Grid[point].EntitiesInPosition.FindAll(Filters.HittableEntities));
             }
             return entities;
         }
 
-        public static void ShowMessages(ActionOutcome result)
+        public static List<Effect> AppliedEffectsResolve(Entity source, AttackType attackType, Item item, AttackTypeParameters attackTypeParameters, AttackParameters attackParameters)
+        {
+            List<Effect> appliedEffects = new List<Effect>();
+            if (attackTypeParameters == null)
+            {
+                return appliedEffects;
+            }
+            var ammo = CombatUtil.AmmoResolve(source, attackType, item);
+            if (item != null)
+            {
+                appliedEffects.AddRange(item.EffectsGlobal.FindAll(Filters.AppliedEffects));
+            }
+            appliedEffects.AddRange(attackParameters.AttackSpecificEffects.FindAll(Filters.AppliedEffects));
+            if (attackType == AttackType.Ranged)
+            {
+                var ammoAttackParameters = MathUtil.ChooseRandomElement<AttackParameters>(ammo.AttackTypeParameters[AttackType.Ranged].AttackParameters);
+                appliedEffects.AddRange(ammo.EffectsGlobal.FindAll(Filters.AppliedEffects));
+                appliedEffects.AddRange(ammoAttackParameters.AttackSpecificEffects.FindAll(Filters.AppliedEffects));
+            }
+            return appliedEffects;
+        }
+
+        public static Point EndpointOfAttack(Entity source, AttackType attackType, Item item, Point targetPosition, Direction direction, AttackTypeParameters attackTypeParameters)
+        {
+            Point retval;
+            if (attackTypeParameters.AttackTargetingType == AttackTargetingType.Line)
+            {
+                retval = CombatUtil.CalculateEndpointOfLineSkillshot(source.Position, attackTypeParameters, direction);
+            }
+            else if (attackTypeParameters.AttackTargetingType == AttackTargetingType.SelectTarget)
+            {
+                retval = targetPosition;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            return retval;
+        }
+
+        public static List<Point> PointsHitByAttack(Entity source, AttackType attackType, Item item, Point endpointOfAttack, Direction direction, AttackTypeParameters attackTypeParameters)
+        {
+            var retVal = new List<Point>();
+            if (attackTypeParameters.AttackTargetingType == AttackTargetingType.Line)
+            {
+                var distance = (int)source.Position.Distance(endpointOfAttack);
+                retVal.AddRange(MathUtil.LineInDirection(source.Position, direction, distance));
+            }
+            else if (attackTypeParameters.AttackTargetingType == AttackTargetingType.SelectTarget)
+            {
+                retVal.Add(endpointOfAttack);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            return retVal;
+        }
+
+        public static void ApplyAttackInstantly(CalculatedAttack calculated)
+        {
+            foreach (var stateChange in calculated.AttackStateChanges)
+            {
+                CombatUtil.ApplyEntityStateChange(stateChange);
+            }
+            foreach (var stateChange in calculated.ExplosionStateChanges)
+            {
+                CombatUtil.ApplyEntityStateChange(stateChange);
+            }
+
+            foreach (var stateChange in calculated.SourceStateChanges)
+            {
+                CombatUtil.ApplyEntityStateChange(stateChange);
+            }
+
+            CombatUtil.ApplyItemStateChanges(calculated);
+            CombatUtil.ApplyGroundSpawnStateChange(calculated);
+            if (Context.UIController)
+            {
+                Context.UIController.Refresh();
+            }
+        }
+
+        public static CalculatedAttack CalculateSimpleDamage(Entity target, string i18nString, int damage, DamageTypes damageType)
+        {
+            var attackTypeParameters = new AttackTypeParameters()
+            {
+                Range = 1,
+                AttackParameters = new List<AttackParameters>() {
+                    new AttackParameters()
+                    {
+                            AttackMessage = i18nString.Localize(),
+                            Bonus = 0,
+                            DyeNumber = 1,
+                            DyeSize = damage,
+                            DamageType = damageType,
+                            ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_NONE,
+                    }
+                },
+                NumberOfTargetsToPierce = 1,
+                AttackTargetingType = AttackTargetingType.SelectTarget,
+            };
+
+            var calculated = CombatUtil.CalculateAttack(Context.GameStateManager.Game.CurrentLevel.Grid,
+                    null,
+                    AttackType.ApplyToOther,
+                    null,
+                    target.Position,
+                    attackTypeParameters,
+                    attackTypeParameters.AttackParameters[0]
+            );
+            return calculated;
+        }
+
+        public static CalculatedAttack CalculateAttack(Grid<Tile> grid,
+            Entity source, AttackType attackType, Item item, Point targetPosition,
+            AttackTypeParameters attackTypeParameters,
+            AttackParameters attackParameters)
+        {
+            CalculatedAttack calculatedAttack = new CalculatedAttack
+            {
+                Source = source,
+                AttackType = attackType,
+                Item = item,
+                TargetPosition = targetPosition,
+                AttackParameters = attackParameters,
+                AttackTypeParameters = attackTypeParameters,
+                NumberOfTargetsPierced = 0,
+            };
+            if (source != null)
+            {
+                calculatedAttack.DirectionOfAttack = MathUtil.RelativeDirection(source.Position, targetPosition);
+            }
+
+            calculatedAttack.EndpointOfAttack = EndpointOfAttack(source, calculatedAttack.AttackType, item, targetPosition, calculatedAttack.DirectionOfAttack, calculatedAttack.AttackTypeParameters);
+            calculatedAttack.PointsPossiblyAffectedBeforeTargetPiercing.AddRange(PointsHitByAttack(source, attackType, item, calculatedAttack.EndpointOfAttack, calculatedAttack.DirectionOfAttack, calculatedAttack.AttackTypeParameters));
+            var entitiesToHit = new List<Entity>();
+
+            foreach (var point in calculatedAttack.PointsPossiblyAffectedBeforeTargetPiercing)
+            {
+                var entitiesInThisPosition = grid[point].EntitiesInPosition.FindAll(Filters.HittableEntities);
+                calculatedAttack.PointsAffectedByAttack.Add(point);
+                if (entitiesInThisPosition.Count > 0)
+                {
+                    entitiesToHit.AddRange(entitiesInThisPosition);
+                    calculatedAttack.NumberOfTargetsPierced++; // This means that it is really tiles pierced, but entities are rarely stacked
+                    if (calculatedAttack.NumberOfTargetsPierced >= calculatedAttack.AttackTypeParameters.NumberOfTargetsToPierce)
+                    {
+                        break;
+                    }
+                }
+            }
+            foreach (var target in entitiesToHit)
+            {
+                var attackStateChange = new EntityStateChange
+                {
+                    Source = calculatedAttack.Source,
+                    AttackType = calculatedAttack.AttackType,
+                    Target = target,
+                    AttackingItem = calculatedAttack.Item,
+                    TargetPositionOfAttack = calculatedAttack.TargetPosition,
+                };
+                attackStateChange.AttackParameters = calculatedAttack.AttackParameters;
+                attackStateChange.AppliedEffects.AddRange(CombatUtil.AppliedEffectsResolve(source, attackType, item, calculatedAttack.AttackTypeParameters, calculatedAttack.AttackParameters));
+                calculatedAttack.AttackStateChanges.Add(attackStateChange);
+                if (calculatedAttack.AttackParameters != null)
+                {
+                    CalculateDamageForAttackParameters(attackStateChange.AttackParameters, attackStateChange);
+                }
+                CombatUtil.CalculateAffectOutgoingAttack(calculatedAttack, attackStateChange);
+                CombatUtil.CalculateAffectIncomingAttackEffects(calculatedAttack, attackStateChange);
+            }
+            CalculateExplosion(grid, calculatedAttack, calculatedAttack.EndpointOfAttack);
+            CalculateProjectileItemChanges(calculatedAttack);
+            CalculateChargeItemChanges(calculatedAttack);
+            return calculatedAttack;
+        }
+
+
+        public static void ApplyGroundSpawnStateChange(CalculatedAttack calculatedAttack)
+        {
+            foreach (var groundDropStateChange in calculatedAttack.GroundDropsToSpawn)
+            {
+                var groundDrop = EntityFactory.Build(UniqueIdentifier.ENTITY_GROUND_DROP);
+                groundDrop.Position = new Point(groundDropStateChange.SpawnPosition);
+                groundDrop.Name = groundDropStateChange.Name;
+
+                var level = Context.GameStateManager.Game.CurrentLevel;
+                Context.EntitySystem.Register(groundDrop, level);
+                var itemCopy = ItemFactory.Build(groundDropStateChange.UniqueIdentifier);
+                itemCopy.NumberOfItems = 1;
+
+                groundDrop.Inventory.AddItem(itemCopy);
+                Context.ViewFactory.BuildView(groundDrop);
+            }
+        }
+
+        private static Item GetItemBeingLaunched(CalculatedAttack calculatedAttack)
+        {
+            var ammo = CombatUtil.AmmoResolve(calculatedAttack.Source, calculatedAttack.AttackType, calculatedAttack.Item);
+            return calculatedAttack.AttackType == AttackType.Ranged ? ammo : calculatedAttack.Item;
+        }
+
+        public static void ApplyItemStateChanges(CalculatedAttack calculatedAttack)
+        {
+            foreach (var itemStateChange in calculatedAttack.ItemStateChanges)
+            {
+                if (itemStateChange.NumberOfChargesConsumed > 0)
+                {
+                    itemStateChange.Item.ExactNumberOfChargesRemaining = itemStateChange.Item.ExactNumberOfChargesRemaining - 1;
+                }
+                if (itemStateChange.NumberOfItemsConsumed > 0)
+                {
+                    itemStateChange.Item.NumberOfItems -= itemStateChange.NumberOfItemsConsumed;
+                    if (itemStateChange.Item.NumberOfItems <= 0)
+                    {
+                        itemStateChange.Owner.Inventory.RemoveWholeItemStack(itemStateChange.Item);
+                    }
+                }
+            }
+        }
+
+        private static void CalculateChargeItemChanges(CalculatedAttack calculatedAttack)
+        {
+            // Handle the swinging weapon
+            var item = calculatedAttack.Item;
+            if (item != null && !item.HasUnlimitedCharges && item.HasCharges)
+            {
+                var itemStateChange = new ItemStateChange();
+                itemStateChange.Item = item;
+                itemStateChange.Owner = calculatedAttack.Source;
+                if (item.ExactNumberOfChargesRemaining - 1 <= 0 && item.DestroyWhenAllChargesAreConsumed)
+                {
+                    itemStateChange.NumberOfItemsConsumed = 1;
+                }
+                itemStateChange.NumberOfChargesConsumed = 1;
+                calculatedAttack.ItemStateChanges.Add(itemStateChange);
+            }
+        }
+
+        private static void CalculateProjectileItemChanges(CalculatedAttack calculatedAttack)
+        {
+            if (calculatedAttack.AttackType == AttackType.Ranged || calculatedAttack.AttackType == AttackType.Thrown)
+            {
+                Item itemBeingLaunched = GetItemBeingLaunched(calculatedAttack);
+                var shouldSpawnItemOnGround = MathUtil.PercentageChanceEventOccurs(itemBeingLaunched.ChanceToSurviveLaunch);
+                if (shouldSpawnItemOnGround)
+                {
+                    var groundDropSpawn = new GroundDropSpawn();
+                    groundDropSpawn.UniqueIdentifier = itemBeingLaunched.UniqueIdentifier;
+                    groundDropSpawn.Name = itemBeingLaunched.DisplayName;
+
+                    var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+                    Point locationForSpawn = null;
+                    if (grid[calculatedAttack.EndpointOfAttack].TileType == TileType.Wall)
+                    {
+                        // Spawn one tile back the way it came
+                        var oppositeDirection = MathUtil.OppositeDirection(calculatedAttack.DirectionOfAttack);
+                        var offset = MathUtil.OffsetForDirection(oppositeDirection);
+                        locationForSpawn = MathUtil.GetPointByOffset(calculatedAttack.EndpointOfAttack, offset);
+                    }
+                    else
+                    {
+                        // Spawn exactly at endpoint
+                        locationForSpawn = new Point(calculatedAttack.EndpointOfAttack.X, calculatedAttack.EndpointOfAttack.Y);
+                    }
+
+                    groundDropSpawn.SpawnPosition = new Point(locationForSpawn);
+                    groundDropSpawn.NumberToSpawn = 1;
+                    calculatedAttack.GroundDropsToSpawn.Add(groundDropSpawn);
+                }
+                var itemStateChange = new ItemStateChange()
+                {
+                    Owner = calculatedAttack.Source,
+                    Item = itemBeingLaunched,
+                    NumberOfItemsConsumed = 1
+                };
+                calculatedAttack.ItemStateChanges.Add(itemStateChange);
+            }
+        }
+
+        public static void CalculateExplosion(Grid<Tile> grid, CalculatedAttack calculatedAttack, Point explosionPosition)
+        {
+            if (calculatedAttack.AttackParameters.ExplosionParameters != null)
+            {
+                Assert.IsNotNull(calculatedAttack.Source);
+                Assert.IsNotNull(explosionPosition);
+                Assert.IsTrue(calculatedAttack.AttackParameters.ExplosionParameters.Radius > 0, "An explosion with a radius of 0 does nothing");
+
+                var pointsHitOnAnyPass = new List<Point>();
+                for (var index = 0; index <= calculatedAttack.AttackParameters.ExplosionParameters.Radius; index++)
+                {
+                    EnsureExplosionDictsForRadius(calculatedAttack, index);
+
+                    var pointsHitOnPass = calculatedAttack.ExplosionPointsByRadius[index];
+                    var stateChangesOnPass = calculatedAttack.ExplosionStateChangesByRadius[index];
+
+                    if (index == 0)
+                    {
+                        // The first tile in the flood fill might be a wall node if the shot hit the wall
+                        // so dont filter for floor tiles, just add this node.
+                        pointsHitOnPass.Add(explosionPosition);
+                    }
+                    else
+                    {
+                        var pointsInFloodfill = Context.GameStateManager.Game.CurrentLevel.Grid[explosionPosition].CachedFloorFloodFills[index];
+                        foreach (var point in pointsInFloodfill)
+                        {
+                            if (!pointsHitOnAnyPass.Contains(point))
+                            {
+                                pointsHitOnPass.Add(point);
+                                pointsHitOnAnyPass.Add(point);
+                            }
+                        }
+
+                    }
+                    foreach (var pointHitOnPass in pointsHitOnPass)
+                    {
+                        var entitiesInPosition = grid[pointHitOnPass].EntitiesInPosition;
+                        foreach (var entityInPosition in entitiesInPosition)
+                        {
+                            if (entityInPosition.IsCombatant)
+                            {
+                                var entityStateChange = new EntityStateChange
+                                {
+                                    Source = calculatedAttack.Source,
+                                    AttackType = calculatedAttack.AttackType,
+                                    AttackParameters = calculatedAttack.AttackParameters.ExplosionParameters,
+                                    Target = entityInPosition,
+                                };
+                                CalculateDamageForAttackParameters(calculatedAttack.AttackParameters.ExplosionParameters, entityStateChange);
+                                entityStateChange.AppliedEffects.AddRange(calculatedAttack.AttackParameters.ExplosionParameters.AppliedEffects);
+                                stateChangesOnPass.Add(entityStateChange);
+                                calculatedAttack.ExplosionStateChanges.Add(entityStateChange);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        private static void CalculateDamageForAttackParameters(AttackParameters attackParameters, EntityStateChange attackStateChange)
+        {
+            for (var numDyeRolled = 0; numDyeRolled < attackParameters.DyeNumber; numDyeRolled++)
+            {
+                attackStateChange.HealthChange += UnityEngine.Random.Range(1, attackParameters.DyeSize + 1);
+            }
+            attackStateChange.HealthChange += attackParameters.Bonus;
+
+            if (attackParameters.DamageType == DamageTypes.HEALING)
+            {
+                attackStateChange.HealthChange *= -1;
+            }
+        }
+
+        private static void EnsureExplosionDictsForRadius(CalculatedAttack calculatedAttack, int index)
+        {
+            if (!calculatedAttack.ExplosionPointsByRadius.ContainsKey(index))
+            {
+                calculatedAttack.ExplosionPointsByRadius[index] = new List<Point>();
+            }
+            if (!calculatedAttack.ExplosionStateChangesByRadius.ContainsKey(index))
+            {
+                calculatedAttack.ExplosionStateChangesByRadius[index] = new List<EntityStateChange>();
+            }
+        }
+
+
+        public static AttackParameters AttackParametersResolve(Entity source, AttackType attackType, Item item)
+        {
+            var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(source, attackType, item);
+            AttackParameters resolved = null;
+            if (attackTypeParameters != null)
+            {
+                if (attackType == AttackType.Ranged)
+                {
+                    var ammo = CombatUtil.AmmoResolve(source, attackType, item);
+                    resolved = MathUtil.ChooseRandomElement<AttackParameters>(ammo.AttackTypeParameters[AttackType.Ranged].AttackParameters);
+                }
+                else
+                {
+                    resolved = MathUtil.ChooseRandomElement<AttackParameters>(attackTypeParameters.AttackParameters);
+                }
+            }
+            return resolved;
+        }
+
+        public static void ShowMessages(EntityStateChange result)
         {
             foreach (var msg in result.LogMessages)
             {
@@ -51,24 +432,24 @@ namespace Gamepackage
             result.FloatingTextMessage.Clear();
         }
 
-        public static void ApplyEntityStateChange(ActionOutcome result)
+        public static void ApplyEntityStateChange(EntityStateChange result)
         {
             Assert.IsNotNull(result.Target);
             Assert.IsNotNull(result.AppliedEffects);
-            result.Resolve(); // will not recalculate
             var target = result.Target;
 
             Assert.IsNotNull(target);
             if (result.Source != null)
             {
-                var newFacingDirection = MathUtil.RelativeDirection(target.Position, result.Source.Position);
+                var newTargetingDirection = MathUtil.RelativeDirection(target.Position, result.Source.Position);
+                target.Direction = newTargetingDirection;
                 if (target.View != null && target.View.SkeletonAnimation != null)
                 {
                     var skeletonAnimation = target.View.SkeletonAnimation;
                     skeletonAnimation.AnimationState.ClearTracks();
                     skeletonAnimation.Skeleton.SetToSetupPose();
-                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.GetHit, newFacingDirection), false);
-                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newFacingDirection), true, 0.0f);
+                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.GetHit, newTargetingDirection), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newTargetingDirection), true, 0.0f);
                 }
             }
             if (result.AttackParameters != null && result.AttackParameters.DamageType == DamageTypes.NOT_SET)
@@ -152,13 +533,13 @@ namespace Gamepackage
                 HandleAppliedEffects(result);
                 HandleRemovedEffects(result);
 
-                if(target.IsNPC)
+                if (target.IsNPC)
                 {
-                    if((result.AppliedEffects.Count > 0 || result.HealthChange > 0) && result.Target.Behaviour != null && result.Source != null)
+                    if ((result.AppliedEffects.Count > 0 || result.HealthChange > 0) && result.Target.Behaviour != null && result.Source != null)
                     {
                         var level = Context.GameStateManager.Game.CurrentLevel;
                         result.Target.Behaviour.ShoutAboutHostileTarget(level, result.Source, result.Target.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS));
-                        if(result.Target.Behaviour.LastKnownTargetPosition == null)
+                        if (result.Target.Behaviour.LastKnownTargetPosition == null)
                         {
                             result.Target.Behaviour.LastKnownTargetPosition = new Point(result.Source.Position);
                         }
@@ -193,7 +574,7 @@ namespace Gamepackage
                     foreach (var pair in target.Inventory.EquippedItemBySlot)
                     {
                         var item = pair.Value;
-                        foreach (var effect in item.Effects)
+                        foreach (var effect in item.EffectsGlobal)
                         {
                             effect.RemovePersistantVisualEffects(target);
                         }
@@ -216,6 +597,9 @@ namespace Gamepackage
                     {
                         target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
                         Context.ViewFactory.BuildView(target, false);
+                        var sortable = target.View.ViewGameObject.GetComponent<Sortable>();
+                        sortable.Position = target.Position;
+                        Context.SpriteSortingSystem.Register(sortable);
                     }
                     if (!target.IsPlayer)
                     {
@@ -242,14 +626,14 @@ namespace Gamepackage
             foreach (var pair in entity.Inventory.EquippedItemBySlot)
             {
                 var item = pair.Value;
-                effectsAggregate.AddRange(item.Effects);
+                effectsAggregate.AddRange(item.EffectsGlobal);
             }
 
             foreach (var item in entity.Inventory.Items)
             {
                 if (item != null)
                 {
-                    effectsAggregate.AddRange(item.Effects);
+                    effectsAggregate.AddRange(item.EffectsGlobal);
 
                 }
             }
@@ -286,24 +670,24 @@ namespace Gamepackage
             foreach (var pair in entity.Inventory.EquippedItemBySlot)
             {
                 var item = pair.Value;
-                var expiring = item.Effects.FindAll(IsAnAffectThatShouldExpire);
+                var expiring = item.EffectsGlobal.FindAll(IsAnAffectThatShouldExpire);
                 foreach (var expire in expiring)
                 {
                     expire.OnRemove(entity);
                 }
-                item.Effects.RemoveAll(IsAnAffectThatShouldExpire);
+                item.EffectsGlobal.RemoveAll(IsAnAffectThatShouldExpire);
             }
 
             foreach (var item in entity.Inventory.Items)
             {
                 if (item != null)
                 {
-                    var expiring = item.Effects.FindAll(IsAnAffectThatShouldExpire);
+                    var expiring = item.EffectsGlobal.FindAll(IsAnAffectThatShouldExpire);
                     foreach (var expire in expiring)
                     {
                         expire.OnRemove(entity);
                     }
-                    item.Effects.RemoveAll(IsAnAffectThatShouldExpire);
+                    item.EffectsGlobal.RemoveAll(IsAnAffectThatShouldExpire);
                 }
             }
 
@@ -318,7 +702,7 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleRemovedEffects(ActionOutcome outcome)
+        private static void HandleRemovedEffects(EntityStateChange outcome)
         {
             if (!outcome.WasShortCircuited)
             {
@@ -340,7 +724,7 @@ namespace Gamepackage
             }
         }
 
-        private static void HandleAppliedEffects(ActionOutcome outcome)
+        private static void HandleAppliedEffects(EntityStateChange outcome)
         {
             if (!outcome.WasShortCircuited)
             {
@@ -369,7 +753,7 @@ namespace Gamepackage
                 var abilities = potentialTrigger.Trigger.Effects;
                 foreach (var effect in abilities)
                 {
-                    var attack = new ActionOutcome();
+                    var attack = new EntityStateChange();
                     attack.Source = potentialTrigger;
                     attack.Target = Source;
                     effect.TriggerOnStep(attack);
@@ -388,11 +772,214 @@ namespace Gamepackage
                 }
                 if (item.DestroyWhenAllChargesAreConsumed)
                 {
-                    owner.Inventory.RemoveItemStack(item);
+                    owner.Inventory.RemoveWholeItemStack(item);
                     Context.UIController.Refresh();
                     Context.ViewFactory.BuildView(owner);
                 }
             }
+        }
+
+        public static bool CanAttackWithItem(Entity source, AttackType attackType, Item item)
+        {
+            if (attackType == AttackType.NotSet)
+            {
+                return false;
+            }
+            var ammo = AmmoResolve(source, attackType, item);
+            var hasBody = source.Body != null && source.Body.CanAttackInMelee;
+            if (attackType == AttackType.Melee)
+            {
+                var hasWeapon = hasBody && source.Inventory != null && item != null && item.CanBeUsedInAttackType(AttackType.Melee);
+                return hasBody || hasWeapon;
+            }
+            else if (attackType == AttackType.Ranged)
+            {
+                var hasRangedWeapon = hasBody && source.Inventory != null && item != null && item.CanBeUsedInAttackType(AttackType.Ranged);
+                var hasAmmo = false;
+                if (hasRangedWeapon)
+                {
+                    hasAmmo = ammo != null && item.AmmoType == ammo.AmmoType;
+                }
+                return hasRangedWeapon && hasAmmo;
+            }
+            else if (attackType == AttackType.Thrown)
+            {
+                return hasBody && source.Inventory != null && item != null && item.CanBeUsedInAttackType(AttackType.Thrown);
+            }
+            else if (attackType == AttackType.Zapped)
+            {
+                return hasBody && source.Inventory != null && item != null && item.CanBeUsedInAttackType(AttackType.Zapped);
+            }
+            else if (attackType == AttackType.ApplyToSelf || attackType == AttackType.ApplyToOther)
+            {
+                return true;
+            }
+            else
+            {
+                throw new NotImplementedException("Unimplemented attack type");
+            }
+        }
+
+        public static Item AmmoResolve(Entity source, AttackType attackType, Item item)
+        {
+            if (source == null || attackType != AttackType.Ranged || source.Inventory == null)
+            {
+                return null;
+            }
+            return source.Inventory.GetItemBySlot(ItemSlot.Ammo);
+        }
+
+        public static List<Point> PointsInRange(Grid<Tile> grid, Point position, int range, AttackTargetingType attackTargetingType)
+        {
+            List<Point> outputRange = new List<Point>();
+            if (attackTargetingType == AttackTargetingType.Line)
+            {
+                outputRange.AddRange(MathUtil.LineInDirection(position, Direction.SouthEast, range));
+                outputRange.AddRange(MathUtil.LineInDirection(position, Direction.SouthWest, range));
+                outputRange.AddRange(MathUtil.LineInDirection(position, Direction.NorthEast, range));
+                outputRange.AddRange(MathUtil.LineInDirection(position, Direction.NorthWest, range));
+            }
+            else if (attackTargetingType == AttackTargetingType.SelectTarget)
+            {
+                outputRange.AddRange(grid[position].CachedFloorFloodFills[range]);
+            }
+            else
+            {
+                throw new NotImplementedException("AttackTargetingType not implemented: " + attackTargetingType);
+            }
+            outputRange.AddRange(outputRange);
+            return outputRange;
+        }
+
+        public static bool InRangeOfAttack(Grid<Tile> grid, Point position, int range, AttackTargetingType attackTargetingType, Point target)
+        {
+            var pointsInRange = PointsInRange(grid, position, range, attackTargetingType);
+            return pointsInRange.Contains(target);
+        }
+
+        public static bool HasAClearShot(Entity source, AttackTargetingType attackTargetingType, Point target)
+        {
+            var canHitFromHere = source.Position.IsOrthogonalTo(target) || attackTargetingType != AttackTargetingType.Line;
+
+            if (!canHitFromHere)
+            {
+                return false;
+            }
+
+            var distance = (int)source.Position.Distance(target); // whole number bc grid coords
+            var coordsToCheck = MathUtil.LineInDirection(source.Position, MathUtil.RelativeDirection(source.Position, target), distance);
+            foreach (var point in coordsToCheck)
+            {
+                var game = Context.GameStateManager.Game;
+                var level = game.CurrentLevel;
+                if (point != target)
+                {
+                    if (level.Grid[point].TileType == TileType.Wall)
+                    {
+                        return false; // dont shoot through walls
+                    }
+                    var entitiesInPosition = level.Grid[point].EntitiesInPosition;
+                    foreach (var entityInPosition in entitiesInPosition)
+                    {
+                        if (entityInPosition.IsCombatant && entityInPosition.Behaviour != null && source.Behaviour != null && entityInPosition.Behaviour.ActingTeam == source.Behaviour.ActingTeam)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public static List<Point> PointsInExplosionRange(ExplosionParameters ExplosionParameters, Point placementPosition)
+        {
+            List<Point> outputRange = new List<Point>();
+            if (ExplosionParameters != null)
+            {
+                outputRange.AddRange(Context.GameStateManager.Game.CurrentLevel.Grid[placementPosition].CachedFloorFloodFills[ExplosionParameters.Radius]);
+            }
+            return outputRange;
+        }
+
+        public static AttackTypeParameters AttackTypeParametersResolve(Entity source, AttackType attackType, Item item)
+        {
+            AttackTypeParameters attackTypeParameters = null;
+            var ammo = CombatUtil.AmmoResolve(source, attackType, item);
+            var hasAmmoOrDoesntNeedIt = attackType != AttackType.Ranged || ammo != null;
+            if ((item == null || !item.CanBeUsedInAttackType(AttackType.Melee) && source.Body.CanAttackInMelee))
+            {
+                attackTypeParameters = source.Body.MeleeAttackTypeParameters;
+            }
+            else if (item != null && item.CanBeUsedInAttackType(attackType) && hasAmmoOrDoesntNeedIt)
+            {
+                attackTypeParameters = item.AttackTypeParameters[attackType];
+            }
+
+            return attackTypeParameters;
+        }
+
+        public static void CalculateAffectOutgoingAttack(CalculatedAttack calculatedAttack, EntityStateChange change)
+        {
+            if (change.Source != null)
+            {
+                var sourceEffects = change.Source.GetEffects();
+                foreach (var effect in sourceEffects)
+                {
+                    if (effect.CanAffectOutgoingAttack(calculatedAttack, change))
+                    {
+                        effect.CalculateAffectOutgoingAttack(calculatedAttack, change);
+                    }
+                }
+            }
+        }
+
+        public static void CalculateAffectIncomingAttackEffects(CalculatedAttack calculatedAttack, EntityStateChange change)
+        {
+            var targetEffects = change.Target.GetEffects();
+            foreach (var effect in targetEffects)
+            {
+                if (effect.CanAffectIncomingAttack(calculatedAttack, change))
+                {
+                    effect.CalculateAffectIncomingAttackEffects(calculatedAttack, change);
+                }
+            }
+        }
+
+        public static void ShortCiruitAttack(EntityStateChange change)
+        {
+            change.HealthChange = 0;
+            change.WasShortCircuited = true;
+            change.LogMessages.Clear();
+            change.LateMessages.Clear();
+            change.FloatingTextMessage.Clear();
+            change.AppliedEffects.Clear();
+            change.RemovedEffects.Clear();
+        }
+
+        public static Point CalculateEndpointOfLineSkillshot(Point position, AttackTypeParameters attackTypeParameters, Direction direction)
+        {
+            var pointsInLine = MathUtil.LineInDirection(position, direction, attackTypeParameters.Range);
+            var numberOfThingsCanPierce = attackTypeParameters.NumberOfTargetsToPierce;
+            var numberOfThingsPierced = 0;
+
+            var game = Context.GameStateManager.Game;
+            var level = game.CurrentLevel;
+            var grid = level.Grid;
+            var previouslyTraversedPoint = position;
+            foreach (var point in pointsInLine)
+            {
+                numberOfThingsPierced += grid[point].EntitiesInPosition.Count;
+                if (numberOfThingsPierced == numberOfThingsCanPierce)
+                {
+                    return point;
+                }
+                if (grid[point].TileType != TileType.Floor)
+                {
+                    return point;
+                }
+                previouslyTraversedPoint = point;
+            }
+            return pointsInLine[pointsInLine.Count - 1];
         }
     }
 }

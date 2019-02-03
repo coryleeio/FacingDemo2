@@ -180,6 +180,8 @@ namespace Gamepackage
                     childGo.transform.position = item.CorpsePositionOffset;
                     childGo.transform.localScale = item.CorpseIconScale;
                     childGo.transform.SetParent(go.transform, false);
+                    var childSortable = childGo.AddComponent<Sortable>();
+                    childSortable.Layer = SortingLayer.EntitiesAndProps;
                     spriteRenderer.sprite = item.ItemAppearance.InventorySprite;
                     spriteRenderer.material = defaultMaterial;
                 }
@@ -198,7 +200,7 @@ namespace Gamepackage
                 foreach (var pair in entity.Inventory.EquippedItemBySlot)
                 {
                     var item = pair.Value;
-                    foreach (var effect in item.Effects)
+                    foreach (var effect in item.EffectsGlobal)
                     {
                         effect.ApplyPersistentVisualEffects(entity);
                     }

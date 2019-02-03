@@ -78,7 +78,7 @@ namespace Gamepackage
 
         public void SwapItemPosition(Item item, int oldIndex, int newIndex)
         {
-            RemoveItemStack(item);
+            RemoveWholeItemStack(item);
             if (Items[newIndex] != null)
             {
                 Items[oldIndex] = Items[newIndex];
@@ -105,19 +105,7 @@ namespace Gamepackage
             return null;
         }
 
-        public void ConsumeItem(Item item)
-        {
-            if (item.NumberOfItems > 1)
-            {
-                item.NumberOfItems--;
-            }
-            else
-            {
-                RemoveItemStack(item);
-            }
-        }
-
-        public void RemoveItemStack(Item item)
+        public void RemoveWholeItemStack(Item item)
         {
             // If you modify the dictionary while iterating it,
             // it will fail silently sometimes due to a undetected race condition
@@ -172,11 +160,11 @@ namespace Gamepackage
                 UnequipItemInSlot(GetItemSlotOfEquippedItem(itemThatMustBeRemoved));
             }
 
-            RemoveItemStack(item);
+            RemoveWholeItemStack(item);
             EquippedItemBySlot[slot] = item;
             if (Entity != null)
             {
-                foreach (var effect in item.Effects)
+                foreach (var effect in item.EffectsGlobal)
                 {
                     effect.OnApply(Entity);
                 }
@@ -192,7 +180,7 @@ namespace Gamepackage
                 AddItem(item, IndexToMoveTo);
                 if (Entity != null)
                 {
-                    foreach (var effect in item.Effects)
+                    foreach (var effect in item.EffectsGlobal)
                     {
                         effect.OnRemove(Entity);
                     }

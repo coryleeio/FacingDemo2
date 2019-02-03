@@ -7,6 +7,7 @@
         Ranged,
         Thrown,
         Zapped,
-        OnUse,
+        ApplyToSelf,
+        ApplyToOther,
     }
 }

@@ -18,11 +18,11 @@
             }
         }
 
-        public override void OnApply(ActionOutcome combatContext)
+        public override void OnApply(EntityStateChange combatContext)
         {
             base.OnApply(combatContext);
             Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.apply.message".Localize(), combatContext.Target.Name));
-            ActionOutcome outcome = new ActionOutcome();
+            EntityStateChange outcome = new EntityStateChange();
             outcome.Source = combatContext.Source;
             outcome.Target = combatContext.Target;
             var effectsToAttemptRemoval = CombatUtil.GetEntityEffectsByType(outcome.Target, (effectInQuestion) => { return effectInQuestion is Poison; });
@@ -36,17 +36,17 @@
             Context.UIController.TextLog.AddText(string.Format("effect.poison.immunity.remove.message".Localize(), entity.Name));
         }
 
-        public override void HandleStacking(ActionOutcome outcome)
+        public override void HandleStacking(EntityStateChange outcome)
         {
             StackingStrategies.AddDuration(outcome, this);
         }
 
-        public override bool CanAffectIncomingAttack(ActionOutcome outcome)
+        public override bool CanAffectIncomingAttack(CalculatedAttack calculatedAttack, EntityStateChange outcome)
         {
             return true;
         }
 
-        public override ActionOutcome CalculateAffectIncomingAttackEffects(ActionOutcome outcome)
+        public override EntityStateChange CalculateAffectIncomingAttackEffects(CalculatedAttack calculatedAttack, EntityStateChange outcome)
         {
             var effectsBlocked = outcome.AppliedEffects.FindAll((effectInQuestion) => { return effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON || effectInQuestion.Identifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON; });
 

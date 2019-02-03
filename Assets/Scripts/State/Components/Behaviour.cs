@@ -56,26 +56,20 @@ namespace Gamepackage
             var level = Context.GameStateManager.Game.CurrentLevel;
 
             var relevantContexts = entity.Behaviour.AI == AIType.DumbMelee ? MeleeAIRelevantContexts : RangedAIRelevantContexts;
-            var capabilities = new Dictionary<AttackType, AttackCapability>();
-
-            foreach (var relevantContext in relevantContexts)
-            {
-                capabilities[relevantContext] = new AttackCapability(entity, relevantContext, entity.Inventory.GetItemBySlot(ItemSlot.MainHand));
-            }
 
             NextAction = null;
 
             if (entity.Behaviour.AI == AIType.DumbMelee)
             {
-                CommonAIAttackWithWeapon(level, capabilities, MeleeAIRelevantContexts);
+                CommonAIAttackWithWeapon(level, entity, entity.Inventory.GetItemBySlot(ItemSlot.MainHand), MeleeAIRelevantContexts);
             }
             else if (entity.Behaviour.AI == AIType.Archer)
             {
-                CommonAIAttackWithWeapon(level, capabilities, RangedAIRelevantContexts);
+                CommonAIAttackWithWeapon(level, entity, entity.Inventory.GetItemBySlot(ItemSlot.MainHand), RangedAIRelevantContexts);
             }
         }
 
-        private void CommonAIAttackWithWeapon(Level level, Dictionary<AttackType, AttackCapability> capabilities, List<AttackType> contexts)
+        private void CommonAIAttackWithWeapon(Level level, Entity entity, Item item, List<AttackType> contexts)
         {
             var hostileTarget = FindVisibleTargets(entity);
             if (hostileTarget == null)
@@ -89,7 +83,7 @@ namespace Gamepackage
                 var shoutRadius = entity.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS);
                 ShoutAboutHostileTarget(level, hostileTarget, shoutRadius);
             }
-            EnqueueBasicAttackOrApproach(capabilities, contexts, hostileTarget);
+            EnqueueBasicAttackOrApproach(entity, item, contexts, hostileTarget);
         }
 
         public void ShoutAboutHostileTarget(Level level, Entity hostileTarget, int shoutRadius)
@@ -120,14 +114,13 @@ namespace Gamepackage
             }
         }
 
-        private void EnqueueBasicAttackOrApproach(Dictionary<AttackType, AttackCapability> capabilities, List<AttackType> relevantContexts, Entity target)
+        private void EnqueueBasicAttackOrApproach(Entity entity, Item item, List<AttackType> relevantContexts, Entity target)
         {
             foreach (var combatContext in relevantContexts)
             {
-                var capability = capabilities[combatContext];
-                if (AbleAndWillingToPerformAttackTypeOnTarget(capability, target))
+                if (AbleAndWillingToPerformAttackTypeOnTarget(entity, combatContext, item, target))
                 {
-                    EnqueueAttackType(capability, target);
+                    EnqueueAttackType(entity, combatContext, item, target);
                 }
             }
 
@@ -137,16 +130,24 @@ namespace Gamepackage
             }
         }
 
-        private void EnqueueAttackType(AttackCapability capability, Entity target)
+        private void EnqueueAttackType(Entity entity, AttackType attackType, Item item, Entity target)
         {
-            var direction = MathUtil.RelativeDirection(entity.Position, target.Position);
-            var attack = new Attack(capability, direction, target.Position);
+            var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+            var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(entity, attackType, item);
+            var attacParameters = CombatUtil.AttackParametersResolve(entity, attackType, item);
+            var calculatedAttack = CombatUtil.CalculateAttack(grid, entity, attackType, item, target.Position, attackTypeParameters, attacParameters);
+            var attack = new Attack(calculatedAttack);
             NextAction = attack;
         }
 
-        private bool AbleAndWillingToPerformAttackTypeOnTarget(AttackCapability capability, Entity target)
+        private bool AbleAndWillingToPerformAttackTypeOnTarget(Entity source, AttackType attackType, Item item, Entity target)
         {
-            var isAbleToPerform = capability.CanPerform && capability.IsInRange(target) && capability.HasAClearShot(target.Position);
+            var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(source, attackType, item);
+            var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+
+            var isAbleToPerform = CombatUtil.CanAttackWithItem(source, attackType, item) &&
+                CombatUtil.InRangeOfAttack(grid, source.Position, attackTypeParameters.Range, attackTypeParameters.AttackTargetingType, target.Position) && 
+                CombatUtil.HasAClearShot(source, attackTypeParameters.AttackTargetingType, target.Position);
 
             if (!isAbleToPerform)
             {
@@ -156,10 +157,10 @@ namespace Gamepackage
             // There are certain things the AI CAN do, but it should NOT do.
             // those go here.
             var isWillingToPerform = true;
-            if (capability.AttackType == AttackType.Thrown)
+            if (attackType == AttackType.Thrown)
             {
                 // Dont throw my only weapon
-                isWillingToPerform = capability.Item.NumberOfItems > 1;
+                isWillingToPerform = item.NumberOfItems > 1;
             }
             return isAbleToPerform && isWillingToPerform;
         }
@@ -290,8 +291,8 @@ namespace Gamepackage
         {
             NextAction = null;
             var level = Context.GameStateManager.Game.CurrentLevel;
-            var PointsAroundMe = MathUtil.OrthogonalPoints(entity.Position).FindAll(CombatUtil.NonoccupiedTiles);
-            var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll(CombatUtil.NonoccupiedTiles);
+            var PointsAroundMe = MathUtil.OrthogonalPoints(entity.Position).FindAll(Filters.NonoccupiedTiles);
+            var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll(Filters.NonoccupiedTiles);
             if (PointsAroundMe.Count == 0)
             {
                 // If there are no positions around me available, I can just give up now, as I cannot move.

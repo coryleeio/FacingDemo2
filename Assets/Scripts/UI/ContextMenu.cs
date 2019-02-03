@@ -45,21 +45,20 @@ namespace Gamepackage
                 var onUseText = item.CustomOnUseText ?? "context.menu.buttons.use.default".Localize();
                 BuildButton(onUseText, () =>
                 {
-                    var action = new UseItemOnSelf
-                    {
-                        Source = player,
-                        Item = item
-                    };
-                    Context.PlayerController.ActionList.Enqueue(action);
+                    var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+                    var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, AttackType.ApplyToSelf, item);
+                    var attackParameters = CombatUtil.AttackParametersResolve(player, AttackType.ApplyToSelf, item);
+                    var calculatedAttack = CombatUtil.CalculateAttack(grid, player, AttackType.ApplyToSelf, item, player.Position, attackTypeParameters, attackParameters);
+                    Attack attack = new Attack(calculatedAttack);
+                    Context.PlayerController.ActionList.Enqueue(attack);
                 });
             }
 
-            if ((hasItemInInventory || isWearingItem) && item.CanBeThrown)
+            if ((hasItemInInventory || isWearingItem) && item.CanBeUsedInAttackType(AttackType.Thrown))
             {
                 BuildButton("context.menu.buttons.throw".Localize(), () =>
                 {
-                    AttackCapability thrownCapability = new AttackCapability(player, AttackType.Thrown, item);
-                    Context.PlayerController.StartAiming(thrownCapability);
+                    Context.PlayerController.StartAiming(AttackType.Thrown, item);
                     Context.UIController.InventoryWindow.Hide();
                 });
             }

@@ -17,7 +17,7 @@ namespace Gamepackage
         public UniqueIdentifier Identifier;
         public Dictionary<Attributes, int> Attributes;
 
-        public virtual void HandleStacking(ActionOutcome outcome)
+        public virtual void HandleStacking(EntityStateChange outcome)
         {
             StackingStrategies.AddDuplicate(outcome, this);
         }
@@ -51,7 +51,7 @@ namespace Gamepackage
 
         // Call when applying for the first time, may actually do state changes, or apply 
         // non permanent visual effects on initial application
-        public virtual void OnApply(ActionOutcome outcome)
+        public virtual void OnApply(EntityStateChange outcome)
         {
             ApplyPersistentVisualEffects(outcome.Target);
         }
@@ -88,20 +88,20 @@ namespace Gamepackage
 
         }
 
-        public virtual bool CanAffectIncomingAttack(ActionOutcome abilityTriggerContext)
+        public virtual bool CanAffectIncomingAttack(CalculatedAttack calculatedAttack, EntityStateChange abilityTriggerContext)
         {
             return false;
         }
-        public virtual ActionOutcome CalculateAffectIncomingAttackEffects(ActionOutcome outcome)
+        public virtual EntityStateChange CalculateAffectIncomingAttackEffects(CalculatedAttack calculatedAttack, EntityStateChange outcome)
         {
             return outcome;
         }
 
-        public virtual bool CanAffectOutgoingAttack(ActionOutcome abilityTriggerContext)
+        public virtual bool CanAffectOutgoingAttack(CalculatedAttack calculatedAttack, EntityStateChange abilityTriggerContext)
         {
             return false;
         }
-        public virtual ActionOutcome CalculateAffectOutgoingAttack(ActionOutcome outcome)
+        public virtual EntityStateChange CalculateAffectOutgoingAttack(CalculatedAttack calculatedAttack, EntityStateChange outcome)
         {
             return outcome;
         }
@@ -110,7 +110,7 @@ namespace Gamepackage
         {
             return false;
         }
-        public virtual ActionOutcome TriggerOnStep(ActionOutcome outcome)
+        public virtual EntityStateChange TriggerOnStep(EntityStateChange outcome)
         {
             return outcome;
         }
@@ -120,7 +120,7 @@ namespace Gamepackage
             return false;
         }
 
-        public virtual ActionOutcome TriggerOnPress(ActionOutcome outcome)
+        public virtual EntityStateChange TriggerOnPress(EntityStateChange outcome)
         {
             return outcome;
         }

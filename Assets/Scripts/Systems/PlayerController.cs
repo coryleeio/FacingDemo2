@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
@@ -23,7 +24,8 @@ namespace Gamepackage
         // this is important for throwing from inventory, otherwise they will get recalculated in the 
         // button down section of this and cause the primary weapon to be thrown if one exists
         // or it will cause you not to be able to throw if one does not.
-        private AttackCapability AimingAttackCapability;
+        private AttackType AimedAttackType;
+        private Item AimedItem;
         public Queue<Action> ActionList = new Queue<Action>();
 
         public void Init()
@@ -105,39 +107,45 @@ namespace Gamepackage
             };
         }
 
-        public void GenerateAttackOverlayOffsets(Point mousePos, Point position, AttackCapability capability, Direction direction)
+        public void GenerateAttackOverlayOffsets(Entity entity, AttackType attackType, Item item, Point mousePos)
         {
-            if (capability.AttackTargetingType == AttackTargetingType.Line && (direction == Direction.SouthEast || direction == Direction.SouthWest || direction == Direction.NorthEast || direction == Direction.NorthWest))
+            var direction = MathUtil.RelativeDirection(entity.Position, mousePos);
+            var position = entity.Position;
+            var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(entity, attackType, item);
+            var attackParameters = CombatUtil.AttackParametersResolve(entity, attackType, item);
+            var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+            if (attackTypeParameters.AttackTargetingType == AttackTargetingType.Line && (direction == Direction.SouthEast || direction == Direction.SouthWest || direction == Direction.NorthEast || direction == Direction.NorthWest))
             {
-                var lineOffsets = MathUtil.LineInDirection(position, direction, capability.Range);
+                var lineOffsets = MathUtil.LineInDirection(position, direction, attackTypeParameters.Range);
                 CurrentProposedAttackPlacement.OffsetPoints = lineOffsets;
-                PossibleAttackPositions.OffsetPoints = capability.PointsInRange();
             }
-            else if (capability.AttackTargetingType == AttackTargetingType.SelectTarget)
+            else if (attackTypeParameters.AttackTargetingType == AttackTargetingType.SelectTarget)
             {
                 CurrentProposedAttackPlacement.OffsetPoints = new List<Point>()
                 {
                     mousePos,
                 };
-                PossibleAttackPositions.OffsetPoints = capability.PointsInRange();
             }
 
-            if (capability.AttackParameters != null && capability.AttackParameters.ExplosionParameters != null)
+            PossibleAttackPositions.OffsetPoints = CombatUtil.PointsInRange(grid, position, attackTypeParameters.Range, attackTypeParameters.AttackTargetingType);
+
+            if (attackParameters != null && attackParameters.ExplosionParameters != null)
             {
 
-                if (capability.PointsInRange().Contains(mousePos))
+                if (PossibleAttackPositions.OffsetPoints.Contains(mousePos))
                 {
-                    var explosionParameters = capability.AttackParameters.ExplosionParameters;
-                    if (capability.AttackTargetingType == AttackTargetingType.Line)
+                    var explosionParameters = attackParameters.ExplosionParameters;
+
+                    if (attackTypeParameters.AttackTargetingType == AttackTargetingType.Line)
                     {
-                        var endpoint = CalculateEndpointOfSkillshot(position, capability, direction);
-                        CurrentProposedAttackExplosionPlacement.Position = endpoint;
-                        CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(endpoint, capability.PointsInExplosionRange(endpoint));
+                        var endPoint = CombatUtil.CalculateEndpointOfLineSkillshot(position, attackTypeParameters, direction);
+                        CurrentProposedAttackExplosionPlacement.Position = endPoint;
+                        CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(endPoint, CombatUtil.PointsInExplosionRange(explosionParameters, endPoint));
                     }
-                    else if(capability.AttackTargetingType == AttackTargetingType.SelectTarget)
+                    else if (attackTypeParameters.AttackTargetingType == AttackTargetingType.SelectTarget)
                     {
                         CurrentProposedAttackExplosionPlacement.Position = mousePos;
-                        CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(mousePos, capability.PointsInExplosionRange(mousePos));
+                        CurrentProposedAttackExplosionPlacement.OffsetPoints = MathUtil.ConvertMapSpaceToLocalMapSpace(mousePos, CombatUtil.PointsInExplosionRange(explosionParameters, mousePos));
                     }
                 }
                 else
@@ -152,32 +160,6 @@ namespace Gamepackage
             }
         }
 
-        private static Point CalculateEndpointOfSkillshot(Point position, AttackCapability capability, Direction direction)
-        {
-            var pointsInLine = MathUtil.LineInDirection(position, direction, capability.Range);
-            var numberOfThingsCanPierce = capability.NumberOfTargetsToPierce;
-            var numberOfThingsPierced = 0;
-
-            var game = Context.GameStateManager.Game;
-            var level = game.CurrentLevel;
-            var grid = level.Grid;
-            var previouslyTraversedPoint = position;
-            foreach (var point in pointsInLine)
-            {
-                numberOfThingsPierced += grid[point].EntitiesInPosition.Count;
-                if (numberOfThingsPierced == numberOfThingsCanPierce)
-                {
-                    return point;
-                }
-                if (grid[point].TileType != TileType.Floor)
-                {
-                    return point;
-                }
-                previouslyTraversedPoint = point;
-            }
-            return pointsInLine[pointsInLine.Count - 1];
-        }
-
         public void Process()
         {
 
@@ -188,6 +170,8 @@ namespace Gamepackage
             var game = Context.GameStateManager.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
+            var item = player.Inventory.GetItemBySlot(ItemSlot.MainHand);
+            var meleeAttackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, AttackType.Melee, item);
 
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);
             var hoverIsValidPoint = level.BoundingBox.Contains(mousePos);
@@ -219,10 +203,11 @@ namespace Gamepackage
 
             var isHoveringOnEnemyCombatant = hoverIsValidPoint && mousePos != player.Position && hoverContainsCombatant && tileContainsEnemy;
             var isHoveringOnAlly = hoverIsValidPoint && mousePos != player.Position && hoverContainsAlly;
-            AttackCapability meleeAttackCapability = new AttackCapability(player, AttackType.Melee, player.Inventory.GetItemBySlot(ItemSlot.MainHand));
-            var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant && meleeAttackCapability.CanPerform && meleeAttackCapability.IsInRange(mousePos);
+
+            var isAbleToHitHoveringEnemyCombatant = isHoveringOnEnemyCombatant &&
+                CombatUtil.CanAttackWithItem(player, AttackType.Melee, item) &&
+                CombatUtil.InRangeOfAttack(level.Grid, player.Position, meleeAttackTypeParameters.Range, meleeAttackTypeParameters.AttackTargetingType, mousePos);
             var isAbleToSwapWithHoveringAlly = isHoveringOnAlly && player.Position.IsOrthogonalTo(mousePos) && player.Position.IsAdjacentTo(mousePos);
-            var hoverDirection = MathUtil.RelativeDirection(player.Position, mousePos);
 
             Context.OverlaySystem.SetActivated(MouseHoverOverlay, isAcceptingClickInput && !isAiming);
             Context.OverlaySystem.SetActivated(AimingOverlay, isAiming);
@@ -241,13 +226,20 @@ namespace Gamepackage
                 // It is important you use the AIMING attack capabilities
                 // otherwise you will throw nothing, or whatever is equipped when throwing 
                 // from inventory.
-                GenerateAttackOverlayOffsets(mousePos, player.Position, AimingAttackCapability, hoverDirection);
+                GenerateAttackOverlayOffsets(player, AimedAttackType, AimedItem, mousePos);
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (AimingAttackCapability.CanPerform && AimingAttackCapability.IsInRange(mousePos))
+                    var aimingAttackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, AimedAttackType, AimedItem);
+                    if (CombatUtil.CanAttackWithItem(player, AimedAttackType, AimedItem) &&
+                        CombatUtil.InRangeOfAttack(level.Grid, player.Position,
+                        aimingAttackTypeParameters.Range,
+                        aimingAttackTypeParameters.AttackTargetingType,
+                        mousePos))
                     {
-                        var direction = MathUtil.RelativeDirection(player.Position, mousePos);
-                        Attack attack = new Attack(AimingAttackCapability, direction, mousePos);
+                        var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, AimedAttackType, AimedItem);
+                        var attacParameters = CombatUtil.AttackParametersResolve(player, AimedAttackType, AimedItem);
+                        var calculatedAttack = CombatUtil.CalculateAttack(level.Grid, player, AimedAttackType, AimedItem, mousePos, attackTypeParameters, attacParameters);
+                        Attack attack = new Attack(calculatedAttack);
                         player.Behaviour.NextAction = attack;
                     }
                     StopAiming();
@@ -350,25 +342,22 @@ namespace Gamepackage
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                StartAiming(meleeAttackCapability);
+                StartAiming(AttackType.Melee, item);
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                var rangedAttackCapabilities = new AttackCapability(player, AttackType.Ranged, player.Inventory.GetItemBySlot(ItemSlot.MainHand));
-                StartAiming(rangedAttackCapabilities);
+                StartAiming(AttackType.Ranged, item);
             }
 
             if (Input.GetKeyDown(KeyCode.T))
             {
-                var thrownCapabilities = new AttackCapability(player, AttackType.Thrown, player.Inventory.GetItemBySlot(ItemSlot.MainHand));
-                StartAiming(thrownCapabilities);
+                StartAiming(AttackType.Thrown, item);
             }
 
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                var zapCapabilities = new AttackCapability(player, AttackType.Zapped, player.Inventory.GetItemBySlot(ItemSlot.MainHand));
-                StartAiming(zapCapabilities);
+                StartAiming(AttackType.Zapped, item);
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -419,7 +408,7 @@ namespace Gamepackage
                 else
                 {
                     var entitiesInPosition = level.Grid[player.Position].EntitiesInPosition;
-                    var lootableEntities = entitiesInPosition.FindAll(CombatUtil.LootableEntities);
+                    var lootableEntities = entitiesInPosition.FindAll(Filters.LootableEntities);
 
                     Entity triggerEntity = null;
                     Effect triggerEffect = null;
@@ -470,7 +459,7 @@ namespace Gamepackage
                 }
                 else if (isAbleToHitHoveringEnemyCombatant)
                 {
-                    QueueAttack(player, mousePos, meleeAttackCapability);
+                    QueueAttack(player, AttackType.Melee, item, mousePos);
                 }
                 else
                 {
@@ -494,23 +483,31 @@ namespace Gamepackage
             });
         }
 
-        public void StartAiming(AttackCapability capability)
+        public void StartAiming(AttackType attackType, Item item)
         {
-            AimingAttackCapability = capability;
-            if (!isAiming && AimingAttackCapability.CanPerform)
+            AimedAttackType = attackType;
+            AimedItem = item;
+            var player = Context.GameStateManager.Game.CurrentLevel.Player;
+            if (player == null)
+            {
+                return;
+            }
+            Assert.AreNotEqual(AttackType.NotSet, attackType);
+            var ammo = CombatUtil.AmmoResolve(player, attackType, item);
+            if (!isAiming && CombatUtil.CanAttackWithItem(player, attackType, item))
             {
                 isAiming = true;
-                Context.UIController.InputHint.ShowText(("player.controller.select.direction." + AimingAttackCapability.AttackType.ToString().ToLower()).Localize());
+                Context.UIController.InputHint.ShowText(("player.controller.select.direction." + attackType.ToString().ToLower()).Localize());
             }
-            else if (AimingAttackCapability.AttackType == AttackType.Ranged && AimingAttackCapability.Item != null && (AimingAttackCapability.Ammo == null || AimingAttackCapability.Ammo.NumberOfItems <= 0))
+            else if (attackType == AttackType.Ranged && item != null && (ammo == null || ammo.NumberOfItems <= 0))
             {
                 var outOfAmmoString = "player.controller.cannot.do.out.of.ammo".Localize();
                 Context.UIController.InputHint.ShowText(outOfAmmoString);
             }
-            else if (AimingAttackCapability.Item != null)
+            else if (item != null)
             {
-                var cannotPerformString = ("player.controller.cannot.do." + AimingAttackCapability.AttackType.ToString().ToLower()).Localize();
-                Context.UIController.InputHint.ShowText(string.Format(cannotPerformString, AimingAttackCapability.Item.DisplayName));
+                var cannotPerformString = ("player.controller.cannot.do." + attackType.ToString().ToLower()).Localize();
+                Context.UIController.InputHint.ShowText(string.Format(cannotPerformString, item.DisplayName));
             }
             else
             {
@@ -522,7 +519,8 @@ namespace Gamepackage
         {
             if (isAiming)
             {
-                AimingAttackCapability = null;
+                AimedAttackType = AttackType.NotSet;
+                AimedItem = null;
                 isAiming = false;
                 Context.UIController.InputHint.Hide();
             }
@@ -530,7 +528,7 @@ namespace Gamepackage
 
         private void QueueTriggerEffect(Entity triggerEntity, Effect triggerEffect, Entity player)
         {
-            ActionOutcome outcome = new ActionOutcome();
+            EntityStateChange outcome = new EntityStateChange();
             outcome.Source = triggerEntity;
             outcome.Target = player;
             triggerEffect.TriggerOnPress(outcome);
@@ -555,10 +553,13 @@ namespace Gamepackage
             player.Behaviour.NextAction = swapPositions;
         }
 
-        private void QueueAttack(Entity player, Point mousePos, AttackCapability attackCapability)
+        private void QueueAttack(Entity player, AttackType attackType, Item item, Point mousePos)
         {
-            var direction = MathUtil.RelativeDirection(player.Position, mousePos);
-            Attack attack = new Attack(attackCapability, direction, mousePos);
+            var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+            var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, attackType, item);
+            var attacParameters = CombatUtil.AttackParametersResolve(player, attackType, item);
+            var calculatedAttack = CombatUtil.CalculateAttack(grid, player, attackType, item, mousePos, attackTypeParameters, attacParameters);
+            Attack attack = new Attack(calculatedAttack);
             player.Behaviour.NextAction = attack;
         }
 

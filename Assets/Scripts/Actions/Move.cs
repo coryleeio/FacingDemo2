@@ -35,7 +35,6 @@ namespace Gamepackage
             LerpTargetPosition = MathUtil.MapToWorld(TargetPosition);
             var newDirection = MathUtil.RelativeDirection(Source.Position, TargetPosition);
 
-
             var sortable = Source.Sortable;
             if (sortable != null && TargetPosition != null && newDirection == Direction.SouthEast || newDirection == Direction.SouthWest || newDirection == Direction.East || newDirection == Direction.South)
             {
@@ -43,7 +42,6 @@ namespace Gamepackage
                 // corectly. Other directions should keep the higher index until the move is complete.
                 sortable.Position = TargetPosition;
             }
-
 
             Source.Direction = newDirection;
 
@@ -132,7 +130,7 @@ namespace Gamepackage
 
         public static void HandleInputHints(List<Entity> entitiesInPos)
         {
-            var lootableEntitiesInPosition = entitiesInPos.FindAll(CombatUtil.LootableEntities);
+            var lootableEntitiesInPosition = entitiesInPos.FindAll(Filters.LootableEntities);
             var trigggerEntitiesInPos = entitiesInPos.FindAll((entInPos) => { return entInPos.Trigger != null; });
             Effect triggerOnPressEffect = null;
 
@@ -164,7 +162,7 @@ namespace Gamepackage
 
         public override bool IsValid()
         {
-            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].Walkable && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].EntitiesInPosition.FindAll(CombatUtil.HittableEntities).Count == 0));
+            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].Walkable && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].EntitiesInPosition.FindAll(Filters.HittableEntities).Count == 0));
         }
     }
 }

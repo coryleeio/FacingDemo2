@@ -13,37 +13,69 @@ namespace Gamepackage
             item.SlotsOccupiedByWearing = new List<ItemSlot>(0);
             item.NumberOfItems = 1;
             item.MaxStackSize = 1;
-            item.MeleeRange = 1;
             item.Attributes = new Dictionary<Attributes, int>(0);
-            item.Effects = new List<Effect>();
-            item.MeleeParameters = new List<AttackParameters>(0);
-            item.MeleeRange = 1;
-            item.MeleeTargetsPierced = 1;
-            item.RangedParameters = new List<AttackParameters>(0);
-            item.RangedRange = 5;
-            item.RangedTargetsPierced = 1;
-            item.ThrowParameters = new List<AttackParameters>(0);
-            item.ThrowParameters = new List<AttackParameters>() {
-                new AttackParameters()
-                {
-                    AttackMessage = "attacks.throw.useless.1".Localize(),
-                    Bonus = 0,
-                    DyeNumber = 1,
-                    DyeSize = 1,
-                    DamageType = DamageTypes.PIERCING,
-                    ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_NONE,
-                }
+            item.EffectsGlobal = new List<Effect>();
+            item.AttackTypeParameters = new Dictionary<AttackType, AttackTypeParameters>()
+            {
+                {     AttackType.Melee, new AttackTypeParameters()
+                      {
+                          Range = 1,
+                          AttackParameters = new List<AttackParameters>(0),
+                          NumberOfTargetsToPierce = 1,
+                      }
+                },
+                {     AttackType.Ranged, new AttackTypeParameters()
+                      {
+                          Range = 5,
+                          AttackParameters = new List<AttackParameters>(0),
+                          NumberOfTargetsToPierce = 1,
+                      }
+                },
+                {     AttackType.Thrown, new AttackTypeParameters()
+                      {
+                          Range = 5,
+                          AttackParameters =new List<AttackParameters>() {
+                                new AttackParameters()
+                                 {
+                                   AttackMessage = "attacks.throw.useless.1".Localize(),
+                                   Bonus = 0,
+                                    DyeNumber = 1,
+                                     DyeSize = 1,
+                                    DamageType = DamageTypes.PIERCING,
+                                          ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_NONE,
+                                   }
+                            },
+                          NumberOfTargetsToPierce = 1,
+                      }
+                },
+                {     AttackType.Zapped, new AttackTypeParameters()
+                      {
+                          Range = 5,
+                          AttackParameters = new List<AttackParameters>(0),
+                          NumberOfTargetsToPierce = 1,
+                      }
+                },
+                {     AttackType.ApplyToSelf, new AttackTypeParameters()
+                      {
+                          Range = 1,
+                          AttackParameters = new List<AttackParameters>(0),
+                          NumberOfTargetsToPierce = 1,
+                          AttackTargetingType = AttackTargetingType.SelectTarget,
+                      }
+                },
+                {     AttackType.ApplyToOther, new AttackTypeParameters()
+                      {
+                          Range = 1,
+                          AttackParameters = new List<AttackParameters>(0),
+                          NumberOfTargetsToPierce = 1,
+                          AttackTargetingType = AttackTargetingType.SelectTarget,
+                      }
+                },
             };
-            item.ThrownRange = 5;
-            item.ThrownTargetsPierced = 1;
-            item.ZapParameters = new List<AttackParameters>(0);
-            item.ZapRange = 5;
-            item.ZappedTargetsPierced = 1;
             item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ARROW;
             item.ExactNumberOfChargesRemaining = 0;
             item.HasUnlimitedCharges = false;
             item.DestroyWhenAllChargesAreConsumed = false;
-            item.IsUsable = false;
             item.ChanceToSurviveLaunch = 100;
             item.AmmoType = AmmoType.None;
         }
@@ -58,7 +90,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LONGSWORD;
                 item.DisplayName = "item.longsword.name".Localize();
                 item.Description = "item.longsword.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.slashing.1".Localize(),
@@ -68,7 +100,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.SLASHING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -85,14 +117,14 @@ namespace Gamepackage
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_POISON_DAGGER)
             {
                 item = ItemFactory.Build(UniqueIdentifier.ITEM_DAGGER);
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<AttackType>() { AttackType.Melee, AttackType.Thrown }));
+                item.EffectsGlobal.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON, new List<AttackType>() { AttackType.Melee, AttackType.Thrown }));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_DAGGER)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_DAGGER;
                 item.DisplayName = "item.dagger.name".Localize();
                 item.Description = "item.dagger.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.piercing.1".Localize(),
@@ -102,7 +134,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.PIERCING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -121,7 +153,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_MACE;
                 item.DisplayName = "item.mace.name".Localize();
                 item.Description = "item.mace.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.bludgeoning.1".Localize(),
@@ -131,7 +163,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.BLUDGEONING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -150,7 +182,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ACTION_STAFF;
                 item.DisplayName = "item.staff.of.fireballs.name".Localize();
                 item.Description = "item.staff.of.fireballs.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.bludgeoning.1".Localize(),
@@ -160,7 +192,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.BLUDGEONING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -171,7 +203,7 @@ namespace Gamepackage
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ACTION_STAFF,
                     }
                 };
-                item.ZapParameters = new List<AttackParameters>()
+                item.AttackTypeParameters[AttackType.Zapped].AttackParameters = new List<AttackParameters>()
                 {
                     new AttackParameters()
                     {
@@ -181,7 +213,6 @@ namespace Gamepackage
                         DyeSize = 0,
                         DamageType = DamageTypes.FIRE,
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_FIREBALL,
-                        AttackTargetingType = AttackTargetingType.Line,
                         ExplosionParameters = new ExplosionParameters()
                         {
                             AttackMessage = "attacks.fire.1".Localize(),
@@ -195,7 +226,7 @@ namespace Gamepackage
                     }
                 };
                 item.HasUnlimitedCharges = true;
-                item.ZappedTargetsPierced = 999;
+                item.AttackTypeParameters[AttackType.Zapped].NumberOfTargetsToPierce = 999;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
             }
@@ -205,7 +236,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_BOW;
                 item.DisplayName = "item.shortbow.name".Localize();
                 item.Description = "item.shortbow.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.bludgeoning.1".Localize(),
@@ -215,7 +246,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.BLUDGEONING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -226,7 +257,7 @@ namespace Gamepackage
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_BOW,
                     }
                 };
-                item.RangedParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Ranged].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.piercing.1".Localize(),
@@ -235,7 +266,7 @@ namespace Gamepackage
                     }
                 };
                 item.AmmoType = AmmoType.Arrow;
-                item.RangedRange = 5;
+                item.AttackTypeParameters[AttackType.Ranged].Range = 5;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.OffHand);
@@ -245,7 +276,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_SWIRL_STAFF;
                 item.DisplayName = "item.wand.of.lightning.name".Localize();
                 item.Description = "item.wand.of.lightning.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.bludgeoning.1".Localize(),
@@ -255,7 +286,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.BLUDGEONING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -266,7 +297,7 @@ namespace Gamepackage
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_SWIRL_STAFF,
                     }
                 };
-                item.ZapParameters = new List<AttackParameters>()
+                item.AttackTypeParameters[AttackType.Zapped].AttackParameters = new List<AttackParameters>()
                 {
                     new AttackParameters()
                     {
@@ -276,11 +307,10 @@ namespace Gamepackage
                         DyeSize = 8,
                         DamageType = DamageTypes.FIRE,
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_LIGHTNING_JET,
-                        AttackTargetingType = AttackTargetingType.Line,
                     }
                 };
                 item.HasUnlimitedCharges = true;
-                item.ZappedTargetsPierced = 999;
+                item.AttackTypeParameters[AttackType.Zapped].NumberOfTargetsToPierce = 999;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
             }
@@ -289,7 +319,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ORB_SCEPTER;
                 item.DisplayName = "item.wand.of.madness.name".Localize();
                 item.Description = "item.wand.of.madness.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.bludgeoning.1".Localize(),
@@ -299,7 +329,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.BLUDGEONING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -310,7 +340,7 @@ namespace Gamepackage
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ORB_SCEPTER,
                     }
                 };
-                item.ZapParameters = new List<AttackParameters>()
+                item.AttackTypeParameters[AttackType.Zapped].AttackParameters = new List<AttackParameters>()
                 {
                     new AttackParameters()
                     {
@@ -319,12 +349,12 @@ namespace Gamepackage
                         DyeSize = 0,
                         DamageType = DamageTypes.NEGATIVE,
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_PURPLE_BALL,
-                        AttackTargetingType = AttackTargetingType.SelectTarget,
                     }
                 };
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_MADNESS, new List<AttackType>() { AttackType.Zapped }));
+                item.AttackTypeParameters[AttackType.Zapped].AttackTargetingType = AttackTargetingType.SelectTarget;
+                item.AttackTypeParameters[AttackType.Zapped].NumberOfTargetsToPierce = 1;
+                item.EffectsGlobal.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_MADNESS, new List<AttackType>() { AttackType.Zapped }));
                 item.HasUnlimitedCharges = true;
-                item.ZappedTargetsPierced = 1;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
             }
@@ -333,7 +363,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ORB_SCEPTER;
                 item.DisplayName = "item.wand.of.charm.name".Localize();
                 item.Description = "item.wand.of.charm.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.bludgeoning.1".Localize(),
@@ -343,7 +373,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.BLUDGEONING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -354,7 +384,7 @@ namespace Gamepackage
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ORB_SCEPTER,
                     }
                 };
-                item.ZapParameters = new List<AttackParameters>()
+                item.AttackTypeParameters[AttackType.Zapped].AttackParameters = new List<AttackParameters>()
                 {
                     new AttackParameters()
                     {
@@ -363,12 +393,12 @@ namespace Gamepackage
                         DyeSize = 0,
                         DamageType = DamageTypes.NEGATIVE,
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_PURPLE_BALL,
-                        AttackTargetingType = AttackTargetingType.SelectTarget,
                     }
                 };
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_CHARM, new List<AttackType>() { AttackType.Zapped }));
+                item.AttackTypeParameters[AttackType.Zapped].AttackTargetingType = AttackTargetingType.SelectTarget;
+                item.AttackTypeParameters[AttackType.Zapped].NumberOfTargetsToPierce = 1;
+                item.EffectsGlobal.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_CHARM, new List<AttackType>() { AttackType.Zapped }));
                 item.HasUnlimitedCharges = true;
-                item.ZappedTargetsPierced = 1;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
             }
@@ -377,7 +407,7 @@ namespace Gamepackage
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_ORB_SCEPTER;
                 item.DisplayName = "item.wand.of.domination.name".Localize();
                 item.Description = "item.wand.of.domination.description".Localize();
-                item.MeleeParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Melee].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.bludgeoning.1".Localize(),
@@ -387,7 +417,7 @@ namespace Gamepackage
                         DamageType = DamageTypes.BLUDGEONING,
                     }
                 };
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -398,7 +428,7 @@ namespace Gamepackage
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_ORB_SCEPTER,
                     }
                 };
-                item.ZapParameters = new List<AttackParameters>()
+                item.AttackTypeParameters[AttackType.Zapped].AttackParameters = new List<AttackParameters>()
                 {
                     new AttackParameters()
                     {
@@ -407,12 +437,12 @@ namespace Gamepackage
                         DyeSize = 0,
                         DamageType = DamageTypes.NEGATIVE,
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_PURPLE_BALL,
-                        AttackTargetingType = AttackTargetingType.SelectTarget,
                     }
                 };
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_DOMINATION, new List<AttackType>() { AttackType.Zapped }));
+                item.AttackTypeParameters[AttackType.Zapped].NumberOfTargetsToPierce = 1;
+                item.AttackTypeParameters[AttackType.Zapped].AttackTargetingType = AttackTargetingType.SelectTarget;
+                item.EffectsGlobal.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_DOMINATION, new List<AttackType>() { AttackType.Zapped }));
                 item.HasUnlimitedCharges = true;
-                item.ZappedTargetsPierced = 1;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
             }
@@ -422,11 +452,10 @@ namespace Gamepackage
                 item.DisplayName = "item.antidote.name".Localize();
                 item.Description = "item.antidote.description".Localize();
                 item.CustomOnUseText = "item.antidote.action".Localize();
-                item.OnUseText = "item.antidote.on.use".Localize();
                 item.ExactNumberOfChargesRemaining = 1;
                 item.DestroyWhenAllChargesAreConsumed = true;
 
-                item.ThrowParameters = new List<AttackParameters>()
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>()
                 {
                     new AttackParameters()
                     {
@@ -439,19 +468,31 @@ namespace Gamepackage
                     },
                 };
 
+                item.AttackTypeParameters[AttackType.ApplyToSelf].AttackParameters = new List<AttackParameters>()
+                {
+                    new AttackParameters()
+                    {
+                        AttackMessage = "item.antidote.on.use".Localize(),
+                        Bonus = 0,
+                        DyeNumber = 0,
+                        DyeSize = 0,
+                        DamageType = DamageTypes.HEALING,
+                        ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_PURPLE_POTION,
+                    },
+                };
+
                 item.ChanceToSurviveLaunch = 0;
                 item.SlotsWearable.Add(ItemSlot.MainHand);
                 item.SlotsOccupiedByWearing.Add(ItemSlot.MainHand);
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY, new List<AttackType>() { AttackType.OnUse, AttackType.Thrown }));
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_REGENERATION, new List<AttackType>() { AttackType.OnUse, AttackType.Thrown }));
-                item.IsUsable = true;
+                item.EffectsGlobal.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY, new List<AttackType>() { AttackType.ApplyToSelf, AttackType.Thrown }));
+                item.EffectsGlobal.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_APPLIED_WEAK_REGENERATION, new List<AttackType>() { AttackType.ApplyToSelf, AttackType.Thrown }));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_LUCKY_COIN)
             {
                 item.ItemAppearanceIdentifier = UniqueIdentifier.ITEM_APPEARANCE_LUCKY_COIN;
                 item.DisplayName = "item.lucky.coin.name".Localize();
                 item.Description = "item.lucky.coin.description".Localize();
-                item.ThrowParameters = new List<AttackParameters>() {
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>() {
                     new AttackParameters()
                     {
                         AttackMessage = "attacks.throw.useless.1".Localize(),
@@ -463,7 +504,7 @@ namespace Gamepackage
                     }
                 };
 
-                item.Effects.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
+                item.EffectsGlobal.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ROBE_OF_WONDERS)
             {
@@ -515,7 +556,7 @@ namespace Gamepackage
                 item.Description = "item.arrow.description".Localize();
                 item.MaxStackSize = 60;
                 item.ChanceToSurviveLaunch = 50;
-                item.ThrowParameters = new List<AttackParameters>()
+                item.AttackTypeParameters[AttackType.Thrown].AttackParameters = new List<AttackParameters>()
                 {
                     new AttackParameters()
                     {
@@ -528,7 +569,7 @@ namespace Gamepackage
                     },
                 };
 
-                item.RangedParameters = new List<AttackParameters>()
+                item.AttackTypeParameters[AttackType.Ranged].AttackParameters = new List<AttackParameters>()
                 {
                     new AttackParameters()
                     {

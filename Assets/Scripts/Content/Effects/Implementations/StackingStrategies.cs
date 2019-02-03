@@ -2,7 +2,7 @@
 {
     public static class StackingStrategies
     {
-        public static void AddDuration(ActionOutcome outcome, Effect effect)
+        public static void AddDuration(EntityStateChange outcome, Effect effect)
         {
             var matchingEffects = outcome.Target.Body.Effects.FindAll((x) => { return x.Identifier == effect.Identifier; });
             if (matchingEffects.Count > 1)
@@ -27,7 +27,7 @@
             }
         }
 
-        public static void AddDuplicate(ActionOutcome outcome, Effect effect)
+        public static void AddDuplicate(EntityStateChange outcome, Effect effect)
         {
             outcome.Target.Body.Effects.Add(effect);
             effect.OnApply(outcome);

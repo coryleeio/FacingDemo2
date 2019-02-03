@@ -176,22 +176,24 @@ namespace Gamepackage
         public static List<Tuple<string, string>> GetDisplayAttributesForItem(Item item)
         {
             var retVal = new List<Tuple<string, string>>();
-            if (item.MeleeParameters.Count > 0)
+            var meleeTypeParams = item.AttackTypeParameters[AttackType.Melee];
+            var meleeParameters = meleeTypeParams.AttackParameters;
+            if (meleeParameters.Count > 0)
             {
-                for (var i = 0; i < item.MeleeParameters.Count; i++)
+                for (var i = 0; i < meleeParameters.Count; i++)
                 {
-                    var attackParameter = item.MeleeParameters[i];
-                    var isLast = i == item.MeleeParameters.Count - 1;
+                    var attackParameter = meleeParameters[i];
+                    var isLast = i == meleeParameters.Count - 1;
                     retVal.Add(new Tuple<string, string>()
                     {
                         Key = MeleeDamageKey,
                         Value = DisplayValueForAttackParameters(attackParameter, isLast)
                     });
                 }
-                for (var i = 0; i < item.MeleeParameters.Count; i++)
+                for (var i = 0; i < meleeParameters.Count; i++)
                 {
-                    var attackParameter = item.MeleeParameters[i];
-                    var isLast = i == item.MeleeParameters.Count - 1;
+                    var attackParameter = meleeParameters[i];
+                    var isLast = i == meleeParameters.Count - 1;
                     retVal.Add(new Tuple<string, string>()
                     {
                         Key = DamageTypeKey,
@@ -213,7 +215,7 @@ namespace Gamepackage
         public static List<string> GetDisplayAbilitiesForItem(Item item)
         {
             var retVal = new List<string>();
-            foreach (var ability in item.Effects)
+            foreach (var ability in item.EffectsGlobal)
             {
                 retVal.Add(string.Format("{0} - {1}", ability.DisplayName, ability.Description));
             }

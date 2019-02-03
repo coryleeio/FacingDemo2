@@ -1,100 +1,93 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
+    // Action which executes an attack with an item, spell, bare hands etc.
+    // uses an attack capability to resolve the thing being attacked with, source etc.
+    // basically this action applies an attackCapability.
     public class Attack : Action
     {
-        // Inputs
-        private Direction Direction;
+        private CalculatedAttack CalculatedAttack;
 
         // Book keeping values
+        private AttackParameters AttackParameters;
+        private AttackTypeParameters AttackTypeParameters;
+        private ExplosionParameters ExplosionParameters;
+        private ProjectileAppearance ProjectileAppearance;
+
         private float ElapsedTime = 0.0f;
         private GameObject ProjectileView;
-        private int NumberOfTargetsHit;
-        private int RangeTraversed = 0;
-        private Point SourceGridPosition;
+        private int NextPointIndex = 0;
         private Point NextGridPosition;
-        private Point LastNonWallTraversed;
         private Vector2 LerpCurrentPosition;
         private Vector2 LerpCurrentNextPosition;
-        private Point AimedTarget;
         private bool isDoneInternal = false;
-        private AttackParameters AttackParameters;
-        private ExplosionParameters ExplosionParameters;
-        private AttackCapability AttackCapability;
-        private ProjectileAppearance ProjectileAppearance;
 
         private Attack() { }
 
-        public Attack(AttackCapability attackCapability, Direction direction, Point aimedTarget)
+        public Attack(CalculatedAttack calculatedAttack)
         {
-            this.AttackCapability = attackCapability;
-            this.Direction = direction;
-            this.AimedTarget = aimedTarget;
-
-            if (AttackCapability != null)
-            {
-                this.AttackParameters = AttackCapability.AttackParameters;
-            }
+            this.CalculatedAttack = calculatedAttack;
+            AttackParameters = CombatUtil.AttackParametersResolve(this.CalculatedAttack.Source, this.CalculatedAttack.AttackType, this.CalculatedAttack.Item);
+            AttackTypeParameters = CombatUtil.AttackTypeParametersResolve(this.CalculatedAttack.Source, this.CalculatedAttack.AttackType, this.CalculatedAttack.Item);
             if (AttackParameters != null)
             {
-                ProjectileAppearance = AttackCapability.AttackParameters.ProjectileAppearance;
-                ExplosionParameters = AttackCapability.AttackParameters.ExplosionParameters;
+                ProjectileAppearance = AttackParameters.ProjectileAppearance;
+                ExplosionParameters = AttackParameters.ExplosionParameters;
             }
         }
 
         public override bool IsValid()
         {
-            return AttackCapability != null && AttackCapability.CanPerform;
+            return AttackTypeParameters != null && AttackParameters != null && CombatUtil.CanAttackWithItem(this.CalculatedAttack.Source, this.CalculatedAttack.AttackType, this.CalculatedAttack.Item);
         }
 
         public override void Enter()
         {
             base.Enter();
-            Assert.IsNotNull(AttackCapability);
-            Assert.AreNotEqual(AttackCapability.AttackType, AttackType.NotSet);
+            Assert.IsNotNull(AttackParameters);
+            Assert.IsNotNull(AttackTypeParameters);
+            Assert.AreNotEqual(CalculatedAttack.AttackType, AttackType.NotSet);
 
-            AttackCapability.Source.Direction = Direction;
-            if (AttackCapability.Source.View != null && AttackCapability.Source.View.SkeletonAnimation != null)
+            this.CalculatedAttack.Source.Direction = CalculatedAttack.DirectionOfAttack;
+            CombatUtil.ApplyItemStateChanges(CalculatedAttack);
+            Context.UIController.Refresh();
+
+            if (this.CalculatedAttack.Source.View != null && this.CalculatedAttack.Source.View.SkeletonAnimation != null)
             {
-                var skeletonAnimation = AttackCapability.Source.View.SkeletonAnimation;
+                var skeletonAnimation = this.CalculatedAttack.Source.View.SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
-                if (AttackCapability.AttackType == AttackType.Zapped)
+                if (this.CalculatedAttack.AttackType == AttackType.Zapped)
                 {
-                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastStart, Direction), false);
+                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastStart, CalculatedAttack.DirectionOfAttack), false);
                 }
-                else if (AttackCapability.AttackType == AttackType.Ranged)
+                else if (this.CalculatedAttack.AttackType == AttackType.Ranged)
                 {
-                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Shoot, Direction), false);
-                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
+                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Shoot, CalculatedAttack.DirectionOfAttack), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
                 }
                 else
                 {
-                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Attack, Direction), false);
-                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
+                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Attack, CalculatedAttack.DirectionOfAttack), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
                 }
             }
-
-            SourceGridPosition = new Point(AttackCapability.Source.Position.X, AttackCapability.Source.Position.Y);
-            LastNonWallTraversed = new Point(SourceGridPosition.X, SourceGridPosition.Y);
-            NumberOfTargetsHit = 0;
             BuildProjectileViewIfNeeded();
-            MoveProjectileTowardNextPositionFromHere(MathUtil.MapToWorld(AttackCapability.Source.Position));
+            MoveProjectileTowardNextPositionFromHere(MathUtil.MapToWorld(CalculatedAttack.Source.Position));
 
             // Remove the item from the view if it is the last item being thrown
             // and the character is not throwing an item from their inventory.
-            if (AttackCapability.AttackType == AttackType.Thrown)
+            if (CalculatedAttack.AttackType == AttackType.Thrown)
             {
-                var itemBeingLaunched = GetItemBeingLaunched(AttackCapability);
-                if (itemBeingLaunched.NumberOfItems == 1)
+                var itemBeingLaunched = GetItemBeingLaunched();
+                if (itemBeingLaunched.NumberOfItems == 0)
                 {
-                    if (AttackCapability.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
+                    if (CalculatedAttack.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
                     {
-                        AttackCapability.Source.Inventory.UnequipItemInSlot(ItemSlot.MainHand);
-                        Context.ViewFactory.BuildView(AttackCapability.Source);
+                        CalculatedAttack.Source.Inventory.UnequipItemInSlot(ItemSlot.MainHand);
+                        Context.ViewFactory.BuildView(CalculatedAttack.Source);
                     }
                 }
             }
@@ -102,29 +95,20 @@ namespace Gamepackage
 
         private void MoveProjectileTowardNextPositionFromHere(Vector2 currentPosition)
         {
-            if (ProjectileAppearance.OnLeaveDefinition != null)
+            if (NextGridPosition != null && ProjectileAppearance.OnLeaveDefinition != null)
             {
-                ProjectileAppearance.OnLeaveDefinition.Instantiate(NextGridPosition, Direction, ProjectileView);
+                ProjectileAppearance.OnLeaveDefinition.Instantiate(NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView);
             }
-
             ElapsedTime = 0.0f;
-            RangeTraversed++;
             LerpCurrentPosition = currentPosition;
-            if (AttackCapability.AttackTargetingType == AttackTargetingType.Line)
-            {
-                NextGridPosition = SourceGridPosition + (MathUtil.OffsetForDirection(Direction) * RangeTraversed);
-            }
-            if (AttackCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
-            {
-                NextGridPosition = AimedTarget;
-            }
+            NextGridPosition = CalculatedAttack.PointsAffectedByAttack[NextPointIndex];
+            NextPointIndex++;
             LerpCurrentNextPosition = MathUtil.MapToWorld(NextGridPosition);
+        }
 
-
-            if (Context.GameStateManager.Game.CurrentLevel.Grid[NextGridPosition].TileType == TileType.Floor || Context.GameStateManager.Game.CurrentLevel.Grid[NextGridPosition].TileType == TileType.Empty)
-            {
-                LastNonWallTraversed = new Point(NextGridPosition.X, NextGridPosition.Y);
-            }
+        private bool IsEndPoint()
+        {
+            return NextPointIndex == CalculatedAttack.PointsAffectedByAttack.Count;
         }
 
         public override void Do()
@@ -144,14 +128,13 @@ namespace Gamepackage
                 perTileTravelTime = ProjectileAppearance.ProjectileDefinition.PerTileTravelTime;
             }
 
-            if (AttackCapability.AttackTargetingType == AttackTargetingType.SelectTarget)
+            if (AttackTypeParameters.AttackTargetingType == AttackTargetingType.SelectTarget)
             {
                 // in this case - since we travel ALL the distance in 1 lerp, we want 
                 // to set the perTileTravelTime to distance * the per tile travel time
                 // to approximate how quickly to move the projectile
                 // so that it will look consistent independent of range
-                NextGridPosition = AimedTarget;
-                perTileTravelTime = perTileTravelTime * SourceGridPosition.Distance(NextGridPosition);
+                perTileTravelTime = perTileTravelTime * CalculatedAttack.Source.Position.Distance(NextGridPosition);
             }
 
             if (ElapsedTime > perTileTravelTime)
@@ -160,73 +143,43 @@ namespace Gamepackage
             }
 
             var lerpPercent = ElapsedTime / perTileTravelTime;
-            LerpCurrentPosition = Vector2.Lerp(LerpCurrentPosition, LerpCurrentNextPosition, lerpPercent);
-            if (ProjectileView != null)
+            if(LerpCurrentPosition != LerpCurrentNextPosition)
             {
-                ProjectileView.gameObject.transform.position = LerpCurrentPosition;
+                // When applying to self this will cause an error
+                LerpCurrentPosition = Vector2.Lerp(LerpCurrentPosition, LerpCurrentNextPosition, lerpPercent);
+                if (ProjectileView != null)
+                {
+                    ProjectileView.gameObject.transform.position = LerpCurrentPosition;
+                }
             }
+
             if (Vector2.Distance(LerpCurrentPosition, LerpCurrentNextPosition) < 0.05f)
             {
                 var level = Context.GameStateManager.Game.CurrentLevel;
-                var targets = CombatUtil.HittableEntitiesInPositionsOnLevel(NextGridPosition, level);
-                var hitTarget = targets.Count > 0;
-                var hitWall = level.Grid.PointInGrid(NextGridPosition) && level.Grid[NextGridPosition].TileType == TileType.Wall;
-                var hitMaxRange = RangeTraversed >= AttackCapability.Range;
-                var movedThisPass = false;
 
-                if (!hitWall && ProjectileAppearance.OnEnterDefinition != null)
+                if (ProjectileAppearance.OnEnterDefinition != null)
                 {
-                    ProjectileAppearance.OnEnterDefinition.Instantiate(NextGridPosition, Direction, ProjectileView);
+                    ProjectileAppearance.OnEnterDefinition.Instantiate(NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView);
                 }
 
-                if (hitTarget)
+                foreach (var attackStateChanges in CalculatedAttack.AttackStateChanges)
                 {
-                    foreach (var target in targets)
+                    if (NextGridPosition == attackStateChanges.Target.Position)
                     {
                         if (ProjectileAppearance.OnHitDefinition != null)
                         {
-                            ProjectileAppearance.OnHitDefinition.Instantiate(NextGridPosition, Direction, ProjectileView == null ? null : ProjectileView.gameObject);
+                            ProjectileAppearance.OnHitDefinition.Instantiate(NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView == null ? null : ProjectileView.gameObject);
                         }
-
-                        NumberOfTargetsHit += targets.Count;
-                        CombatUtil.ApplyEntityStateChange(AttackCapability.PerformOnTarget(target));
-                        if (NumberOfTargetsHit == AttackCapability.NumberOfTargetsToPierce)
-                        {
-                            break;
-                        }
+                        CombatUtil.ApplyEntityStateChange(attackStateChanges);
                     }
-                    if (AttackCapability.AttackTargetingType != AttackTargetingType.SelectTarget)
-                    {
-                        MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
-                    }
-                    movedThisPass = true;
-                    LastNonWallTraversed = new Point(targets[0].Position.X, targets[0].Position.Y);
                 }
-
-                var canHitMoreTargets = NumberOfTargetsHit < AttackCapability.NumberOfTargetsToPierce && AttackCapability.AttackTargetingType != AttackTargetingType.SelectTarget;
-
-                if (!canHitMoreTargets || hitWall || hitMaxRange)
+                if (IsEndPoint())
                 {
-                    if (AttackCapability.AttackType == AttackType.Zapped && AttackCapability.Source.View != null && AttackCapability.Source.View.SkeletonAnimation != null)
-                    {
-                        var skeletonAnimation = AttackCapability.Source.View.SkeletonAnimation;
-                        skeletonAnimation.AnimationState.ClearTracks();
-                        skeletonAnimation.Skeleton.SetToSetupPose();
-
-                        skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastEnd, Direction), false);
-                        skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Direction), true, 5.0f);
-                    }
                     isDoneInternal = true;
-                    if (ExplosionParameters != null)
-                    {
-                        var explosionAction = new Explosion(AttackCapability.Source, AttackParameters, NextGridPosition);
-                        var currentStep = Context.FlowSystem.Steps.First.Value;
-                        var currentAction = currentStep.Actions.AddAfter(currentStep.Actions.First, explosionAction);
-                    }
                 }
-                else if (!movedThisPass)
+                else
                 {
-                    MoveProjectileTowardNextPositionFromHere(LerpCurrentNextPosition);
+                    MoveProjectileTowardNextPositionFromHere(LerpCurrentPosition);
                 }
             }
         }
@@ -234,44 +187,38 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            if (AttackCapability.Source.Body.MeleeParameters.Count == 0)
-            {
-                throw new NotImplementedException("You don't have any attacks, but are trying to attack anyway?");
-            }
             if (ProjectileView != null)
             {
                 GameObject.Destroy(ProjectileView.gameObject);
             }
-            HandleSpawnItemOnGroundIfRelevant();
-        }
 
-        private void HandleSpawnItemOnGroundIfRelevant()
-        {
-            if (AttackCapability.AttackType == AttackType.Ranged || AttackCapability.AttackType == AttackType.Thrown)
+            if (CalculatedAttack.AttackType == AttackType.Zapped && CalculatedAttack.Source.View != null && CalculatedAttack.Source.View.SkeletonAnimation != null)
             {
-                Item itemBeingLaunched = GetItemBeingLaunched(AttackCapability);
-                var shouldSpawnItemOnGround = MathUtil.PercentageChanceEventOccurs(itemBeingLaunched.ChanceToSurviveLaunch);
-                if (shouldSpawnItemOnGround)
-                {
-                    var placeItemLanded = LastNonWallTraversed;
-                    var groundDrop = EntityFactory.Build(UniqueIdentifier.ENTITY_GROUND_DROP);
-                    groundDrop.Position = new Point(placeItemLanded.X, placeItemLanded.Y);
-                    groundDrop.Name = itemBeingLaunched.DisplayName;
-                    var level = Context.GameStateManager.Game.CurrentLevel;
-                    Context.EntitySystem.Register(groundDrop, level);
-                    var itemCopy = ItemFactory.Build(itemBeingLaunched.UniqueIdentifier);
-                    itemCopy.NumberOfItems = 1;
-                    groundDrop.Inventory.AddItem(itemCopy);
-                    Context.ViewFactory.BuildView(groundDrop);
-                }
-                AttackCapability.Source.Inventory.ConsumeItem(itemBeingLaunched);
-            }
+                var skeletonAnimation = CalculatedAttack.Source.View.SkeletonAnimation;
+                skeletonAnimation.AnimationState.ClearTracks();
+                skeletonAnimation.Skeleton.SetToSetupPose();
 
+                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastEnd, CalculatedAttack.DirectionOfAttack), false);
+                skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
+            }
+            foreach(var stateChange in CalculatedAttack.SourceStateChanges)
+            {
+                CombatUtil.ApplyEntityStateChange(stateChange);
+            }
+            isDoneInternal = true;
+            if (ExplosionParameters != null)
+            {
+                var explosionAction = new Explosion(CalculatedAttack);
+                var currentStep = Context.FlowSystem.Steps.First.Value;
+                var currentAction = currentStep.Actions.AddAfter(currentStep.Actions.First, explosionAction);
+            }
+            CombatUtil.ApplyGroundSpawnStateChange(CalculatedAttack);
         }
 
-        private Item GetItemBeingLaunched(AttackCapability capability)
+        private Item GetItemBeingLaunched()
         {
-            return AttackCapability.AttackType == AttackType.Ranged ? capability.Ammo : capability.Item;
+            var ammo = CombatUtil.AmmoResolve(CalculatedAttack.Source, CalculatedAttack.AttackType, CalculatedAttack.Item);
+            return CalculatedAttack.AttackType == AttackType.Ranged ? ammo : CalculatedAttack.Item;
         }
 
         public override bool IsEndable
@@ -286,11 +233,11 @@ namespace Gamepackage
         {
             if (ProjectileAppearance.OnSwingDefinition != null)
             {
-                ProjectileAppearance.OnSwingDefinition.Instantiate(SourceGridPosition, Direction, ProjectileView);
+                ProjectileAppearance.OnSwingDefinition.Instantiate(CalculatedAttack.Source.Position, CalculatedAttack.DirectionOfAttack, ProjectileView);
             }
             if (ProjectileAppearance.ProjectileDefinition != null)
             {
-                ProjectileView = ProjectileAppearance.ProjectileDefinition.Instantiate(SourceGridPosition, Direction, ProjectileView);
+                ProjectileView = ProjectileAppearance.ProjectileDefinition.Instantiate(CalculatedAttack.Source.Position, CalculatedAttack.DirectionOfAttack, ProjectileView);
             }
         }
     }

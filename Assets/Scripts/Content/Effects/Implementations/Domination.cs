@@ -18,7 +18,7 @@
             }
         }
 
-        public override void OnApply(ActionOutcome outcome)
+        public override void OnApply(EntityStateChange outcome)
         {
             base.OnApply(outcome);
             Context.UIController.TextLog.AddText(string.Format("effect.domination.apply.message".Localize(), outcome.Target.Name));
@@ -47,7 +47,7 @@
             }
         }
 
-        public override void HandleStacking(ActionOutcome outcome)
+        public override void HandleStacking(EntityStateChange outcome)
         {
             StackingStrategies.AddDuplicate(outcome, this);
         }

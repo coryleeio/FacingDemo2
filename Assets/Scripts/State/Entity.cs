@@ -108,7 +108,7 @@ namespace Gamepackage
                             total += attribute.Value;
                         }
                     }
-                    foreach (var effect in item.Effects)
+                    foreach (var effect in item.EffectsGlobal)
                     {
                         int amountToAdd = 0;
                         effect.Attributes.TryGetValue(attr, out amountToAdd);
