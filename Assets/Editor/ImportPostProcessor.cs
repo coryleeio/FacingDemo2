@@ -24,6 +24,16 @@ namespace Gamepackage
                     textureSettings.spriteMeshType = SpriteMeshType.FullRect;
                     textureImporter.SetTextureSettings(textureSettings);
                 }
+
+                if (assetPath.Contains("Spine/Export"))
+                {
+                    // Spine needs this
+                    textureImporter.isReadable = true;
+
+                    TextureImporterSettings textureSettings = new TextureImporterSettings();
+                    textureImporter.ReadTextureSettings(textureSettings);
+                    textureImporter.SetTextureSettings(textureSettings);
+                }
             }
 
         }
