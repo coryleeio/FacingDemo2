@@ -121,7 +121,7 @@ namespace Gamepackage
                 return;
             }
             ElapsedTime += Time.deltaTime;
-            var perTileTravelTime = 1.00f;
+            var perTileTravelTime = 0.5f;
 
             if (ProjectileAppearance != null && ProjectileAppearance.ProjectileDefinition != null)
             {

@@ -220,6 +220,7 @@ namespace Gamepackage
                 {
                     Prefab = arrowPrefab,
                     Lifetime = 0.0f,
+                    PerTileTravelTime = 0.2f,
                     ProjectileBehaviour = ProjectileBehaviour.FaceDirection,
                 }
             };
