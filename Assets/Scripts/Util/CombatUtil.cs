@@ -968,7 +968,10 @@ namespace Gamepackage
             var previouslyTraversedPoint = position;
             foreach (var point in pointsInLine)
             {
-                numberOfThingsPierced += grid[point].EntitiesInPosition.Count;
+                if (grid[point].EntitiesInPosition.FindAll(Filters.HittableEntities).Count > 0)
+                {
+                    numberOfThingsPierced += 1;
+                }
                 if (numberOfThingsPierced == numberOfThingsCanPierce)
                 {
                     return point;
