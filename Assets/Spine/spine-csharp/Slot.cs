@@ -85,9 +85,6 @@ namespace Spine {
 			g = data.g;
 			b = data.b;
 			a = data.a;
-
-
-
 			if (data.attachmentName == null)
 				Attachment = null;
 			else {

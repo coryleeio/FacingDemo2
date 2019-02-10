@@ -136,7 +136,7 @@ namespace Spine.Unity {
 		[HideInInspector]
 		public SkeletonRenderer skeletonRenderer;
 		[HideInInspector]
-		public ISkeletonAnimation animatedSkeletonComponent;
+		public ISkeletonAnimation skeletonAnimation;
 		[System.NonSerialized]
 		public List<SkeletonUtilityBone> utilityBones = new List<SkeletonUtilityBone>();
 		[System.NonSerialized]
@@ -151,16 +151,18 @@ namespace Spine.Unity {
 				skeletonRenderer = GetComponent<SkeletonRenderer>();
 			}
 
-			if (animatedSkeletonComponent == null) {
-				animatedSkeletonComponent = GetComponent(typeof(ISkeletonAnimation)) as ISkeletonAnimation;
+			if (skeletonAnimation == null) {
+				skeletonAnimation = GetComponent<SkeletonAnimation>();
+				if (skeletonAnimation == null)
+					skeletonAnimation = GetComponent<SkeletonAnimator>();
 			}
 
 			skeletonRenderer.OnRebuild -= HandleRendererReset;
 			skeletonRenderer.OnRebuild += HandleRendererReset;
 
-			if (animatedSkeletonComponent != null) {
-				animatedSkeletonComponent.UpdateLocal -= UpdateLocal;
-				animatedSkeletonComponent.UpdateLocal += UpdateLocal;
+			if (skeletonAnimation != null) {
+				skeletonAnimation.UpdateLocal -= UpdateLocal;
+				skeletonAnimation.UpdateLocal += UpdateLocal;
 			}
 
 			CollectBones();
@@ -174,10 +176,10 @@ namespace Spine.Unity {
 		void OnDisable () {
 			skeletonRenderer.OnRebuild -= HandleRendererReset;
 
-			if (animatedSkeletonComponent != null) {
-				animatedSkeletonComponent.UpdateLocal -= UpdateLocal;
-				animatedSkeletonComponent.UpdateWorld -= UpdateWorld;
-				animatedSkeletonComponent.UpdateComplete -= UpdateComplete;
+			if (skeletonAnimation != null) {
+				skeletonAnimation.UpdateLocal -= UpdateLocal;
+				skeletonAnimation.UpdateWorld -= UpdateWorld;
+				skeletonAnimation.UpdateComplete -= UpdateComplete;
 			}
 		}
 
@@ -238,15 +240,15 @@ namespace Spine.Unity {
 
 				hasUtilityConstraints |= utilityConstraints.Count > 0;
 
-				if (animatedSkeletonComponent != null) {
-					animatedSkeletonComponent.UpdateWorld -= UpdateWorld;
-					animatedSkeletonComponent.UpdateComplete -= UpdateComplete;
+				if (skeletonAnimation != null) {
+					skeletonAnimation.UpdateWorld -= UpdateWorld;
+					skeletonAnimation.UpdateComplete -= UpdateComplete;
 
 					if (hasTransformBones || hasUtilityConstraints)
-						animatedSkeletonComponent.UpdateWorld += UpdateWorld;
+						skeletonAnimation.UpdateWorld += UpdateWorld;
 
 					if (hasUtilityConstraints)
-						animatedSkeletonComponent.UpdateComplete += UpdateComplete;
+						skeletonAnimation.UpdateComplete += UpdateComplete;
 				}
 
 				needToReprocessBones = false;

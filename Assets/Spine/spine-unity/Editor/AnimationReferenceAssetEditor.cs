@@ -159,8 +159,7 @@ namespace Spine.Unity.Editor {
 
 		public override GUIContent GetPreviewTitle () { return SpineInspectorUtility.TempContent("Preview"); }
 		public override void OnPreviewSettings () { preview.HandleDrawSettings(); }
-
-		//public override Texture2D RenderStaticPreview (string assetPath, UnityEngine.Object[] subAssets, int width, int height) { return preview.GetStaticPreview(width, height); }
+		public override Texture2D RenderStaticPreview (string assetPath, UnityEngine.Object[] subAssets, int width, int height) { return preview.GetStaticPreview(width, height); }
 		#endregion
 	}
 
