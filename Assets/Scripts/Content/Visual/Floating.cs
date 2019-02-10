@@ -10,12 +10,12 @@
         {
             startingOffset = Random.Range(0.0f, 1.0f);
         }
-        public void Update()
+        public void FixedUpdate()
         {
             var oldX = this.transform.position.x;
             var oldZ = this.transform.position.z;
             var oldY = this.transform.position.y;
-            this.transform.position = new Vector3(oldX, oldY + (Mathf.Sin((startingOffset + Time.time) * frequency) * amplitude), oldZ);
+            this.transform.position = new Vector3(oldX, oldY + (Mathf.Sin((startingOffset + Time.fixedTime) * frequency) * amplitude), oldZ);
         }
     }
 }
