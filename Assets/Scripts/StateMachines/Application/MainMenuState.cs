@@ -6,10 +6,7 @@ namespace Gamepackage
     {
         public void Enter()
         {
-            Context.GameStateManager.Clear();
-            Context.EntitySystem.Clear();
             Context.MainMenuScene.Load();
-
             var MainMenuPrefab = Resources.Load<GameObject>("UI/MainMenu");
             var MainMenu = GameObject.Instantiate(MainMenuPrefab);
             MainMenu.name = "MainMenu";

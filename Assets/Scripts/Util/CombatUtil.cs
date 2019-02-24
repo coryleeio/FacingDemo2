@@ -127,7 +127,7 @@ namespace Gamepackage
                 AttackTargetingType = AttackTargetingType.SelectTarget,
             };
 
-            var calculated = CombatUtil.CalculateAttack(Context.GameStateManager.Game.CurrentLevel.Grid,
+            var calculated = CombatUtil.CalculateAttack(Context.Game.CurrentLevel.Grid,
                     null,
                     AttackType.ApplyToOther,
                     null,
@@ -211,13 +211,13 @@ namespace Gamepackage
                 groundDrop.Position = new Point(groundDropStateChange.SpawnPosition);
                 groundDrop.Name = groundDropStateChange.Name;
 
-                var level = Context.GameStateManager.Game.CurrentLevel;
+                var level = Context.Game.CurrentLevel;
                 Context.EntitySystem.Register(groundDrop, level);
                 var itemCopy = ItemFactory.Build(groundDropStateChange.UniqueIdentifier);
                 itemCopy.NumberOfItems = 1;
 
                 groundDrop.Inventory.AddItem(itemCopy);
-                Context.ViewFactory.BuildView(groundDrop);
+                ViewFactory.RebuildView(groundDrop);
             }
         }
 
@@ -276,7 +276,7 @@ namespace Gamepackage
                     groundDropSpawn.UniqueIdentifier = itemBeingLaunched.UniqueIdentifier;
                     groundDropSpawn.Name = itemBeingLaunched.DisplayName;
 
-                    var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+                    var grid = Context.Game.CurrentLevel.Grid;
                     Point locationForSpawn = null;
                     if (grid[calculatedAttack.EndpointOfAttack].TileType == TileType.Wall)
                     {
@@ -329,7 +329,7 @@ namespace Gamepackage
                     }
                     else
                     {
-                        var pointsInFloodfill = Context.GameStateManager.Game.CurrentLevel.Grid[explosionPosition].CachedFloorFloodFills[index];
+                        var pointsInFloodfill = Context.Game.CurrentLevel.Grid[explosionPosition].CachedFloorFloodFills[index];
                         foreach (var point in pointsInFloodfill)
                         {
                             if (!pointsHitOnAnyPass.Contains(point))
@@ -537,7 +537,7 @@ namespace Gamepackage
                 {
                     if ((result.AppliedEffects.Count > 0 || result.HealthChange > 0) && result.Target.Behaviour != null && result.Source != null)
                     {
-                        var level = Context.GameStateManager.Game.CurrentLevel;
+                        var level = Context.Game.CurrentLevel;
                         result.Target.Behaviour.ShoutAboutHostileTarget(level, result.Source, result.Target.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS));
                         if (result.Target.Behaviour.LastKnownTargetPosition == null)
                         {
@@ -568,7 +568,7 @@ namespace Gamepackage
                     target.Body.IsDead = true;
                     // Is not deregistered because the corpse should still be available
                     target.Behaviour = null;
-                    var game = Context.GameStateManager.Game;
+                    var game = Context.Game;
                     var level = game.CurrentLevel;
 
                     foreach (var pair in target.Inventory.EquippedItemBySlot)
@@ -596,7 +596,7 @@ namespace Gamepackage
                     if (target.Inventory.HasAnyItems)
                     {
                         target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
-                        Context.ViewFactory.BuildView(target, false);
+                        ViewFactory.RebuildView(target, false);
                         var sortable = target.View.ViewGameObject.GetComponent<Sortable>();
                         sortable.Position = target.Position;
                         Context.SpriteSortingSystem.Register(sortable);
@@ -774,7 +774,7 @@ namespace Gamepackage
                 {
                     owner.Inventory.RemoveWholeItemStack(item);
                     Context.UIController.Refresh();
-                    Context.ViewFactory.BuildView(owner);
+                    ViewFactory.RebuildView(owner);
                 }
             }
         }
@@ -870,7 +870,7 @@ namespace Gamepackage
             var coordsToCheck = MathUtil.LineInDirection(source.Position, MathUtil.RelativeDirection(source.Position, target), distance);
             foreach (var point in coordsToCheck)
             {
-                var game = Context.GameStateManager.Game;
+                var game = Context.Game;
                 var level = game.CurrentLevel;
                 if (point != target)
                 {
@@ -896,7 +896,7 @@ namespace Gamepackage
             List<Point> outputRange = new List<Point>();
             if (ExplosionParameters != null)
             {
-                outputRange.AddRange(Context.GameStateManager.Game.CurrentLevel.Grid[placementPosition].CachedFloorFloodFills[ExplosionParameters.Radius]);
+                outputRange.AddRange(Context.Game.CurrentLevel.Grid[placementPosition].CachedFloorFloodFills[ExplosionParameters.Radius]);
             }
             return outputRange;
         }
@@ -962,7 +962,7 @@ namespace Gamepackage
             var numberOfThingsCanPierce = attackTypeParameters.NumberOfTargetsToPierce;
             var numberOfThingsPierced = 0;
 
-            var game = Context.GameStateManager.Game;
+            var game = Context.Game;
             var level = game.CurrentLevel;
             var grid = level.Grid;
             var previouslyTraversedPoint = position;

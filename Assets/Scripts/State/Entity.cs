@@ -1,6 +1,5 @@
 
 using Newtonsoft.Json;
-using Spine.Unity;
 using System;
 using System.Collections.Generic;
 

@@ -90,7 +90,7 @@ namespace Gamepackage
             base.Exit();
 
             // Release old position
-            Context.EntitySystem.Deregister(Source, Context.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Deregister(Source, Context.Game.CurrentLevel);
 
             // Move the view to the new position
             if (Source.View != null && Source.View.ViewGameObject != null)
@@ -108,9 +108,9 @@ namespace Gamepackage
             }
 
             // Lock new position
-            Context.EntitySystem.Register(Source, Context.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Register(Source, Context.Game.CurrentLevel);
 
-            foreach (var triggerThatMightGoOff in Context.GameStateManager.Game.CurrentLevel.Entitys)
+            foreach (var triggerThatMightGoOff in Context.Game.CurrentLevel.Entitys)
             {
                 var onStepTriggers = triggerThatMightGoOff.GetEffects((effectInQuestion) => { return effectInQuestion.CanTriggerOnStep(); });
                 foreach (var onStepTrigger in onStepTriggers)
@@ -122,7 +122,7 @@ namespace Gamepackage
 
             if(Source.IsPlayer)
             {
-                var level = Context.GameStateManager.Game.CurrentLevel;
+                var level = Context.Game.CurrentLevel;
                 var entitiesInPos = level.Grid[Source.Position].EntitiesInPosition;
                 HandleInputHints(entitiesInPos);
             }
@@ -162,7 +162,7 @@ namespace Gamepackage
 
         public override bool IsValid()
         {
-            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].Walkable && Context.GameStateManager.Game.CurrentLevel.Grid[TargetPosition].EntitiesInPosition.FindAll(Filters.HittableEntities).Count == 0));
+            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.Game.CurrentLevel.Grid[TargetPosition].Walkable && Context.Game.CurrentLevel.Grid[TargetPosition].EntitiesInPosition.FindAll(Filters.HittableEntities).Count == 0));
         }
     }
 }

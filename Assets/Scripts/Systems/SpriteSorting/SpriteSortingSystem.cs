@@ -16,7 +16,7 @@ namespace Gamepackage
         public void Init()
         {
             nextSortableId = 0;
-            level = Context.GameStateManager.Game.CurrentLevel;
+            level = Context.Game.CurrentLevel;
             var sortables = GameObject.FindObjectsOfType<Sortable>();
             sortablesById = new Dictionary<int, Sortable>();
             var uncastLayers = Enum.GetValues(typeof(SortingLayer));

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity.Modules.AttachmentTools;
 using Spine;
@@ -8,24 +7,19 @@ using Spine.Unity;
 
 namespace Gamepackage
 {
-    public class ViewFactory
+    public static class ViewFactory
     {
-        private Material DefaultSpriteMaterial;
-        private Sprite MissingSprite;
-
-        public ViewFactory()
+        private static Material GetDefaultSpriteMaterial()
         {
-            if (DefaultSpriteMaterial == null)
-            {
-                DefaultSpriteMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
-            }
-            if (MissingSprite == null)
-            {
-                MissingSprite = Resources.Load<Sprite>("Missing");
-            }
+            return Resources.Load<Material>("Materials/DefaultSpriteMaterial");
         }
 
-        public void BuildView(Entity entity, bool DestroyOldView = true)
+        private static Sprite MissingSpriteMaterial()
+        {
+            return Resources.Load<Sprite>("Missing");
+        }
+
+        public static  void RebuildView(Entity entity, bool DestroyOldView = true)
         {
             if (entity.View != null && entity.View.ViewGameObject != null && DestroyOldView)
             {
@@ -217,7 +211,7 @@ namespace Gamepackage
             return go;
         }
 
-        private Sortable BuildDefaultSortable(Entity entity)
+        private static Sortable BuildDefaultSortable(Entity entity)
         {
             var sortable = entity.View.ViewGameObject.AddComponent<Sortable>();
             sortable.Layer = SortingLayer.EntitiesAndProps;
@@ -246,7 +240,7 @@ namespace Gamepackage
             newGo.transform.localPosition = new Vector3(0, -0.30f, 0);
         }
 
-        public void BuildMapTiles(Level level)
+        public static void BuildMapTiles(Level level)
         {
             var folder = GameObjectUtils.MakeFolder("Grid");
             for (int x = 0; x < level.BoundingBox.Width; x++)
@@ -394,7 +388,7 @@ namespace Gamepackage
                         }
                         else
                         {
-                            BuildWallTile(folder, MissingSprite, point);
+                            BuildWallTile(folder, MissingSpriteMaterial(), point);
                         }
                         BuildFloorTile(folder, tileSet.FloorSprite, point);
                     }
@@ -468,13 +462,13 @@ namespace Gamepackage
             return level.Grid[offsetPoint.X, offsetPoint.Y].TileType;
         }
 
-        private void BuildWallTile(GameObject folder, Sprite wallTile, Point position)
+        private static void BuildWallTile(GameObject folder, Sprite wallTile, Point position)
         {
             GameObject o = new GameObject();
             o.name = "Tile";
             var renderer = o.AddComponent<SpriteRenderer>();
             var sortable = o.AddComponent<Sortable>();
-            renderer.material = DefaultSpriteMaterial;
+            renderer.material = GetDefaultSpriteMaterial();
             o.transform.SetParent(folder.transform);
             renderer.sprite = wallTile;
             o.transform.localPosition = MathUtil.MapToWorld(position);
@@ -482,13 +476,13 @@ namespace Gamepackage
             sortable.Layer = SortingLayer.EntitiesAndProps;
         }
 
-        private void BuildFloorTile(GameObject folder, Sprite wallTile, Point position)
+        private static void BuildFloorTile(GameObject folder, Sprite wallTile, Point position)
         {
             GameObject o = new GameObject();
             o.name = "Ground";
             var renderer = o.AddComponent<SpriteRenderer>();
             var sortable = o.AddComponent<Sortable>();
-            renderer.material = DefaultSpriteMaterial;
+            renderer.material = GetDefaultSpriteMaterial();
             o.transform.SetParent(folder.transform);
             renderer.sprite = wallTile;
             o.transform.localPosition = MathUtil.MapToWorld(position);

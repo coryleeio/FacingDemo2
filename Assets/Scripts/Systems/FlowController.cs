@@ -31,7 +31,7 @@ namespace Gamepackage
             else
             {
                 // Take stock of who from the current team still needs to act
-                var entities = Context.GameStateManager.Game.CurrentLevel.Entitys;
+                var entities = Context.Game.CurrentLevel.Entitys;
                 var entitiesDoneThinking = 0;
                 var entitiesNotDoneThinking = 0;
                 var entitesThatStillNeedToACtBeforePhaseEnds = 0;
@@ -267,7 +267,7 @@ namespace Gamepackage
         public void ChangeCurrentlyActingTeam(Team nextPhase)
         {
             CurrentlyActingTeam = nextPhase;
-            var entities = Context.GameStateManager.Game.CurrentLevel.Entitys;
+            var entities = Context.Game.CurrentLevel.Entitys;
             foreach (var entity in entities)
             {
                 if (entity.Behaviour != null)

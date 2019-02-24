@@ -102,8 +102,8 @@ namespace Gamepackage
         public override void Exit()
         {
             base.Exit();
-            Context.EntitySystem.Deregister(Source, Context.GameStateManager.Game.CurrentLevel);
-            Context.EntitySystem.Deregister(Targets[0], Context.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Deregister(Source, Context.Game.CurrentLevel);
+            Context.EntitySystem.Deregister(Targets[0], Context.Game.CurrentLevel);
 
             var targetOldPosition = Targets[0].Position;
             var oldSourcePos = new Point(Source.Position.X, Source.Position.Y);
@@ -135,10 +135,10 @@ namespace Gamepackage
             }
 
             // Lock new positions
-            Context.EntitySystem.Register(Source, Context.GameStateManager.Game.CurrentLevel);
-            Context.EntitySystem.Register(Targets[0], Context.GameStateManager.Game.CurrentLevel);
+            Context.EntitySystem.Register(Source, Context.Game.CurrentLevel);
+            Context.EntitySystem.Register(Targets[0], Context.Game.CurrentLevel);
 
-            foreach (var potentialTrigger in Context.GameStateManager.Game.CurrentLevel.Entitys)
+            foreach (var potentialTrigger in Context.Game.CurrentLevel.Entitys)
             {
                 var onStepTriggers = potentialTrigger.GetEffects((effectInQuestion) => { return effectInQuestion.CanTriggerOnStep(); });
                 foreach(var onStepTrigger in onStepTriggers)
@@ -151,7 +151,7 @@ namespace Gamepackage
 
             if (Source.IsPlayer)
             {
-                var level = Context.GameStateManager.Game.CurrentLevel;
+                var level = Context.Game.CurrentLevel;
                 var entitiesInPos = level.Grid[Source.Position].EntitiesInPosition;
                 Move.HandleInputHints(entitiesInPos);
             }

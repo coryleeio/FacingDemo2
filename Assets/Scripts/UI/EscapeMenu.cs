@@ -26,27 +26,27 @@ namespace Gamepackage
 
                 });
                 BuildButton("escape.menu.buttons.restart".Localize(), () => {
-                    Context.GameStateManager.Clear();
+                    SaveUtil.NewGame();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
                 });
                 BuildButton("escape.menu.buttons.save".Localize(), () =>
                 {
-                    Context.GameStateManager.SaveGame();
+                    SaveUtil.SaveGame(Context.Game, SaveUtil.GetDefaultSaveLocation());
                 });
                 BuildButton("escape.menu.buttons.load".Localize(), () =>
                 {
-                    Context.GameStateManager.LoadGame();
+                    SaveUtil.LoadGame();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
                 });
                 BuildButton("escape.menu.buttons.quit.to.main.menu".Localize(), () => {
-                    Context.GameStateManager.Clear();
+                    SaveUtil.NewGame();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
                 });
                 BuildButton("escape.menu.buttons.quit.game".Localize(), () =>
                 {
                     if (UnityEngine.Application.isEditor)
                     {
-                        Context.GameStateManager.Clear();
+                        SaveUtil.NewGame();
                         Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
                     }
                     else

@@ -2,13 +2,11 @@
 {
     public static class Context
     {
-        public static GameStateManager GameStateManager = new GameStateManager();
+        public static Game Game;
         public static VisibilitySystem VisibilitySystem = new VisibilitySystem();
         public static ResourceManager ResourceManager = new ResourceManager();
-        public static ViewFactory ViewFactory = new ViewFactory();
         public static EntityManager EntitySystem = new EntityManager();
         public static Localizer Localizer = new Localizer();
-        public static DungeonGenerator DungeonGenerator = new DungeonGenerator();
         public static SpriteSortingSystem SpriteSortingSystem = new SpriteSortingSystem();
         public static OverlaySystem OverlaySystem = new OverlaySystem();
         public static PathFinder PathFinder = new PathFinder();

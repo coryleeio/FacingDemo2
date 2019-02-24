@@ -13,12 +13,12 @@ namespace Gamepackage
 
         IEnumerator LoadPrototypes()
         {
-            Context.ResourceManager.LoadAllPrototypes();
-            if (Context.GameStateManager.Game == null)
+            if (Context.Game == null)
             {
-                Context.GameStateManager.NewGame();
-                Context.DungeonGenerator.GenerateDungeon();
+                SaveUtil.NewGame();
+                DungeonGenerator.GenerateDungeon();
             }
+            Context.ResourceManager.LoadAllPrototypes();
             Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             yield return new WaitForEndOfFrame();
         }

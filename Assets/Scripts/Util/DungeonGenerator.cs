@@ -4,17 +4,14 @@ using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    public class DungeonGenerator
+    public static class DungeonGenerator
     {
-
-        public DungeonGenerator() { }
-
-        public void GenerateDungeon()
+        public static void GenerateDungeon()
         {
             var numberOfLevels = 2;
 
-            Context.GameStateManager.Game.Dungeon.Levels = new Level[numberOfLevels];
-            var levels = Context.GameStateManager.Game.Dungeon.Levels;
+            Context.Game.Dungeon.Levels = new Level[numberOfLevels];
+            var levels = Context.Game.Dungeon.Levels;
             for (int levelIndex = 0; levelIndex < numberOfLevels; levelIndex++)
             {
                 var level = new Level();
@@ -83,10 +80,10 @@ namespace Gamepackage
                 Height = 4,
                 Width = 4,
             });
-            BuildPathfindingGrid(Context.GameStateManager.Game);
+            BuildPathfindingGrid(Context.Game);
         }
 
-        private void SpawnConnectedStandardRoomsOnLevel(Level level, int numberOfRoomsToSpawn)
+        private static void SpawnConnectedStandardRoomsOnLevel(Level level, int numberOfRoomsToSpawn)
         {
             var roomConnections = new List<KeyValuePair<Room, Room>>();
             for (var roomNumber = 0; roomNumber < numberOfRoomsToSpawn; roomNumber++)
@@ -172,14 +169,14 @@ namespace Gamepackage
             }
         }
 
-        private void ConnectLevelsByStairway(Level level1, Level level2)
+        private static void ConnectLevelsByStairway(Level level1, Level level2)
         {
             Assert.AreNotEqual(level1.LevelIndex, level2.LevelIndex);
             var lowerLevel = level1.LevelIndex < level2.LevelIndex ? level1 : level2;
             var higherLevel = lowerLevel == level1 ? level2 : level1;
 
-            var downStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_DOWN, Context.GameStateManager.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
-            var upStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_UP, Context.GameStateManager.Game.Dungeon.Levels[higherLevel.LevelIndex]);
+            var downStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_DOWN, Context.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
+            var upStair = SpawnOnLevel(UniqueIdentifier.ENTITY_STAIRS_UP, Context.Game.Dungeon.Levels[higherLevel.LevelIndex]);
 
             var downStairTraverseAction = downStair.Trigger;
             downStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
@@ -192,7 +189,7 @@ namespace Gamepackage
             upStairTraverseAction.TriggerParameters.Add(TraverseStaircase.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
         }
 
-        private Entity SpawnInBounds(UniqueIdentifier identifier, Level level, Rectangle boundingBox)
+        private static Entity SpawnInBounds(UniqueIdentifier identifier, Level level, Rectangle boundingBox)
         {
             var possiblePlayerSpawnPoints = FloorTilesInRect(level, boundingBox);
             foreach (var alreadyExistingEntity in level.Entitys)
@@ -206,12 +203,12 @@ namespace Gamepackage
             return thing;
         }
 
-        private Entity SpawnOnLevel(UniqueIdentifier identifier, Level level)
+        private static Entity SpawnOnLevel(UniqueIdentifier identifier, Level level)
         {
             return SpawnInBounds(identifier, level, level.BoundingBox);
         }
 
-        private void BuildPathfindingGrid(Game game)
+        private static void BuildPathfindingGrid(Game game)
         {
             var levels = game.Dungeon.Levels;
             foreach (var level in levels)
@@ -240,7 +237,7 @@ namespace Gamepackage
             }
         }
 
-        private void ConnectTwoRooms(Level level, Room previousRoom, Room newRoom)
+        private static void ConnectTwoRooms(Level level, Room previousRoom, Room newRoom)
         {
             var previousTiles = FloorTilesInRect(level, previousRoom.BoundingBox);
             var currentTiles = FloorTilesInRect(level, newRoom.BoundingBox);
@@ -255,7 +252,7 @@ namespace Gamepackage
             ConnectTwoPoints(level, previousRoom, newRoom, previousTile, currentTile);
         }
 
-        private void ConnectTwoPoints(Level level, Room previousRoom, Room nextRoom, Point previousTile, Point nextTile)
+        private static void ConnectTwoPoints(Level level, Room previousRoom, Room nextRoom, Point previousTile, Point nextTile)
         {
             var pathA = ConnectPointsByX(level, previousTile.X, nextTile.X, previousTile.Y);
             pathA.AddRange(ConnectPointsByY(level, previousTile.Y, nextTile.Y, nextTile.X));
@@ -271,7 +268,7 @@ namespace Gamepackage
             }
         }
 
-        private void Carve(Level level, Point centerPoint)
+        private static void Carve(Level level, Point centerPoint)
         {
             level.Grid[centerPoint.X, centerPoint.Y].TileType = TileType.Floor;
             foreach (var point in MathUtil.SurroundingPoints(centerPoint))
@@ -283,7 +280,7 @@ namespace Gamepackage
             }
         }
 
-        private bool PathIntersectsRoom(Room room, List<Point> path)
+        private static bool PathIntersectsRoom(Room room, List<Point> path)
         {
             foreach (var point in path)
             {
@@ -295,7 +292,7 @@ namespace Gamepackage
             return false;
         }
 
-        private List<Point> ConnectPointsByX(Level level, int x1, int x2, int currentY)
+        private static List<Point> ConnectPointsByX(Level level, int x1, int x2, int currentY)
         {
 
             var path = new List<Point>();
@@ -306,7 +303,7 @@ namespace Gamepackage
             return path;
         }
 
-        private List<Point> ConnectPointsByY(Level level, int y1, int y2, int currentX)
+        private static List<Point> ConnectPointsByY(Level level, int y1, int y2, int currentX)
         {
             var path = new List<Point>();
             for (var y = Math.Min(y1, y2); y < Math.Max(y1, y2) + 1; y++)

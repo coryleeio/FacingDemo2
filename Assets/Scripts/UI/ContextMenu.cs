@@ -31,7 +31,7 @@ namespace Gamepackage
                 Context.UIController.ItemInspectionWindow.ShowFor(item);
             });
 
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = Context.Game.CurrentLevel;
             var player = level.Player;
             var isWearingItem = player.Inventory.IsWearing(item);
             var hasItemInInventory = player.Inventory.Items.Contains(item);
@@ -45,7 +45,7 @@ namespace Gamepackage
                 var onUseText = item.CustomOnUseText ?? "context.menu.buttons.use.default".Localize();
                 BuildButton(onUseText, () =>
                 {
-                    var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+                    var grid = Context.Game.CurrentLevel.Grid;
                     var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, AttackType.ApplyToSelf, item);
                     var attackParameters = CombatUtil.AttackParametersResolve(player, AttackType.ApplyToSelf, item);
                     var calculatedAttack = CombatUtil.CalculateAttack(grid, player, AttackType.ApplyToSelf, item, player.Position, attackTypeParameters, attackParameters);

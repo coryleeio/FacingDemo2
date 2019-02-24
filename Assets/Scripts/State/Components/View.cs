@@ -38,7 +38,5 @@ namespace Gamepackage
                 return null;
             }
         }
-
-        public View() { }
     }
 }

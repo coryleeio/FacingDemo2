@@ -113,7 +113,7 @@ namespace Gamepackage
             var position = entity.Position;
             var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(entity, attackType, item);
             var attackParameters = CombatUtil.AttackParametersResolve(entity, attackType, item);
-            var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+            var grid = Context.Game.CurrentLevel.Grid;
             if (attackTypeParameters.AttackTargetingType == AttackTargetingType.Line && (direction == Direction.SouthEast || direction == Direction.SouthWest || direction == Direction.NorthEast || direction == Direction.NorthWest))
             {
                 var lineOffsets = MathUtil.LineInDirection(position, direction, attackTypeParameters.Range);
@@ -167,7 +167,7 @@ namespace Gamepackage
                 !Context.UIController.LootWindow.isActiveAndEnabled &&
                 !Context.UIController.InventoryWindow.isActiveAndEnabled;
 
-            var game = Context.GameStateManager.Game;
+            var game = Context.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
             var item = player.Inventory.GetItemBySlot(ItemSlot.MainHand);
@@ -487,7 +487,7 @@ namespace Gamepackage
         {
             AimedAttackType = attackType;
             AimedItem = item;
-            var player = Context.GameStateManager.Game.CurrentLevel.Player;
+            var player = Context.Game.CurrentLevel.Player;
             if (player == null)
             {
                 return;
@@ -555,7 +555,7 @@ namespace Gamepackage
 
         private void QueueAttack(Entity player, AttackType attackType, Item item, Point mousePos)
         {
-            var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+            var grid = Context.Game.CurrentLevel.Grid;
             var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, attackType, item);
             var attacParameters = CombatUtil.AttackParametersResolve(player, attackType, item);
             var calculatedAttack = CombatUtil.CalculateAttack(grid, player, attackType, item, mousePos, attackTypeParameters, attacParameters);
@@ -565,7 +565,7 @@ namespace Gamepackage
 
         private void OnPathComplete(Path path)
         {
-            var game = Context.GameStateManager.Game;
+            var game = Context.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
             foreach (var node in path.Nodes)

@@ -12,7 +12,7 @@ namespace Gamepackage
         {
             if (entity.Id == 0)
             {
-                entity.Id = Context.GameStateManager.Game.NextId;
+                entity.Id = Context.Game.NextId;
             }
             if (!EntityMap.ContainsKey(entity.Id))
             {
@@ -58,7 +58,7 @@ namespace Gamepackage
         public void Init()
         {
             Clear();
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = Context.Game.CurrentLevel;
             foreach (var entity in level.Entitys)
             {
                 Context.EntitySystem.Register(entity, level);

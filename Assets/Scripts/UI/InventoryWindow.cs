@@ -39,7 +39,7 @@ namespace Gamepackage
 
         public override void Refresh()
         {
-            var player = Context.GameStateManager.Game.CurrentLevel.Player;
+            var player = Context.Game.CurrentLevel.Player;
             var inventory = player.Inventory;
             var container = GetComponentInChildren<ItemContainer>();
             foreach (Transform child in container.transform)

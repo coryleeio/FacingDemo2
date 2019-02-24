@@ -29,7 +29,7 @@ namespace Gamepackage
 
         public override void Enter()
         {
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = Context.Game.CurrentLevel;
 
             base.Enter();
             Assert.IsNotNull(Source);
@@ -39,7 +39,7 @@ namespace Gamepackage
             var source = Source;
             var target = Targets[0];
             target.Inventory.RemoveWholeItemStack(Item);
-            Context.ViewFactory.BuildView(target);
+            ViewFactory.RebuildView(target);
             if(Index == -1)
             {
                source.Inventory.AddItem(Item);

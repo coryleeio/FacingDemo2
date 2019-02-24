@@ -13,12 +13,12 @@ namespace Gamepackage
             Context.SpriteSortingSystem.Init();
             Context.GameScene.Load();
             Context.VisibilitySystem.Init();
-            Context.OverlaySystem.Init(Context.GameStateManager.Game.CurrentLevel.Grid.Width, Context.GameStateManager.Game.CurrentLevel.Grid.Height);
+            Context.OverlaySystem.Init(Context.Game.CurrentLevel.Grid.Width, Context.Game.CurrentLevel.Grid.Height);
             Context.PathFinder.Init(DiagonalOptions.NoDiagonals, 5);
             Context.FlowSystem.Init();
             Context.PlayerController.Init();
             CameraDriver = Context.GameScene.GetCamera();
-            CameraDriver.JumpToTarget(Context.GameStateManager.Game.CurrentLevel.Player.Position);
+            CameraDriver.JumpToTarget(Context.Game.CurrentLevel.Player.Position);
 
             var EventSystemPrefab = Resources.Load<GameObject>("UI/EventSystem");
             var eventSYstem = GameObject.Instantiate(EventSystemPrefab);

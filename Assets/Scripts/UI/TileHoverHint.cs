@@ -41,7 +41,7 @@ namespace Gamepackage
             {
                 line.gameObject.SetActive(false);
             }
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = Context.Game.CurrentLevel;
 
             if (level.BoundingBox.Contains(location))
             {

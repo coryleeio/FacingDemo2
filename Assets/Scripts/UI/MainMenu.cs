@@ -11,15 +11,15 @@ namespace Gamepackage
             GetComponent<Canvas>().worldCamera = Camera.main;
 
             BuildButton("main.menu.buttons.new.game".Localize(), () => {
-                Context.GameStateManager.Clear();
+                SaveUtil.Clear();
                 Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
             });
 
-            if(Context.GameStateManager.HasGameToLoad())
+            if(SaveUtil.HasGameToLoad(SaveUtil.GetDefaultSaveLocation()))
             {
                 BuildButton("main.menu.buttons.continue".Localize(), () => {
 
-                    Context.GameStateManager.LoadGame();
+                    SaveUtil.LoadGame();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
                 });
             }
@@ -27,7 +27,7 @@ namespace Gamepackage
             BuildButton("main.menu.buttons.quit".Localize(), () => {
                 if (UnityEngine.Application.isEditor)
                 {
-                    Context.GameStateManager.Clear();
+                    SaveUtil.Clear();
                     Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
                 }
                 else

@@ -87,7 +87,6 @@ namespace Gamepackage
                     if (CalculatedAttack.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
                     {
                         CalculatedAttack.Source.Inventory.UnequipItemInSlot(ItemSlot.MainHand);
-                        Context.ViewFactory.BuildView(CalculatedAttack.Source);
                     }
                 }
             }
@@ -155,7 +154,7 @@ namespace Gamepackage
 
             if (Vector2.Distance(LerpCurrentPosition, LerpCurrentNextPosition) < 0.05f)
             {
-                var level = Context.GameStateManager.Game.CurrentLevel;
+                var level = Context.Game.CurrentLevel;
 
                 if (ProjectileAppearance.OnEnterDefinition != null)
                 {

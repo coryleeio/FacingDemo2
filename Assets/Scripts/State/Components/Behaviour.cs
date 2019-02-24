@@ -53,7 +53,7 @@ namespace Gamepackage
                 throw new NotImplementedException("AI with undefined behaviour: " + entity.PrototypeIdentifier.ToString());
             }
 
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = Context.Game.CurrentLevel;
 
             var relevantContexts = entity.Behaviour.AI == AIType.DumbMelee ? MeleeAIRelevantContexts : RangedAIRelevantContexts;
 
@@ -132,7 +132,7 @@ namespace Gamepackage
 
         private void EnqueueAttackType(Entity entity, AttackType attackType, Item item, Entity target)
         {
-            var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+            var grid = Context.Game.CurrentLevel.Grid;
             var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(entity, attackType, item);
             var attacParameters = CombatUtil.AttackParametersResolve(entity, attackType, item);
             var calculatedAttack = CombatUtil.CalculateAttack(grid, entity, attackType, item, target.Position, attackTypeParameters, attacParameters);
@@ -143,7 +143,7 @@ namespace Gamepackage
         private bool AbleAndWillingToPerformAttackTypeOnTarget(Entity source, AttackType attackType, Item item, Entity target)
         {
             var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(source, attackType, item);
-            var grid = Context.GameStateManager.Game.CurrentLevel.Grid;
+            var grid = Context.Game.CurrentLevel.Grid;
 
             var isAbleToPerform = CombatUtil.CanAttackWithItem(source, attackType, item) &&
                 CombatUtil.InRangeOfAttack(grid, source.Position, attackTypeParameters.Range, attackTypeParameters.AttackTargetingType, target.Position) && 
@@ -168,7 +168,7 @@ namespace Gamepackage
         private static Entity FindVisibleTargets(Entity entity)
         {
             var entitySystem = Context.EntitySystem;
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = Context.Game.CurrentLevel;
             var grid = level.Grid;
             var points = Context.VisibilitySystem.PlacesVisibleFromLocation(level, entity.Position, entity.CalculateValueOfAttribute(Attributes.VISION_RADIUS));
             var targets = new List<Entity>();
@@ -239,7 +239,7 @@ namespace Gamepackage
             if (entity.Behaviour.ActingTeam == Team.PLAYER)
             {
                 // Default for allies is follow player
-                var player = Context.GameStateManager.Game.CurrentLevel.Player;
+                var player = Context.Game.CurrentLevel.Player;
                 if (player.Position.IsAdjacentTo(entity.Position))
                 {
                     // Wait if we are already adjacent
@@ -290,7 +290,7 @@ namespace Gamepackage
         private IEnumerator MoveToward(Point targetPosition)
         {
             NextAction = null;
-            var level = Context.GameStateManager.Game.CurrentLevel;
+            var level = Context.Game.CurrentLevel;
             var PointsAroundMe = MathUtil.OrthogonalPoints(entity.Position).FindAll(Filters.NonoccupiedTiles);
             var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll(Filters.NonoccupiedTiles);
             if (PointsAroundMe.Count == 0)
@@ -313,12 +313,12 @@ namespace Gamepackage
 
             foreach (var pointAroundTarget in PointsAroundTarget)
             {
-                Context.PathFinder.StartPath(entity.Position, pointAroundTarget, Context.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
+                Context.PathFinder.StartPath(entity.Position, pointAroundTarget, Context.Game.CurrentLevel.Grid, ReceivePath);
             }
 
             foreach (var pointAroundMe in PointsAroundMe)
             {
-                Context.PathFinder.StartPath(entity.Position, pointAroundMe, Context.GameStateManager.Game.CurrentLevel.Grid, ReceivePath);
+                Context.PathFinder.StartPath(entity.Position, pointAroundMe, Context.Game.CurrentLevel.Grid, ReceivePath);
             }
 
             while (NextAction == null)

@@ -129,9 +129,9 @@ namespace Gamepackage
             if(Entity != null && Entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GROUND_DROP)
             {
                 // Remove ground drop entities if their last item is looted
-                if(Context.GameStateManager != null && Context.GameStateManager.Game != null&& Context.GameStateManager.Game.CurrentLevel != null)
+                if(Context.Game != null&& Context.Game.CurrentLevel != null)
                 {
-                    Context.EntitySystem.Deregister(Entity, Context.GameStateManager.Game.CurrentLevel);
+                    Context.EntitySystem.Deregister(Entity, Context.Game.CurrentLevel);
                 }
             }
         }
@@ -168,6 +168,10 @@ namespace Gamepackage
                 {
                     effect.OnApply(Entity);
                 }
+                if(Entity.View.ViewGameObject != null)
+                {
+                    ViewFactory.RebuildView(Entity);
+                }
             }
         }
 
@@ -183,6 +187,10 @@ namespace Gamepackage
                     foreach (var effect in item.EffectsGlobal)
                     {
                         effect.OnRemove(Entity);
+                    }
+                    if (Entity.View.ViewGameObject != null)
+                    {
+                        ViewFactory.RebuildView(Entity);
                     }
                 }
             }

@@ -42,7 +42,7 @@ namespace Gamepackage
             var shiftLeftClicked = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) && isLeftClick);
             var rightClicked = eventData.button == PointerEventData.InputButton.Right;
 
-            var player = Context.GameStateManager.Game.CurrentLevel.Player;
+            var player = Context.Game.CurrentLevel.Player;
 
 
             var isWearingItem = player.Inventory.IsWearing(Item);

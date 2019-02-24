@@ -6,10 +6,12 @@
         public float startingOffset;
         public float frequency = 3.0f;
         public float amplitude = 0.005f;
+
         void Start()
         {
             startingOffset = Random.Range(0.0f, 1.0f);
         }
+
         public void FixedUpdate()
         {
             var oldX = this.transform.position.x;

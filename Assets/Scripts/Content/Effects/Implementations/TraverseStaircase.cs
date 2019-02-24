@@ -63,7 +63,7 @@ namespace Gamepackage
 
             if (targetIsPlayer)
             {
-                var oldLevel = Context.GameStateManager.Game.CurrentLevel;
+                var oldLevel = Context.Game.CurrentLevel;
                 foreach (var entityInLevel in oldLevel.Entitys)
                 {
                     // Add player followers to list of targets
@@ -73,7 +73,7 @@ namespace Gamepackage
                         targetsForLevelChange.Add(entityInLevel);
                     }
                 }
-                Context.GameStateManager.Game.CurrentLevel.UnindexAll();
+                Context.Game.CurrentLevel.UnindexAll();
             }
 
             foreach (var target in targetsForLevelChange)
@@ -84,13 +84,13 @@ namespace Gamepackage
                     Context.FlowSystem.Steps.First.Value.Actions.Clear();
                 }
 
-                var oldLevel = Context.GameStateManager.Game.CurrentLevel;
+                var oldLevel = Context.Game.CurrentLevel;
                 oldLevel.ReleasePathfindingAtPosition(target, target.Position);
                 if (target.View.ViewGameObject != null)
                 {
                     GameObject.Destroy(target.View.ViewGameObject);
                 }
-                var newLevel = Context.GameStateManager.Game.Dungeon.Levels[levelId];
+                var newLevel = Context.Game.Dungeon.Levels[levelId];
                 var pos = new Point(posX, posY);
                 oldLevel.Entitys.Remove(target);
                 target.Position = pos;
@@ -99,10 +99,10 @@ namespace Gamepackage
             if (targetIsPlayer)
             {
                 Context.PlayerController.ActionList.Clear();
-                Context.GameStateManager.Game.CurrentLevelIndex = levelId;
-                if (levelId > Context.GameStateManager.Game.FurthestLevelReached)
+                Context.Game.CurrentLevelIndex = levelId;
+                if (levelId > Context.Game.FurthestLevelReached)
                 {
-                    Context.GameStateManager.Game.FurthestLevelReached = levelId;
+                    Context.Game.FurthestLevelReached = levelId;
                 }
                 Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
             }
