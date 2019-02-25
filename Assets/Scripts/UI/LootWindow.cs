@@ -20,7 +20,7 @@ namespace Gamepackage
                 }
                 foreach(var target in _targets)
                 {
-                    if(target.Inventory.HasAnyItems)
+                    if(InventoryUtil.HasAnyItems(target))
                     {
                         return true;
                     }

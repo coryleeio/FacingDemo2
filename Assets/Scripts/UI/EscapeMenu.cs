@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Gamepackage
@@ -26,8 +27,8 @@ namespace Gamepackage
 
                 });
                 BuildButton("escape.menu.buttons.restart".Localize(), () => {
-                    SaveUtil.NewGame();
-                    Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
+                    SaveUtil.Clear();
+                    SceneManager.LoadScene((int)Scenes.Loading);
                 });
                 BuildButton("escape.menu.buttons.save".Localize(), () =>
                 {
@@ -36,18 +37,18 @@ namespace Gamepackage
                 BuildButton("escape.menu.buttons.load".Localize(), () =>
                 {
                     SaveUtil.LoadGame();
-                    Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
+                    SceneManager.LoadScene((int)Scenes.Loading);
                 });
                 BuildButton("escape.menu.buttons.quit.to.main.menu".Localize(), () => {
                     SaveUtil.NewGame();
-                    Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+                    SceneManager.LoadScene((int)Scenes.MainMenu);
                 });
                 BuildButton("escape.menu.buttons.quit.game".Localize(), () =>
                 {
                     if (UnityEngine.Application.isEditor)
                     {
                         SaveUtil.NewGame();
-                        Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+                        SceneManager.LoadScene((int)Scenes.MainMenu);
                     }
                     else
                     {

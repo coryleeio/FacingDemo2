@@ -302,6 +302,10 @@ namespace Gamepackage
 
         public static TChoose ChooseRandomElement<TChoose>(List<TChoose> elements)
         {
+            if(elements.Count == 0)
+            {
+                Debug.LogError("Trying to choose from a list with nothing in it..." + elements);
+            }
             return elements[ChooseRandomIntInRange(0, elements.Count)];
         }
 

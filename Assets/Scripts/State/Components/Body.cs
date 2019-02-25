@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class Body : Component
+    public class Body
     {
         public int CurrentHealth;
         public Dictionary<Attributes, int> Attributes = new Dictionary<Attributes, int>(0);
@@ -17,13 +17,5 @@ namespace Gamepackage
         public GameObject MeleeOnHitPrefab;
         public GameObject MeleeOnSwingPrefab;
         public float MeleeProjectileTravelTime;
-
-        public bool CanAttackInMelee
-        {
-            get
-            {
-                return MeleeAttackTypeParameters != null && MeleeAttackTypeParameters.AttackParameters.Count > 0;
-            }
-        }
     }
 }

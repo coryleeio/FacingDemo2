@@ -164,12 +164,15 @@ namespace Gamepackage
 
         private void ReturnToPool(SpriteWithMapPosition sprite)
         {
-            if (BoundingBox.Contains(sprite.Position))
+            if(sprite != null)
             {
-                AllOverlayTilesInUse[sprite.Position.X, sprite.Position.Y].Remove(sprite.SpriteRenderer);
+                if (BoundingBox.Contains(sprite.Position))
+                {
+                    AllOverlayTilesInUse[sprite.Position.X, sprite.Position.Y].Remove(sprite.SpriteRenderer);
+                }
+                _pool.CheckIn(sprite);
+                sprite.SpriteRenderer.sortingOrder = 0;
             }
-            _pool.CheckIn(sprite);
-            sprite.SpriteRenderer.sortingOrder = 0;
         }
 
         public void Clear()

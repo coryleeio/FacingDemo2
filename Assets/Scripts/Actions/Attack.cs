@@ -84,9 +84,9 @@ namespace Gamepackage
                 var itemBeingLaunched = GetItemBeingLaunched();
                 if (itemBeingLaunched.NumberOfItems == 0)
                 {
-                    if (CalculatedAttack.Source.Inventory.GetItemBySlot(ItemSlot.MainHand) == itemBeingLaunched)
+                    if (InventoryUtil.GetItemBySlot(CalculatedAttack.Source, ItemSlot.MainHand) == itemBeingLaunched)
                     {
-                        CalculatedAttack.Source.Inventory.UnequipItemInSlot(ItemSlot.MainHand);
+                        InventoryUtil.UnequipItemInSlot(CalculatedAttack.Source, ItemSlot.MainHand);
                     }
                 }
             }
@@ -96,7 +96,7 @@ namespace Gamepackage
         {
             if (NextGridPosition != null && ProjectileAppearance.OnLeaveDefinition != null)
             {
-                ProjectileAppearance.OnLeaveDefinition.Instantiate(NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView);
+                ViewFactory.InstantiateProjectileAppearance(ProjectileAppearance.OnLeaveDefinition, NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView);
             }
             ElapsedTime = 0.0f;
             LerpCurrentPosition = currentPosition;
@@ -158,7 +158,7 @@ namespace Gamepackage
 
                 if (ProjectileAppearance.OnEnterDefinition != null)
                 {
-                    ProjectileAppearance.OnEnterDefinition.Instantiate(NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView);
+                    ViewFactory.InstantiateProjectileAppearance(ProjectileAppearance.OnEnterDefinition, NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView);
                 }
 
                 foreach (var attackStateChanges in CalculatedAttack.AttackStateChanges)
@@ -167,7 +167,7 @@ namespace Gamepackage
                     {
                         if (ProjectileAppearance.OnHitDefinition != null)
                         {
-                            ProjectileAppearance.OnHitDefinition.Instantiate(NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView == null ? null : ProjectileView.gameObject);
+                            ViewFactory.InstantiateProjectileAppearance(ProjectileAppearance.OnHitDefinition, NextGridPosition, CalculatedAttack.DirectionOfAttack, ProjectileView == null ? null : ProjectileView.gameObject);
                         }
                         CombatUtil.ApplyEntityStateChange(attackStateChanges);
                     }
@@ -232,11 +232,11 @@ namespace Gamepackage
         {
             if (ProjectileAppearance.OnSwingDefinition != null)
             {
-                ProjectileAppearance.OnSwingDefinition.Instantiate(CalculatedAttack.Source.Position, CalculatedAttack.DirectionOfAttack, ProjectileView);
+                ViewFactory.InstantiateProjectileAppearance(ProjectileAppearance.OnSwingDefinition, CalculatedAttack.Source.Position, CalculatedAttack.DirectionOfAttack, ProjectileView);
             }
             if (ProjectileAppearance.ProjectileDefinition != null)
             {
-                ProjectileView = ProjectileAppearance.ProjectileDefinition.Instantiate(CalculatedAttack.Source.Position, CalculatedAttack.DirectionOfAttack, ProjectileView);
+                ProjectileView = ViewFactory.InstantiateProjectileAppearance(ProjectileAppearance.ProjectileDefinition, CalculatedAttack.Source.Position, CalculatedAttack.DirectionOfAttack, ProjectileView);
             }
         }
     }

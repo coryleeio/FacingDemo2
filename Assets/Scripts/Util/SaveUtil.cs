@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -7,6 +8,11 @@ namespace Gamepackage
     {
         public static void NewGame()
         {
+            var gameSceneRoot = GameObject.FindObjectOfType<GameSceneRoot>();
+            if (gameSceneRoot != null)
+            {
+                gameSceneRoot.Stopped = true;
+            }
             Clear();
             Context.Game = new Game
             {
@@ -21,6 +27,11 @@ namespace Gamepackage
 
         public static void Clear()
         {
+            var gameSceneRoot = GameObject.FindObjectOfType<GameSceneRoot>();
+            if (gameSceneRoot != null)
+            {
+                gameSceneRoot.Stopped = true;
+            }
             Context.EntitySystem.Clear();
             Context.Game = null;
         }

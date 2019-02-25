@@ -28,7 +28,7 @@ namespace Gamepackage
             base.Enter();
             Assert.IsTrue(Index != -1);
             var oldIndex = Source.Inventory.Items.IndexOf(Item);
-            Source.Inventory.SwapItemPosition(Item, oldIndex, Index);
+            InventoryUtil.SwapItemPosition(Source, Item, oldIndex, Index);
             Context.UIController.Refresh();
         }
     }

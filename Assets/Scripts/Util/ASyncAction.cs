@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public abstract class ASyncAction : IStateMachineState
+    public abstract class ASyncAction
     {
         public bool HasStarted = false;
         public bool Completed = false;

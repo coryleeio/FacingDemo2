@@ -117,29 +117,5 @@ namespace Gamepackage
             }
             return total;
         }
-
-        public void Rewire()
-        {
-            if (Trigger != null)
-            {
-                Trigger.Rewire(this);
-            }
-            if (Body != null)
-            {
-                Body.Rewire(this);
-            }
-            if (Inventory != null)
-            {
-                Inventory.Rewire(this);
-            }
-            if (View != null)
-            {
-                View.Rewire(this);
-            }
-            if (Behaviour != null)
-            {
-                Behaviour.Rewire(this);
-            }
-        }
     }
 }

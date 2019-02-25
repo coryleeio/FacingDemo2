@@ -22,7 +22,6 @@ namespace Gamepackage
             {
                 level.Entitys.Add(entity);
             }
-            entity.Rewire();
             level.IndexEntity(entity, entity.Position);
             level.UpdatePathfindingForEntity(entity);
         }

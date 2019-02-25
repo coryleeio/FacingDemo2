@@ -216,7 +216,7 @@ namespace Gamepackage
                 var itemCopy = ItemFactory.Build(groundDropStateChange.UniqueIdentifier);
                 itemCopy.NumberOfItems = 1;
 
-                groundDrop.Inventory.AddItem(itemCopy);
+                InventoryUtil.AddItem(groundDrop, itemCopy);
                 ViewFactory.RebuildView(groundDrop);
             }
         }
@@ -240,7 +240,7 @@ namespace Gamepackage
                     itemStateChange.Item.NumberOfItems -= itemStateChange.NumberOfItemsConsumed;
                     if (itemStateChange.Item.NumberOfItems <= 0)
                     {
-                        itemStateChange.Owner.Inventory.RemoveWholeItemStack(itemStateChange.Item);
+                        InventoryUtil.RemoveWholeItemStack(itemStateChange.Owner, itemStateChange.Item);
                     }
                 }
             }
@@ -538,7 +538,7 @@ namespace Gamepackage
                     if ((result.AppliedEffects.Count > 0 || result.HealthChange > 0) && result.Target.Behaviour != null && result.Source != null)
                     {
                         var level = Context.Game.CurrentLevel;
-                        result.Target.Behaviour.ShoutAboutHostileTarget(level, result.Source, result.Target.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS));
+                        AIUtil.ShoutAboutHostileTarget(result.Target, level, result.Source, result.Target.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS));
                         if (result.Target.Behaviour.LastKnownTargetPosition == null)
                         {
                             result.Target.Behaviour.LastKnownTargetPosition = new Point(result.Source.Position);
@@ -549,7 +549,6 @@ namespace Gamepackage
 
                 if (target.Body.CurrentHealth <= 0)
                 {
-
                     if (target.View != null && target.View.SkeletonAnimation != null)
                     {
                         var skeletonAnimation = target.View.SkeletonAnimation;
@@ -593,7 +592,7 @@ namespace Gamepackage
 
                     }
 
-                    if (target.Inventory.HasAnyItems)
+                    if (InventoryUtil.HasAnyItems(target))
                     {
                         target.View.ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CORPSE;
                         ViewFactory.RebuildView(target, false);
@@ -772,7 +771,7 @@ namespace Gamepackage
                 }
                 if (item.DestroyWhenAllChargesAreConsumed)
                 {
-                    owner.Inventory.RemoveWholeItemStack(item);
+                    InventoryUtil.RemoveWholeItemStack(owner, item);
                     Context.UIController.Refresh();
                     ViewFactory.RebuildView(owner);
                 }
@@ -786,7 +785,7 @@ namespace Gamepackage
                 return false;
             }
             var ammo = AmmoResolve(source, attackType, item);
-            var hasBody = source.Body != null && source.Body.CanAttackInMelee;
+            var hasBody = source.Body != null && CanAttackInMeleeWithoutWeapon(source);
             if (attackType == AttackType.Melee)
             {
                 var hasWeapon = hasBody && source.Inventory != null && item != null && item.CanBeUsedInAttackType(AttackType.Melee);
@@ -826,7 +825,7 @@ namespace Gamepackage
             {
                 return null;
             }
-            return source.Inventory.GetItemBySlot(ItemSlot.Ammo);
+            return InventoryUtil.GetItemBySlot(source, ItemSlot.Ammo);
         }
 
         public static List<Point> PointsInRange(Grid<Tile> grid, Point position, int range, AttackTargetingType attackTargetingType)
@@ -891,6 +890,11 @@ namespace Gamepackage
             return true;
         }
 
+        public static bool CanAttackInMeleeWithoutWeapon(Entity source)
+        {
+             return source.Body != null && source.Body.MeleeAttackTypeParameters != null && source.Body.MeleeAttackTypeParameters.AttackParameters.Count > 0;
+        }
+
         public static List<Point> PointsInExplosionRange(ExplosionParameters ExplosionParameters, Point placementPosition)
         {
             List<Point> outputRange = new List<Point>();
@@ -906,7 +910,7 @@ namespace Gamepackage
             AttackTypeParameters attackTypeParameters = null;
             var ammo = CombatUtil.AmmoResolve(source, attackType, item);
             var hasAmmoOrDoesntNeedIt = attackType != AttackType.Ranged || ammo != null;
-            if ((item == null || !item.CanBeUsedInAttackType(AttackType.Melee) && source.Body.CanAttackInMelee))
+            if ((item == null || !item.CanBeUsedInAttackType(AttackType.Melee) && CanAttackInMeleeWithoutWeapon(source)))
             {
                 attackTypeParameters = source.Body.MeleeAttackTypeParameters;
             }

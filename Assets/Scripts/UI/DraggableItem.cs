@@ -45,7 +45,7 @@ namespace Gamepackage
             var player = Context.Game.CurrentLevel.Player;
 
 
-            var isWearingItem = player.Inventory.IsWearing(Item);
+            var isWearingItem = InventoryUtil.IsWearing(player, Item);
             var hasItemInInventory = player.Inventory.Items.Contains(Item);
             var isPickingUpItem = !isWearingItem && !hasItemInInventory;
 
@@ -62,7 +62,7 @@ namespace Gamepackage
                         Source = Source,
                         Item = Item
                     };
-                    action.Slot = Source.Inventory.GetItemSlotOfEquippedItem(action.Item);
+                    action.Slot = InventoryUtil.GetItemSlotOfEquippedItem(Source, action.Item);
                     Context.PlayerController.ActionList.Enqueue(action);
                     Context.UIController.Refresh();
                 }

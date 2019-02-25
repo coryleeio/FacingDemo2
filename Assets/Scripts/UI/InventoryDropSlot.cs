@@ -16,7 +16,7 @@ namespace Gamepackage
             DraggableItem.CurrentDraggable.transform.SetParent(this.transform);
             if (Entity == DraggableItem.CurrentDraggable.Source)
             {
-                if (Entity.Inventory.IsWearing(DraggableItem.CurrentDraggable.Item))
+                if (InventoryUtil.IsWearing(Entity, DraggableItem.CurrentDraggable.Item))
                 {
                     // Unequip item and move it to slot in inventory
                     // this is not a free action so we send it to the player controller
@@ -26,7 +26,7 @@ namespace Gamepackage
                         Item = DraggableItem.CurrentDraggable.Item,
                         Index = Index
                     };
-                    action.Slot = Entity.Inventory.GetItemSlotOfEquippedItem(action.Item);
+                    action.Slot = InventoryUtil.GetItemSlotOfEquippedItem(Entity, action.Item);
                     Context.PlayerController.ActionList.Enqueue(action);
                 }
                 else

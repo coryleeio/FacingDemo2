@@ -9,37 +9,5 @@ namespace Gamepackage
         public bool InheritRotation = false;
         public ProjectileBehaviour ProjectileBehaviour;
         public float PerTileTravelTime = 0.5f;
-
-        public ProjectileAppearanceDefinition() { }
-
-        public GameObject Instantiate(Point position, Direction direction, GameObject referenceObject)
-        {
-            if(Prefab == null)
-            {
-                return null;
-            }
-            var prefabInstance = GameObject.Instantiate<GameObject>(Prefab);
-            if(position != null)
-            {
-                prefabInstance.transform.position = MathUtil.MapToWorld(position);
-            }
-            if (ProjectileBehaviour == ProjectileBehaviour.Spin)
-            {
-                prefabInstance.AddComponent<ProjectileRotator>();
-            }
-            else if (ProjectileBehaviour == ProjectileBehaviour.FaceDirection)
-            {
-                prefabInstance.transform.eulerAngles = MathUtil.GetProjectileRotation(direction);
-            }
-            if(InheritRotation)
-            {
-                prefabInstance.transform.localRotation = referenceObject.transform.localRotation;
-            }
-            if (Lifetime > 0.0f)
-            {
-                prefabInstance.AddComponent<Expires>().Lifetime = Lifetime;
-            }
-            return prefabInstance;
-        }
     }
 }

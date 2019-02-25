@@ -55,22 +55,22 @@ namespace Gamepackage
                     ActingTeam = Team.PLAYER,
                     OriginalTeam = Team.PLAYER,
                 };
-                entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_ROBE_OF_WONDERS));
-                entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_SANDALS));
-                entity.Inventory.EquipItem(ItemFactory.Build(UniqueIdentifier.ITEM_SHORTBOW));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_LIGHTNING));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_STAFF_OF_FIREBALLS));
-                entity.Inventory.AddItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
-                entity.Inventory.AddItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
-                entity.Inventory.AddItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
-                entity.Inventory.AddItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_MADNESS));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_CHARM));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_DOMINATION));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_SHIELD_OF_AMALURE));
+                InventoryUtil.EquipItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_ROBE_OF_WONDERS));
+                InventoryUtil.EquipItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_SANDALS));
+                InventoryUtil.EquipItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_SHORTBOW));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_LIGHTNING));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_STAFF_OF_FIREBALLS));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons)));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_LUCKY_COIN));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_MADNESS));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_CHARM));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_WAND_OF_DOMINATION));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_SHIELD_OF_AMALURE));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_MASLOW)
             {
@@ -118,7 +118,7 @@ namespace Gamepackage
                     ActingTeam = Team.Enemy,
                     OriginalTeam = Team.Enemy,
                 };
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_ARROW));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_SKELETON)
             {
@@ -147,7 +147,7 @@ namespace Gamepackage
                 itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
                 foreach (var itemId in itemIds)
                 {
-                    entity.Inventory.EquipItem(ItemFactory.Build(itemId));
+                    InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
                 }
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_GHOST)
@@ -178,7 +178,7 @@ namespace Gamepackage
                 itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
                 foreach (var itemId in itemIds)
                 {
-                    entity.Inventory.EquipItem(ItemFactory.Build(itemId));
+                    InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
                 }
             }
 
@@ -209,7 +209,7 @@ namespace Gamepackage
                 itemIds.Add(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.HumanoidWeapons));
                 foreach (var itemId in itemIds)
                 {
-                    entity.Inventory.EquipItem(ItemFactory.Build(itemId));
+                    InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
                 }
             }
 
@@ -236,8 +236,8 @@ namespace Gamepackage
                     OriginalTeam = Team.Enemy,
                     AI = AIType.DumbMelee,
                 };
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_LONGSWORD));
-                entity.Inventory.AddItem(ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_LONGSWORD));
+                InventoryUtil.AddItem(entity, ItemFactory.Build(UniqueIdentifier.ITEM_ANTIDOTE));
             }
             else if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_STAIRS_UP)
             {
@@ -293,7 +293,6 @@ namespace Gamepackage
                 Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.MAX_HEALTH), "Entities must have a value for MAX_HEALTH.");
                 Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.SHOUT_RADIUS), "Entities must have a value for SHOUT_RADIUS.");
                 Assert.IsTrue(entity.Body.Attributes.ContainsKey(Attributes.VISION_RADIUS), "Entities must have a value for VISION_RADIUS.");
-                entity.Body.entity = entity; // Needed for the recursive calculation.
                 entity.Body.CurrentHealth = entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
             }
 
@@ -301,8 +300,8 @@ namespace Gamepackage
 
             if (entity.Inventory != null)
             {
-                var mainHand = entity.Inventory.GetItemBySlot(ItemSlot.MainHand);
-                var ammo = entity.Inventory.GetItemBySlot(ItemSlot.Ammo);
+                var mainHand = InventoryUtil.GetItemBySlot(entity, ItemSlot.MainHand);
+                var ammo = InventoryUtil.GetItemBySlot(entity, ItemSlot.Ammo);
                 if (mainHand != null)
                 {
                     if (mainHand.CanBeUsedInAttackType(AttackType.Ranged) && mainHand.AmmoType == AmmoType.Arrow && ammo == null)
@@ -310,7 +309,7 @@ namespace Gamepackage
                         // If we've got a ranged weapon equipped that is a bow, 
                         // but no arrows equipped, go ahead and spawn some default arrows
                         // and equip them
-                        entity.Inventory.EquipItem(ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.RandomArrows)));
+                        InventoryUtil.EquipItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<UniqueIdentifier>(Tables.RandomArrows)));
                     }
                 }
             }

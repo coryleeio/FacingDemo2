@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public class Trigger : Component
+    public class Trigger
     {
         public List<Effect> Effects = new List<Effect>();
         public List<Point> Offsets = new List<Point>(0);

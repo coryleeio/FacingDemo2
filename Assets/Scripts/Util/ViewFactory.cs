@@ -164,7 +164,7 @@ namespace Gamepackage
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CORPSE)
             {
-                var relevantItems = entity.Inventory.ChooseRandomItemsFromInventory(3);
+                var relevantItems = InventoryUtil.ChooseRandomItemsFromInventory(entity, 3);
                 foreach (var item in relevantItems)
                 {
                     var childGo = new GameObject();
@@ -200,6 +200,36 @@ namespace Gamepackage
                     }
                 }
             }
+        }
+
+        public static GameObject InstantiateProjectileAppearance(ProjectileAppearanceDefinition def, Point position, Direction direction, GameObject referenceObject)
+        {
+            if (def.Prefab == null)
+            {
+                return null;
+            }
+            var prefabInstance = GameObject.Instantiate<GameObject>(def.Prefab);
+            if (position != null)
+            {
+                prefabInstance.transform.position = MathUtil.MapToWorld(position);
+            }
+            if (def.ProjectileBehaviour == ProjectileBehaviour.Spin)
+            {
+                prefabInstance.AddComponent<ProjectileRotator>();
+            }
+            else if (def.ProjectileBehaviour == ProjectileBehaviour.FaceDirection)
+            {
+                prefabInstance.transform.eulerAngles = MathUtil.GetProjectileRotation(direction);
+            }
+            if (def.InheritRotation)
+            {
+                prefabInstance.transform.localRotation = referenceObject.transform.localRotation;
+            }
+            if (def.Lifetime > 0.0f)
+            {
+                prefabInstance.AddComponent<Expires>().Lifetime = def.Lifetime;
+            }
+            return prefabInstance;
         }
 
         private static GameObject BuildDefaultGameObject(Entity entity)

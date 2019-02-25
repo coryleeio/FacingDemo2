@@ -23,11 +23,6 @@ namespace Gamepackage
             }
         }
 
-        public Game()
-        {
-
-        }
-
         public Dungeon Dungeon;
 
         [JsonIgnore]

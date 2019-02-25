@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gamepackage
 {
-    public class View : Component
+    public class View
     {
         public ViewType ViewType;
         public UniqueIdentifier ViewPrototypeUniqueIdentifier;

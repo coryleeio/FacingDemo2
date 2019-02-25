@@ -10,14 +10,10 @@
         public static SpriteSortingSystem SpriteSortingSystem = new SpriteSortingSystem();
         public static OverlaySystem OverlaySystem = new OverlaySystem();
         public static PathFinder PathFinder = new PathFinder();
-        public static GameScene GameScene = new GameScene();
-        public static LoadingScene LoadingScene = new LoadingScene();
-        public static MainMenuScene MainMenuScene = new MainMenuScene();
         public static FlowController FlowSystem = new FlowController();
         public static PlayerController PlayerController = new PlayerController();
 
-        public static Application Application;
         public static UIController UIController;
-        public static MainMenu MainMenu;
+        public static GameSceneRoot GameSceneRoot;
     }
 }

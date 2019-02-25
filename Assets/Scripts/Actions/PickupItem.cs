@@ -38,15 +38,15 @@ namespace Gamepackage
 
             var source = Source;
             var target = Targets[0];
-            target.Inventory.RemoveWholeItemStack(Item);
+            InventoryUtil.RemoveWholeItemStack(target, Item);
             ViewFactory.RebuildView(target);
             if(Index == -1)
             {
-               source.Inventory.AddItem(Item);
+                InventoryUtil.AddItem(source, Item);
             }
             else
             {
-                source.Inventory.AddItem(Item, Index);
+                InventoryUtil.AddItem(source, Item, Index);
             }
             if(source.IsPlayer)
             {

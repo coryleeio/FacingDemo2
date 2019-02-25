@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Gamepackage
@@ -12,7 +13,7 @@ namespace Gamepackage
 
             BuildButton("main.menu.buttons.new.game".Localize(), () => {
                 SaveUtil.Clear();
-                Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
+                SceneManager.LoadScene((int)Scenes.Loading);
             });
 
             if(SaveUtil.HasGameToLoad(SaveUtil.GetDefaultSaveLocation()))
@@ -20,7 +21,7 @@ namespace Gamepackage
                 BuildButton("main.menu.buttons.continue".Localize(), () => {
 
                     SaveUtil.LoadGame();
-                    Context.Application.StateMachine.ChangeState(ApplicationStateMachine.LoadingResourcesState);
+                    SceneManager.LoadScene((int)Scenes.Loading);
                 });
             }
 
@@ -28,7 +29,7 @@ namespace Gamepackage
                 if (UnityEngine.Application.isEditor)
                 {
                     SaveUtil.Clear();
-                    Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+                    SceneManager.LoadScene((int)Scenes.MainMenu);
                 }
                 else
                 {

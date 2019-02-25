@@ -1,17 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Gamepackage
 {
-    public class MainMenuScene : Scene
+    public class MainMenuRoot : MonoBehaviour
     {
-        public Logger Logger { get; set; }
-
-        public MainMenuScene()
-        {
-
-        }
-
-        protected override void BuildScene()
+        public void Start()
         {
             GameObject obj = new GameObject();
             obj.tag = "MainCamera";
@@ -26,6 +19,21 @@ namespace Gamepackage
             var EventSystemPrefab = Resources.Load<GameObject>("UI/EventSystem");
             var eventSYstem = GameObject.Instantiate(EventSystemPrefab);
             eventSYstem.name = "EventSystem";
+
+            var MainMenuPrefab = Resources.Load<GameObject>("UI/MainMenu");
+            var MainMenu = GameObject.Instantiate(MainMenuPrefab);
+            MainMenu.name = "MainMenu";
+            var mainMenuInstance = MainMenu.GetComponent<MainMenu>();
+        }
+
+        public void Update()
+        {
+            
+        }
+
+        public void OnDisable()
+        {
+            Context.PathFinder.Cleanup();
         }
     }
 }

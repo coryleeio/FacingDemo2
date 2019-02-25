@@ -47,7 +47,7 @@ namespace Gamepackage
                         {
                             entity.Behaviour.NextAction = null;
                             entity.Behaviour.IsThinking = true;
-                            entity.Behaviour.FigureOutNextAction();
+                            AIUtil.FigureOutNextAction(entity);
                         }
                         if (!entity.Behaviour.IsDoneThisTurn)
                         {

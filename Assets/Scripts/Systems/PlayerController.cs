@@ -162,7 +162,11 @@ namespace Gamepackage
 
         public void Process()
         {
-
+            if(Context.UIController == null || Context.UIController.EscapeMenu == null)
+            {
+                // bail out if we are changing scenes
+                return;
+            }
             bool isAcceptingClickInput = !Context.UIController.EscapeMenu.isActiveAndEnabled &&
                 !Context.UIController.LootWindow.isActiveAndEnabled &&
                 !Context.UIController.InventoryWindow.isActiveAndEnabled;
@@ -170,7 +174,7 @@ namespace Gamepackage
             var game = Context.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
-            var item = player.Inventory.GetItemBySlot(ItemSlot.MainHand);
+            var item = InventoryUtil.GetItemBySlot(player, ItemSlot.MainHand);
             var meleeAttackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, AttackType.Melee, item);
 
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);

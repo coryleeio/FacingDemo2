@@ -26,7 +26,7 @@ namespace Gamepackage
             {
                 return false;
             }
-            var item = outcome.Target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
+            var item = InventoryUtil.ItemByIdentifier(outcome.Target, UniqueIdentifier.ITEM_LUCKY_COIN);
             return item != null;
         }
 
@@ -36,7 +36,7 @@ namespace Gamepackage
             var isLethal = target.Body.CurrentHealth - outcome.HealthChange <= 0;
             if (isLethal && MathUtil.ChanceToOccur(100))
             {
-                var item = target.Inventory.ItemByIdentifier(UniqueIdentifier.ITEM_LUCKY_COIN);
+                var item = InventoryUtil.ItemByIdentifier(target, UniqueIdentifier.ITEM_LUCKY_COIN);
 
                 CombatUtil.ShortCiruitAttack(outcome);
                 outcome.FloatingTextMessage.AddLast(new FloatingTextMessage()

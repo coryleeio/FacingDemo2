@@ -26,7 +26,7 @@ namespace Gamepackage
             Assert.IsNotNull(Source);
             Assert.IsNotNull(Item);
             Assert.IsTrue(Slot != ItemSlot.None);
-            Source.Inventory.UnequipItemInSlot(Slot, Index);
+            InventoryUtil.UnequipItemInSlot(Source, Slot, Index);
             Context.UIController.Refresh();
         }
     }

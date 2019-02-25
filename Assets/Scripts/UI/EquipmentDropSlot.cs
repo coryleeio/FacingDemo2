@@ -32,7 +32,7 @@ namespace Gamepackage
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            var item = Player.Inventory.GetItemBySlot(Slot);
+            var item = InventoryUtil.GetItemBySlot(Player, Slot);
             if(item == null)
             {
                 Context.UIController.Tooltip.Hover(this.gameObject, StringUtil.DisplayValueForSlot(Slot));

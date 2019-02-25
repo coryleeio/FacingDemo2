@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Gamepackage
 {
@@ -104,7 +105,12 @@ namespace Gamepackage
                 {
                     Context.Game.FurthestLevelReached = levelId;
                 }
-                Context.Application.StateMachine.ChangeState(ApplicationStateMachine.GamePlayState);
+                var gameSceneRoot = GameObject.FindObjectOfType<GameSceneRoot>();
+                if (gameSceneRoot != null)
+                {
+                    gameSceneRoot.Stopped = true;
+                }
+                SceneManager.LoadScene((int) Scenes.Game);
             }
             return outcome;
         }

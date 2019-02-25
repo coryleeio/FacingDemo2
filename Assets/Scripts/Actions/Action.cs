@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public abstract class Action : IStateMachineState
+    public abstract class Action
     {
         public bool Started = false;
         public bool Done = false;

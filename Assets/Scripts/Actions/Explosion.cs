@@ -49,7 +49,7 @@ namespace Gamepackage
 
             if (ExplosionParameters.ProjectileAppearance != null && ExplosionParameters.ProjectileAppearance.OnSwingDefinition != null)
             {
-                ExplosionParameters.ProjectileAppearance.OnSwingDefinition.Instantiate(CalculatedAttack.EndpointOfAttack, Direction.SouthEast, null);
+                ViewFactory.InstantiateProjectileAppearance(ExplosionParameters.ProjectileAppearance.OnSwingDefinition, CalculatedAttack.EndpointOfAttack, Direction.SouthEast, null);
             }
         }
 
@@ -78,7 +78,7 @@ namespace Gamepackage
                     {
                         if (ExplosionProjectileAppearance != null && ExplosionProjectileAppearance.OnEnterDefinition != null)
                         {
-                            ExplosionProjectileAppearance.OnEnterDefinition.Instantiate(point, Direction.SouthEast, null);
+                            ViewFactory.InstantiateProjectileAppearance(ExplosionProjectileAppearance.OnEnterDefinition, point, Direction.SouthEast, null);
                         }
                     }
 
@@ -89,7 +89,7 @@ namespace Gamepackage
                         {
                             if (ExplosionProjectileAppearance != null && ExplosionProjectileAppearance.OnLeaveDefinition != null)
                             {
-                                ExplosionProjectileAppearance.OnLeaveDefinition.Instantiate(point, Direction.SouthEast, null);
+                                ViewFactory.InstantiateProjectileAppearance(ExplosionProjectileAppearance.OnLeaveDefinition, point, Direction.SouthEast, null);
                             }
                         }
                     }

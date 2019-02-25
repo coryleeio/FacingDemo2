@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Gamepackage
 {
@@ -8,7 +9,7 @@ namespace Gamepackage
     {
         public void RestartGame()
         {
-            Context.Application.StateMachine.ChangeState(ApplicationStateMachine.MainMenuState);
+            SceneManager.LoadScene((int)Scenes.MainMenu);
         }
 
         public override void Hide()
