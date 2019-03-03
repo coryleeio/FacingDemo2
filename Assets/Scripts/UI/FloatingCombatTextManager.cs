@@ -5,17 +5,22 @@ namespace Gamepackage
 {
     public class FloatingCombatTextManager : UIComponent
     {
-        public void ShowCombatText(string text, Color color, int size, Vector3 worldPos)
+        public static float LeftRightOffset = 0.15f;
+        public void ShowCombatText(string text, Color color, int size, Vector3 worldPos, bool AllowLeftRight)
         {
-            var vec2 = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPos);
-            var prefab = Resources.Load<FloatingText>("UI/FloatingCombatText");
+            LeftRightOffset = LeftRightOffset * -1;
+            var prefab = Resources.Load<FloatingText>("Prefabs/UI/FloatingCombatText");
             var floatingTextObject = GameObject.Instantiate<FloatingText>(prefab);
+            if(AllowLeftRight)
+            {
+                floatingTextObject.LeftRightOffset = LeftRightOffset;
+            }
             var textComponent = floatingTextObject.GetComponent<Text>();
             textComponent.text = text;
             textComponent.fontSize = size;
             textComponent.color = color;
-            textComponent.rectTransform.SetParent(this.transform, true);
-            textComponent.rectTransform.position = vec2;
+            textComponent.transform.SetParent(this.transform, false);
+            textComponent.transform.position = worldPos;
         }
 
         public override void Hide()

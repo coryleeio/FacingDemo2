@@ -424,7 +424,7 @@ namespace Gamepackage
             }
             foreach (var msg in result.FloatingTextMessage)
             {
-                Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(result.Target.Position));
+                Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(result.Target.Position), msg.AllowLeftRightDrift);
             }
             // Because in some circumstances this can be caused twice, clear the buffer.
             result.LogMessages.Clear();
@@ -485,7 +485,10 @@ namespace Gamepackage
                 {
                     result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, result.HealthChange < 0 ? result.HealthChange * -1 : result.HealthChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                     target.Body.CurrentHealth = target.Body.CurrentHealth - result.HealthChange;
-
+                    if(target.View != null && target.View.HealthBar != null)
+                    {
+                        target.View.HealthBar.UpdateHealth(target.Body.CurrentHealth, target.CalculateValueOfAttribute(Attributes.MAX_HEALTH));
+                    }
                     var healthChangeDisplay = result.HealthChange > 0 ? "-" : "+";
                     healthChangeDisplay += Math.Abs(result.HealthChange).ToString();
                     Color healthChangeColor = Color.black;
@@ -522,6 +525,7 @@ namespace Gamepackage
                         Message = string.Format("{0}", healthChangeDisplay),
                         Color = healthChangeColor,
                         target = target,
+                        AllowLeftRightDrift = true,
                     });
 
                     // Go ahead and show messages so that onApply messages appear in the correct order
@@ -561,6 +565,7 @@ namespace Gamepackage
                         Message = string.Format("Dead!", result.HealthChange),
                         Color = Color.black,
                         target = target,
+                        AllowLeftRightDrift = false,
                     });
                     result.LogMessages.AddLast(string.Format("{0} has been slain!", targetName));
                     target.Name = string.Format("( Corpse ) {0}", target.Name);
@@ -588,8 +593,11 @@ namespace Gamepackage
 
                     if (target.View.ViewGameObject != null)
                     {
-                        target.View.ViewGameObject.AddComponent<DeathAnimation>();
-
+                        var deathAnim = target.View.ViewGameObject.AddComponent<DeathAnimation>();
+                        if(target.View.HealthBar != null)
+                        {
+                            GameObject.Destroy(target.View.HealthBar.gameObject);
+                        }
                     }
 
                     if (InventoryUtil.HasAnyItems(target))

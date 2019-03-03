@@ -16,7 +16,7 @@ namespace Gamepackage
 
         private static Sprite MissingSpriteMaterial()
         {
-            return Resources.Load<Sprite>("Missing");
+            return Resources.Load<Sprite>("SpritesManual/Missing");
         }
 
         public static  void RebuildView(Entity entity, bool DestroyOldView = true)
@@ -48,35 +48,36 @@ namespace Gamepackage
 
             if (entity.IsCombatant && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
             {
-                var healthbarPrefab = Resources.Load<GameObject>("UI/Healthbar/Healthbar");
+                var healthbarPrefab = Resources.Load<GameObject>("Prefabs/UI/Healthbar");
                 var healthbarGameObject = GameObject.Instantiate(healthbarPrefab);
-                healthbarGameObject.transform.SetParent(go.transform);
-                healthbarGameObject.transform.localPosition = new Vector3(0, 0.35f, 0);
-                healthbarGameObject.GetComponent<HealthBar>().Entity = entity;
+                healthbarGameObject.transform.SetParent(Context.UIController.gameObject.transform, false);
+                var healthBarComponent = healthbarGameObject.GetComponent<HealthBar>();
+                healthBarComponent.Entity = entity;
+                entity.View.HealthBar = healthBarComponent;
             }
 
             if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("RedMarker");
+                spriteRenderer.sprite = Resources.Load<Sprite>("SpritesManual/RedMarker");
                 spriteRenderer.material = defaultMaterial;
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_GREEN)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("GreenMarker");
+                spriteRenderer.sprite = Resources.Load<Sprite>("SpritesManual/GreenMarker");
                 spriteRenderer.material = defaultMaterial;
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_YELLOW)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("YellowMarker");
+                spriteRenderer.sprite = Resources.Load<Sprite>("SpritesManual/YellowMarker");
                 spriteRenderer.material = defaultMaterial;
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_BLUE)
             {
                 var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("BlueMarker");
+                spriteRenderer.sprite = Resources.Load<Sprite>("SpritesManual/BlueMarker");
                 spriteRenderer.material = defaultMaterial;
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CHESS_PIECE)

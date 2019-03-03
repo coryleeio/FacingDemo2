@@ -44,6 +44,7 @@ namespace Gamepackage
                     Message = "effect.lucky.coin.lifesave.floating.message".Localize(),
                     Color = Color.green,
                     target = target,
+                    AllowLeftRightDrift = false,
                 });
                 outcome.LateMessages.AddLast("effect.lucky.coin.lifesave.block.attack".Localize());
 

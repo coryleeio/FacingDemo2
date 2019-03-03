@@ -14,6 +14,6 @@
         public static PlayerController PlayerController = new PlayerController();
 
         public static UIController UIController;
-        public static GameSceneRoot GameSceneRoot;
+        public static GameSceneController GameSceneRoot;
     }
 }

@@ -47,14 +47,14 @@ namespace Gamepackage
             };
             if (_squareSprite == null)
             {
-                _squareSprite = Resources.Load<Sprite>("Overlay/Square");
+                _squareSprite = Resources.Load<Sprite>("SpritesManual/Square");
             }
             if (_circleSprite == null)
             {
-                _circleSprite = Resources.Load<Sprite>("Overlay/Circle");
+                _circleSprite = Resources.Load<Sprite>("SpritesManual/Circle");
             }
             _overlayFolder = GameObjectUtils.MakeFolder("Overlays");
-            _pool = new GameObjectPool<SpriteWithMapPosition>("Overlay/OverlayPrefab", _overlayFolder);
+            _pool = new GameObjectPool<SpriteWithMapPosition>("Prefabs/UI/OverlayPrefab", _overlayFolder);
             AllOverlayTilesInUse = new ListGrid<SpriteRenderer>(mapWidth, mapHeight);
             _pool.Init();
         }

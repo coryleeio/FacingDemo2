@@ -1,5 +1,9 @@
 show.loot.message: "Press <color=yellow>F</color> to loot..."
 
+
+death.notification.you.have.died: You have died!
+death.notification.admit.defeat: Admit defeat
+
 main.menu.buttons.new.game: New Game
 main.menu.buttons.continue: Continue
 main.menu.buttons.quit: Quit

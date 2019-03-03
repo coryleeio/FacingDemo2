@@ -33,12 +33,12 @@ namespace Gamepackage
             FogLayer = LayerMask.GetMask(new string[] { "Fog" });
             if (FogOfWarGameObject == null)
             {
-                var prefab = Resources.Load<GameObject>("Fog/Fog of War");
+                var prefab = Resources.Load<GameObject>("Prefabs/Fog of War");
                 FogOfWarGameObject = GameObject.Instantiate(prefab);
             }
             if (RevealMask == null)
             {
-                RevealMask = Resources.Load<Texture2D>("Fog/CubeMask");
+                RevealMask = Resources.Load<Texture2D>("SpritesManual/CubeMask");
             }
 
             _mapSize = Context.Game.CurrentLevel.BoundingBox.Width;
@@ -293,7 +293,23 @@ namespace Gamepackage
 
                 if (entity.View.ViewGameObject != null)
                 {
-                    entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
+                    if (entity.View != null)
+                    {
+                        entity.View.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
+                        if (entity.View.ViewGameObject != null)
+                        {
+                            entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
+                        }
+                        if (entity.View.HealthBar != null)
+                        {
+                            entity.View.HealthBar.gameObject.SetActive(entity.View.IsVisible); ;
+                        }
+                    }
+
+                    if (entity.View.ViewGameObject != null)
+                    {
+                        entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
+                    }
                 }
             }
 

@@ -22,7 +22,10 @@ namespace Gamepackage
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Context.UIController.ContextMenu.Hide();
+            if(Context.UIController.ContextMenu != null)
+            {
+                Context.UIController.ContextMenu.Hide();
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Gamepackage
 
         [JsonIgnore]
         public List<Entity> Targets = new List<Entity>(0);
-
+        
         public Item Item;
         public int Index = -1;
 

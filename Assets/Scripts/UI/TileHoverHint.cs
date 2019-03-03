@@ -29,7 +29,7 @@ namespace Gamepackage
 
             if (prefab == null)
             {
-                prefab = Resources.Load<GameObject>("UI/TileHoverText");
+                prefab = Resources.Load<GameObject>("Prefabs/UI/TileHoverHintText");
                 for (var i = 0; i < MaxLines; i++)
                 {
                     var lineGameObject = GameObject.Instantiate(prefab);

@@ -114,7 +114,8 @@ namespace Gamepackage
                     }
                 }
             }
-            this.transform.position = eventData.position;
+            this.transform.position = eventData.pointerPressRaycast.gameObject.transform.position;
+            this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
             Show();
         }
 
@@ -129,7 +130,7 @@ namespace Gamepackage
 
         public void BuildButton(string buttonName, UnityAction handler)
         {
-            var _buttonPrefab = Resources.Load<Button>("UI/ButtonPrefab");
+            var _buttonPrefab = Resources.Load<Button>("Prefabs/UI/ContextMenuButton");
             var buttonGameObject = GameObject.Instantiate<Button>(_buttonPrefab);
             buttonGameObject.name = string.Format("{0}Button", buttonName);
             var text = buttonGameObject.GetComponentInChildren<Text>();

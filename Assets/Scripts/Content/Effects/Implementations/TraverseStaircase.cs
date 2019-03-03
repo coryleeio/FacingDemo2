@@ -105,7 +105,7 @@ namespace Gamepackage
                 {
                     Context.Game.FurthestLevelReached = levelId;
                 }
-                var gameSceneRoot = GameObject.FindObjectOfType<GameSceneRoot>();
+                var gameSceneRoot = GameObject.FindObjectOfType<GameSceneController>();
                 if (gameSceneRoot != null)
                 {
                     gameSceneRoot.Stopped = true;

@@ -46,8 +46,8 @@ namespace Gamepackage
 
                 if (levelIndex == 0)
                 {
-                    SpawnConnectedStandardRoomsOnLevel(level, 6);
-                    var numberOfSpawnTablesToSpawn = 5;
+                    SpawnConnectedStandardRoomsOnLevel(level, MathUtil.ChooseRandomIntInRange(4, 11));
+                    var numberOfSpawnTablesToSpawn = MathUtil.ChooseRandomIntInRange(4, 8);
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
                         var entitiesInEncounter = EncounterFactory.Build(UniqueIdentifier.ENCOUNTER_BEE_SWARM);
@@ -56,8 +56,8 @@ namespace Gamepackage
                 }
                 else if (levelIndex == 1)
                 {
-                    SpawnConnectedStandardRoomsOnLevel(level, 4);
-                    var numberOfSpawnTablesToSpawn = 3;
+                    SpawnConnectedStandardRoomsOnLevel(level, MathUtil.ChooseRandomIntInRange(4, 11));
+                    var numberOfSpawnTablesToSpawn = MathUtil.ChooseRandomIntInRange(4, 8);
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
                         var entitiesInEncounter = EncounterFactory.Build(UniqueIdentifier.ENCOUNTER_SKELETONS);

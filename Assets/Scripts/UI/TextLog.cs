@@ -16,7 +16,7 @@ namespace Gamepackage
 
         private Text GetTextComponent()
         {
-            return GetComponentInChildren<Text>();
+            return GetComponentInChildren<Text>(true);
         }
 
         public void UpdateText(string text)

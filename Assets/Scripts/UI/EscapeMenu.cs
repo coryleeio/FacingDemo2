@@ -21,6 +21,7 @@ namespace Gamepackage
         {
             if (!hasInit)
             {
+                SetupClosing();
                 hasInit = true;
                 BuildButton("escape.menu.buttons.return".Localize(), () =>
                 {
@@ -61,6 +62,12 @@ namespace Gamepackage
             GetComponent<EscapeMenu>().gameObject.SetActive(true);
         }
 
+        public void SetupClosing()
+        {
+            var window = this.transform.GetComponentInChildren<BorderedWindow>();
+            window.CloseButton.WireUp(this);
+        }
+
         public override void Refresh()
         {
 
@@ -68,12 +75,12 @@ namespace Gamepackage
 
         public void BuildButton(string buttonName, UnityAction handler)
         {
-            var _buttonPrefab = Resources.Load<Button>("UI/ButtonPrefab");
+            var _buttonPrefab = Resources.Load<Button>("Prefabs/UI/MenuButton");
             var buttonGameObject = GameObject.Instantiate<Button>(_buttonPrefab);
             buttonGameObject.name = string.Format("{0}", buttonName);
             var text = buttonGameObject.GetComponentInChildren<Text>();
             text.text = buttonName;
-            buttonGameObject.gameObject.transform.SetParent(transform.Find("InnerPanel").transform, false);
+            buttonGameObject.gameObject.transform.SetParent(Window.ContentPanel.transform, false);
             buttonGameObject.onClick.AddListener(() =>
             {
                 Hide();

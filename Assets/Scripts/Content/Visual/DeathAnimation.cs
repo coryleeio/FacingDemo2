@@ -11,11 +11,7 @@ namespace Gamepackage
 
         public void Start()
         {
-            var healthBar = GetComponentInChildren<HealthBar>();
-            if (healthBar != null)
-            {
-                healthBar.gameObject.SetActive(false);
-            }
+
             var floating = GetComponentInChildren<Floating>();
 
             if (floating != null)

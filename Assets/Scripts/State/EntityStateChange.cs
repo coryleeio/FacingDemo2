@@ -39,5 +39,6 @@ namespace Gamepackage
         public Color Color;
         public int FontSize = 35;
         public Entity target;
+        public bool AllowLeftRightDrift = true;
     }
 }

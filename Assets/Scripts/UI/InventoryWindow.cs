@@ -9,6 +9,7 @@ namespace Gamepackage
     public class InventoryWindow : UIComponent
     {
         private bool active = false;
+        private bool hasInit = false;
 
         public override void Hide()
         {
@@ -19,6 +20,12 @@ namespace Gamepackage
 
         public override void Show()
         {
+            if(!hasInit)
+            {
+                var window = this.transform.GetComponentInChildren<BorderedWindow>();
+                window.CloseButton.WireUp(this);
+                hasInit = true;
+            }
             active = true;
             GetComponent<InventoryWindow>().gameObject.SetActive(true);
             Context.UIController.PushWindow(this);
@@ -46,7 +53,7 @@ namespace Gamepackage
             {
                 GameObject.Destroy(child.gameObject);
             }
-            var slotPrefab = Resources.Load<InventoryDropSlot>("UI/ItemDropSlot");
+            var slotPrefab = Resources.Load<InventoryDropSlot>("Prefabs/UI/ItemDropSlot");
             for (var i = 0; i < inventory.Items.Count; i++)
             {
                 var slotInstance = GameObject.Instantiate<InventoryDropSlot>(slotPrefab);
@@ -123,7 +130,7 @@ namespace Gamepackage
 
         private static void BuildDraggableItemForPlayerParentToTransform(Item item, Entity player, Transform parentTransform)
         {
-            var draggablePrefab = Resources.Load<DraggableItem>("UI/DraggableItem");
+            var draggablePrefab = Resources.Load<DraggableItem>("Prefabs/UI/DraggableItem");
             var draggableInstance = GameObject.Instantiate<DraggableItem>(draggablePrefab);
             draggableInstance.transform.SetParent(parentTransform, false);
             draggableInstance.Source = player;

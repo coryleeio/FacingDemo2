@@ -5,6 +5,7 @@ namespace Gamepackage
 {
     public class FloatingText : MonoBehaviour
     {
+        public float LeftRightOffset = 0.0f; // set by manager. otherwise floats straight up.
         private float lifetime = 1.0f;
         public float elapsedTime = 0.0f;
         private Color StartingColor = Color.black;
@@ -17,7 +18,7 @@ namespace Gamepackage
         {
             TextComponent = GetComponent<Text>();
             StartingPosition = TextComponent.rectTransform.position;
-            EndingPosition = new Vector3(StartingPosition.x, StartingPosition.y + 15, StartingPosition.z);
+            EndingPosition = new Vector3(StartingPosition.x + LeftRightOffset, StartingPosition.y + 0.5f, StartingPosition.z);
             StartingColor = TextComponent.color;
             EndingColor = new Color(StartingColor.r, StartingColor.g, StartingColor.b, 0.0f);
         }

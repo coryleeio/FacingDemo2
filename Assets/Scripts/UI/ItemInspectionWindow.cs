@@ -8,6 +8,7 @@ namespace Gamepackage
     {
         public List<AttributeRow> attributeRows = new List<AttributeRow>();
         public List<AbilityRow> abilityRows = new List<AbilityRow>();
+        private bool hasInit = false;
 
         public override void Hide()
         {
@@ -17,10 +18,16 @@ namespace Gamepackage
 
         public void ShowFor(Item item)
         {
+            if(!hasInit)
+            {
+                var window = this.transform.GetComponentInChildren<BorderedWindow>();
+                window.CloseButton.WireUp(this);
+                hasInit = true;
+            }
             if(attributeRows.Count == 0)
             {
                 attributeRows.AddRange(gameObject.GetComponentsInChildren<AttributeRow>());
-                Assert.IsTrue(attributeRows.Count == 6);
+                Assert.IsTrue(attributeRows.Count == 4);
             }
             var displayAttributes = StringUtil.GetDisplayAttributesForItem(item);
             for(var i = 0; i < attributeRows.Count; i++)
@@ -61,7 +68,7 @@ namespace Gamepackage
             ShowHideAbilityHeader(displayAbilities.Count > 0);
             SetPicture(item.ItemAppearance.InventorySprite);
 
-            var description = transform.Find("InnerPanel").Find("DescriptionPanel").Find("Text").GetComponent<Text>();
+            var description = Window.ContentPanel.transform.Find("DescriptionPanel").Find("Text").GetComponent<Text>();
             description.text = item.Description;
             Show();
         }
@@ -82,20 +89,25 @@ namespace Gamepackage
 
         private UnityEngine.Transform GetStatsGrid()
         {
-            return GetTopPanel().Find("StatsPanel").Find("StatsGrid");
+            return GetTopPanel().transform.Find("StatsPanel").Find("StatsGrid");
         }
 
         private UnityEngine.Transform GetTopPanel()
         {
-            return transform.Find("InnerPanel").Find("TopPanel");
+            return Window.ContentPanel.transform.Find("TopPanel");
         }
 
         public void ShowHideAbilityHeader(bool show)
         {
-            var header = transform.Find("InnerPanel").Find("TopPanel").Find("StatsPanel").Find("StatsGrid")
+            var header = GetStatsPanel().Find("StatsGrid")
                 .Find("Panel").Find("AbilitiesPanel").Find("FieldDescriptor")
                 .GetComponent<Text>();
             header.gameObject.SetActive(show);
+        }
+
+        private UnityEngine.Transform GetStatsPanel()
+        {
+            return GetTopPanel().Find("StatsPanel");
         }
 
         public override void Refresh()

@@ -8,7 +8,7 @@ namespace Gamepackage
     {
         public static void NewGame()
         {
-            var gameSceneRoot = GameObject.FindObjectOfType<GameSceneRoot>();
+            var gameSceneRoot = GameObject.FindObjectOfType<GameSceneController>();
             if (gameSceneRoot != null)
             {
                 gameSceneRoot.Stopped = true;
@@ -27,7 +27,7 @@ namespace Gamepackage
 
         public static void Clear()
         {
-            var gameSceneRoot = GameObject.FindObjectOfType<GameSceneRoot>();
+            var gameSceneRoot = GameObject.FindObjectOfType<GameSceneController>();
             if (gameSceneRoot != null)
             {
                 gameSceneRoot.Stopped = true;

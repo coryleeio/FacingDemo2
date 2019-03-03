@@ -14,6 +14,9 @@ namespace Gamepackage
         public GameObject ViewGameObject;
 
         [JsonIgnore]
+        public HealthBar HealthBar;
+
+        [JsonIgnore]
         public SkeletonAnimation SkeletonAnimation
         {
             get

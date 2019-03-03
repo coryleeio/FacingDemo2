@@ -19,6 +19,9 @@ namespace Gamepackage
         public InventoryWindow InventoryWindow;
 
         [NonSerialized]
+        public MainMenu MainMenu;
+
+        [NonSerialized]
         public LootWindow LootWindow;
 
         [NonSerialized]
@@ -37,7 +40,7 @@ namespace Gamepackage
         public DarkOverlay DarkOverlay;
 
         [NonSerialized]
-        public Tooltip Tooltip;
+        public TooltipManager Tooltip;
 
         [NonSerialized]
         public InputHint InputHint;
@@ -67,14 +70,11 @@ namespace Gamepackage
             ContextMenu = GetComponentInChildren<ContextMenu>(true);
             ClickoutCatcher = GetComponentInChildren<ClickoutCatcher>(true);
             DarkOverlay = GetComponentInChildren<DarkOverlay>(true);
-            Tooltip = GetComponentInChildren<Tooltip>(true);
+            Tooltip = GetComponentInChildren<TooltipManager>(true);
             EscapeMenu = GetComponentInChildren<EscapeMenu>(true);
             InputHint = GetComponentInChildren<InputHint>(true);
             TileHoverHint = GetComponentInChildren<TileHoverHint>(true);
-
-            FloatingCombatTextManager.Show();
-            TextLog.ClearText();
-            TextLog.Show();
+            MainMenu = GetComponentInChildren<MainMenu>(true);
         }
 
         public bool HasWindowsOpen
@@ -103,7 +103,7 @@ namespace Gamepackage
 
         public void PushWindow(UIComponent uIComponent)
         {
-            if(OpenWindows.Contains(uIComponent))
+            if (OpenWindows.Contains(uIComponent))
             {
                 RemoveWindow(uIComponent);
             }

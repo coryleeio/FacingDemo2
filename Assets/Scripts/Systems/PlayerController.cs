@@ -42,7 +42,7 @@ namespace Gamepackage
                 RelativeSortOrder = 1,
                 WalkableTilesOnly = true,
                 ConstrainToLevel = true,
-                Sprite = Resources.Load<Sprite>("Overlay/Square"),
+                Sprite = Resources.Load<Sprite>("SpritesManual/Square"),
             };
             PathOverlayConfig = new OverlayConfig
             {
@@ -53,7 +53,7 @@ namespace Gamepackage
                 RelativeSortOrder = 0,
                 WalkableTilesOnly = true,
                 ConstrainToLevel = true,
-                Sprite = Resources.Load<Sprite>("Dot"),
+                Sprite = Resources.Load<Sprite>("SpritesManual/Dot"),
             };
             MouseHoverOverlay = new Overlay()
             {
@@ -72,7 +72,7 @@ namespace Gamepackage
                 RelativeSortOrder = 1,
                 WalkableTilesOnly = true,
                 ConstrainToLevel = true,
-                Sprite = Resources.Load<Sprite>("Overlay/Square"),
+                Sprite = Resources.Load<Sprite>("SpritesManual/Square"),
             };
             CurrentProposedAttackPlacement = new OverlayConfig
             {
@@ -83,7 +83,7 @@ namespace Gamepackage
                 RelativeSortOrder = 2,
                 WalkableTilesOnly = true,
                 ConstrainToLevel = true,
-                Sprite = Resources.Load<Sprite>("Overlay/Square"),
+                Sprite = Resources.Load<Sprite>("SpritesManual/Square"),
             };
             CurrentProposedAttackExplosionPlacement = new OverlayConfig
             {
@@ -94,7 +94,7 @@ namespace Gamepackage
                 RelativeSortOrder = 3,
                 WalkableTilesOnly = true,
                 ConstrainToLevel = true,
-                Sprite = Resources.Load<Sprite>("Overlay/AoeIndicator"),
+                Sprite = Resources.Load<Sprite>("SpritesManual/AoeIndicator"),
             };
             AimingOverlay = new Overlay()
             {

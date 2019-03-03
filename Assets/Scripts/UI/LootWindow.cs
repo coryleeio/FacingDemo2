@@ -70,7 +70,7 @@ namespace Gamepackage
 
         private static void BuildDraggableItemForPlayerParentToTransform(Item item, Entity player, Transform parentTransform)
         {
-            var draggablePrefab = Resources.Load<DraggableItem>("UI/DraggableItem");
+            var draggablePrefab = Resources.Load<DraggableItem>("Prefabs/UI/DraggableItem");
             var draggableInstance = GameObject.Instantiate<DraggableItem>(draggablePrefab);
             draggableInstance.transform.SetParent(parentTransform, false);
             draggableInstance.Source = player;
@@ -96,7 +96,7 @@ namespace Gamepackage
             foreach (var target in _targets)
             {
                 var inventory = target.Inventory;
-                var slotPrefab = Resources.Load<InventoryDropSlot>("UI/ItemDropSlot");
+                var slotPrefab = Resources.Load<InventoryDropSlot>("Prefabs/UI/ItemDropSlot");
 
                 for (var i = 0; i < inventory.Items.Count; i++)
                 {

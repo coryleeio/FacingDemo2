@@ -20,7 +20,7 @@ namespace Gamepackage
 
         public void ShowText(string text)
         {
-            GetComponent<Text>().text = text;
+            GetComponentInChildren<Text>(true).text = text;
             Show();
         }
 

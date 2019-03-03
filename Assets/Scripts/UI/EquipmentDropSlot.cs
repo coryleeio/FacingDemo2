@@ -35,18 +35,18 @@ namespace Gamepackage
             var item = InventoryUtil.GetItemBySlot(Player, Slot);
             if(item == null)
             {
-                Context.UIController.Tooltip.Hover(this.gameObject, StringUtil.DisplayValueForSlot(Slot));
+                Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, StringUtil.DisplayValueForSlot(Slot));
             }
             else
             {
-                Context.UIController.Tooltip.Hover(this.gameObject, String.Format("{0} ({1})", item.DisplayName, StringUtil.DisplayValueForSlot(Slot)));
+                Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, String.Format("{0} ({1})", item.DisplayName, StringUtil.DisplayValueForSlot(Slot)));
             }
             
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Context.UIController.Tooltip.Leave(this.gameObject);
+            Context.UIController.Tooltip.StopTooltip(this.gameObject);
         }
     }
 }

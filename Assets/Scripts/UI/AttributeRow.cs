@@ -25,12 +25,12 @@ namespace Gamepackage
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Context.UIController.Tooltip.Hover(this.gameObject, StringUtil.TooltipFor(Key));
+            Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, StringUtil.TooltipFor(Key));
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Context.UIController.Tooltip.Leave(this.gameObject);
+            Context.UIController.Tooltip.StopTooltip(this.gameObject);
         }
     }
 }
