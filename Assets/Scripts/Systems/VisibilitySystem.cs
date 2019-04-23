@@ -275,6 +275,7 @@ namespace Gamepackage
 
             if (LastPlayerPosition == null || (player != null && player.Position != LastPlayerPosition))
             {
+                LastPlayerPosition = player.Position;
                 for (int x = 0; x < _mapSize; x++)
                 {
                     for (int y = 0; y < _mapSize; y++)
