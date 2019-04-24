@@ -27,11 +27,9 @@ namespace Gamepackage
         private Color ObfuscatedColor = new Color(0, 0, 0, .75f);
         private bool[,] _updatedVisibilityGrid;
         private GameObject FogOfWarGameObject;
-        private Point LastPlayerPosition;
 
         public void Init()
         {
-            LastPlayerPosition = null;
             FogLayer = LayerMask.GetMask(new string[] { "Fog" });
             if (FogOfWarGameObject == null)
             {
@@ -92,13 +90,13 @@ namespace Gamepackage
                                 if (isValid && level.Grid[newPoint].TileType == TileType.Floor || level.Grid[newPoint].TileType == TileType.Wall)
                                 {
                                     visibilityAggregate.Add(newPoint);
-                                    if(level.Grid[newPoint].TileType == TileType.Wall)
+                                    if (level.Grid[newPoint].TileType == TileType.Wall)
                                     {
                                         // Let them see the last wall, but points on the other side of that wall are not valid.
                                         break;
                                     }
                                 }
-                                if(isValid && (level.Grid[newPoint].TileType == TileType.Empty || level.Grid[newPoint].TileType == TileType.Wall))
+                                if (isValid && (level.Grid[newPoint].TileType == TileType.Empty || level.Grid[newPoint].TileType == TileType.Wall))
                                 {
                                     break;
                                 }
@@ -136,7 +134,7 @@ namespace Gamepackage
             PaintVisibility(revealed, MapVisibilityState.Revealed);
         }
 
-        public void UpdateVisibility(bool[,] newVisibility)
+        private void UpdateVisibilityInternal(bool[,] newVisibility)
         {
             Assert.AreEqual(newVisibility.GetLength(0), _mapSize);
             Assert.AreEqual(newVisibility.GetLength(1), _mapSize);
@@ -268,43 +266,38 @@ namespace Gamepackage
             return PlacesVisibleFromLocation(level, start.Position, visionRadius).Contains(end.Position);
         }
 
-        public void Process()
+        public void UpdateVisibility()
         {
             var level = Context.Game.CurrentLevel;
             var player = level.Player;
-
-            if (LastPlayerPosition == null || (player != null && player.Position != LastPlayerPosition))
+            for (int x = 0; x < _mapSize; x++)
             {
-                LastPlayerPosition = player.Position;
-                for (int x = 0; x < _mapSize; x++)
+                for (int y = 0; y < _mapSize; y++)
                 {
-                    for (int y = 0; y < _mapSize; y++)
-                    {
-                        _updatedVisibilityGrid[x, y] = false;
-                    }
+                    _updatedVisibilityGrid[x, y] = false;
                 }
-
-                var visiblePoints = PlacesVisibleFromLocation(level, player.Position, player.CalculateValueOfAttribute(Attributes.VISION_RADIUS));
-                foreach (var tile in visiblePoints)
-                {
-                    _updatedVisibilityGrid[tile.X, tile.Y] = true;
-                }
-
-                foreach (var entity in level.Entitys)
-                {
-                    if (entity.View != null)
-                    {
-                        entity.View.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
-                    }
-
-                    if (entity.View.ViewGameObject != null)
-                    {
-                        entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
-                    }
-                }
-
-                UpdateVisibility(_updatedVisibilityGrid);
             }
+
+            var visiblePoints = PlacesVisibleFromLocation(level, player.Position, player.CalculateValueOfAttribute(Attributes.VISION_RADIUS));
+            foreach (var tile in visiblePoints)
+            {
+                _updatedVisibilityGrid[tile.X, tile.Y] = true;
+            }
+
+            foreach (var entity in level.Entitys)
+            {
+                if (entity.View != null)
+                {
+                    entity.View.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
+                }
+
+                if (entity.View.ViewGameObject != null)
+                {
+                    entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
+                }
+            }
+
+            UpdateVisibilityInternal(_updatedVisibilityGrid);
         }
 
         public void Clear()

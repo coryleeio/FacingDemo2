@@ -137,6 +137,7 @@ namespace Gamepackage
             // Lock new positions
             Context.EntitySystem.Register(Source, Context.Game.CurrentLevel);
             Context.EntitySystem.Register(Targets[0], Context.Game.CurrentLevel);
+            Context.VisibilitySystem.UpdateVisibility();
 
             foreach (var potentialTrigger in Context.Game.CurrentLevel.Entitys)
             {

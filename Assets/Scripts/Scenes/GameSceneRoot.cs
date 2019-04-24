@@ -65,6 +65,7 @@ namespace Gamepackage
             Context.UIController = uiController;
             Context.UIController.Init();
             Context.GameSceneRoot = this;
+            Context.VisibilitySystem.UpdateVisibility();
         }
 
         public void Update()
@@ -79,7 +80,6 @@ namespace Gamepackage
                     Context.OverlaySystem.Process();
                     Context.PathFinder.Process();
                     Context.FlowSystem.Process();
-                    Context.VisibilitySystem.Process();
                     CameraDriver.MoveCamera();
                 }
             }
