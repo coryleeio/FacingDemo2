@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Spine.Unity;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -49,6 +50,44 @@ namespace Gamepackage
         public override void HandleStacking(EntityStateChange outcome)
         {
             StackingStrategies.AddDuration(outcome, this);
+        }
+
+        public override void ApplyPersistentVisualEffects(Entity owner)
+        {
+            base.ApplyPersistentVisualEffects(owner);
+            if(owner.View != null && owner.View.ViewGameObject != null)
+            {
+                var go = owner.View.ViewGameObject;
+                var mySkeletonAnimation = go.GetComponentInChildren<SkeletonAnimation>(true);
+                if(mySkeletonAnimation!= null)
+                {
+                    mySkeletonAnimation.skeleton.SetColor(Color.green);
+                }
+                var mySpriteImages = go.transform.GetComponentsInChildren<SpriteRenderer>(true);
+                foreach( var mySpriteImage in mySpriteImages)
+                {
+                    mySpriteImage.color = Color.green;
+                }
+            }
+        }
+
+        public override void RemovePersistantVisualEffects(Entity owner)
+        {
+            base.RemovePersistantVisualEffects(owner);
+            if (owner.View != null && owner.View.ViewGameObject != null)
+            {
+                var go = owner.View.ViewGameObject;
+                var mySkeletonAnimation = go.GetComponentInChildren<SkeletonAnimation>(true);
+                if (mySkeletonAnimation != null)
+                {
+                    mySkeletonAnimation.skeleton.SetColor(Color.white);
+                }
+                var mySpriteImages = go.transform.GetComponentsInChildren<SpriteRenderer>(true);
+                foreach (var mySpriteImage in mySpriteImages)
+                {
+                    mySpriteImage.color = Color.white;
+                }
+            }
         }
     }
 }

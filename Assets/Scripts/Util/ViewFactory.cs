@@ -192,13 +192,10 @@ namespace Gamepackage
 
             if (entity.IsCombatant)
             {
-                foreach (var pair in entity.Inventory.EquippedItemBySlot)
+                var effects = entity.GetEffects();
+                foreach (var effect in effects)
                 {
-                    var item = pair.Value;
-                    foreach (var effect in item.EffectsGlobal)
-                    {
-                        effect.ApplyPersistentVisualEffects(entity);
-                    }
+                   effect.ApplyPersistentVisualEffects(entity);
                 }
             }
         }
