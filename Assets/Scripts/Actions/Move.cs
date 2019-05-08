@@ -50,7 +50,7 @@ namespace Gamepackage
                 var skeletonAnimation = Source.View.SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
-                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Walk, newDirection), true);
+                skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Walk, newDirection), true);
             }
 
             if (Source.IsPlayer)
@@ -148,7 +148,7 @@ namespace Gamepackage
 
             if (triggerOnPressEffect != null)
             {
-                Context.UIController.InputHint.ShowText(triggerOnPressEffect.Description);
+                Context.UIController.InputHint.ShowText(triggerOnPressEffect.Description.Localize());
             }
 
             else if (lootableEntitiesInPosition.Count > 0)

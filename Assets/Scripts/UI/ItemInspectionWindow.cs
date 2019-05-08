@@ -29,7 +29,7 @@ namespace Gamepackage
                 attributeRows.AddRange(gameObject.GetComponentsInChildren<AttributeRow>());
                 Assert.IsTrue(attributeRows.Count == 4);
             }
-            var displayAttributes = StringUtil.GetDisplayAttributesForItem(item);
+            var displayAttributes = DisplayUtil.GetDisplayAttributesForItem(item);
             for(var i = 0; i < attributeRows.Count; i++)
             {
                 if (i < attributeRows.Count)
@@ -49,7 +49,7 @@ namespace Gamepackage
                 abilityRows.AddRange(gameObject.GetComponentsInChildren<AbilityRow>());
                 Assert.IsTrue(abilityRows.Count == 2);
             }
-            var displayAbilities = StringUtil.GetDisplayAbilitiesForItem(item);
+            var displayAbilities = DisplayUtil.GetDisplayAbilitiesForItem(item);
             for (var i = 0; i < abilityRows.Count; i++)
             {
                 if (i < abilityRows.Count)

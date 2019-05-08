@@ -424,12 +424,18 @@ namespace Gamepackage
             }
             foreach (var msg in result.FloatingTextMessage)
             {
-                Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(result.Target.Position), msg.AllowLeftRightDrift);
+                ShowFloatingMessage(result.Target.Position, msg);
             }
+
             // Because in some circumstances this can be caused twice, clear the buffer.
             result.LogMessages.Clear();
             result.LateMessages.Clear();
             result.FloatingTextMessage.Clear();
+        }
+
+        public static void ShowFloatingMessage(Point pos, FloatingTextMessage msg)
+        {
+            Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(pos), msg.AllowLeftRightDrift);
         }
 
         public static void ApplyEntityStateChange(EntityStateChange result)
@@ -448,8 +454,8 @@ namespace Gamepackage
                     var skeletonAnimation = target.View.SkeletonAnimation;
                     skeletonAnimation.AnimationState.ClearTracks();
                     skeletonAnimation.Skeleton.SetToSetupPose();
-                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.GetHit, newTargetingDirection), false);
-                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, newTargetingDirection), true, 0.0f);
+                    skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.GetHit, newTargetingDirection), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Idle, newTargetingDirection), true, 0.0f);
                 }
             }
             if (result.AttackParameters != null && result.AttackParameters.DamageType == DamageTypes.NOT_SET)
@@ -467,6 +473,8 @@ namespace Gamepackage
                 // if you keep hitting him he doesn't get dead-er..
                 return;
             }
+            bool healthChangeIsHostile = result.HealthChange > 0;
+            Color healthChangeColor = DisplayUtil.DamageDisplayColor(result.Target.IsPlayer, healthChangeIsHostile);
 
             var sourceName = "";
             if (result.Source != null)
@@ -477,13 +485,13 @@ namespace Gamepackage
 
             if (result.WasShortCircuited)
             {
-                result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, result.HealthChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, result.HealthChange, DisplayUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
             }
             else
             {
                 if (result.AttackParameters != null && result.HealthChange != 0)
                 {
-                    result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, result.HealthChange < 0 ? result.HealthChange * -1 : result.HealthChange, StringUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
+                    result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, result.HealthChange < 0 ? result.HealthChange * -1 : result.HealthChange, DisplayUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                     target.Body.CurrentHealth = target.Body.CurrentHealth - result.HealthChange;
                     if(target.View != null && target.View.HealthBar != null)
                     {
@@ -491,34 +499,7 @@ namespace Gamepackage
                     }
                     var healthChangeDisplay = result.HealthChange > 0 ? "-" : "+";
                     healthChangeDisplay += Math.Abs(result.HealthChange).ToString();
-                    Color healthChangeColor = Color.black;
 
-                    if (target.IsPlayer)
-                    {
-                        if (result.HealthChange > 0)
-                        {
-                            // Damage to player
-                            healthChangeColor = Color.red;
-                        }
-                        else
-                        {
-                            // Healing to player
-                            healthChangeColor = Color.green;
-                        }
-                    }
-                    else
-                    {
-                        if (result.HealthChange > 0)
-                        {
-                            // Damage to NPC
-                            healthChangeColor = Color.magenta;
-                        }
-                        else
-                        {
-                            // Healing to NPC
-                            healthChangeColor = Color.blue;
-                        }
-                    }
 
                     result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                     {
@@ -558,7 +539,7 @@ namespace Gamepackage
                         var skeletonAnimation = target.View.SkeletonAnimation;
                         skeletonAnimation.AnimationState.ClearTracks();
                         skeletonAnimation.Skeleton.SetToSetupPose();
-                        skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.FallDown, target.Direction), false);
+                        skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.FallDown, target.Direction), false);
                     }
                     result.FloatingTextMessage.AddLast(new FloatingTextMessage()
                     {

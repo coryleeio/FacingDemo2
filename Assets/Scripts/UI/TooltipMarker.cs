@@ -9,7 +9,7 @@ namespace Gamepackage
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, StringUtil.TooltipFor(Key));
+            Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, DisplayUtil.TooltipFor(Key));
         }
 
         public void OnPointerExit(PointerEventData eventData)

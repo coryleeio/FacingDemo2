@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
@@ -24,12 +26,38 @@ namespace Gamepackage
 
         public Ticker Ticker;
 
+        // Is the application of this effect, taken alone, a hostile action, or a positive one.
+        // One causes aggro, and is displayed as bad, the others are not.
+        // though if applied as part of an attack the entire attack may still be interpreted as hostile.
+        public AttackHostility Hostility = AttackHostility.NOT_SET;
+
         [JsonIgnore]
         public bool CanTick
         {
             get
             {
                 return Ticker != null;
+            }
+        }
+
+        [JsonIgnore]
+        public bool IsHostile
+        {
+            get
+            {
+                Assert.IsTrue(Hostility != AttackHostility.NOT_SET);
+                if(Hostility == AttackHostility.HOSTILE)
+                {
+                    return true;
+                }
+                if(Hostility == AttackHostility.NOT_HOSTILE)
+                {
+                    return false;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
         }
 
@@ -41,12 +69,35 @@ namespace Gamepackage
             }
         }
 
+        public virtual void ShowAddMessage(Entity entity)
+        {
+            CombatUtil.ShowFloatingMessage(entity.Position, new FloatingTextMessage()
+            {
+                Message = string.Format("+{0}", this.DisplayName.Localize()),
+                Color = DisplayUtil.DamageDisplayColor(entity.IsPlayer, IsHostile),
+                target = entity,
+                AllowLeftRightDrift = true,
+            });
+        }
+
+        public virtual void ShowRemoveMessage(Entity entity)
+        {
+            CombatUtil.ShowFloatingMessage(entity.Position, new FloatingTextMessage()
+            {
+                Message = string.Format("-{0}", this.DisplayName.Localize()),
+                Color = DisplayUtil.DamageDisplayColor(entity.IsPlayer, !IsHostile),
+                target = entity,
+                AllowLeftRightDrift = true,
+            });
+        }
+
         // For applying persistant visual effects from items, since this does not have a actionOutcome
         // this should not be overwritten, only called.  It is just a work around for not having an
         // action outcome for equiping an item.
         public void OnApply(Entity entity)
         {
             ApplyPersistentVisualEffects(entity);
+            ShowAddMessage(entity);
         }
 
         // Call when applying for the first time, may actually do state changes, or apply 
@@ -54,6 +105,7 @@ namespace Gamepackage
         public virtual void OnApply(EntityStateChange outcome)
         {
             ApplyPersistentVisualEffects(outcome.Target);
+            ShowAddMessage(outcome.Target);
         }
 
         // When an effect is removed, perform any state changes, and remove the persistent visual effects
@@ -75,6 +127,7 @@ namespace Gamepackage
                     target.Body.CurrentHealth = 1;
                 }
             }
+            ShowRemoveMessage(target);
         }
 
         // Apply persistent visual effects, be sure to call this when loading the game for all effects

@@ -9,7 +9,7 @@ namespace Gamepackage
         {
             get
             {
-                return "effect.poison.name".Localize();
+                return "effect.poison.name";
             }
         }
 
@@ -17,7 +17,7 @@ namespace Gamepackage
         {
             get
             {
-                return "effect.poison.description".Localize();
+                return "effect.poison.description";
             }
         }
 

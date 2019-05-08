@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Gamepackage
 {
@@ -9,7 +10,7 @@ namespace Gamepackage
         public TSECOND Value;
     }
 
-    public static class StringUtil
+    public static class DisplayUtil
     {
         public static string MeleeDamageKey = "Damage";
         public static string DamageTypeKey = "Type";
@@ -148,6 +149,39 @@ namespace Gamepackage
             }
         }
 
+        public static Color DamageDisplayColor(bool isPlayer, bool isHostile)
+        {
+            Color healthChangeColor = Color.black;
+
+            if (isPlayer)
+            {
+                if (isHostile)
+                {
+                    // Damage to player
+                    healthChangeColor = Color.red;
+                }
+                else
+                {
+                    // Healing to player
+                    healthChangeColor = Color.green;
+                }
+            }
+            else
+            {
+                if (isHostile)
+                {
+                    // Damage to NPC
+                    healthChangeColor = Color.magenta;
+                }
+                else
+                {
+                    // Healing to NPC
+                    healthChangeColor = Color.blue;
+                }
+            }
+            return healthChangeColor;
+        }
+
         public static List<Tuple<string, string>> GetDisplayAttributesForPlayer(Entity player)
         {
             var retVal = new List<Tuple<string, string>>();
@@ -215,9 +249,9 @@ namespace Gamepackage
         public static List<string> GetDisplayAbilitiesForItem(Item item)
         {
             var retVal = new List<string>();
-            foreach (var ability in item.EffectsGlobal)
+            foreach (var effect in item.EffectsGlobal)
             {
-                retVal.Add(string.Format("{0} - {1}", ability.DisplayName, ability.Description));
+                retVal.Add(string.Format("{0} - {1}", effect.DisplayName.Localize(), effect.Description.Localize()));
             }
             return retVal;
         }

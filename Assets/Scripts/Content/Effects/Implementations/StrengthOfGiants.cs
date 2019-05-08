@@ -6,7 +6,7 @@
         {
             get
             {
-                return "effect.strength.of.giants.name".Localize();
+                return "effect.strength.of.giants.name";
             }
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return "effect.strength.of.giants.description".Localize();
+                return "effect.strength.of.giants.description";
             }
         }
 

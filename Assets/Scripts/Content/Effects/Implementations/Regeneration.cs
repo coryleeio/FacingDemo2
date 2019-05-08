@@ -8,7 +8,7 @@ namespace Gamepackage
         {
             get
             {
-                return "effect.regen.name".Localize();
+                return "effect.regen.name";
             }
         }
 
@@ -16,7 +16,7 @@ namespace Gamepackage
         {
             get
             {
-                return "effect.regen.description".Localize();
+                return "effect.regen.description";
             }
         }
 

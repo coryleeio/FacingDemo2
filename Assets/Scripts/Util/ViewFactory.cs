@@ -434,7 +434,7 @@ namespace Gamepackage
             Material runtimeMaterial;
             var skeletonDataAsset = Resources.Load<SkeletonDataAsset>(SkeletonDataPath);
             var skeletonData = skeletonDataAsset.GetSkeletonData(false);
-            var idleAnimation = skeletonData.FindAnimation(StringUtil.GetAnimationNameForDirection(beginningAnimation, beginningDirection));
+            var idleAnimation = skeletonData.FindAnimation(DisplayUtil.GetAnimationNameForDirection(beginningAnimation, beginningDirection));
             var templateSkin = skeletonData.FindSkin("Template");
             var bodySkin = SkinName != null ? skeletonData.FindSkin(SkinName) : skeletonData.DefaultSkin;
             var skeletonAnimation = SkeletonAnimation.NewSkeletonAnimationGameObject(skeletonDataAsset);

@@ -6,7 +6,7 @@
         {
             get
             {
-                return "effect.poison.immunity.name".Localize();
+                return "effect.poison.immunity.name";
             }
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return "effect.poison.immunity.description".Localize();
+                return "effect.poison.immunity.description";
             }
         }
 

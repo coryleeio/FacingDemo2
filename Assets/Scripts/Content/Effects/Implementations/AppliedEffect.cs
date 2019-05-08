@@ -39,5 +39,17 @@ namespace Gamepackage
             CombatUtil.ApplyEntityStateChange(applyToTargetContext);
             return usageContext;
         }
+
+        public override void ShowAddMessage(Entity entity)
+        {
+            // An applied effect is an internal wrapper and should not be messaged
+            // the effect it is applying will be messaged
+        }
+
+        public override void ShowRemoveMessage(Entity entity)
+        {
+            // An applied effect is an internal wrapper and should not be messaged
+            // the effect it is applying will be messaged
+        }
     }
 }

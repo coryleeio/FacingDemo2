@@ -40,7 +40,7 @@ namespace Gamepackage
             if (Source.View != null && Source.View.SkeletonAnimation != null)
             {
                 var skeletonAnimation = Source.View.SkeletonAnimation;
-                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, Source.Direction), true);
+                skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Idle, Source.Direction), true);
             }
         }
     }

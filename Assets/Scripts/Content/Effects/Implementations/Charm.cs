@@ -6,7 +6,7 @@
         {
             get
             {
-                return "effect.charm.name".Localize();
+                return "effect.charm.name";
             }
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return "effect.charm.description".Localize();
+                return "effect.charm.description";
             }
         }
 

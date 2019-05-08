@@ -114,7 +114,7 @@ namespace Gamepackage
             Assert.AreEqual(14, attributeRows.Count);
 
             var displayAttributes = new List<Tuple<string, string>>();
-            displayAttributes = StringUtil.GetDisplayAttributesForPlayer(player);
+            displayAttributes = DisplayUtil.GetDisplayAttributesForPlayer(player);
             for (var i = 0; i < attributeRows.Count; i++)
             {
                 if (i < displayAttributes.Count)

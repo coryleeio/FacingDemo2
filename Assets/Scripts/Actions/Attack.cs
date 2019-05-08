@@ -61,17 +61,17 @@ namespace Gamepackage
                 skeletonAnimation.Skeleton.SetToSetupPose();
                 if (this.CalculatedAttack.AttackType == AttackType.Zapped)
                 {
-                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastStart, CalculatedAttack.DirectionOfAttack), false);
+                    skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.CastStart, CalculatedAttack.DirectionOfAttack), false);
                 }
                 else if (this.CalculatedAttack.AttackType == AttackType.Ranged)
                 {
-                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Shoot, CalculatedAttack.DirectionOfAttack), false);
-                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
+                    skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Shoot, CalculatedAttack.DirectionOfAttack), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
                 }
                 else
                 {
-                    skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Attack, CalculatedAttack.DirectionOfAttack), false);
-                    skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
+                    skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Attack, CalculatedAttack.DirectionOfAttack), false);
+                    skeletonAnimation.AnimationState.AddAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
                 }
             }
             BuildProjectileViewIfNeeded();
@@ -197,8 +197,8 @@ namespace Gamepackage
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
 
-                skeletonAnimation.AnimationState.SetAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.CastEnd, CalculatedAttack.DirectionOfAttack), false);
-                skeletonAnimation.AnimationState.AddAnimation(0, StringUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
+                skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.CastEnd, CalculatedAttack.DirectionOfAttack), false);
+                skeletonAnimation.AnimationState.AddAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Idle, CalculatedAttack.DirectionOfAttack), true, 5.0f);
             }
             foreach(var stateChange in CalculatedAttack.SourceStateChanges)
             {

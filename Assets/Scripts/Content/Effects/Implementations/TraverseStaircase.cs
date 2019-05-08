@@ -11,7 +11,7 @@ namespace Gamepackage
         {
             get
             {
-                return "effect.traverse.stairs.name".Localize();
+                return "effect.traverse.stairs.name";
             }
         }
 
@@ -19,7 +19,7 @@ namespace Gamepackage
         {
             get
             {
-                return "effect.traverse.stairs.description".Localize();
+                return "effect.traverse.stairs.description";
             }
         }
 

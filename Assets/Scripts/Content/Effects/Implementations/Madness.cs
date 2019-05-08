@@ -6,7 +6,7 @@
         {
             get
             {
-                return "effect.madness.name".Localize();
+                return "effect.madness.name";
             }
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return "effect.madness.description".Localize();
+                return "effect.madness.description";
             }
         }
 

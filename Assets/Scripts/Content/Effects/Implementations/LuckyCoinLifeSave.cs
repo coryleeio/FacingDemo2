@@ -8,7 +8,7 @@ namespace Gamepackage
         {
             get
             {
-                return "effect.lucky.coin.lifesave.name".Localize();
+                return "effect.lucky.coin.lifesave.name";
             }
         }
 
@@ -16,7 +16,7 @@ namespace Gamepackage
         {
             get
             {
-                return "effect.lucky.coin.lifesave.description".Localize();
+                return "effect.lucky.coin.lifesave.description";
             }
         }
 
@@ -42,7 +42,7 @@ namespace Gamepackage
                 outcome.FloatingTextMessage.AddLast(new FloatingTextMessage()
                 {
                     Message = "effect.lucky.coin.lifesave.floating.message".Localize(),
-                    Color = Color.green,
+                    Color = DisplayUtil.DamageDisplayColor(target.IsPlayer, false),
                     target = target,
                     AllowLeftRightDrift = false,
                 });

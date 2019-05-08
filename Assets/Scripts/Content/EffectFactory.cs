@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
@@ -9,19 +10,26 @@ namespace Gamepackage
             Effect retVal = null;
             if (uniqueIdentifier == UniqueIdentifier.EFFECT_TRAVERSE_STAIRCASE)
             {
-                retVal = new TraverseStaircase();
+                retVal = new TraverseStaircase()
+                {
+                    Hostility = AttackHostility.NOT_HOSTILE,
+                };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE)
             {
-                retVal = new LuckyCoinLifeSave();
+                retVal = new LuckyCoinLifeSave()
+                {
+                    Hostility = AttackHostility.NOT_HOSTILE,
+                };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_WEAK_POISON)
             {
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_WEAK_POISON,
-                    AppliedDisplayName = "effect.applied.weak.poison.name".Localize(),
-                    AppliedDisplayDescription = "effect.applied.weak.poison.description".Localize(),
+                    AppliedDisplayName = "effect.applied.weak.poison.name",
+                    AppliedDisplayDescription = "effect.applied.weak.poison.description",
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_MADNESS)
@@ -29,8 +37,9 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_MADNESS,
-                    AppliedDisplayName = "effect.applied.madness.name".Localize(),
-                    AppliedDisplayDescription = "effect.applied.madness.description".Localize(),
+                    AppliedDisplayName = "effect.applied.madness.name",
+                    AppliedDisplayDescription = "effect.applied.madness.description",
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_CHARM)
@@ -38,8 +47,9 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_CHARM,
-                    AppliedDisplayName = "effect.applied.charm.name".Localize(),
-                    AppliedDisplayDescription = "effect.applied.charm.description".Localize(),
+                    AppliedDisplayName = "effect.applied.charm.name",
+                    AppliedDisplayDescription = "effect.applied.charm.description",
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_DOMINATION)
@@ -47,8 +57,9 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_DOMINATION,
-                    AppliedDisplayName = "effect.applied.domination.name".Localize(),
-                    AppliedDisplayDescription = "effect.applied.domination.description".Localize(),
+                    AppliedDisplayName = "effect.applied.domination.name",
+                    AppliedDisplayDescription = "effect.applied.domination.description",
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_STRONG_POISON)
@@ -56,8 +67,9 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_STRONG_POISON,
-                    AppliedDisplayName = "effect.applied.strong.poison.name".Localize(),
-                    AppliedDisplayDescription = "effect.applied.strong.poison.description".Localize(),
+                    AppliedDisplayName = "effect.applied.strong.poison.name",
+                    AppliedDisplayDescription = "effect.applied.strong.poison.description",
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_APPLIED_POISON_IMMUNITY)
@@ -65,8 +77,9 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_POISON_IMMUNITY,
-                    AppliedDisplayName = "effect.applied.poison.immunity.name".Localize(),
-                    AppliedDisplayDescription = "effect.applied.poison.immunity.description".Localize(),
+                    AppliedDisplayName = "effect.applied.poison.immunity.name",
+                    AppliedDisplayDescription = "effect.applied.poison.immunity.description",
+                    Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_WEAK_POISON)
@@ -77,7 +90,8 @@ namespace Gamepackage
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3
-                    }
+                    },
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_MADNESS)
@@ -87,7 +101,8 @@ namespace Gamepackage
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3
-                    }
+                    },
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_CHARM)
@@ -97,13 +112,15 @@ namespace Gamepackage
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3
-                    }
+                    },
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_DOMINATION)
             {
                 retVal = new Domination()
                 {
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_STRONG_POISON)
@@ -114,7 +131,8 @@ namespace Gamepackage
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3
-                    }
+                    },
+                    Hostility = AttackHostility.HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_POISON_IMMUNITY)
@@ -124,7 +142,8 @@ namespace Gamepackage
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 20
-                    }
+                    },
+                    Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_WEAK_REGENERATION)
@@ -134,7 +153,8 @@ namespace Gamepackage
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 20
-                    }
+                    },
+                    Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
 
@@ -145,6 +165,7 @@ namespace Gamepackage
                     EffectAppliedId = UniqueIdentifier.EFFECT_WEAK_REGENERATION,
                     AppliedDisplayName = "effect.applied.regen.name".Localize(),
                     AppliedDisplayDescription = "effect.applied.regen.description".Localize(),
+                    Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
 
@@ -155,13 +176,17 @@ namespace Gamepackage
                     Attributes = new Dictionary<Attributes, int>()
                     {
                         {  Attributes.MAX_HEALTH, 100 },
-                    }
+                    },
+                    Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
 
             else if (uniqueIdentifier == UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE)
             {
-                retVal = new LuckyCoinLifeSave();
+                retVal = new LuckyCoinLifeSave()
+                {
+                    Hostility = AttackHostility.NOT_HOSTILE,
+                };
             }
 
             if (retVal is AppliedEffect)
@@ -183,6 +208,8 @@ namespace Gamepackage
             {
                 retVal.Attributes = new Dictionary<Attributes, int>();
             }
+
+            Assert.IsTrue(retVal.Hostility != AttackHostility.NOT_SET, "Must specify hostility for all effects, not set for: " + retVal.Identifier);
             return retVal;
         }
     }

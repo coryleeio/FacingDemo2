@@ -6,7 +6,7 @@
         {
             get
             {
-                return "effect.domination.name".Localize();
+                return "effect.domination.name";
             }
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return "effect.domination.description".Localize();
+                return "effect.domination.description";
             }
         }
 
