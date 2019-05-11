@@ -7,6 +7,7 @@
         Default,
         Ground,
         Overlays,
+        Shadows,
         EntitiesAndProps,
     }
 }

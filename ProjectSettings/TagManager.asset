@@ -47,6 +47,9 @@ TagManager:
   - name: Overlays
     uniqueID: 3537133791
     locked: 0
+  - name: Shadows
+    uniqueID: 971655131
+    locked: 0
   - name: EntitiesAndProps
     uniqueID: 3049523431
     locked: 0

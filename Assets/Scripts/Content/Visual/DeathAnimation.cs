@@ -11,7 +11,6 @@ namespace Gamepackage
 
         public void Start()
         {
-
             var floating = GetComponentInChildren<Floating>();
 
             if (floating != null)
@@ -27,16 +26,16 @@ namespace Gamepackage
 
             if (ElapsedTime > 1.0f)
             {
-                var spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+                var spriteRenderers = transform.GetComponentInChildren<EntityView>(true).GetComponentsInChildren<SpriteRenderer>(true);
                 var firstPhasePercentage = (ElapsedTime - 1.0f) / 1f;
-                var secondPhasePErcentage = (ElapsedTime - 2f) / 1f;
+                var secondPhasePercentage = (ElapsedTime - 2f) / 1f;
 
                 if (firstPhasePercentage < 1.0f)
                 {
                     var color = Color.Lerp(Color.white, Color.black, firstPhasePercentage);
                     if (spriteRenderers.Length == 0)
                     {
-                        var meshRenderer = GetComponentInChildren<MeshRenderer>();
+                        var meshRenderer = transform.GetComponentInChildren<EntityView>(true).GetComponentInChildren<MeshRenderer>(true);
                         meshRenderer.SetPropertyBlock(mpb);
                         mpb.SetColor(colorPropertyName, color);
                     }
@@ -49,12 +48,12 @@ namespace Gamepackage
                     }
 
                 }
-                else if (secondPhasePErcentage < 1.0f)
+                else if (secondPhasePercentage < 1.0f)
                 {
-                    var color = Color.Lerp(Color.black, DeathColor, secondPhasePErcentage);
+                    var color = Color.Lerp(Color.black, DeathColor, secondPhasePercentage);
                     if (spriteRenderers.Length == 0)
                     {
-                        var meshRenderer = GetComponentInChildren<MeshRenderer>();
+                        var meshRenderer = transform.GetComponentInChildren<EntityView>(true).GetComponentInChildren<MeshRenderer>(true);
                         mpb.SetColor(colorPropertyName, color);
                         meshRenderer.SetPropertyBlock(mpb);
                     }

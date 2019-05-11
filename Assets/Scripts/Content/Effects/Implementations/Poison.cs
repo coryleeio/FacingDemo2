@@ -55,39 +55,13 @@ namespace Gamepackage
         public override void ApplyPersistentVisualEffects(Entity owner)
         {
             base.ApplyPersistentVisualEffects(owner);
-            if(owner.View != null && owner.View.ViewGameObject != null)
-            {
-                var go = owner.View.ViewGameObject;
-                var mySkeletonAnimation = go.GetComponentInChildren<SkeletonAnimation>(true);
-                if(mySkeletonAnimation!= null)
-                {
-                    mySkeletonAnimation.skeleton.SetColor(Color.green);
-                }
-                var mySpriteImages = go.transform.GetComponentsInChildren<SpriteRenderer>(true);
-                foreach( var mySpriteImage in mySpriteImages)
-                {
-                    mySpriteImage.color = Color.green;
-                }
-            }
+            ViewUtils.ApplyColorToEntity(owner, Color.green);
         }
 
         public override void RemovePersistantVisualEffects(Entity owner)
         {
             base.RemovePersistantVisualEffects(owner);
-            if (owner.View != null && owner.View.ViewGameObject != null)
-            {
-                var go = owner.View.ViewGameObject;
-                var mySkeletonAnimation = go.GetComponentInChildren<SkeletonAnimation>(true);
-                if (mySkeletonAnimation != null)
-                {
-                    mySkeletonAnimation.skeleton.SetColor(Color.white);
-                }
-                var mySpriteImages = go.transform.GetComponentsInChildren<SpriteRenderer>(true);
-                foreach (var mySpriteImage in mySpriteImages)
-                {
-                    mySpriteImage.color = Color.white;
-                }
-            }
+            ViewUtils.ApplyColorToEntity(owner, Color.white);
         }
     }
 }

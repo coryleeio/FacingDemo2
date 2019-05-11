@@ -19,7 +19,25 @@ namespace Gamepackage
             return Resources.Load<Sprite>("SpritesManual/Missing");
         }
 
-        public static  void RebuildView(Entity entity, bool DestroyOldView = true)
+        private static void BuildSprite(GameObject go, string sprite)
+        {
+            var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
+            var spriteRenderer = go.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = Resources.Load<Sprite>(sprite);
+            spriteRenderer.material = defaultMaterial;
+            go.AddComponent<EntityView>();
+        }
+
+        private static void BuildPrefab(GameObject go, string Sprite)
+        {
+            var pref = Resources.Load<GameObject>("Prefabs/ChessPiecePrefab");
+            var newGameObject = GameObject.Instantiate<GameObject>(pref);
+            newGameObject.transform.SetParent(go.transform, false);
+            newGameObject.transform.localPosition = Vector3.zero;
+            newGameObject.AddComponent<EntityView>();
+        }
+
+        public static void RebuildView(Entity entity, bool DestroyOldView = true)
         {
             if (entity.View != null && entity.View.ViewGameObject != null && DestroyOldView)
             {
@@ -48,64 +66,41 @@ namespace Gamepackage
 
             if (entity.IsCombatant && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
             {
-                var healthbarPrefab = Resources.Load<GameObject>("Prefabs/UI/Healthbar");
-                var healthbarGameObject = GameObject.Instantiate(healthbarPrefab);
-                healthbarGameObject.transform.SetParent(Context.UIController.gameObject.transform, false);
-                var healthBarComponent = healthbarGameObject.GetComponent<HealthBar>();
-                healthBarComponent.Entity = entity;
-                entity.View.HealthBar = healthBarComponent;
+                BuildHealthbar(entity);
             }
 
             if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_RED)
             {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("SpritesManual/RedMarker");
-                spriteRenderer.material = defaultMaterial;
+                BuildSprite(go, "SpritesManual/RedMarker");
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_GREEN)
             {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("SpritesManual/GreenMarker");
-                spriteRenderer.material = defaultMaterial;
+                BuildSprite(go, "SpritesManual/GreenMarker");
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_YELLOW)
             {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("SpritesManual/YellowMarker");
-                spriteRenderer.material = defaultMaterial;
+                BuildSprite(go, "SpritesManual/YellowMarker");
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_MARKER_BLUE)
             {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("SpritesManual/BlueMarker");
-                spriteRenderer.material = defaultMaterial;
+                BuildSprite(go, "SpritesManual/BlueMarker");
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CHESS_PIECE)
             {
-                var pref = Resources.Load<GameObject>("Prefabs/ChessPiecePrefab");
-                var ch = GameObject.Instantiate<GameObject>(pref);
-                ch.transform.SetParent(go.transform, false);
-                ch.transform.localPosition = Vector3.zero;
+                BuildPrefab(go, "Prefabs/ChessPiecePrefab");
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_RUG)
             {
-                var pref = Resources.Load<GameObject>("Prefabs/RugPrefab");
-                var ch = GameObject.Instantiate<GameObject>(pref);
-                ch.transform.SetParent(go.transform, false);
-                ch.transform.localPosition = Vector3.zero;
+                BuildPrefab(go, "Prefabs/RugPrefab");
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_UP)
             {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseUp");
-                spriteRenderer.material = defaultMaterial;
+                BuildSprite(go, "Sprites/StaircaseUp");
                 sortable.Weight = 0; // Behind walking combating entities, but still in the entity layer bc it rises up in front of walls behind it.
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
             {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
-                spriteRenderer.material = defaultMaterial;
+                BuildSprite(go, "Sprites/StaircaseDown");
                 sortable.Weight = 0;  // Behind walking combating entities, but still in the entity layer bc it rises up in front of walls behind it.
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_ASIAN)
@@ -145,24 +140,6 @@ namespace Gamepackage
                 SetSpineDefaults(go, newGo);
                 newGo.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
             }
-            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
-            {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
-                spriteRenderer.material = defaultMaterial;
-            }
-            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
-            {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
-                spriteRenderer.material = defaultMaterial;
-            }
-            else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_STAIRCASE_DOWN)
-            {
-                var spriteRenderer = go.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/StaircaseDown");
-                spriteRenderer.material = defaultMaterial;
-            }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CORPSE)
             {
                 var relevantItems = InventoryUtil.ChooseRandomItemsFromInventory(entity, 3);
@@ -179,15 +156,27 @@ namespace Gamepackage
                     childSortable.Layer = SortingLayer.EntitiesAndProps;
                     spriteRenderer.sprite = item.ItemAppearance.InventorySprite;
                     spriteRenderer.material = defaultMaterial;
+                    childGo.AddComponent<EntityView>();
                 }
                 sortable.Weight = 0;
             }
 
-            if (entity.Body != null && entity.Body.Floating && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
+            if (entity.Body != null)
             {
-                var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
-                var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
-                target.AddComponent<Floating>();
+                if (entity.Body.Floating && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
+                {
+                    var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
+                    var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
+                    target.AddComponent<Floating>();
+                }
+
+                if (entity.Body.CastsShadow)
+                {
+                    var shadowPrefab = Resources.Load<GameObject>("Prefabs/Shadow");
+                    var shadowGameObject = GameObject.Instantiate<GameObject>(shadowPrefab);
+                    shadowGameObject.transform.SetParent(go.transform, false);
+                    shadowGameObject.transform.localPosition = Vector3.zero;
+                }
             }
 
             if (entity.IsCombatant)
@@ -195,9 +184,19 @@ namespace Gamepackage
                 var effects = entity.GetEffects();
                 foreach (var effect in effects)
                 {
-                   effect.ApplyPersistentVisualEffects(entity);
+                    effect.ApplyPersistentVisualEffects(entity);
                 }
             }
+        }
+
+        private static void BuildHealthbar(Entity entity)
+        {
+            var healthbarPrefab = Resources.Load<GameObject>("Prefabs/UI/Healthbar");
+            var healthbarGameObject = GameObject.Instantiate(healthbarPrefab);
+            healthbarGameObject.transform.SetParent(Context.UIController.gameObject.transform, false);
+            var healthBarComponent = healthbarGameObject.GetComponent<HealthBar>();
+            healthBarComponent.Entity = entity;
+            entity.View.HealthBar = healthBarComponent;
         }
 
         public static GameObject InstantiateProjectileAppearance(ProjectileAppearanceDefinition def, Point position, Direction direction, GameObject referenceObject)
@@ -266,6 +265,7 @@ namespace Gamepackage
             newGo.transform.SetParent(go.transform, false);
             newGo.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             newGo.transform.localPosition = new Vector3(0, -0.30f, 0);
+            newGo.AddComponent<EntityView>();
         }
 
         public static void BuildMapTiles(Level level)
@@ -477,6 +477,7 @@ namespace Gamepackage
             skeletonAnimation.Update(0); // Use the pose in the currently active animation.
             Resources.UnloadUnusedAssets();
 
+            skeletonAnimation.gameObject.name = SkinName;
             return skeletonAnimation.gameObject;
         }
 

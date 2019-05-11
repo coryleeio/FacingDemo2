@@ -10,7 +10,6 @@ namespace Gamepackage
         private Level level;
         private int nextSortableId;
         private Dictionary<int, Sortable> sortablesById;
-        private const int MaxSortOrdersPerTileInAllLayers = 20;
         private Dictionary<SortingLayer, int> gameSortingLayerToUnitySortingLayerMap = new Dictionary<SortingLayer, int>();
 
         public void Init()
@@ -157,8 +156,9 @@ namespace Gamepackage
             {
                 level.Grid[x, y].SortablesInPositionByLayer[layer].Sort();
             }
-            var sortOrdersAvailablePerTile = 20;
+            var sortOrdersAvailablePerTile = 40;  //  (32767 / 40 / 40 ) * 2 (because range is -32767 - 32767)
             var minimumSortingOrderForLayer = (y * (level.BoundingBox.Width * sortOrdersAvailablePerTile) + (x * sortOrdersAvailablePerTile));
+            minimumSortingOrderForLayer = minimumSortingOrderForLayer - 32767; // adjust for negative values so we use the whole range for each layer
             var maxSortingOrderForLayer = minimumSortingOrderForLayer + sortOrdersAvailablePerTile;
             var startingSortOrder = minimumSortingOrderForLayer;
             var sortOrder = minimumSortingOrderForLayer;
