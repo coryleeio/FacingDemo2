@@ -163,23 +163,25 @@ namespace Gamepackage
 
             if (entity.Body != null)
             {
-                if (entity.Body.Floating && entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
+                if (entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
                 {
-                    var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
-                    var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
-                    target.AddComponent<Floating>();
-                }
-
-                if (entity.Body.CastsShadow)
-                {
-                    var shadowPrefab = Resources.Load<GameObject>("Prefabs/Shadow");
-                    var shadowGameObject = GameObject.Instantiate<GameObject>(shadowPrefab);
-                    shadowGameObject.transform.SetParent(go.transform, false);
-                    shadowGameObject.transform.localPosition = Vector3.zero;
+                    if(entity.Body.Floating)
+                    {
+                        var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
+                        var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
+                        target.AddComponent<Floating>();
+                    }
+                    if (entity.Body.CastsShadow)
+                    {
+                        var shadowPrefab = Resources.Load<GameObject>("Prefabs/Shadow");
+                        var shadowGameObject = GameObject.Instantiate<GameObject>(shadowPrefab);
+                        shadowGameObject.transform.SetParent(go.transform, false);
+                        shadowGameObject.transform.localPosition = Vector3.zero;
+                    }
                 }
             }
-
-            if (entity.IsCombatant)
+            var shouldShowEffects = entity.IsCombatant && (entity.Body == null || (entity.Body != null && !entity.Body.IsDead));
+            if (shouldShowEffects)
             {
                 var effects = entity.GetEffects();
                 foreach (var effect in effects)
