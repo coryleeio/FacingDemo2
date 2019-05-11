@@ -37,6 +37,22 @@ namespace Gamepackage
             newGameObject.AddComponent<EntityView>();
         }
 
+        private static void SetDefaultShadowValues(Entity entity)
+        {
+            SetShadowScale(entity, 1f);
+            entity.View.ShadowTransformY = -.30f;
+        }
+
+        private static void SetShadowScale(Entity entity, float value)
+        {
+            if (entity != null && entity.View != null)
+            {
+                entity.View.ShadowScaleX = value;
+                entity.View.ShadowScaleY = value;
+                entity.View.ShadowScaleZ = value;
+            }
+        }
+
         public static void RebuildView(Entity entity, bool DestroyOldView = true)
         {
             if (entity.View != null && entity.View.ViewGameObject != null && DestroyOldView)
@@ -58,6 +74,9 @@ namespace Gamepackage
                     }
                 }
             }
+
+            // Override this further down if you need a larger or smaller shadow
+            SetDefaultShadowValues(entity);
 
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
 
@@ -87,6 +106,7 @@ namespace Gamepackage
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CHESS_PIECE)
             {
+                SetShadowScale(entity, 1.5f);
                 BuildPrefab(go, "Prefabs/ChessPiecePrefab");
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_RUG)
@@ -117,6 +137,7 @@ namespace Gamepackage
             {
                 var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "Ghost", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
+                newGo.transform.localPosition = new Vector3(0f, 0.15f, 0f);
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_BLACK)
             {
@@ -132,13 +153,16 @@ namespace Gamepackage
             {
                 var newGo = BuildSplineView("Spine/Export/Bee_SkeletonData", itemsToEquip, "Template", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
+                SetShadowScale(entity, 0.7f);
                 newGo.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+                newGo.transform.localPosition = Vector3.zero;
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_LARGE_BEE)
             {
                 var newGo = BuildSplineView("Spine/Export/Bee_SkeletonData", itemsToEquip, "Template", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
                 newGo.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+                newGo.transform.localPosition = Vector3.zero;
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CORPSE)
             {
@@ -165,7 +189,7 @@ namespace Gamepackage
             {
                 if (entity.View.ViewPrototypeUniqueIdentifier != UniqueIdentifier.VIEW_CORPSE)
                 {
-                    if(entity.Body.Floating)
+                    if (entity.Body.Floating)
                     {
                         var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
                         var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
@@ -176,7 +200,11 @@ namespace Gamepackage
                         var shadowPrefab = Resources.Load<GameObject>("Prefabs/Shadow");
                         var shadowGameObject = GameObject.Instantiate<GameObject>(shadowPrefab);
                         shadowGameObject.transform.SetParent(go.transform, false);
-                        shadowGameObject.transform.localPosition = Vector3.zero;
+                        if (entity.View != null)
+                        {
+                            shadowGameObject.transform.localScale = new Vector3(entity.View.ShadowScaleX, entity.View.ShadowScaleY, entity.View.ShadowScaleZ);
+                        }
+                        shadowGameObject.transform.localPosition = new Vector3(0f, entity.View.ShadowTransformY, 0f);
                     }
                 }
             }

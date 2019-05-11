@@ -86,7 +86,7 @@ namespace Gamepackage
                 entity.View = new View()
                 {
                     ViewType = ViewType.StaticSprite,
-                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_MARKER_BLUE,
+                    ViewPrototypeUniqueIdentifier = UniqueIdentifier.VIEW_CHESS_PIECE,
                 };
                 entity.Behaviour = new Behaviour()
                 {

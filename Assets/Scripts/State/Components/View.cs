@@ -17,6 +17,19 @@ namespace Gamepackage
         public HealthBar HealthBar;
 
         [JsonIgnore]
+        public float ShadowScaleX;
+
+        [JsonIgnore]
+        public float ShadowScaleY;
+
+        [JsonIgnore]
+        public float ShadowScaleZ;
+
+        [JsonIgnore]
+        public float ShadowTransformY;
+
+
+        [JsonIgnore]
         public SkeletonAnimation SkeletonAnimation
         {
             get
