@@ -137,7 +137,6 @@ namespace Gamepackage
             {
                 var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "Ghost", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
-                newGo.transform.localPosition = new Vector3(0f, 0.15f, 0f);
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_HUMAN_BLACK)
             {
@@ -155,14 +154,12 @@ namespace Gamepackage
                 SetSpineDefaults(go, newGo);
                 SetShadowScale(entity, 0.7f);
                 newGo.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-                newGo.transform.localPosition = Vector3.zero;
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_LARGE_BEE)
             {
                 var newGo = BuildSplineView("Spine/Export/Bee_SkeletonData", itemsToEquip, "Template", Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
                 newGo.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-                newGo.transform.localPosition = Vector3.zero;
             }
             else if (entity.View.ViewPrototypeUniqueIdentifier == UniqueIdentifier.VIEW_CORPSE)
             {
@@ -519,6 +516,22 @@ namespace Gamepackage
                 return TileType.Empty;
             }
             return level.Grid[offsetPoint.X, offsetPoint.Y].TileType;
+        }
+
+        private static void BuildMaskTile(GameObject folder, string spriteResourceName, Point position)
+        {
+            var spr = Resources.Load<Sprite>(spriteResourceName);
+            GameObject o = new GameObject();
+            o.name = "TileMask";
+            var renderer = o.AddComponent<SpriteRenderer>();
+            var sortable = o.AddComponent<Sortable>();
+            renderer.material = GetDefaultSpriteMaterial();
+            o.transform.SetParent(folder.transform);
+            renderer.sprite = spr;
+            o.transform.localPosition = MathUtil.MapToWorld(position);
+            sortable.Position = new Point(position);
+            sortable.Layer = SortingLayer.Ground;
+            sortable.SortOrder = 1;
         }
 
         private static void BuildWallTile(GameObject folder, Sprite wallTile, Point position)
