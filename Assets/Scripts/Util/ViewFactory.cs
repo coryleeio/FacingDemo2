@@ -40,7 +40,7 @@ namespace Gamepackage
         private static void SetDefaultShadowValues(Entity entity)
         {
             SetShadowScale(entity, 1f);
-            entity.View.ShadowTransformY = -.30f;
+            entity.View.ShadowTransformY = -.33f;
         }
 
         private static void SetShadowScale(Entity entity, float value)
@@ -224,6 +224,7 @@ namespace Gamepackage
             var healthBarComponent = healthbarGameObject.GetComponent<HealthBar>();
             healthBarComponent.Entity = entity;
             entity.View.HealthBar = healthBarComponent;
+            ViewUtils.UpdateHealthBarColor(entity);
         }
 
         public static GameObject InstantiateProjectileAppearance(ProjectileAppearanceDefinition def, Point position, Direction direction, GameObject referenceObject)
@@ -325,6 +326,7 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.TeeSprite, point);
+                            BuildFloorTile(folder, tileSet.FloorSprite, point);
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -334,6 +336,7 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.SouthEastTeeSprite, point);
+                            BuildFloorTile(folder, tileSet.FloorSprite, point);
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -343,6 +346,7 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.NorthEastTeeSprite, point);
+                            BuildFloorTile(folder, tileSet.FloorSprite, point);
                         }
                         else if (
                              (northEastPointTileType == TileType.Floor || northEastPointTileType == TileType.Empty) &&
@@ -352,6 +356,7 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.SouthWestTeeSprite, point);
+                            BuildFloorTile(folder, tileSet.FloorSprite, point);
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -361,6 +366,7 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.NorthWestTeeSprite, point);
+                            BuildFloorTile(folder, tileSet.FloorSprite, point);
                         }
 
                         else if (
@@ -371,6 +377,7 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.NorthWestWallSprite, point);
+                            BuildFloorTile(folder, tileSet.FloorSprite, point);
                         }
 
                         else if (
@@ -381,6 +388,7 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.NorthEastWallSprite, point);
+                            BuildFloorTile(folder, tileSet.FloorSprite, point);
                         }
 
                         // We default to SE and SW incase we later want to shorten the walls on the southern side 
@@ -394,6 +402,10 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.SouthEastWallSprite, point);
+                            if (southEastPointTileType == TileType.Floor)
+                            {
+                                BuildFloorTile(folder, tileSet.FloorSprite, point);
+                            }
                         }
 
                         else if (
@@ -404,6 +416,10 @@ namespace Gamepackage
                         )
                         {
                             BuildWallTile(folder, tileSet.SouthWestWallSprite, point);
+                            if (southWestPointTileType == TileType.Floor)
+                            {
+                                BuildFloorTile(folder, tileSet.FloorSprite, point);
+                            }
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -413,6 +429,10 @@ namespace Gamepackage
                          )
                         {
                             BuildWallTile(folder, tileSet.WestCornerSprite, point);
+                            if (southWestPointTileType == TileType.Floor || northWestPointTileType == TileType.Floor)
+                            {
+                                BuildFloorTile(folder, tileSet.FloorSprite, point);
+                            }
                         }
                         else if (
                              (northEastPointTileType == TileType.Empty || northEastPointTileType == TileType.Floor) &&
@@ -422,6 +442,10 @@ namespace Gamepackage
                          )
                         {
                             BuildWallTile(folder, tileSet.NorthCornerSprite, point);
+                            if(northEastPointTileType == TileType.Empty || southEastPointTileType == TileType.Empty)
+                            {
+                                BuildFloorTile(folder, tileSet.FloorSprite, point);
+                            }
                         }
                         else if (
                              (northEastPointTileType == TileType.Empty || northEastPointTileType == TileType.Floor) &&
@@ -431,6 +455,10 @@ namespace Gamepackage
                          )
                         {
                             BuildWallTile(folder, tileSet.EastCornerSprite, point);
+                            if(northEastPointTileType == TileType.Floor || southEastPointTileType == TileType.Floor)
+                            {
+                                BuildFloorTile(folder, tileSet.FloorSprite, point);
+                            }
                         }
                         else if (
                              northEastPointTileType == TileType.Wall &&
@@ -440,12 +468,18 @@ namespace Gamepackage
                          )
                         {
                             BuildWallTile(folder, tileSet.SouthCornerSprite, point);
+
+                            if (southEastPointTileType == TileType.Floor || southWestPointTileType == TileType.Floor)
+                            {
+                                BuildFloorTile(folder, tileSet.FloorSprite, point);
+                            }
                         }
                         else
                         {
                             BuildWallTile(folder, MissingSpriteMaterial(), point);
+                            BuildFloorTile(folder, tileSet.FloorSprite, point);
                         }
-                        BuildFloorTile(folder, tileSet.FloorSprite, point);
+
                     }
                 }
             }

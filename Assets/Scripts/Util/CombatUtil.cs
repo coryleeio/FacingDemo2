@@ -493,10 +493,6 @@ namespace Gamepackage
                 {
                     result.LogMessages.AddLast(string.Format(result.AttackParameters.AttackMessage, sourceName, targetName, result.HealthChange < 0 ? result.HealthChange * -1 : result.HealthChange, DisplayUtil.DamageTypeToDisplayString(result.AttackParameters.DamageType)));
                     target.Body.CurrentHealth = target.Body.CurrentHealth - result.HealthChange;
-                    if(target.View != null && target.View.HealthBar != null)
-                    {
-                        target.View.HealthBar.UpdateHealth(target.Body.CurrentHealth, target.CalculateValueOfAttribute(Attributes.MAX_HEALTH));
-                    }
                     var healthChangeDisplay = result.HealthChange > 0 ? "-" : "+";
                     healthChangeDisplay += Math.Abs(result.HealthChange).ToString();
 

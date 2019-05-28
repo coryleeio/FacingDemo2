@@ -6,6 +6,7 @@ namespace Gamepackage
     {
         public Slider Slider;
         public Entity Entity;
+        public int LastHealth = 0;
 
         private void Start()
         {
@@ -22,6 +23,12 @@ namespace Gamepackage
             {
                 var newPos = new Vector3(Entity.View.ViewGameObject.transform.position.x, Entity.View.ViewGameObject.transform.position.y + 0.35f, 0.0f);
                 this.transform.position = newPos;
+
+                if (Entity.Body != null && Entity.Body.CurrentHealth != LastHealth)
+                {
+                    LastHealth = Entity.Body.CurrentHealth;
+                    Entity.View.HealthBar.UpdateHealth(Entity.Body.CurrentHealth, Entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH));
+                }
             }
         }
 
@@ -32,6 +39,15 @@ namespace Gamepackage
                 Slider.minValue = 0;
                 Slider.maxValue = max;
                 Slider.value = value;
+            }
+        }
+
+        public void UpdateColor(Color color)
+        {
+            var findImage = transform.Find("Slider").transform.Find("Fill Area").transform.Find("Fill").transform.GetComponent<Image>();
+            if(findImage != null)
+            {
+                findImage.color = color;
             }
         }
     }

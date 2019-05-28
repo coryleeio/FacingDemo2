@@ -25,6 +25,7 @@
             if (outcome.Target.Behaviour != null)
             {
                 outcome.Target.Behaviour.ActingTeam = Team.EnemyOfAll;
+                ViewUtils.UpdateHealthBarColor(outcome.Target);
                 outcome.Target.Behaviour.LastKnownTargetPosition = null;
                 if(outcome.Target.Behaviour.IsPlayer)
                 {
@@ -40,6 +41,7 @@
             if (entity.Behaviour != null)
             {
                 entity.Behaviour.ActingTeam = entity.Behaviour.OriginalTeam;
+                ViewUtils.UpdateHealthBarColor(entity);
                 if (entity.Behaviour.IsPlayer)
                 {
                     entity.Behaviour.AI = AIType.None;
