@@ -2,26 +2,9 @@
 {
     public class Madness : Effect
     {
-        public override string DisplayName
-        {
-            get
-            {
-                return "effect.madness.name";
-            }
-        }
-
-        public override string Description
-        {
-            get
-            {
-                return "effect.madness.description";
-            }
-        }
-
         public override void OnApply(EntityStateChange outcome)
         {
             base.OnApply(outcome);
-            Context.UIController.TextLog.AddText(string.Format("effect.madness.apply.message".Localize(), outcome.Target.Name));
             if (outcome.Target.Behaviour != null)
             {
                 outcome.Target.Behaviour.ActingTeam = Team.EnemyOfAll;
@@ -37,7 +20,6 @@
         public override void OnRemove(Entity entity)
         {
             base.OnRemove(entity);
-            Context.UIController.TextLog.AddText(string.Format("effect.madness.remove.message".Localize(), entity.Name));
             if (entity.Behaviour != null)
             {
                 entity.Behaviour.ActingTeam = entity.Behaviour.OriginalTeam;

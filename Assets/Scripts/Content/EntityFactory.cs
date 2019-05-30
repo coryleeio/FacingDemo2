@@ -33,6 +33,9 @@ namespace Gamepackage
                 entity.Inventory.Items.Add(null);
             }
 
+            entity.EntityAcquiredTags = new List<Tags>();
+            entity.EntityInnateTags = new List<Tags>();
+
             if (entity.PrototypeIdentifier == UniqueIdentifier.ENTITY_PONCY)
             {
                 entity.Name = "entity.player.name.default".Localize();

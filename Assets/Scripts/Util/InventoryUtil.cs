@@ -14,6 +14,22 @@ namespace Gamepackage
             }
         }
 
+        public static List<Item> GetEquippedItems(Entity entity)
+        {
+            var aggregate = new List<Item>();
+            if(entity.Inventory != null)
+            {
+                foreach(var pair in entity.Inventory.EquippedItemBySlot)
+                {
+                    if(!aggregate.Contains(pair.Value))
+                    {
+                        aggregate.Add(pair.Value);
+                    }
+                }
+            }
+            return aggregate;
+        }
+
         public static void AddItem(Entity entity, Item item)
         {
             AddItem(entity, item, -1);

@@ -34,6 +34,12 @@ namespace Gamepackage
 
         public bool AlwaysVisible = false;
 
+        // Tags assigned at creation or at polymorph into a new entity type.
+        public List<Tags> EntityInnateTags;
+
+        // Tags acquired through gameplay, for players or NPCs, not lost on polymorph.
+        public List<Tags> EntityAcquiredTags;
+
         [JsonIgnore]
         public bool IsPlayer
         {
@@ -66,7 +72,7 @@ namespace Gamepackage
         {
             get
             {
-                if(View == null)
+                if (View == null)
                 {
                     return null;
                 }
@@ -85,6 +91,14 @@ namespace Gamepackage
         public List<Effect> GetEffects(Predicate<Effect> predicate)
         {
             return CombatUtil.GetEntityEffectsByType(this, predicate);
+        }
+
+        public List<Tags> Tags
+        {
+            get
+            {
+                return CombatUtil.GetTagsOnEntity(this);
+            }
         }
 
         public int CalculateValueOfAttribute(Attributes attr)

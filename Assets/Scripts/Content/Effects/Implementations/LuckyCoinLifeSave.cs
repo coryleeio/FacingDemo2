@@ -4,22 +4,6 @@ namespace Gamepackage
 {
     public class LuckyCoinLifeSave : Effect
     {
-        public override string DisplayName
-        {
-            get
-            {
-                return "effect.lucky.coin.lifesave.name";
-            }
-        }
-
-        public override string Description
-        {
-            get
-            {
-                return "effect.lucky.coin.lifesave.description";
-            }
-        }
-
         public override bool CanAffectIncomingAttack(CalculatedAttack calculatedAttack, EntityStateChange outcome)
         {
             if (outcome.Target == null)
@@ -41,12 +25,12 @@ namespace Gamepackage
                 CombatUtil.ShortCiruitAttack(outcome);
                 outcome.FloatingTextMessage.AddLast(new FloatingTextMessage()
                 {
-                    Message = "effect.lucky.coin.lifesave.floating.message".Localize(),
+                    Message = ("effect." + LocalizationName + ".floating.message").Localize(),
                     Color = DisplayUtil.DamageDisplayColor(target.IsPlayer, false),
                     target = target,
                     AllowLeftRightDrift = false,
                 });
-                outcome.LateMessages.AddLast("effect.lucky.coin.lifesave.block.attack".Localize());
+                outcome.LateMessages.AddLast(("effect." + LocalizationName + ".stop.attack").Localize());
 
                 calculatedAttack.ItemStateChanges.Add(new ItemStateChange()
                 {

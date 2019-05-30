@@ -1,46 +1,21 @@
-﻿using Spine.Unity;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gamepackage
 {
     public class Poison : Effect
     {
-        public override string DisplayName
-        {
-            get
-            {
-                return "effect.poison.name";
-            }
-        }
-
-        public override string Description
-        {
-            get
-            {
-                return "effect.poison.description";
-            }
-        }
-
         public int PoisonAmount;
 
-        public override void OnApply(EntityStateChange outcome)
-        {
-            base.OnApply(outcome);
-            Context.UIController.TextLog.AddText(string.Format("effect.poison.apply.message".Localize(), outcome.Target.Name));
-        }
-
-        public override void OnRemove(Entity entity)
-        {
-            base.OnRemove(entity);
-            Context.UIController.TextLog.AddText(string.Format("effect.poison.remove.message".Localize(), entity.Name));
-        }
+        private static readonly List<Tags> BlockingTags = new List<Tags>() { Gamepackage.Tags.PoisonImmunity, };
+        public override List<Tags> TagsThatBlockThisEffect => BlockingTags;
 
         public override void Tick(Entity entity)
         {
             base.Tick(entity);
             var calculated = CombatUtil.CalculateSimpleDamage(
                 entity,
-                "effect.poison.tick.message",
+                "effect." + LocalizationName + ".tick.message",
                 PoisonAmount,
                 DamageTypes.POISON
             );

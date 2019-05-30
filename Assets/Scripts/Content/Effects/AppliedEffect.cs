@@ -5,15 +5,13 @@ namespace Gamepackage
     public class AppliedEffect : Effect
     {
         public UniqueIdentifier EffectAppliedId;
-        public string AppliedDisplayName;
-        public string AppliedDisplayDescription;
         public List<AttackType> ValidCombatContextsForApplication = new List<AttackType>();
 
         public override string DisplayName
         {
             get
             {
-                return AppliedDisplayName;
+                return "effect.applied." + LocalizationName + ".name";
             }
         }
 
@@ -21,7 +19,7 @@ namespace Gamepackage
         {
             get
             {
-                return AppliedDisplayDescription;
+                return "effect.applied." + LocalizationName + ".description";
             }
         }
 
@@ -40,13 +38,13 @@ namespace Gamepackage
             return usageContext;
         }
 
-        public override void ShowAddMessage(Entity entity)
+        public override void ShowAddMessages(Entity entity)
         {
             // An applied effect is an internal wrapper and should not be messaged
             // the effect it is applying will be messaged
         }
 
-        public override void ShowRemoveMessage(Entity entity)
+        public override void ShowRemoveMessages(Entity entity)
         {
             // An applied effect is an internal wrapper and should not be messaged
             // the effect it is applying will be messaged

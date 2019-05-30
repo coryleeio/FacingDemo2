@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -7,13 +8,24 @@ namespace Gamepackage
 {
     public abstract class Effect
     {
-        public abstract string DisplayName
+        public string LocalizationName
         {
-            get;
+            get; set;
         }
-        public abstract string Description
+
+        public virtual string DisplayName
         {
-            get;
+            get
+            {
+                return "effect." + LocalizationName + ".name";
+            }
+        }
+        public virtual string Description
+        {
+            get
+            {
+                return "effect." + LocalizationName + ".description";
+            }
         }
 
         public UniqueIdentifier Identifier;
@@ -30,6 +42,31 @@ namespace Gamepackage
         // One causes aggro, and is displayed as bad, the others are not.
         // though if applied as part of an attack the entire attack may still be interpreted as hostile.
         public AttackHostility Hostility = AttackHostility.NOT_SET;
+
+        // A good practice is to use a static to avoid making a new list all the time.
+        [JsonIgnore]
+        public static readonly List<Tags> EmptyTagList = new List<Tags>(0);
+
+        // If an entity has a tag in this list, this effect cannot be applied.
+        // a good practice is to use a static to avoid making a new list all the time.
+        [JsonIgnore]
+        public virtual List<Tags> TagsAppliedToEntity
+        {
+            get
+            {
+                return EmptyTagList;
+            }
+        }
+
+        // If an entity has a tag in this list, this effect cannot be applied.
+        [JsonIgnore]
+        public virtual List<Tags> TagsThatBlockThisEffect
+        {
+            get
+            {
+                return EmptyTagList;
+            }
+        }
 
         [JsonIgnore]
         public bool CanTick
@@ -69,7 +106,7 @@ namespace Gamepackage
             }
         }
 
-        public virtual void ShowAddMessage(Entity entity)
+        public virtual void ShowAddMessages(Entity entity)
         {
             CombatUtil.ShowFloatingMessage(entity.Position, new FloatingTextMessage()
             {
@@ -78,9 +115,10 @@ namespace Gamepackage
                 target = entity,
                 AllowLeftRightDrift = true,
             });
+            Context.UIController.TextLog.AddText(string.Format(("effect." + LocalizationName + ".apply.message").Localize(), entity.Name));
         }
 
-        public virtual void ShowRemoveMessage(Entity entity)
+        public virtual void ShowRemoveMessages(Entity entity)
         {
             CombatUtil.ShowFloatingMessage(entity.Position, new FloatingTextMessage()
             {
@@ -89,6 +127,7 @@ namespace Gamepackage
                 target = entity,
                 AllowLeftRightDrift = true,
             });
+            Context.UIController.TextLog.AddText(string.Format(("effect." + LocalizationName + ".remove.message").Localize(), entity.Name));
         }
 
         // For applying persistant visual effects from items, since this does not have a actionOutcome
@@ -96,16 +135,48 @@ namespace Gamepackage
         // action outcome for equiping an item.
         public void OnApply(Entity entity)
         {
-            ApplyPersistentVisualEffects(entity);
-            ShowAddMessage(entity);
+            OnApplyInternal(entity);
         }
 
         // Call when applying for the first time, may actually do state changes, or apply 
         // non permanent visual effects on initial application
         public virtual void OnApply(EntityStateChange outcome)
         {
-            ApplyPersistentVisualEffects(outcome.Target);
-            ShowAddMessage(outcome.Target);
+            OnApplyInternal(outcome.Target);
+        }
+
+        private void OnApplyInternal(Entity entity)
+        {
+            ApplyPersistentVisualEffects(entity);
+            ShowAddMessages(entity);
+            HandleRemovalOfBlockedEffects(entity);
+        }
+
+        private void HandleRemovalOfBlockedEffects(Entity entity)
+        {
+            var stateChanges = new List<EntityStateChange>();
+            foreach(var entityTag in entity.Tags)
+            {
+                foreach (var effectOnEntity in entity.GetEffects())
+                {
+                    foreach (var tagThatBlocksThisEffect in effectOnEntity.TagsThatBlockThisEffect)
+                    {
+                        if (entityTag == tagThatBlocksThisEffect)
+                        {
+                            EntityStateChange outcome = new EntityStateChange();
+                            outcome.Source = entity;
+                            outcome.Target = entity;
+                            outcome.RemovedEffects.Add(effectOnEntity);
+                            stateChanges.Add(outcome);
+                        }
+                    }
+                }
+
+            }
+            foreach (var stateChange in stateChanges)
+            {
+                CombatUtil.ApplyEntityStateChange(stateChange);
+            }
         }
 
         // When an effect is removed, perform any state changes, and remove the persistent visual effects
@@ -127,7 +198,7 @@ namespace Gamepackage
                     target.Body.CurrentHealth = 1;
                 }
             }
-            ShowRemoveMessage(target);
+            ShowRemoveMessages(target);
         }
 
         // Apply persistent visual effects, be sure to call this when loading the game for all effects

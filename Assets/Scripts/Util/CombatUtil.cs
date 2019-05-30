@@ -195,6 +195,7 @@ namespace Gamepackage
                 }
                 CombatUtil.CalculateAffectOutgoingAttack(calculatedAttack, attackStateChange);
                 CombatUtil.CalculateAffectIncomingAttackEffects(calculatedAttack, attackStateChange);
+                CombatUtil.CalculateBlockIncomingAttackEffects(calculatedAttack, attackStateChange);
             }
             CalculateExplosion(grid, calculatedAttack, calculatedAttack.EndpointOfAttack);
             CalculateProjectileItemChanges(calculatedAttack);
@@ -571,7 +572,7 @@ namespace Gamepackage
                     if (target.View.ViewGameObject != null)
                     {
                         var deathAnim = target.View.ViewGameObject.AddComponent<DeathAnimation>();
-                        if(target.View.HealthBar != null)
+                        if (target.View.HealthBar != null)
                         {
                             GameObject.Destroy(target.View.HealthBar.gameObject);
                         }
@@ -599,6 +600,31 @@ namespace Gamepackage
             ShowMessages(result);
         }
 
+        public static List<Effect> GetEffectsFromInventory(Entity entity)
+        {
+            var effectsAggregate = new List<Effect>();
+            if (entity.Inventory != null)
+            {
+                foreach (var pair in entity.Inventory.EquippedItemBySlot)
+                {
+                    var item = pair.Value;
+                    effectsAggregate.AddRange(item.EffectsGlobal);
+                }
+
+                foreach (var item in entity.Inventory.Items)
+                {
+                    if (item != null)
+                    {
+                        if (item.TagsThatDescribeThisItem.Contains(Tags.ItemEffectsApplyFromInventory))
+                        {
+                            effectsAggregate.AddRange(item.EffectsGlobal);
+                        }
+                    }
+                }
+            }
+            return effectsAggregate;
+        }
+
         public static List<Effect> GetEntityEffectsByType(Entity entity, Predicate<Effect> filter = null)
         {
             var effectsAggregate = new List<Effect>();
@@ -607,20 +633,7 @@ namespace Gamepackage
                 effectsAggregate.AddRange(entity.Trigger.Effects);
             }
 
-            foreach (var pair in entity.Inventory.EquippedItemBySlot)
-            {
-                var item = pair.Value;
-                effectsAggregate.AddRange(item.EffectsGlobal);
-            }
-
-            foreach (var item in entity.Inventory.Items)
-            {
-                if (item != null)
-                {
-                    effectsAggregate.AddRange(item.EffectsGlobal);
-
-                }
-            }
+            effectsAggregate.AddRange(GetEffectsFromInventory(entity));
 
             if (entity.Body != null)
             {
@@ -634,6 +647,27 @@ namespace Gamepackage
             {
                 return effectsAggregate.FindAll(filter);
             }
+        }
+
+        // Aggregate all the tags an entity has applied to it via itself, items, and effects.
+        // does not include tags that describe the specific item or effect, only the tags
+        // applied to the entity itself.
+        public static List<Tags> GetTagsOnEntity(Entity entity)
+        {
+            var aggregate = new List<Tags>();
+            aggregate.AddRange(entity.EntityInnateTags);
+            aggregate.AddRange(entity.EntityAcquiredTags);
+            var items = InventoryUtil.GetEquippedItems(entity);
+            foreach (var item in items)
+            {
+                aggregate.AddRange(item.TagsAppliedToEntity);
+            }
+            var effects = entity.GetEffects();
+            foreach(var effect in effects)
+            {
+                aggregate.AddRange(effect.TagsAppliedToEntity);
+            }
+            return aggregate;
         }
 
         public static void RemoveEntityEffects(Entity entity, List<Effect> effectsThatShouldExpire)
@@ -877,7 +911,7 @@ namespace Gamepackage
 
         public static bool CanAttackInMeleeWithoutWeapon(Entity source)
         {
-             return source.Body != null && source.Body.MeleeAttackTypeParameters != null && source.Body.MeleeAttackTypeParameters.AttackParameters.Count > 0;
+            return source.Body != null && source.Body.MeleeAttackTypeParameters != null && source.Body.MeleeAttackTypeParameters.AttackParameters.Count > 0;
         }
 
         public static List<Point> PointsInExplosionRange(ExplosionParameters ExplosionParameters, Point placementPosition)
@@ -931,6 +965,38 @@ namespace Gamepackage
                 {
                     effect.CalculateAffectIncomingAttackEffects(calculatedAttack, change);
                 }
+            }
+        }
+        public static void CalculateBlockIncomingAttackEffects(CalculatedAttack calculatedAttack, EntityStateChange change)
+        {
+            var tagsTargetHas = change.Target.Tags;
+            var effectsBlocked = new List<Effect>();
+
+            foreach(var sourceEffect in change.AppliedEffects)
+            {
+                Effect realEffect = null;
+                if(sourceEffect is AppliedEffect)
+                {
+                    var appliedEffect = (AppliedEffect)sourceEffect;
+                    realEffect = EffectFactory.Build(appliedEffect.EffectAppliedId);
+                }
+                else
+                {
+                    realEffect = sourceEffect;
+                }
+
+                foreach(var tagThatMayBlockThisEffect in realEffect.TagsThatBlockThisEffect)
+                {
+                    if(tagsTargetHas.Contains(tagThatMayBlockThisEffect))
+                    {
+                        effectsBlocked.Add(sourceEffect);
+                    }
+                }
+            }
+            foreach(var effectBlocked in effectsBlocked)
+            {
+                change.AppliedEffects.Remove(effectBlocked);
+                change.LateMessages.AddLast(string.Format(("effect." + effectBlocked.LocalizationName + ".block.message").Localize(), change.Target.Name));
             }
         }
 

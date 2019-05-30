@@ -82,13 +82,25 @@ entity.stairs.down.name: "Stairs (Down)"
 effect.lucky.coin.lifesave.name: "It's really lucky"
 effect.lucky.coin.lifesave.description: "50% chance to survive a hit that would otherwise kill you."
 effect.lucky.coin.lifesave.floating.message: "Got lucky!"
-effect.lucky.coin.lifesave.block.attack: "The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters..."
+effect.lucky.coin.lifesave.stop.attack: "The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters..."
 
-effect.poison.name: "Poison"
-effect.poison.description: "You are poisoned..."
-effect.poison.apply.message: "{0} is now poisoned..."
-effect.poison.remove.message: "{0} is no longer poisoned!"
-effect.poison.tick.message: "Poison hurts {1} for {2} points of damage!"
+effect.weak.poison.name: "Poison"
+effect.weak.poison.description: "You are poisoned..."
+effect.weak.poison.apply.message: "{0} is now poisoned..."
+effect.weak.poison.remove.message: "{0} is no longer poisoned!"
+effect.weak.poison.tick.message: "Poison hurts {1} for {2} points of damage!"
+effect.weak.poison.block.message: "The poison had no effect on {0}."
+effect.applied.weak.poison.name: "Applied weak poison"
+effect.applied.weak.poison.description: "The business end of this is coated in poison..."
+
+effect.strong.poison.name: "Poison"
+effect.strong.poison.description: "You are poisoned..."
+effect.strong.poison.apply.message: "{0} is now poisoned..."
+effect.strong.poison.remove.message: "{0} is no longer poisoned!"
+effect.strong.poison.tick.message: "Poison hurts {1} for {2} points of damage!"
+effect.strong.poison.block.message: "The poison had no effect on {0}."
+effect.applied.strong.poison.name: "Applied strong poison"
+effect.applied.strong.poison.description: "The business end of this is coated in a viscous poison..."
 
 effect.madness.name: "Madness"
 effect.madness.description: "You feel mad at everything"
@@ -111,34 +123,32 @@ effect.domination.remove.message: "{0} has broken free of their mental bonds!"
 effect.applied.domination.name: "Applied Domination"
 effect.applied.domination.description: "Makes the target faithfully serve as long as they shall live."
 
-effect.regen.name: "Regeneration"
-effect.regen.description: "You begin regenerating..."
-effect.regen.apply.message: "{0} is now regenerating!"
-effect.regen.remove.message: "{0} is no longer regenerating..."
-effect.regen.tick.message: "{1} heals for {2} points of damage!"
+effect.weak.regeneration.name: "Regeneration"
+effect.weak.regeneration.description: "You begin regenerating..."
+effect.weak.regeneration.apply.message: "{0} is now regenerating!"
+effect.weak.regeneration.remove.message: "{0} is no longer regenerating..."
+effect.weak.regeneration.tick.message: "{1} heals for {2} points of damage!"
+effect.applied.weak.regeneration.name: Applied regeneration
+effect.applied.weak.regeneration.description: This causes you to regenerate faster...
 
 effect.poison.immunity.name: "Cures poison"
 effect.poison.immunity.description: "Removes all poisons from your body."
 effect.poison.immunity.apply.message: "{0} is cleansed of all toxins"
 effect.poison.immunity.remove.message: "{0} is no longer immune to poison..."
-effect.poison.immunity.block.message: "The poison had no effect on {0}."
+effect.applied.poison.immunity.name: "Applied poison immunity"
+effect.applied.poison.immunity.description: "This makes you immune to poison..."
 
 effect.strength.of.giants.name: "Strength of Giants"
 effect.strength.of.giants.description: "Your strength feels boundless"
 effect.strength.of.giants.apply: "{0} is filled with boundless strength!"
 effect.strength.of.giants.remove: "{0} feels much weaker..."
 
-effect.traverse.stairs.name: "Change level"
-effect.traverse.stairs.description: "Press <color=yellow>F</color> use stairs..."
+effect.traverse.staircase.name: "Change level"
+effect.traverse.staircase.description: "Press <color=yellow>F</color> use stairs..."
 
-effect.applied.weak.poison.name: "Applied weak poison"
-effect.applied.weak.poison.description: "The business end of this is coated in poison..."
-effect.applied.strong.poison.name: "Applied strong poison"
-effect.applied.strong.poison.description: "The business end of this is coated in a viscous poison..."
-effect.applied.poison.immunity.name: "Applied poison immunity"
-effect.applied.poison.immunity.description: "This makes you immune to poison..."
-effect.applied.regen.name: Applied regeneration
-effect.applied.regen.description: This causes you to regenerate faster...
+
+
+
 
 item.no.name: No name
 item.no.description: No set description

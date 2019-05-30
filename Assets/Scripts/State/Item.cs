@@ -28,6 +28,9 @@ namespace Gamepackage
         // For ranged items it determines what type of ammo is fired
         public AmmoType AmmoType;
 
+        public List<Tags> TagsThatDescribeThisItem;
+        public List<Tags> TagsAppliedToEntity;
+
         public Dictionary<AttackType, AttackTypeParameters> AttackTypeParameters = new Dictionary<AttackType, AttackTypeParameters>();
 
         public bool IsUsable

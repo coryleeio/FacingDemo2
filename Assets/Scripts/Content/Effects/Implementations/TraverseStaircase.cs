@@ -7,22 +7,6 @@ namespace Gamepackage
 {
     public class TraverseStaircase : Effect
     {
-        public override string DisplayName
-        {
-            get
-            {
-                return "effect.traverse.stairs.name";
-            }
-        }
-
-        public override string Description
-        {
-            get
-            {
-                return "effect.traverse.stairs.description";
-            }
-        }
-
         public enum Params
         {
             TARGET_POSX,

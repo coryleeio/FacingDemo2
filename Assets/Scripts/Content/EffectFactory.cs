@@ -12,6 +12,7 @@ namespace Gamepackage
             {
                 retVal = new TraverseStaircase()
                 {
+                    LocalizationName = "traverse.staircase",
                     Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
@@ -19,6 +20,7 @@ namespace Gamepackage
             {
                 retVal = new LuckyCoinLifeSave()
                 {
+                    LocalizationName = "lucky.coin.lifesave",
                     Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
@@ -27,8 +29,7 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_WEAK_POISON,
-                    AppliedDisplayName = "effect.applied.weak.poison.name",
-                    AppliedDisplayDescription = "effect.applied.weak.poison.description",
+                    LocalizationName = "weak.poison",
                     Hostility = AttackHostility.HOSTILE,
                 };
             }
@@ -37,8 +38,7 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_MADNESS,
-                    AppliedDisplayName = "effect.applied.madness.name",
-                    AppliedDisplayDescription = "effect.applied.madness.description",
+                    LocalizationName = "madness",
                     Hostility = AttackHostility.HOSTILE,
                 };
             }
@@ -47,8 +47,7 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_CHARM,
-                    AppliedDisplayName = "effect.applied.charm.name",
-                    AppliedDisplayDescription = "effect.applied.charm.description",
+                    LocalizationName = "charm",
                     Hostility = AttackHostility.HOSTILE,
                 };
             }
@@ -57,8 +56,7 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_DOMINATION,
-                    AppliedDisplayName = "effect.applied.domination.name",
-                    AppliedDisplayDescription = "effect.applied.domination.description",
+                    LocalizationName = "domination",
                     Hostility = AttackHostility.HOSTILE,
                 };
             }
@@ -67,8 +65,7 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_STRONG_POISON,
-                    AppliedDisplayName = "effect.applied.strong.poison.name",
-                    AppliedDisplayDescription = "effect.applied.strong.poison.description",
+                    LocalizationName = "strong.poison",
                     Hostility = AttackHostility.HOSTILE,
                 };
             }
@@ -77,8 +74,7 @@ namespace Gamepackage
                 retVal = new AppliedEffect()
                 {
                     EffectAppliedId = UniqueIdentifier.EFFECT_POISON_IMMUNITY,
-                    AppliedDisplayName = "effect.applied.poison.immunity.name",
-                    AppliedDisplayDescription = "effect.applied.poison.immunity.description",
+                    LocalizationName = "poison.immunity",
                     Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
@@ -86,6 +82,7 @@ namespace Gamepackage
             {
                 retVal = new Poison()
                 {
+                    LocalizationName = "weak.poison",
                     PoisonAmount = 1,
                     Ticker = new Ticker()
                     {
@@ -98,6 +95,7 @@ namespace Gamepackage
             {
                 retVal = new Madness()
                 {
+                    LocalizationName = "madness",
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3
@@ -109,6 +107,7 @@ namespace Gamepackage
             {
                 retVal = new Charm()
                 {
+                    LocalizationName = "charm",
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 3
@@ -120,6 +119,7 @@ namespace Gamepackage
             {
                 retVal = new Domination()
                 {
+                    LocalizationName = "domination",
                     Hostility = AttackHostility.HOSTILE,
                 };
             }
@@ -127,6 +127,7 @@ namespace Gamepackage
             {
                 retVal = new Poison()
                 {
+                    LocalizationName = "strong.poison",
                     PoisonAmount = 3,
                     Ticker = new Ticker()
                     {
@@ -139,6 +140,7 @@ namespace Gamepackage
             {
                 retVal = new PoisonImmunity()
                 {
+                    LocalizationName = "poison.immunity",
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 20
@@ -150,6 +152,7 @@ namespace Gamepackage
             {
                 retVal = new Regeneration()
                 {
+                    LocalizationName = "weak.regeneration",
                     Ticker = new Ticker()
                     {
                         TurnsRemaining = 20
@@ -162,9 +165,8 @@ namespace Gamepackage
             {
                 retVal = new AppliedEffect()
                 {
+                    LocalizationName = "weak.regeneration",
                     EffectAppliedId = UniqueIdentifier.EFFECT_WEAK_REGENERATION,
-                    AppliedDisplayName = "effect.applied.regen.name".Localize(),
-                    AppliedDisplayDescription = "effect.applied.regen.description".Localize(),
                     Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
@@ -173,6 +175,7 @@ namespace Gamepackage
             {
                 retVal = new StrengthOfGiants()
                 {
+                    LocalizationName = "strength.of.giants",
                     Attributes = new Dictionary<Attributes, int>()
                     {
                         {  Attributes.MAX_HEALTH, 100 },
@@ -185,6 +188,7 @@ namespace Gamepackage
             {
                 retVal = new LuckyCoinLifeSave()
                 {
+                    LocalizationName = "lucky.coin.lifesave",
                     Hostility = AttackHostility.NOT_HOSTILE,
                 };
             }
@@ -208,7 +212,8 @@ namespace Gamepackage
             {
                 retVal.Attributes = new Dictionary<Attributes, int>();
             }
-
+            Assert.IsNotNull(retVal.LocalizationName, "Localization not defined for " + retVal.Identifier);
+            Assert.AreNotEqual("", retVal.LocalizationName, "Localization not defined for " + retVal.Identifier);
             Assert.IsTrue(retVal.Hostility != AttackHostility.NOT_SET, "Must specify hostility for all effects, not set for: " + retVal.Identifier);
             return retVal;
         }

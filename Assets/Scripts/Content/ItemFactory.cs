@@ -15,6 +15,8 @@ namespace Gamepackage
             item.MaxStackSize = 1;
             item.Attributes = new Dictionary<Attributes, int>(0);
             item.EffectsGlobal = new List<Effect>();
+            item.TagsThatDescribeThisItem = new List<Tags>();
+            item.TagsAppliedToEntity = new List<Tags>();
             item.AttackTypeParameters = new Dictionary<AttackType, AttackTypeParameters>()
             {
                 {     AttackType.Melee, new AttackTypeParameters()
@@ -503,7 +505,7 @@ namespace Gamepackage
                         ProjectileAppearanceIdentifier = UniqueIdentifier.PROJECTILE_APPEARANCE_COIN,
                     }
                 };
-
+                item.TagsThatDescribeThisItem.Add(Tags.ItemEffectsApplyFromInventory);
                 item.EffectsGlobal.Add(EffectFactory.Build(UniqueIdentifier.EFFECT_LUCKY_COIN_LIFE_SAVE));
             }
             else if (uniqueIdentifier == UniqueIdentifier.ITEM_ROBE_OF_WONDERS)
