@@ -23,7 +23,6 @@ namespace Gamepackage
 
         public void TooltipShowSimpleText(GameObject hoverOver, string input)
         {
-            Debug.Log("SHow" + hoverOver.name);
             if(input == null || input == "")
             {
                 return;
@@ -39,7 +38,6 @@ namespace Gamepackage
         {
             if (obj == _mostRecentHover)
             {
-                Debug.Log(obj);
                 Hide();
             }
         }
