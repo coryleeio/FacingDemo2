@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Gamepackage
 {
@@ -57,19 +58,32 @@ namespace Gamepackage
 
         public void Update()
         {
+            Profiler.BeginSample("GameSceneControllerUpdate");
             if (!Stopped)
             {
+                Profiler.BeginSample("PlayerController");
                 Context.PlayerController.Process();
+                Profiler.EndSample();
                 // Player controller can cause a scene change which will cause these to error out
                 // as the state will change.
                 if (!Stopped)
                 {
+                    Profiler.BeginSample("OverlaySystem");
                     Context.OverlaySystem.Process();
+                    Profiler.EndSample();
+
+                    Profiler.BeginSample("PathFinder");
                     Context.PathFinder.Process();
+                    Profiler.EndSample();
+
+                    Profiler.BeginSample("FlowSystem");
                     Context.FlowSystem.Process();
+                    Profiler.EndSample();
+
                     CameraDriver.MoveCamera();
                 }
             }
+            Profiler.EndSample();
         }
 
         public void OnDisable()
