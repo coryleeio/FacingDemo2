@@ -11,10 +11,10 @@ namespace Gamepackage
         {
             if (Context.Game == null)
             {
+                Context.ModManager.LoadModsAndResources();
                 // So play button works in editor
                 SaveUtil.NewGame();
                 DungeonGenerator.GenerateDungeon();
-                Context.ResourceManager.LoadAllPrototypes();
                 Stopped = false;
             }
 
@@ -27,13 +27,10 @@ namespace Gamepackage
             ViewFactory.BuildMapTiles(Context.Game.CurrentLevel);
             foreach (var entity in Context.Game.CurrentLevel.Entitys)
             {
-                if (entity.View != null)
-                {
-                    ViewFactory.RebuildView(entity);
-                }
+                 ViewFactory.RebuildView(entity);
             }
             var player = Context.Game.CurrentLevel.Player;
-            if (player.View != null && player.View.ViewGameObject != null)
+            if (player.ViewGameObject != null)
             {
                 gameSceneCameraDriver.JumpToTarget(player.Position);
             }

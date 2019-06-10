@@ -261,9 +261,9 @@ namespace Gamepackage
             return level.Grid[location].CachedVisibilityFloodFills[visionRadius];
         }
 
-        public bool CanSee(Level level, Entity start, Entity end, int visionRadius)
+        public bool CanSee(Entity start, Point end)
         {
-            return PlacesVisibleFromLocation(level, start.Position, visionRadius).Contains(end.Position);
+            return PlacesVisibleFromLocation(Context.Game.CurrentLevel, start.Position, start.CalculateValueOfAttribute(Attributes.VISION_RADIUS)).Contains(end);
         }
 
         public void UpdateVisibility()
@@ -286,29 +286,22 @@ namespace Gamepackage
 
             foreach (var entity in level.Entitys)
             {
-                if (entity.View != null)
+                entity.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
+                if (entity.ViewGameObject != null)
                 {
-                    entity.View.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
-                }
-
-                if (entity.View.ViewGameObject != null)
-                {
-                    if (entity.View != null)
+                    entity.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
+                    if (entity.ViewGameObject != null)
                     {
-                        entity.View.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
-                        if (entity.View.ViewGameObject != null)
-                        {
-                            entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
-                        }
-                        if (entity.View.HealthBar != null)
-                        {
-                            entity.View.HealthBar.gameObject.SetActive(entity.View.IsVisible); ;
-                        }
+                        entity.ViewGameObject.SetActive(entity.IsVisible);
+                    }
+                    if (entity.HealthBar != null)
+                    {
+                        entity.HealthBar.gameObject.SetActive(entity.IsVisible); ;
                     }
 
-                    if (entity.View.ViewGameObject != null)
+                    if (entity.ViewGameObject != null)
                     {
-                        entity.View.ViewGameObject.SetActive(entity.View.IsVisible);
+                        entity.ViewGameObject.SetActive(entity.IsVisible);
                     }
                 }
             }

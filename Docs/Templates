@@ -1,0 +1,41 @@
+states - actual tangible instance of a thing in the world. has reference to definition, but not a template. includes the applied effects and whatnot.
+
+			eg. Physical instance of a blue nissan
+
+impls - code needed to run the nissan
+templates - a reference to a template of the item being created, and sufficient values to generate an item state (min/max durability when found in the wild, current stack size, a list of possible names,etc.)
+This is the thing that gets instantiated in the game via it's ID.  When you instantiate a template, you get a state with a reference to a definition.  
+               
+			(Not PITA because you share the nissan definition, color and hatchback are on the state)
+            eg. RED_NISSAN
+            eg. BLUE_NISSAN
+            eg. BLUE_NISSAN_WITH_HATCHBACK 
+
+variants- overrides for an existing template, might be added later for the hatchback case, adding poison to a dagger and still having it be a dagger etc.
+
+
+Tables - collections of template ids, rarities, and a mode
+
+			 returns list of strings, typically of templates, but 
+			 doesn't have to be.
+
+             ALWAYS, COMMON, UNCOMMON, RARE, VERY_RARE, EPIC.     LEGENDARY
+             64       32     16     8      4     2    1
+
+             assign a range
+             roll num 1-100, if in range, return object
+
+             (for 'one of' just dont add null to list)
+
+             Entity templates, will reference these for their equipment, loot, etc.
+             Other templates may reference them as well, as well as scripts for generating levels.
+
+
+             eg an encounter with 4 skeletons is just 4 skeleton entries with a each mode and an always probability.
+
+Campaign - classes to instantiate to generate each level.
+         - definitions to use for parameters, etc.
+         - localization keys to use for interstitials, name, description
+
+
+

@@ -8,7 +8,7 @@ namespace Gamepackage
 {
     public class FlowController
     {
-        public LinkedList<Step> Steps = new LinkedList<Step>();
+        public LinkedList<FlowStep> Steps = new LinkedList<FlowStep>();
         public Team CurrentlyActingTeam = Team.PLAYER; // always start on player when changing scenes
 
         public void Init()
@@ -37,22 +37,22 @@ namespace Gamepackage
                 var entitesThatStillNeedToACtBeforePhaseEnds = 0;
                 foreach (var entity in entities)
                 {
-                    if (entity.Behaviour != null)
+                    if (entity.HasBehaviour)
                     {
-                        if (entity.Behaviour.IsPlayer && entity.Behaviour.AI == AIType.None)
+                        if (entity.IsPlayer && entity.AI == AIType.None)
                         {
-                            entity.Behaviour.IsThinking = true;
+                            entity.IsThinking = true;
                         }
-                        if (!entity.Behaviour.IsThinking)
+                        if (!entity.IsThinking)
                         {
-                            entity.Behaviour.NextAction = null;
-                            entity.Behaviour.IsThinking = true;
+                            entity.NextAction = null;
+                            entity.IsThinking = true;
                             AIUtil.FigureOutNextAction(entity);
                         }
-                        if (!entity.Behaviour.IsDoneThisTurn)
+                        if (!entity.IsDoneThisTurn)
                         {
                             entitesThatStillNeedToACtBeforePhaseEnds++;
-                            if (entity.Behaviour.IsThinking && entity.Behaviour.NextAction != null)
+                            if (entity.IsThinking && entity.NextAction != null)
                             {
                                 entitiesDoneThinking++;
                             }
@@ -99,30 +99,30 @@ namespace Gamepackage
 
                     foreach (var entity in entities)
                     {
-                        if (entity.Behaviour != null && !entity.Behaviour.IsDoneThisTurn)
+                        if (entity.HasBehaviour && !entity.IsDoneThisTurn)
                         {
-                            if(entity.Behaviour.NextAction == null)
+                            if(entity.NextAction == null)
                             {
                                 Debug.Log("it");
                             }
-                            Assert.IsNotNull(entity.Behaviour.NextAction, "Any entity that is not done at this point should know what they would like to do, somehow an action was not chosen for: " + entity.PrototypeIdentifier.ToString());
-                            if (!entity.Behaviour.NextAction.IsValid())
+                            Assert.IsNotNull(entity.NextAction, "Any entity that is not done at this point should know what they would like to do, somehow an action was not chosen for: " + entity.TemplateIdentifier.ToString());
+                            if (!entity.NextAction.IsValid())
                             {
-                                if(entity.Behaviour.NextAction.GetType() == typeof(Move))
+                                if(entity.NextAction.GetType() == typeof(Move))
                                 {
-                                    var castMove = (Move)entity.Behaviour.NextAction;
-                                    Debug.Log(string.Format("Entity {0} of type {1} discarded its next action of {2}", entity.Id.ToString(), entity.PrototypeIdentifier.ToString(), entity.Behaviour.NextAction.ToString()));
+                                    var castMove = (Move)entity.NextAction;
+                                    Debug.Log(string.Format("Entity {0} of type {1} discarded its next action of {2}", entity.Id.ToString(), entity.TemplateIdentifier.ToString(), entity.NextAction.ToString()));
                                     Debug.Log(string.Format("It was in position {0} trying to move to: {1}", entity.Position, castMove.TargetPosition));
                                 }
                                 else
                                 {
-                                    Debug.Log(string.Format("Entity {0} of type {1} discarded its next action of {2}", entity.Id.ToString(), entity.PrototypeIdentifier.ToString(), entity.Behaviour.NextAction.ToString()));
+                                    Debug.Log(string.Format("Entity {0} of type {1} discarded its next action of {2}", entity.Id.ToString(), entity.TemplateIdentifier.ToString(), entity.NextAction.ToString()));
                                 }
                                 if(entity.IsPlayer)
                                 {
                                     Debug.Log("Since it is the player the action will be cleared.");
-                                    entity.Behaviour.NextAction = null;
-                                    entity.Behaviour.IsThinking = false;
+                                    entity.NextAction = null;
+                                    entity.IsThinking = false;
                                     continue;
                                 }
                                 else
@@ -134,19 +134,19 @@ namespace Gamepackage
                                     {
                                         Source = entity
                                     };
-                                    entity.Behaviour.NextAction = wait;
+                                    entity.NextAction = wait;
                                     return;
                                 }
                             }
-                            if (entity.Behaviour.NextAction.GetType() == typeof(Wait))
+                            if (entity.NextAction.GetType() == typeof(Wait))
                             {
                                 waiters.Add(entity);
                             }
-                            else if (entity.Behaviour.NextAction.GetType() == typeof(Move))
+                            else if (entity.NextAction.GetType() == typeof(Move))
                             {
                                 movers.Add(entity);
                             }
-                            else if (entity.Behaviour.NextAction.GetType() == typeof(SwapPositionsWithAlly))
+                            else if (entity.NextAction.GetType() == typeof(SwapPositionsWithAlly))
                             {
                                 swappers.Add(entity);
                             }
@@ -159,11 +159,11 @@ namespace Gamepackage
                     if (combatants.Count != 0)
                     {
                         // Enqueue a combat action
-                        var step = new Step();
-                        var endTurnStep = new Step();
+                        var step = new FlowStep();
+                        var endTurnStep = new FlowStep();
 
                         var entityToAct = combatants[0];
-                        var nextAction = entityToAct.Behaviour.NextAction;
+                        var nextAction = entityToAct.NextAction;
                         step.Actions.AddLast(nextAction);
                         var endTurn = new EndTurn
                         {
@@ -177,11 +177,11 @@ namespace Gamepackage
                     }
                     else if (swappers.Count != 0)
                     {
-                        var step = new Step();
-                        var endTurnStep = new Step();
+                        var step = new FlowStep();
+                        var endTurnStep = new FlowStep();
                         foreach (var swapper in swappers)
                         {
-                            step.Actions.AddFirst(swapper.Behaviour.NextAction);
+                            step.Actions.AddFirst(swapper.NextAction);
                         }
                         foreach (var swapper in swappers)
                         {
@@ -198,11 +198,11 @@ namespace Gamepackage
                     else if (waiters.Count != 0)
                     {
                         // Enqueue waiters
-                        var step = new Step();
-                        var endTurnStep = new Step();
+                        var step = new FlowStep();
+                        var endTurnStep = new FlowStep();
                         foreach (var waiter in waiters)
                         {
-                            step.Actions.AddFirst(waiter.Behaviour.NextAction);
+                            step.Actions.AddFirst(waiter.NextAction);
                         }
                         foreach (var waiter in waiters)
                         {
@@ -219,16 +219,16 @@ namespace Gamepackage
                     {
                         // Batch the non conflicting moves
                         var listOfMovedToPoints = new List<Point>();
-                        var moveStep = new Step();
-                        var endTurnSTep = new Step();
+                        var moveStep = new FlowStep();
+                        var endTurnSTep = new FlowStep();
 
                         foreach (var entity in movers)
                         {
-                            var desiredMove = entity.Behaviour.NextAction as Move;
+                            var desiredMove = entity.NextAction as Move;
                             if (!listOfMovedToPoints.Contains(desiredMove.TargetPosition))
                             {
                                 listOfMovedToPoints.Add(desiredMove.TargetPosition);
-                                moveStep.Actions.AddLast(entity.Behaviour.NextAction);
+                                moveStep.Actions.AddLast(entity.NextAction);
                                 var endTurn = new EndTurn
                                 {
                                     Source = entity
@@ -253,12 +253,12 @@ namespace Gamepackage
         {
             foreach (var entity in entities)
             {
-                if (entity.Behaviour != null)
+                if (entity.HasBehaviour)
                 {
-                    if (!entity.Behaviour.IsPlayer)
+                    if (!entity.IsPlayer)
                     {
-                        entity.Behaviour.NextAction = null;
-                        entity.Behaviour.IsThinking = false;
+                        entity.NextAction = null;
+                        entity.IsThinking = false;
                     }
                 }
             }
@@ -270,19 +270,19 @@ namespace Gamepackage
             var entities = Context.Game.CurrentLevel.Entitys;
             foreach (var entity in entities)
             {
-                if (entity.Behaviour != null)
+                if (entity.HasBehaviour)
                 {
-                    entity.Behaviour.IsDoneThisTurn = !ActsInPhase(entity);
-                    entity.Behaviour.IsThinking = false;
-                    entity.Behaviour.NextAction = null;
+                    entity.IsDoneThisTurn = !ActsInPhase(entity);
+                    entity.IsThinking = false;
+                    entity.NextAction = null;
                 }
             }
         }
 
         public bool ActsInPhase(Entity entity)
         {
-            var canAct = entity.Body != null && !entity.Body.IsDead && entity.Behaviour != null;
-            return canAct && (entity.Behaviour.ActingTeam == CurrentlyActingTeam);
+            var canAct = entity.IsCombatant && !entity.IsDead && entity.HasBehaviour;
+            return canAct && (entity.ActingTeam == CurrentlyActingTeam);
         }
     }
 }

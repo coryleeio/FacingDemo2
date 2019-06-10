@@ -10,6 +10,16 @@ namespace Gamepackage
         public int CurrentTurn { get; set; }
         public bool IsPlayerTurn { get; set; }
 
+        public string CampaignTemplateIdentifier;
+        [JsonIgnore]
+        public CampaignTemplate CampaignTemplate
+        {
+            get
+            {
+                return Context.ResourceManager.Load<CampaignTemplate>(CampaignTemplateIdentifier);
+            }
+        }
+
         [JsonProperty]
         public int _nextId = 0;
 

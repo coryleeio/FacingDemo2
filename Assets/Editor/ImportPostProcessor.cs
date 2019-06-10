@@ -5,6 +5,17 @@ namespace Gamepackage
 {
     public class ImportPostProcessor : AssetPostprocessor
     {
+        void OnPreprocessAsset()
+        {
+            if (assetImporter != null)
+            {
+                if (assetPath.Contains("Prefabs/") && !assetPath.Contains("UI/"))
+                {
+                    assetImporter.assetBundleName = "Core";
+                }
+            }
+        }
+
         void OnPreprocessTexture()
         {
             if (assetPath.Contains(".png"))
@@ -22,6 +33,7 @@ namespace Gamepackage
                     TextureImporterSettings textureSettings = new TextureImporterSettings();
                     textureImporter.ReadTextureSettings(textureSettings);
                     textureSettings.spriteMeshType = SpriteMeshType.FullRect;
+                    textureImporter.assetBundleName = "Core";
                     textureImporter.SetTextureSettings(textureSettings);
                 }
 
@@ -32,6 +44,7 @@ namespace Gamepackage
 
                     TextureImporterSettings textureSettings = new TextureImporterSettings();
                     textureImporter.ReadTextureSettings(textureSettings);
+                    textureImporter.assetBundleName = "Core";
                     textureImporter.SetTextureSettings(textureSettings);
                 }
             }

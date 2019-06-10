@@ -1,9 +1,16 @@
 ﻿using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Gamepackage
 {
     public abstract class Action
     {
+        [JsonIgnore]
+        public abstract Entity Source
+        {
+            get; set;
+        }
+
         public bool Started = false;
         public bool Done = false;
 

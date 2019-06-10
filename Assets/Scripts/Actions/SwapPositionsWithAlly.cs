@@ -8,7 +8,10 @@ namespace Gamepackage
     public class SwapPositionsWithAlly : Action
     {
         [JsonIgnore]
-        public Entity Source;
+        public override Entity Source
+        {
+            get; set;
+        }
 
         [JsonIgnore]
         public List<Entity> Targets = new List<Entity>(0);
@@ -48,9 +51,9 @@ namespace Gamepackage
             var targetOldPosition = Targets[0].Position;
             var oldSourcePos = new Point(Source.Position.X, Source.Position.Y);
             var sourceDirection = MathUtil.RelativeDirection(Source.Position, targetOldPosition);
-            if (Source.View != null && Source.View.SkeletonAnimation != null)
+            if (Source.SkeletonAnimation != null)
             {
-                var skeletonAnimation = Source.View.SkeletonAnimation;
+                var skeletonAnimation = Source.SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
                 skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Walk, sourceDirection), true);
@@ -58,9 +61,9 @@ namespace Gamepackage
             }
 
             var targetDirection = MathUtil.RelativeDirection(Targets[0].Position, oldSourcePos);
-            if (Targets[0].View != null && Targets[0].View.SkeletonAnimation != null)
+            if (Targets[0].SkeletonAnimation != null)
             {
-                var skeletonAnimation = Targets[0].View.SkeletonAnimation;
+                var skeletonAnimation = Targets[0].SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
                 skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Walk, targetDirection), true);
@@ -85,13 +88,13 @@ namespace Gamepackage
             var _lerpPosSrc = Vector2.Lerp(LerpCurrentPositionForSource, LerpTargetPositionForSource, lerpPercentarge);
             var _lerpPosTarget = Vector2.Lerp(LerpCurrentPositionForTarget, LerpTargetPositionForTarget, lerpPercentarge);
 
-            if (Source.View != null && Source.View.ViewGameObject != null)
+            if (Source.ViewGameObject != null)
             {
-                Source.View.ViewGameObject.transform.position = _lerpPosSrc;
+                Source.ViewGameObject.transform.position = _lerpPosSrc;
             }
-            if (Targets[0].View != null && Targets[0].View.ViewGameObject != null)
+            if (Targets[0].ViewGameObject != null)
             {
-                Targets[0].View.ViewGameObject.transform.position = _lerpPosTarget;
+                Targets[0].ViewGameObject.transform.position = _lerpPosTarget;
             }
             if (Vector2.Distance(_lerpPosSrc, LerpTargetPositionForSource) < 0.005f)
             {
@@ -110,13 +113,13 @@ namespace Gamepackage
 
 
             // Move the view to the new position
-            if (Source.View != null && Source.View.ViewGameObject != null)
+            if ( Source.ViewGameObject != null)
             {
-                Source.View.ViewGameObject.transform.position = MathUtil.MapToWorld(Targets[0].Position);
+                Source.ViewGameObject.transform.position = MathUtil.MapToWorld(Targets[0].Position);
             }
-            if (Targets[0].View != null && Targets[0].View.ViewGameObject != null)
+            if (Targets[0].ViewGameObject != null)
             {
-                Targets[0].View.ViewGameObject.transform.position = MathUtil.MapToWorld(oldSourcePos);
+                Targets[0].ViewGameObject.transform.position = MathUtil.MapToWorld(oldSourcePos);
             }
 
             // Actually set new position
@@ -139,22 +142,13 @@ namespace Gamepackage
             Context.EntitySystem.Register(Targets[0], Context.Game.CurrentLevel);
             Context.VisibilitySystem.UpdateVisibility();
 
-            foreach (var potentialTrigger in Context.Game.CurrentLevel.Entitys)
-            {
-                var onStepTriggers = potentialTrigger.GetEffects((effectInQuestion) => { return effectInQuestion.CanTriggerOnStep(); });
-                foreach(var onStepTrigger in onStepTriggers)
-                {
-                    var points = MathUtil.GetPointsByOffset(potentialTrigger.Position, potentialTrigger.Trigger.Offsets);
-                    CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Source, potentialTrigger, points);
-                    CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Targets[0], potentialTrigger, points);
-                }
-            }
+            CombatUtil.DoStepTriggersForMover(Source);
+            CombatUtil.DoStepTriggersForMover(Targets[0]);
 
             if (Source.IsPlayer)
             {
                 var level = Context.Game.CurrentLevel;
-                var entitiesInPos = level.Grid[Source.Position].EntitiesInPosition;
-                Move.HandleInputHints(entitiesInPos);
+                Move.ShowInputHintsForPressTrigger(Source);
             }
         }
 

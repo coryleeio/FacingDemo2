@@ -1,4 +1,7 @@
 show.loot.message: "Press <color=yellow>F</color> to loot..."
+loot.action: "Loot"
+loot.notification: You have looted {0}{1}
+cost.health.damage: "Using {0} drains {1} health from {2}."
 
 
 death.notification.you.have.died: You have died!
@@ -58,15 +61,44 @@ item.slot.display.ammo: Ammo
 item.slot.display.ring: Ring
 item.slot.display.neck: Neck
 
-attacks.humanoid.1: "{0} punches {1} for {2} points of {3} damage!"
-attacks.dog.1: "{0} bites {1} for {2} points of {3} damage!"
-attacks.stinger.1: "{0} stings {1} for {2} points of {3} damage!"
-attacks.slashing.1: "{0} slashes {1} for {2} points of {3} damage!"
-attacks.bludgeoning.1: "{0} crushes {1} for {2} points of {3} damage!"
-attacks.piercing.1: "{0} pierces {1} for {2} points of {3} damage!"
-attacks.fire.1: "{0} burns {1} for {2} points of {3} damage!"
+attacks.miss.floating.text: Miss!
+attacks.block.floating.text: Blocked!
 
-attacks.throw.useless.1: "{0} throws an item clumbsily at {1} for {2} points of {3} damage!"
+attacks.humanoid.1.hit: "{0} punches {1} for {2} points of {3} damage!"
+attacks.humanoid.1.miss: "{0} tries to punch {1} but misses!"
+attacks.humanoid.1.block: "{0} tries to punch {1} but {1} blocks!"
+
+attacks.dog.1.hit: "{0} bites {1} for {2} points of {3} damage!"
+attacks.dog.1.miss: "{0} tries to bite {1} but misses!"
+attacks.dog.1.block: "{0} tries to bite {1} but {1} blocks!"
+
+attacks.stinger.1.hit: "{0} stings {1} for {2} points of {3} damage!"
+attacks.stinger.1.miss: "{0} tries to sting {1} but misses!"
+attacks.stinger.1.block: "{0} tries to sting {1} but {1} blocks!"
+
+attacks.slashing.1.hit: "{0} slashes {1} for {2} points of {3} damage!"
+attacks.slashing.1.miss: "{0} tries to slash {1} but misses!"
+attacks.slashing.1.block: "{0} tries to slash {1} but {1} blocks!"
+
+attacks.bludgeoning.1.hit: "{0} crushes {1} for {2} points of {3} damage!"
+attacks.bludgeoning.1.miss: "{0} tries to crush {1} but misses!"
+attacks.bludgeoning.1.block: "{0} tries to crush {1} but {1} blocks!"
+
+attacks.piercing.1.hit: "{0} pierces {1} for {2} points of {3} damage!"
+attacks.piercing.1.miss: "{0} tries to pierce {1} but misses!"
+attacks.piercing.1.block: "{0} tries to pierce {1} but {1} blocks!"
+
+attacks.fire.1.hit: "{0} burns {1} for {2} points of {3} damage!"
+attacks.fire.1.miss: "{0} tries to burn {1} but misses!"
+attacks.fire.1.block: "{0} tries to burn {1} but {1} blocks!"
+
+attacks.lightning.1.hit: "{0} zaps {1} for {2} points of {3} damage!"
+attacks.lightning.1.miss: "{0} tries to zap {1} but misses!"
+attacks.lightning.1.block: "{0} tries to zap {1} but {1} blocks!"
+
+attacks.throw.useless.1.hit: "{0} throws an item clumbsily at {1} for {2} points of {3} damage!"
+attacks..throw.useless.1.miss: "{0} tries to throw an item clumbsily at {1} but misses!"
+attacks..throw.useless.1.block: "{0} tries to throw an item clumbsily at {1} but {1} blocks!"
 
 entity.player.name.default: "Poncy"
 entity.dog.name.default: "Maslow"
@@ -79,76 +111,80 @@ entity.queen.bee.special.name: "Bee-yonce"
 entity.stairs.up.name: "Stairs (Up)"
 entity.stairs.down.name: "Stairs (Down)"
 
-effect.lucky.coin.lifesave.name: "It's really lucky"
-effect.lucky.coin.lifesave.description: "50% chance to survive a hit that would otherwise kill you."
-effect.lucky.coin.lifesave.floating.message: "Got lucky!"
+effect.lucky.coin.lifesave.name: "Feelin' Lucky"
+effect.lucky.coin.lifesave.description: "Feelin' Lucky"
+effect.lucky.coin.lifesave.item.description: "50% chance to survive a hit that would otherwise kill you."
+effect.lucky.coin.apply: ""
+effect.lucky.coin.remove: ""
+effect.lucky.coin.lifesave.floating: "Got lucky!"
 effect.lucky.coin.lifesave.stop.attack: "The mortal blow was somehow deflected by the lucky coin, sparing your life! The coin shatters..."
 
 effect.weak.poison.name: "Poison"
 effect.weak.poison.description: "You are poisoned..."
-effect.weak.poison.apply.message: "{0} is now poisoned..."
-effect.weak.poison.remove.message: "{0} is no longer poisoned!"
-effect.weak.poison.tick.message: "Poison hurts {1} for {2} points of damage!"
-effect.weak.poison.block.message: "The poison had no effect on {0}."
-effect.applied.weak.poison.name: "Applied weak poison"
-effect.applied.weak.poison.description: "The business end of this is coated in poison..."
+effect.weak.poison.item.description: "The business end of this is coated in poison..."
+effect.weak.poison.apply: "{0} is now poisoned..."
+effect.weak.poison.remove: "{0} is no longer poisoned!"
+effect.weak.poison.hit: "Poison hurts {1} for {2} points of damage!"
+effect.weak.poison.block: "The poison had no effect on {0}."
 
-effect.strong.poison.name: "Poison"
+effect.strong.poison.name: "Stong Poison"
 effect.strong.poison.description: "You are poisoned..."
-effect.strong.poison.apply.message: "{0} is now poisoned..."
-effect.strong.poison.remove.message: "{0} is no longer poisoned!"
-effect.strong.poison.tick.message: "Poison hurts {1} for {2} points of damage!"
-effect.strong.poison.block.message: "The poison had no effect on {0}."
-effect.applied.strong.poison.name: "Applied strong poison"
-effect.applied.strong.poison.description: "The business end of this is coated in a viscous poison..."
+effect.strong.poison.item.description: "The business end of this is coated in poison..."
+effect.strong.poison.apply.self: "{0} is now poisoned..."
+effect.strong.poison.apply.other: "{0} is now poisoned..."
+effect.strong.poison.apply.worn: "{0} is now poisoned..."
+effect.strong.poison.remove: "{0} is no longer poisoned!"
+effect.strong.poison.hit: "Poison hurts {1} for {2} points of damage!"
+effect.strong.poison.block: "The poison had no effect on {0}."
 
 effect.madness.name: "Madness"
 effect.madness.description: "You feel mad at everything"
-effect.madness.apply.message: "{0} has gone mad with power!"
-effect.madness.remove.message: "{0} has calmed down."
-effect.applied.madness.name: "Applied Madness"
-effect.applied.madness.description: "Causes the target to go mad and attack anyone near them."
+effect.madness.item.description: "Causes the target to go mad and attack anyone near them."
+effect.madness.apply: "{0} has gone mad with power!"
+effect.madness.remove: "{0} has calmed down."
+effect.madness.apply.self: "{0} has gone mad with power!"
+effect.madness.apply.other: "{0} has gone mad with power!"
+effect.madness.apply.worn: "{0} has gone mad with power!"
 
 effect.charm.name: "Charm"
 effect.charm.description: "You feel head over heels in love"
-effect.charm.apply.message: "{0} has fallen madly in love!"
-effect.charm.remove.message: "{0} has decided that they should not live for another's affections, and instead should work on themself."
-effect.applied.charm.name: "Applied Charm"
-effect.applied.charm.description: "Causes the target to fall madly in love with the user for a brief time."
+effect.charm.item.description: "Causes the target to fall madly in love with the user for a brief time."
+effect.charm.apply: "{0} has fallen madly in love!"
+effect.charm.apply.self: "{0} has fallen madly in love!"
+effect.charm.apply.other: "{0} has fallen madly in love!"
+effect.charm.apply.worn: "{0} has fallen madly in love!"
+effect.charm.remove: "{0} has decided that they should not live for another's affections, and instead should work on themself."
 
 effect.domination.name: "Domination"
 effect.domination.description: "You feel are enslaved by another"
-effect.domination.apply.message: "{0} has fallen victim to the will of another"
-effect.domination.remove.message: "{0} has broken free of their mental bonds!"
-effect.applied.domination.name: "Applied Domination"
-effect.applied.domination.description: "Makes the target faithfully serve as long as they shall live."
+effect.domination.item.description: "Makes the target faithfully serve as long as they shall live."
+effect.domination.apply.self: "{0} has gone mad with power!"
+effect.domination.apply.other: "{0} has gone mad with power!"
+effect.domination.apply.worn: "{0} has gone mad with power!"
 
 effect.weak.regeneration.name: "Regeneration"
 effect.weak.regeneration.description: "You begin regenerating..."
-effect.weak.regeneration.apply.message: "{0} is now regenerating!"
-effect.weak.regeneration.remove.message: "{0} is no longer regenerating..."
-effect.weak.regeneration.tick.message: "{1} heals for {2} points of damage!"
-effect.applied.weak.regeneration.name: Applied regeneration
-effect.applied.weak.regeneration.description: This causes you to regenerate faster...
+effect.weak.regeneration.item.description: "This causes you to regenerate faster..."
+effect.weak.regeneration.apply: "{0} is now regenerating!"
+effect.weak.regeneration.remove: "{0} is no longer regenerating..."
+effect.weak.regeneration.tick: "{1} heals for {2} points of damage!"
 
-effect.poison.immunity.name: "Cures poison"
+effect.poison.immunity.name: "Poison Immunity"
 effect.poison.immunity.description: "Removes all poisons from your body."
-effect.poison.immunity.apply.message: "{0} is cleansed of all toxins"
-effect.poison.immunity.remove.message: "{0} is no longer immune to poison..."
-effect.applied.poison.immunity.name: "Applied poison immunity"
-effect.applied.poison.immunity.description: "This makes you immune to poison..."
+effect.poison.immunity.item.description: "This makes you immune to poison..."
+effect.poison.immunity.apply: "{0} is cleansed of all toxins"
+effect.poison.immunity.remove: "{0} is no longer immune to poison..."
 
 effect.strength.of.giants.name: "Strength of Giants"
 effect.strength.of.giants.description: "Your strength feels boundless"
+effect.strength.of.giants.item.description: "Your strength feels boundless"
 effect.strength.of.giants.apply: "{0} is filled with boundless strength!"
 effect.strength.of.giants.remove: "{0} feels much weaker..."
+effect.madness.apply.self: "You are filled with boundless strength!"
+effect.madness.apply.other: "{0} is filled with boundless strength!"
+effect.madness.apply.worn: "You are filled with boundless strength!"
 
-effect.traverse.staircase.name: "Change level"
-effect.traverse.staircase.description: "Press <color=yellow>F</color> use stairs..."
-
-
-
-
+traverse.staircase: "Press <color=yellow>F</color> use stairs..."
 
 item.no.name: No name
 item.no.description: No set description
@@ -162,6 +198,9 @@ item.mace.description: This is a simple mace.
 item.dagger.name: Dagger
 item.dagger.description: This is a simple dagger.
 
+item.fang.of.jahabi.name: Fang of Jahabi
+item.fang.of.jahabi.description: This is the Fang of Jahabi
+
 item.robe.of.wonders.name: Robe of Wonders
 item.robe.of.wonders.description: a Robe of Wonders
 
@@ -170,6 +209,9 @@ item.sandals.description: Some old sandals
 
 item.shield.of.amalure.name: Shield of Amalure
 item.shield.of.amalure.description: a Shield of Amalure
+
+item.wand.name: "Wand"
+item.wand.description: "A zappy wand"
 
 item.staff.of.fireballs.name: Staff of fireballs
 item.staff.of.fireballs.description: This enchanted staff is hot to the touch
@@ -189,7 +231,9 @@ item.wand.of.domination.description: "This wand has the scent of command."
 item.antidote.name: "Antidote"
 item.antidote.description: "A bubbling vial of viscous green liquid."
 item.antidote.action: Drink
-item.antidote.on.use: You quaff a potion
+item.antidote.use.action.text: Drink
+item.antidote.apply.to.self.player: You quaff a potion
+item.antidote.apply.to.self.other: "{0} quaffs a potion"
 
 item.lucky.coin.name: Lucky Coin
 item.lucky.coin.description: "This coin is particularly lucky, and is probably deserving of a better description."
@@ -197,6 +241,11 @@ item.lucky.coin.description: "This coin is particularly lucky, and is probably d
 item.arrow.name: "Arrow"
 item.arrow.description: "People have been using this to kill each other literally forever. The only thing they used before this was a rock. Arrows are considered by many to be more civil."
 
-item.shortbow.name: Shortbow
-item.shortbow.description: A shortbow
+item.bow.name: Shortbow
+item.bow.description: A shortbow
 
+name.modifier.enchantment.domination: "{0} of Domination"
+name.modifier.enchantment.lightning: "{0} of Lightning"
+name.modifier.enchantment.madness: "{0} of Madness"
+name.modifier.enchantment.charm: "{0} of Charm"
+name.modifier.enchantment.fireball: "{0} of Fireball"

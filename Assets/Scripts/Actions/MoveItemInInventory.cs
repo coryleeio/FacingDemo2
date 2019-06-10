@@ -7,11 +7,11 @@ namespace Gamepackage
     public class MoveItemInInventory : Action
     {
         [JsonIgnore]
-        public Entity Source;
+        public override Entity Source
+        {
+            get; set;
+        }
 
-        [JsonIgnore]
-        public List<Entity> Targets = new List<Entity>(0);
-        
         public Item Item;
         public int Index = -1;
 

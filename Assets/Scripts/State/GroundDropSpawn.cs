@@ -4,7 +4,7 @@
     {
         public string Name;
         public int NumberToSpawn;
-        public UniqueIdentifier UniqueIdentifier;
+        public string UniqueIdentifier;
         public Point SpawnPosition;
     }
 }

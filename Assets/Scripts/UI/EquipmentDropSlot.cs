@@ -19,7 +19,7 @@ namespace Gamepackage
                 Item = DraggableItem.CurrentDraggable.Item,
                 Slot = Slot
             };
-            if (action.Item.SlotsWearable.Contains(Slot))
+            if (action.Item.Template.SlotsWearable.Contains(Slot))
             {
                 DraggableItem.CurrentDraggable.transform.SetParent(this.transform);
                 Context.PlayerController.ActionList.Enqueue(action);
@@ -39,7 +39,7 @@ namespace Gamepackage
             }
             else
             {
-                Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, String.Format("{0} ({1})", item.DisplayName, DisplayUtil.DisplayValueForSlot(Slot)));
+                Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, String.Format("{0} ({1})", item.Name.Localize(), DisplayUtil.DisplayValueForSlot(Slot)));
             }
             
         }

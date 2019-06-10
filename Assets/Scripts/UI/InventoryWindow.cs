@@ -136,10 +136,10 @@ namespace Gamepackage
             draggableInstance.Source = player;
             draggableInstance.Item = item;
             var stackCounter = draggableInstance.GetComponentInChildren<Text>();
-            stackCounter.gameObject.SetActive(item.MaxStackSize > 1);
+            stackCounter.gameObject.SetActive(item.Stackable);
             stackCounter.text = item.NumberOfItems.ToString();
             var spr = draggableInstance.GetComponent<Image>();
-            spr.sprite = item.ItemAppearance.InventorySprite;
+            spr.sprite = item.Template.ItemAppearance.InventorySprite;
         }
     }
 }

@@ -6,7 +6,10 @@ namespace Gamepackage
     public class EndTurn : Action
     {
         [JsonIgnore]
-        public Entity Source;
+        public override Entity Source
+        {
+            get;set;
+        }
 
         public override bool IsEndable
         {
@@ -20,26 +23,25 @@ namespace Gamepackage
         {
             base.Enter();
             var effectsThatShouldExpire = new List<Effect>(0);
-            if(Source.Behaviour != null)
+            if(Source.HasBehaviour)
             {
-                Source.Behaviour.IsDoneThisTurn = true;
+                Source.IsDoneThisTurn = true;
             }
 
-            var onTickEffects = Source.GetEffects((effectInQuestion) => { return effectInQuestion.CanTick; });
-            foreach(var effect in onTickEffects)
+            foreach(var effect in Source.GetEffects())
             {
                 var tickingEffect = effect;
-                tickingEffect.Tick(Source);
-                if(tickingEffect.Ticker.ShouldExpire)
+                tickingEffect.EffectImpl.Tick(tickingEffect, Source);
+                if(tickingEffect.ShouldExpire)
                 {
                     effectsThatShouldExpire.Add(tickingEffect);
                 }
             }
             // You dont need to use a state change to do this removal, because nothing should be preventing a ticking effect from expiring
             CombatUtil.RemoveEntityEffects(Source, effectsThatShouldExpire);
-            if (Source.View != null && Source.View.SkeletonAnimation != null)
+            if (Source.SkeletonAnimation != null)
             {
-                var skeletonAnimation = Source.View.SkeletonAnimation;
+                var skeletonAnimation = Source.SkeletonAnimation;
                 skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Idle, Source.Direction), true);
             }
         }

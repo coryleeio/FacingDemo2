@@ -1,15 +1,22 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Gamepackage
 {
     public class Explosion : Action
     {
+        [JsonIgnore]
+        public override Entity Source
+        {
+            get; set;
+        }
+
         // Inputs
-        private CalculatedAttack CalculatedAttack;
+        private CalculatedCombatAction CalculatedCombatAction;
 
         // Derived
-        private ExplosionParameters ExplosionParameters;
-        private ProjectileAppearance ExplosionProjectileAppearance;
+        private CombatActionParameters ExplosionParameters;
+        private ProjectileAppearanceTemplate ExplosionProjectileAppearance;
 
         private bool isDoneInternal = false;
         private int Index = 0;
@@ -25,11 +32,11 @@ namespace Gamepackage
 
         private Explosion() { }
 
-        public Explosion(CalculatedAttack calculatedAttack)
+        public Explosion(CalculatedCombatAction calculatedAttack)
         {
-            this.CalculatedAttack = calculatedAttack;
-            this.ExplosionParameters = calculatedAttack.AttackParameters.ExplosionParameters;
-            this.ExplosionProjectileAppearance = calculatedAttack.AttackParameters.ExplosionParameters.ProjectileAppearance;
+            this.CalculatedCombatAction = calculatedAttack;
+            this.ExplosionParameters = calculatedAttack.ResolvedCombatActionParameters.ExplosionParameters;
+            this.ExplosionProjectileAppearance = calculatedAttack.ResolvedCombatActionParameters.ExplosionParameters.ProjectileAppearance;
         }
 
         public override bool IsValid()
@@ -47,7 +54,7 @@ namespace Gamepackage
 
             if (ExplosionParameters.ProjectileAppearance != null && ExplosionParameters.ProjectileAppearance.OnSwingDefinition != null)
             {
-                ViewFactory.InstantiateProjectileAppearance(ExplosionParameters.ProjectileAppearance.OnSwingDefinition, CalculatedAttack.EndpointOfAttack, Direction.SouthEast, null);
+                ViewFactory.InstantiateProjectileAppearance(ExplosionParameters.ProjectileAppearance.OnSwingDefinition, CalculatedCombatAction.EndpointOfAttack, Direction.SouthEast, null);
             }
         }
 
@@ -55,9 +62,17 @@ namespace Gamepackage
         {
             base.Do();
             ElapsedTimeThisTile += Time.deltaTime;
-            if (ElapsedTimeThisTile > ExplosionProjectileAppearance.OnEnterDefinition.PerTileTravelTime)
+
+            if(ExplosionProjectileAppearance.OnEnterDefinition == null)
             {
-                if (Index == ExplosionParameters.Radius)
+                Debug.LogWarning("This explosion had no OnEnterDefinition, so it wont show anything.");
+                isDoneInternal = true;
+                CombatUtil.ApplyAttackInstantly(CalculatedCombatAction);
+                return;
+            }
+            if (ElapsedTimeThisTile > ExplosionProjectileAppearance.OnEnterDefinition.TimeSpentInEachTile)
+            {
+                if (Index == ExplosionParameters.Range)
                 {
                     isDoneInternal = true;
                 }
@@ -65,8 +80,8 @@ namespace Gamepackage
                 {
                     ElapsedTimeThisTile = 0.0f;
                     Index++;
-                    var currentPoints = CalculatedAttack.ExplosionPointsByRadius[Index];
-                    var currentStateChanges = CalculatedAttack.ExplosionStateChangesByRadius[Index];
+                    var currentPoints = CalculatedCombatAction.ExplosionPointsByRadius[Index];
+                    var currentStateChanges = CalculatedCombatAction.ExplosionStateChangesByRadius[Index];
                     foreach(var stateChange in currentStateChanges)
                     {
                         CombatUtil.ApplyEntityStateChange(stateChange);
@@ -82,7 +97,7 @@ namespace Gamepackage
 
                     if (Index - 1 > 0)
                     {
-                        var previousPoints = CalculatedAttack.ExplosionPointsByRadius[Index - 1];
+                        var previousPoints = CalculatedCombatAction.ExplosionPointsByRadius[Index - 1];
                         foreach (var point in previousPoints)
                         {
                             if (ExplosionProjectileAppearance != null && ExplosionProjectileAppearance.OnLeaveDefinition != null)

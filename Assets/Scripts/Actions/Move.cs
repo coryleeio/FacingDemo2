@@ -8,7 +8,10 @@ namespace Gamepackage
     public class Move : Action
     {
         [JsonIgnore]
-        public Entity Source;
+        public override Entity Source
+        {
+            get; set;
+        }
 
         public override bool IsEndable
         {
@@ -45,9 +48,9 @@ namespace Gamepackage
 
             Source.Direction = newDirection;
 
-            if (Source.View != null && Source.View.SkeletonAnimation != null)
+            if (Source.SkeletonAnimation != null)
             {
-                var skeletonAnimation = Source.View.SkeletonAnimation;
+                var skeletonAnimation = Source.SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
                 skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Walk, newDirection), true);
@@ -57,6 +60,12 @@ namespace Gamepackage
             {
                 Camera.main.GetComponent<GameSceneCameraDriver>().NewTarget(TargetPosition);
                 Context.UIController.LootWindow.Hide();
+            }
+            var player = Context.Game.CurrentLevel.Player;
+            var playerVision = player == null ? 10 : player.CalculateValueOfAttribute(Attributes.VISION_RADIUS);
+            if(player != null && Source.Position.Distance(player.Position) > playerVision && TargetPosition.Distance(player.Position) > playerVision)
+            {
+                isDoneInternal = true;
             }
         }
 
@@ -75,9 +84,9 @@ namespace Gamepackage
             var targetVectorPos = LerpTargetPosition;
             var _lerpPos = Vector2.Lerp(LerpCurrentPosition, targetVectorPos, lerpPercentarge);
 
-            if (Source.View != null && Source.View.ViewGameObject != null)
+            if (Source.ViewGameObject != null)
             {
-                Source.View.ViewGameObject.transform.position = _lerpPos;
+                Source.ViewGameObject.transform.position = _lerpPos;
             }
             if (Vector2.Distance(_lerpPos, targetVectorPos) < 0.005f)
             {
@@ -89,16 +98,16 @@ namespace Gamepackage
         {
             base.Exit();
 
-            // Release old position
+            // Unindex old position
             Context.EntitySystem.Deregister(Source, Context.Game.CurrentLevel);
 
             // Move the view to the new position
-            if (Source.View != null && Source.View.ViewGameObject != null)
+            if (Source.ViewGameObject != null)
             {
-                Source.View.ViewGameObject.transform.position = MathUtil.MapToWorld(TargetPosition);
+                Source.ViewGameObject.transform.position = MathUtil.MapToWorld(TargetPosition);
             }
             
-            // Actually set new position
+            // Write new position to state
             Source.Position = TargetPosition;
 
             var sortable = Source.Sortable;
@@ -107,55 +116,39 @@ namespace Gamepackage
                 sortable.Position = TargetPosition;
             }
 
-            // Lock new position
+            // Index new position
             Context.EntitySystem.Register(Source, Context.Game.CurrentLevel);
             Context.VisibilitySystem.UpdateVisibility();
-
-            foreach (var triggerThatMightGoOff in Context.Game.CurrentLevel.Entitys)
-            {
-                var onStepTriggers = triggerThatMightGoOff.GetEffects((effectInQuestion) => { return effectInQuestion.CanTriggerOnStep(); });
-                foreach (var onStepTrigger in onStepTriggers)
-                {
-                    var points = MathUtil.GetPointsByOffset(triggerThatMightGoOff.Position, triggerThatMightGoOff.Trigger.Offsets);
-                    CombatUtil.PerformTriggerStepAbilityIfSteppedOn(Source, triggerThatMightGoOff, points);
-                }
-            }
+            CombatUtil.DoStepTriggersForMover(Source);
 
             if(Source.IsPlayer)
             {
                 var level = Context.Game.CurrentLevel;
-                var entitiesInPos = level.Grid[Source.Position].EntitiesInPosition;
-                HandleInputHints(entitiesInPos);
+                ShowInputHintsForPressTrigger(Source);
             }
         }
 
-        public static void HandleInputHints(List<Entity> entitiesInPos)
+        public static void ShowInputHintsForPressTrigger(Entity source)
         {
-            var lootableEntitiesInPosition = entitiesInPos.FindAll(Filters.LootableEntities);
-            var trigggerEntitiesInPos = entitiesInPos.FindAll((entInPos) => { return entInPos.Trigger != null; });
-            Effect triggerOnPressEffect = null;
-
-            foreach (var triggerEnt in trigggerEntitiesInPos)
+            var level = Context.Game.CurrentLevel;
+            var grid = level.Grid;
+            var entities = level.Entitys;
+            var entitiesInPositionOfMove = grid[source.Position];
+            var pressTriggers = entities.FindAll(Filters.PressTriggers);
+            var anyHits = false;
+            foreach(var trigger in pressTriggers)
             {
-                foreach (var effect in triggerEnt.Trigger.Effects)
+                if(Trigger.EntityInTrigger(source, trigger))
                 {
-                    if (effect.CanTriggerOnPress())
+                    if(trigger.Trigger.CanPerform(source, trigger))
                     {
-                        triggerOnPressEffect = effect;
+                        Context.UIController.InputHint.ShowText(trigger.Trigger.Template.PressInputHint.Localize());
+                        anyHits = true;
                     }
                 }
             }
 
-            if (triggerOnPressEffect != null)
-            {
-                Context.UIController.InputHint.ShowText(triggerOnPressEffect.Description.Localize());
-            }
-
-            else if (lootableEntitiesInPosition.Count > 0)
-            {
-                Context.UIController.InputHint.ShowText("show.loot.message".Localize());
-            }
-            else
+            if(!anyHits)
             {
                 Context.UIController.InputHint.Hide();
             }

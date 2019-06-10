@@ -17,6 +17,8 @@ namespace Gamepackage
 
         IEnumerator LoadPrototypes()
         {
+
+            Context.ModManager.LoadModsAndResources();
             if (Context.Game == null)
             {
                 SaveUtil.NewGame();
@@ -24,7 +26,6 @@ namespace Gamepackage
                 DungeonGenerator.GenerateDungeon();
                 yield return new WaitForEndOfFrame();
             }
-            Context.ResourceManager.LoadAllPrototypes();
             yield return new WaitForEndOfFrame();
             SceneManager.LoadScene((int) Scenes.Game);
             yield return new WaitForEndOfFrame();

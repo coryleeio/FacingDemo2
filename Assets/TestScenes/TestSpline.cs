@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using Gamepackage;
 
-public class TestSpline : MonoBehaviour {
+public class TestSpline : MonoBehaviour
+{
+    public Material sourceMaterial;
 
-    public Material sourceMaterial; // This will be used as the basis for shader and material property settings.
-
-    // Use this for initialization
-    void Start ()
+    void Start()
     {
         var lis = new List<Sprite>();
         var longswordSprite = Resources.Load<Sprite>("Sprites/Longsword");

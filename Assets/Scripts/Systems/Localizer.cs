@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
-using YamlDotNet;
 using YamlDotNet.Serialization;
 
 namespace Gamepackage
@@ -10,7 +8,7 @@ namespace Gamepackage
     {
         public enum LocalizerLanguages
         {
-            english,
+            English,
         }
 
         public LocalizerLanguages LanguageSetting;

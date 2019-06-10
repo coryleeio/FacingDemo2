@@ -33,7 +33,7 @@ namespace Gamepackage
                 {
                     // Moving into same inventory, this is just a reorg
                     // so we just allow this to happen for free.
-                    var step = new Step();
+                    var step = new FlowStep();
                     var action = new MoveItemInInventory
                     {
                         Source = Entity,

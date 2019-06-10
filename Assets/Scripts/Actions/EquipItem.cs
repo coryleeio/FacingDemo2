@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
@@ -6,7 +7,10 @@ namespace Gamepackage
     public class EquipItem : Action
     {
         [JsonIgnore]
-        public Entity Source;
+        public override Entity Source
+        {
+            get; set;
+        }
         public Item Item;
         public ItemSlot Slot;
 

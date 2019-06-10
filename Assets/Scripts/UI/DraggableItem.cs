@@ -73,9 +73,9 @@ namespace Gamepackage
                         Source = Source,
                         Item = Item
                     };
-                    if (Item.SlotsWearable.Count > 0)
+                    if (Item.Template.SlotsWearable.Count > 0)
                     {
-                        action.Slot = Item.SlotsWearable[0];
+                        action.Slot = Item.Template.SlotsWearable[0];
                         Context.PlayerController.ActionList.Enqueue(action);
                     }
                     Context.UIController.Refresh();
@@ -105,7 +105,7 @@ namespace Gamepackage
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, Item.DisplayName.ToString());
+            Context.UIController.Tooltip.TooltipShowSimpleText(this.gameObject, Item.Name.Localize().ToString());
         }
 
         public void OnPointerExit(PointerEventData eventData)

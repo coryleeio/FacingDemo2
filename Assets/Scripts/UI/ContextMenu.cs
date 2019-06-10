@@ -37,33 +37,31 @@ namespace Gamepackage
             var hasItemInInventory = player.Inventory.Items.Contains(item);
             var isPickingUpItem = !isWearingItem && !hasItemInInventory;
             var isUsable = item.IsUsable;
-            var isEquippable = item.SlotsWearable.Count > 0;
 
 
             if (hasItemInInventory && item.IsUsable)
             {
-                var onUseText = item.CustomOnUseText ?? "context.menu.buttons.use.default".Localize();
+                var onUseText = item.Template.UseButtonText.Localize() ?? "context.menu.buttons.use.default".Localize();
                 BuildButton(onUseText, () =>
                 {
                     var grid = Context.Game.CurrentLevel.Grid;
-                    var attackTypeParameters = CombatUtil.AttackTypeParametersResolve(player, AttackType.ApplyToSelf, item);
-                    var attackParameters = CombatUtil.AttackParametersResolve(player, AttackType.ApplyToSelf, item);
-                    var calculatedAttack = CombatUtil.CalculateAttack(grid, player, AttackType.ApplyToSelf, item, player.Position, attackTypeParameters, attackParameters);
-                    Attack attack = new Attack(calculatedAttack);
+                    var InteractionTypeParameters = CombatUtil.CombatActionParametersResolve(player, CombatActionType.ApplyToSelf, item);
+                    var calculatedAttack = CombatUtil.CalculateAttack(grid, player, CombatActionType.ApplyToSelf, item, player.Position, InteractionTypeParameters);
+                    CombatAction attack = new CombatAction(calculatedAttack);
                     Context.PlayerController.ActionList.Enqueue(attack);
                 });
             }
 
-            if ((hasItemInInventory || isWearingItem) && item.CanBeUsedInAttackType(AttackType.Thrown))
+            if ((hasItemInInventory || isWearingItem) && item.CanBeUsedInInteractionType(CombatActionType.Thrown))
             {
                 BuildButton("context.menu.buttons.throw".Localize(), () =>
                 {
-                    Context.PlayerController.StartAiming(AttackType.Thrown, item);
+                    Context.PlayerController.StartAiming(CombatActionType.Thrown, item);
                     Context.UIController.InventoryWindow.Hide();
                 });
             }
 
-            if (hasItemInInventory && isEquippable)
+            if (hasItemInInventory && item.Equipable)
             {
                 BuildButton("context.menu.buttons.equip".Localize(), () =>
                 {
@@ -71,7 +69,7 @@ namespace Gamepackage
                     {
                         Source = player,
                         Item = item,
-                        Slot = item.SlotsWearable[0]
+                        Slot = item.Template.SlotsWearable[0]
                     };
                     Context.PlayerController.ActionList.Enqueue(action);
                 });

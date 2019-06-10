@@ -6,7 +6,10 @@ namespace Gamepackage
     public class UnequipItem : Action
     {
         [JsonIgnore]
-        public Entity Source;
+        public override Entity Source
+        {
+            get; set;
+        }
 
         public Item Item;
         public ItemSlot Slot;

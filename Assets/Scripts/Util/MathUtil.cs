@@ -267,7 +267,20 @@ namespace Gamepackage
 
         public static bool PercentageChanceEventOccurs(int Percentage)
         {
+            if (Percentage <= 0)
+            {
+                return false;
+            }
             return ChooseRandomIntInRange(0, 100) < Percentage;
+        }
+
+        public static bool PercentageChanceEventOccurs(float Percentage)
+        {
+            if (Percentage <= 0)
+            {
+                return false;
+            }
+            return ChooseRandomFloatInRange(0.0f, 100.0f) < Percentage;
         }
 
         public static Vector3 GetProjectileRotation(Direction direction)
@@ -296,6 +309,11 @@ namespace Gamepackage
 
         // min inclusive, max exclusive
         public static int ChooseRandomIntInRange(int minimum, int maximum)
+        {
+            return UnityEngine.Random.Range(minimum, maximum);
+        }
+
+        public static float ChooseRandomFloatInRange(float minimum, float maximum)
         {
             return UnityEngine.Random.Range(minimum, maximum);
         }

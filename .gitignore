@@ -33,7 +33,7 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-/[Aa]ssets/StreamingAssets/Mods/**/Sprites/
+/[Aa]ssets/StreamingAssets/Mods/Core/Asset Bundles
 Tests/bin/*
 Tests/obj/*
 

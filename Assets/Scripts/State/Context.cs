@@ -3,7 +3,9 @@
     public static class Context
     {
         public static Game Game;
+        public static IRulesEngine RulesEngine;
         public static VisibilitySystem VisibilitySystem = new VisibilitySystem();
+        public static ModManager ModManager = new ModManager();
         public static ResourceManager ResourceManager = new ResourceManager();
         public static EntityManager EntitySystem = new EntityManager();
         public static Localizer Localizer = new Localizer();

@@ -4,7 +4,10 @@ using Newtonsoft.Json;
 public class Wait : Action
 {
     [JsonIgnore]
-    public Entity Source;
+    public override Entity Source
+    {
+        get; set;
+    }
 
     public override bool IsEndable
     {

@@ -64,12 +64,12 @@ namespace Gamepackage
                     }
                 }
             }
-            SetItemName(item.DisplayName);
+            SetItemName(item.Name.Localize());
             ShowHideAbilityHeader(displayAbilities.Count > 0);
-            SetPicture(item.ItemAppearance.InventorySprite);
+            SetPicture(item.Template.ItemAppearance.InventorySprite);
 
             var description = Window.ContentPanel.transform.Find("DescriptionPanel").Find("Text").GetComponent<Text>();
-            description.text = item.Description;
+            description.text = item.Template.TemplateDescription.Localize();
             Show();
         }
 

@@ -19,7 +19,7 @@ namespace Gamepackage
         public static Type[] ConcreteFromAbstract(this Type type)
         {
             var listOfBs = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
-                            from assemblyType in domainAssembly.GetExportedTypes()
+                            from assemblyType in domainAssembly.GetTypes()
                             where type.IsAssignableFrom(assemblyType)
                             where (!assemblyType.IsAbstract)
                             select assemblyType).ToArray();

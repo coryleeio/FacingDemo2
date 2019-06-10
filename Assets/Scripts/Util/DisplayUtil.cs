@@ -132,9 +132,9 @@ namespace Gamepackage
             }
         }
 
-        public static string DisplayValueForAttackParameters(AttackParameters param, bool isLast)
+        public static string DisplayValueForCombatActionParameters(CombatActionParameters param)
         {
-            return string.Format("{0}-{1}{2}", param.DyeNumber + param.Bonus, param.DyeNumber * param.DyeSize + param.Bonus, isLast ? "" : ",");
+            return string.Format("{0}-{1}", param.DyeNumber, param.DyeNumber * param.DyeSize);
         }
 
         public static string DisplayValueForAttribute(Attributes attr)
@@ -149,37 +149,21 @@ namespace Gamepackage
             }
         }
 
-        public static Color DamageDisplayColor(bool isPlayer, bool isHostile)
+        public static Color DamageDisplayColor(bool good)
         {
-            Color healthChangeColor = Color.black;
-
-            if (isPlayer)
+            if(!good)
             {
-                if (isHostile)
-                {
-                    // Damage to player
-                    healthChangeColor = Color.red;
-                }
-                else
-                {
-                    // Healing to player
-                    healthChangeColor = Color.green;
-                }
+                return Color.red;
             }
             else
             {
-                if (isHostile)
-                {
-                    // Damage to NPC
-                    healthChangeColor = Color.magenta;
-                }
-                else
-                {
-                    // Healing to NPC
-                    healthChangeColor = Color.blue;
-                }
+                return Color.green;
             }
-            return healthChangeColor;
+        }
+
+        public static Color EffectDisplayColor ()
+        {
+            return Color.blue;
         }
 
         public static List<Tuple<string, string>> GetDisplayAttributesForPlayer(Entity player)
@@ -189,7 +173,7 @@ namespace Gamepackage
             retVal.Add(new Tuple<string, string>()
             {
                 Key = DisplayValueForAttribute(Attributes.MAX_HEALTH),
-                Value = string.Format("{0}/{1}", player.Body.CurrentHealth, player.CalculateValueOfAttribute(Attributes.MAX_HEALTH)),
+                Value = string.Format("{0}/{1}", player.CurrentHealth, player.CalculateValueOfAttribute(Attributes.MAX_HEALTH)),
             });
             foreach (var enumVal in Enum.GetValues(typeof(Attributes)))
             {
@@ -210,31 +194,21 @@ namespace Gamepackage
         public static List<Tuple<string, string>> GetDisplayAttributesForItem(Item item)
         {
             var retVal = new List<Tuple<string, string>>();
-            var meleeTypeParams = item.AttackTypeParameters[AttackType.Melee];
-            var meleeParameters = meleeTypeParams.AttackParameters;
-            if (meleeParameters.Count > 0)
+            if(item.CombatActionDescriptor.ContainsKey(CombatActionType.Melee))
             {
-                for (var i = 0; i < meleeParameters.Count; i++)
+                var meleeTypeParams = item.CombatActionDescriptor[CombatActionType.Melee];
+                retVal.Add(new Tuple<string, string>()
                 {
-                    var attackParameter = meleeParameters[i];
-                    var isLast = i == meleeParameters.Count - 1;
-                    retVal.Add(new Tuple<string, string>()
-                    {
-                        Key = MeleeDamageKey,
-                        Value = DisplayValueForAttackParameters(attackParameter, isLast)
-                    });
-                }
-                for (var i = 0; i < meleeParameters.Count; i++)
+                    Key = MeleeDamageKey,
+                    Value = DisplayValueForCombatActionParameters(meleeTypeParams.CombatActionParameters)
+                });
+                retVal.Add(new Tuple<string, string>()
                 {
-                    var attackParameter = meleeParameters[i];
-                    var isLast = i == meleeParameters.Count - 1;
-                    retVal.Add(new Tuple<string, string>()
-                    {
-                        Key = DamageTypeKey,
-                        Value = string.Format("{0}{1}", Capitalize(DamageTypeToDisplayString(attackParameter.DamageType)), isLast ? "" : ","),
-                    });
-                }
+                    Key = DamageTypeKey,
+                    Value = Capitalize(DamageTypeToDisplayString(meleeTypeParams.CombatActionParameters.DamageType).ToString()),
+                });
             }
+
             foreach (var pair in item.Attributes)
             {
                 retVal.Add(new Tuple<string, string>()
@@ -249,9 +223,9 @@ namespace Gamepackage
         public static List<string> GetDisplayAbilitiesForItem(Item item)
         {
             var retVal = new List<string>();
-            foreach (var effect in item.EffectsGlobal)
+            foreach (var effect in item.EffectsGrantedToOwner)
             {
-                retVal.Add(string.Format("{0} - {1}", effect.DisplayName.Localize(), effect.Description.Localize()));
+                retVal.Add(string.Format("{0} - {1}", effect.Name.Localize(), effect.ItemDescription.Localize()));
             }
             return retVal;
         }

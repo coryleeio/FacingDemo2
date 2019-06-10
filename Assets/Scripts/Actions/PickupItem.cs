@@ -7,7 +7,10 @@ namespace Gamepackage
     public class PickupItem : Action
     {
         [JsonIgnore]
-        public Entity Source;
+        public override Entity Source
+        {
+            get; set;
+        }
 
         [JsonIgnore]
         public List<Entity> Targets = new List<Entity>(0);
@@ -50,7 +53,7 @@ namespace Gamepackage
             }
             if(source.IsPlayer)
             {
-                Context.UIController.TextLog.AddText(string.Format("You have looted {0}{1}", Item.DisplayName, Item.MaxStackSize > 1 ? string.Format(" x {0}", Item.NumberOfItems.ToString()) : ""));
+                Context.UIController.TextLog.AddText(string.Format("loot.notification".Localize(), Item.Name.Localize(), Item.Stackable ? string.Format(" x {0}", Item.NumberOfItems.ToString()) : ""));
             }
             Context.UIController.Refresh();
             if(!Context.UIController.LootWindow.StillHasItems)
