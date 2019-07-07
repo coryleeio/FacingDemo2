@@ -8,7 +8,6 @@ namespace Gamepackage
 {
     public static class CombatUtil
     {
-
         public static List<Entity> HittableEntitiesInPositionsOnLevel(Point point, Level level)
         {
             return HittableEntitiesInPositionsOnLevel(new List<Point>() { point }, level);
