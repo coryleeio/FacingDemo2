@@ -45,10 +45,10 @@ namespace Gamepackage
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_STAFF_OF_FIREBALLS"));
 
                 var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
 
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_LUCKY_COIN"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_ARROW"));
