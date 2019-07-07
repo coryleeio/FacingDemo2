@@ -9,7 +9,6 @@ namespace Gamepackage
         public int DyeSize;
         public int DyeNumber;
         public DamageTypes DamageType;
-        public string AppliedEffectTemplate;
         public string AttackMessagePrefix;
         public int Range;
         public int NumberOfTargetsToPierce;
@@ -28,7 +27,6 @@ namespace Gamepackage
             DyeSize = inp.DyeSize;
             DyeNumber = inp.DyeNumber;
             DamageType = inp.DamageType;
-            AppliedEffectTemplate = inp.AppliedEffectTemplate;
             AttackMessagePrefix = inp.AttackMessagePrefix;
             Range = inp.Range;
             NumberOfTargetsToPierce = inp.NumberOfTargetsToPierce;

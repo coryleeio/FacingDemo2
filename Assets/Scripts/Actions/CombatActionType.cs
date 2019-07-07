@@ -9,5 +9,6 @@
         Zapped,
         ApplyToSelf,
         ApplyToOther,
+        Explosion,
     }
 }

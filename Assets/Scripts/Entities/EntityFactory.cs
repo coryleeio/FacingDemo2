@@ -49,7 +49,7 @@ namespace Gamepackage
                 InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<string>(Tables.HumanoidWeapons)));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_LUCKY_COIN"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_ARROW"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_ANTIDOTE"));
+                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_PURPLE_POTION"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_MIND_WAND"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_MIND_WAND"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_MIND_WAND"));
@@ -184,7 +184,7 @@ namespace Gamepackage
                 entity.OriginalTeam = Team.Enemy;
                 entity.AI = AIType.DumbMelee;
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_LONGSWORD"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_ANTIDOTE"));
+                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_PURPLE_POTION"));
             }
             else if (entity.TemplateIdentifier == "ENTITY_STAIRS_UP")
             {
@@ -247,73 +247,19 @@ namespace Gamepackage
         private static void DefaultHumanoidBodyAttacks(Entity ent)
         {
             ent.IsCombatant = true;
-            ent.CombatActionDescriptors = new Dictionary<CombatActionType, CombatActionDescriptor>()
-            {
-                { CombatActionType.Melee,  new CombatActionDescriptor()
-                {
-                    CombatActionParameters = new CombatActionParameters()
-                {
-                AttackMessagePrefix = "attacks.humanoid.1",
-                DyeNumber = 1,
-                DyeSize = 1,
-                DamageType = DamageTypes.BLUDGEONING,
-                Range = 1,
-                NumberOfTargetsToPierce = 1,
-                TargetingType = CombatActionTargetingType.Line,
-                AppliedEffectTemplate = null,
-                InteractionProperties = new List<InteractionProperties>(),
-                }
-                }
-            }
-            };
+            ent.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
         }
 
         private static void DefaultDogBodyAttacks(Entity ent)
         {
             ent.IsCombatant = true;
-            ent.CombatActionDescriptors = new Dictionary<CombatActionType, CombatActionDescriptor>()
-            {
-                { CombatActionType.Melee,  new CombatActionDescriptor()
-                {
-                    CombatActionParameters = new CombatActionParameters()
-                {
-                AttackMessagePrefix = "attacks.dog.1",
-                DyeNumber = 2,
-                DyeSize = 4,
-                DamageType = DamageTypes.PIERCING,
-                Range = 1,
-                NumberOfTargetsToPierce = 1,
-                TargetingType = CombatActionTargetingType.Line,
-                AppliedEffectTemplate = null,
-                InteractionProperties = new List<InteractionProperties>(),
-                }
-                }
-            }
-            };
+            ent.DefaultAttackItem = ItemFactory.Build("ITEM_DOG_MAW");
         }
 
         private static void DefaultBeeBodyAttacks(Entity ent)
         {
             ent.IsCombatant = true;
-            ent.CombatActionDescriptors = new Dictionary<CombatActionType, CombatActionDescriptor>()
-            {
-                { CombatActionType.Melee,  new CombatActionDescriptor()
-                {
-                    CombatActionParameters = new CombatActionParameters()
-                {
-                AttackMessagePrefix = "attacks.stinger.1",
-                DyeNumber = 1,
-                DyeSize = 1,
-                DamageType = DamageTypes.PIERCING,
-                AppliedEffectTemplate = "EFFECT_WEAK_POISON",
-                Range = 1,
-                NumberOfTargetsToPierce = 1,
-                TargetingType = CombatActionTargetingType.Line,
-                InteractionProperties = new List<InteractionProperties>(),
-                }
-                }
-            }
-            };
+            ent.DefaultAttackItem = ItemFactory.Build("ITEM_BEE_STINGER");
         }
     }
 }

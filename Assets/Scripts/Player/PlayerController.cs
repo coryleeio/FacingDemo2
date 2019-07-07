@@ -173,7 +173,7 @@ namespace Gamepackage
             var game = Context.Game;
             var level = game.CurrentLevel;
             var player = level.Player;
-            var item = InventoryUtil.GetItemBySlot(player, ItemSlot.MainHand);
+            var item = InventoryUtil.GetMainHandOrDefaultWeapon(player);
             var meleeCombatActionParameters = CombatUtil.CombatActionParametersResolve(player, CombatActionType.Melee, item);
 
             var mousePos = MathUtil.GetMousePositionOnMap(Camera.main);

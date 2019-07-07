@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS "ItemAppearances_SpriteAttachments" (
     "Sprite"    TEXT
 );
 
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_NONE','');
+
 INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_LONGSWORD','Longsword');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_LONGSWORD','MainHandFront','Longsword');
 

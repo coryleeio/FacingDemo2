@@ -23,19 +23,17 @@ namespace Gamepackage
             return entities;
         }
 
-        public static List<Effect> AppliedEffectsResolve(Entity source, CombatActionType InteractionType, Item item, CombatActionParameters InteractionTypeParameters)
+        public static List<Effect> AppliedEffectsResolve(CombatActionType InteractionType, Item item)
         {
             List<Effect> appliedEffects = new List<Effect>();
-            if (InteractionTypeParameters == null)
+            if(item == null)
             {
+                // Simple damage will cause this.
                 return appliedEffects;
             }
-            if (InteractionTypeParameters.AppliedEffectTemplate != null)
+            if (item.IsEnchanted && item.Enchantment.Template.AppliedEffects.ContainsKey(InteractionType) && item.Enchantment.HasCharges)
             {
-                if (item == null || item.HasCharges)
-                {
-                    appliedEffects.Add(EffectFactory.Build(InteractionTypeParameters.AppliedEffectTemplate));
-                }
+                appliedEffects.Add(EffectFactory.Build(item.Enchantment.Template.AppliedEffects[InteractionType]));
             }
             return appliedEffects;
         }
@@ -119,7 +117,6 @@ namespace Gamepackage
                     ProjectileAppearanceIdentifier = "PROJECTILE_APPEARANCE_NONE",
                     NumberOfTargetsToPierce = 1,
                     TargetingType = CombatActionTargetingType.SelectTarget,
-                    AppliedEffectTemplate = null,
                     InteractionProperties = new List<InteractionProperties>()
                     {
                         InteractionProperties.Unavoidable,
@@ -192,7 +189,7 @@ namespace Gamepackage
                     Missed = !hit,
                 };
                 attackStateChange.CombatActionParameters = calculatedAttack.ResolvedCombatActionParameters.CombatActionParameters;
-                attackStateChange.AppliedEffects.AddRange(CombatUtil.AppliedEffectsResolve(source, InteractionType, item, calculatedAttack.ResolvedCombatActionParameters.CombatActionParameters));
+                attackStateChange.AppliedEffects.AddRange(CombatUtil.AppliedEffectsResolve(InteractionType, item));
                 calculatedAttack.AttackStateChanges.Add(attackStateChange);
                 if (calculatedAttack.ResolvedCombatActionParameters.CombatActionParameters != null)
                 {
@@ -303,7 +300,10 @@ namespace Gamepackage
                 {
                     itemStateChange.NumberOfItemsConsumed = 1;
                 }
-                itemStateChange.NumberOfChargesConsumed = 1;
+                if(item.IsEnchanted && !item.Enchantment.HasUnlimitedCharges)
+                {
+                    itemStateChange.NumberOfChargesConsumed = 1;
+                }
                 calculatedAttack.ItemStateChanges.Add(itemStateChange);
             }
         }
@@ -400,10 +400,12 @@ namespace Gamepackage
                                     Target = entityInPosition,
                                 };
                                 CalculateDamageForCombatActionParameters(explosionParams, entityStateChange);
-                                if (explosionParams.AppliedEffectTemplate != null)
+                                if(calculatedAttack.Item != null)
                                 {
-                                    entityStateChange.AppliedEffects.Add(EffectFactory.Build(explosionParams.AppliedEffectTemplate));
+                                    var item = calculatedAttack.Item;
+                                    entityStateChange.AppliedEffects.AddRange(CombatUtil.AppliedEffectsResolve(CombatActionType.Explosion, item));
                                 }
+
                                 stateChangesOnPass.Add(entityStateChange);
                                 calculatedAttack.ExplosionStateChanges.Add(entityStateChange);
                             }
@@ -441,14 +443,9 @@ namespace Gamepackage
 
         public static ResolvedCombatActionDescriptor CombatActionParametersResolve(Entity source, CombatActionType InteractionType, Item item)
         {
+            Assert.IsNotNull(item);
             var resolved = new ResolvedCombatActionDescriptor();
-            var ammo = CombatUtil.AmmoResolve(source, InteractionType, item);
-            var hasAmmoOrDoesntNeedIt = InteractionType != CombatActionType.Ranged || ammo != null;
-            if (InteractionType == CombatActionType.Melee && (item == null || !item.CanBeUsedInInteractionType(CombatActionType.Melee) && CanAttackInMeleeWithoutWeapon(source)))
-            {
-                Flatten(resolved, source.CombatActionDescriptors[CombatActionType.Melee]);
-            }
-            else if (item != null && item.CanBeUsedInInteractionType(InteractionType) && hasAmmoOrDoesntNeedIt)
+            if (item.CanBeUsedInInteractionType(InteractionType))
             {
                 if (item.CombatActionDescriptor.ContainsKey(InteractionType))
                 {
@@ -462,10 +459,6 @@ namespace Gamepackage
                         // we got the weapon damage above, then we get the explosion and ability costs if-any from the enchantment
                         resolved.Cost = item.Enchantment.Template.CombatActionDescriptor[InteractionType].Cost;
                         resolved.ExplosionParameters = item.Enchantment.Template.CombatActionDescriptor[InteractionType].ExplosionParameters;
-
-                        // this is derived, so we can overwrite parts of it.
-                        // we take just the applied effect.
-                        resolved.CombatActionParameters.AppliedEffectTemplate = item.Enchantment.Template.CombatActionDescriptor[InteractionType].CombatActionParameters.AppliedEffectTemplate;
                     }
                     else
                     {
@@ -962,7 +955,7 @@ namespace Gamepackage
 
         public static bool CanAttackInMeleeWithoutWeapon(Entity source)
         {
-            return source.IsCombatant && source.CombatActionDescriptors.ContainsKey(CombatActionType.Melee);
+            return source.IsCombatant && source.DefaultAttackItem.CombatActionDescriptor.ContainsKey(CombatActionType.Melee);
         }
 
         public static List<Point> PointsInExplosionRange(CombatActionParameters ExplosionParameters, Point placementPosition)

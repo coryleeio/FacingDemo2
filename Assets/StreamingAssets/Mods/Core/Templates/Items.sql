@@ -49,7 +49,6 @@ CREATE TABLE "Items_CombatActionParameters" (
 	"DyeSize"	INTEGER,
 	"DyeNumber"	INTEGER,
 	"DamageType"	TEXT,
-	"AppliedEffectTemplate"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,
 	"NumberOfTargetsToPierce"	INTEGER,
@@ -65,7 +64,6 @@ CREATE TABLE "Items_ExplosionParameters" (
 	"DyeSize"	INTEGER,
 	"DyeNumber"	INTEGER,
 	"DamageType"	TEXT,
-	"AppliedEffectTemplate"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,
 	"NumberOfTargetsToPierce"	INTEGER,
@@ -81,70 +79,71 @@ CREATE TABLE "Items_ActionCosts" (
 	"Health"       INTEGER
 );
 
-
 INSERT INTO "Items"                         VALUES ('ITEM_LONGSWORD','item.longsword',1,1,0,100,'None', "ITEM_APPEARANCE_LONGSWORD");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_LONGSWORD', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_LONGSWORD', 'MainHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_LONGSWORD', 'Melee', 8, 1, 'SLASHING', '', 'attacks.slashing.1', 1, 1, 'Line', '', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_LONGSWORD', 'Thrown', 3, 1, 'SLASHING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_LONGSWORD', 'Melee', 8, 1, 'SLASHING', 'attacks.slashing.1', 1, 1, 'Line', '', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_LONGSWORD', 'Thrown', 3, 1, 'SLASHING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
 
 INSERT INTO "Items"                         VALUES ('ITEM_DAGGER','item.dagger',1,1,0,100,'None', "ITEM_APPEARANCE_DAGGER");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_DAGGER', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_DAGGER', 'MainHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_DAGGER', 'Melee', 8, 1, 'PIERCING', '', 'attacks.piercing.1',1,1,'Line', '', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_DAGGER', 'Thrown', 3, 1, 'PIERCING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_DAGGER', 'Melee', 8, 1, 'PIERCING', 'attacks.piercing.1',1,1,'Line', '', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_DAGGER', 'Thrown', 3, 1, 'PIERCING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
 
 INSERT INTO "Items"                         VALUES ('ITEM_FANG_OF_JAHABI','item.fang.of.jahabi',1,1,0,100,'None', "ITEM_APPEARANCE_DAGGER");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_FANG_OF_JAHABI', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_FANG_OF_JAHABI', 'MainHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_FANG_OF_JAHABI', 'Melee', 8, 1, 'PIERCING', 'EFFECT_WEAK_POISON', 'attacks.piercing.1', 1, 1, 'Line', '', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_FANG_OF_JAHABI', 'Thrown', 3, 1, 'PIERCING', 'EFFECT_WEAK_POISON', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_FANG_OF_JAHABI', 'Melee', 8, 1, 'PIERCING','attacks.piercing.1', 1, 1, 'Line', '', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_FANG_OF_JAHABI', 'Thrown', 3, 1, 'PIERCING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_FANG_OF_JAHABI', 'ENCHANTMENT_INNATE_WEAK_POISON');
 
 INSERT INTO "Items"                         VALUES ('ITEM_MACE','item.mace',1,1,0,100,'None', "ITEM_APPEARANCE_MACE");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_MACE', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_MACE', 'MainHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_MACE', 'Melee', 8, 1, 'BLUDGEONING', '', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_MACE', 'Thrown', 3, 1, 'BLUDGEONING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_MACE', 'Melee', 8, 1, 'BLUDGEONING', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_MACE', 'Thrown', 3, 1, 'BLUDGEONING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
 
 INSERT INTO "Items"                         VALUES ('ITEM_STAFF_OF_FIREBALLS','item.wand',1,1,0,100,'None', "ITEM_APPEARANCE_ACTION_STAFF");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_STAFF_OF_FIREBALLS', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_STAFF_OF_FIREBALLS', 'MainHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_STAFF_OF_FIREBALLS', 'Melee', 8, 1, 'BLUDGEONING', '', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_STAFF_OF_FIREBALLS', 'Thrown', 3, 1, 'BLUDGEONING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_STAFF_OF_FIREBALLS', 'Melee', 8, 1, 'BLUDGEONING', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_STAFF_OF_FIREBALLS', 'Thrown', 3, 1, 'BLUDGEONING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
 INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_STAFF_OF_FIREBALLS', 'ENCHANTMENT_FIREBALL');
 
 INSERT INTO "Items"                         VALUES ('ITEM_SHORTBOW','item.bow',1,1,0,100,'Arrow', "ITEM_APPEARANCE_BOW");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_SHORTBOW', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_SHORTBOW', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_SHORTBOW', 'OffHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_SHORTBOW', 'Melee', 3, 1, 'BLUDGEONING', '', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_SHORTBOW', 'Thrown', 3, 1, 'BLUDGEONING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_SHORTBOW', 'Ranged', 12, 1, 'PIERCING', '', 'attacks.piercing.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_ARROW', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_SHORTBOW', 'Melee', 3, 1, 'BLUDGEONING', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_SHORTBOW', 'Thrown', 3, 1, 'BLUDGEONING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_SHORTBOW', 'Ranged', 12, 1, 'PIERCING', 'attacks.piercing.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_ARROW', "");
 
 INSERT INTO "Items"                         VALUES ('ITEM_WAND_OF_LIGHTNING','item.wand',1,1,0,100,'None', "ITEM_APPEARANCE_SWIRL_STAFF");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_WAND_OF_LIGHTNING', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_WAND_OF_LIGHTNING', 'MainHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_WAND_OF_LIGHTNING', 'Melee', 8, 1, 'BLUDGEONING', '', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_WAND_OF_LIGHTNING', 'Thrown', 3, 1, 'BLUDGEONING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_WAND_OF_LIGHTNING', 'Melee', 8, 1, 'BLUDGEONING', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_WAND_OF_LIGHTNING', 'Thrown', 3, 1, 'BLUDGEONING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
 INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_WAND_OF_LIGHTNING', 'ENCHANTMENT_LIGHTNING');
 
 INSERT INTO "Items"                         VALUES ('ITEM_MIND_WAND','item.wand',1,1,0,100,'None', "ITEM_APPEARANCE_ORB_SCEPTER");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_MIND_WAND', 'MainHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_MIND_WAND', 'MainHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_MIND_WAND', 'Melee', 8, 1, 'BLUDGEONING', '', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_MIND_WAND', 'Thrown', 3, 1, 'BLUDGEONING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_MIND_WAND', 'Melee', 8, 1, 'BLUDGEONING', 'attacks.bludgeoning.1', 1, 1, 'Line', '', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_MIND_WAND', 'Thrown', 3, 1, 'BLUDGEONING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
 INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_MIND_WAND', 'ENCHANTMENT_MADNESS');
 INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_MIND_WAND', 'ENCHANTMENT_DOMINATION');
 INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_MIND_WAND', 'ENCHANTMENT_DOMINATION');
 
-INSERT INTO "Items"                         VALUES ('ITEM_ANTIDOTE','item.antidote',1,1,1, 0,'None', "ITEM_APPEARANCE_PURPLE_POTION");
-INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_ANTIDOTE', 'MainHand');
-INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_ANTIDOTE', 'MainHand');
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_ANTIDOTE', 'ApplyToSelf', 0, 0, 'HEALING', 'EFFECT_TEMPORARY_POISON_IMMUNITY', 'attacks.bludgeoning.1', 1, 1, 'SelectTarget', NULL, "Unavoidable");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_ANTIDOTE', 'Thrown', 0, 0, 'HEALING', 'EFFECT_TEMPORARY_POISON_IMMUNITY', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_BROKEN_FLASK', "Unavoidable");
+INSERT INTO "Items"                         VALUES ('ITEM_PURPLE_POTION','item.potion',1,1,1, 0,'None', "ITEM_APPEARANCE_PURPLE_POTION");
+INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_PURPLE_POTION', 'MainHand');
+INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_PURPLE_POTION', 'MainHand');
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_PURPLE_POTION', 'ApplyToSelf', 0, 0, 'HEALING', 'attacks.bludgeoning.1', 1, 1, 'SelectTarget', NULL, "Unavoidable");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_PURPLE_POTION', 'Thrown', 0, 0, 'HEALING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_BROKEN_FLASK', "Unavoidable");
+INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_PURPLE_POTION', 'ENCHANTMENT_CURE_POISON');
 
 INSERT INTO "Items"                         VALUES ('ITEM_LUCKY_COIN','item.lucky.coin',1,1,0,100,'None',"ITEM_APPEARANCE_LUCKY_COIN");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_LUCKY_COIN', 'Thrown', 0, 0, 'BLUDGEONING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_LUCKY_COIN', 'Thrown', 0, 0, 'BLUDGEONING', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
 INSERT INTO "Items_TagsThatDescribeThisItem"VALUES ('ITEM_LUCKY_COIN', 'ItemEffectsApplyFromInventory');
 INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_LUCKY_COIN', 'ENCHANTMENT_LUCKY_COIN_LIFE_SAVE');
 
@@ -163,7 +162,24 @@ INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_SHIELD_OF_AMALURE', 'O
 INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_SHIELD_OF_AMALURE', 'ENCHANTMENT_STRENGTH_OF_GIANTS');
 
 INSERT INTO "Items"                         VALUES ('ITEM_ARROW','item.arrow',1,60,0,50,'Arrow', "ITEM_APPEARANCE_ARROW");
-INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_ARROW', 'Thrown', 1, 1, 'PIERCING', '', 'attacks.piercing.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_ARROW_SPIN', "");
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_ARROW', 'Thrown', 1, 1, 'PIERCING', 'attacks.piercing.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_ARROW_SPIN', "");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_ARROW', 'Ammo');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_ARROW', 'Ammo');
+
+INSERT INTO "Items"                         VALUES ('ITEM_HUMANOID_FIST','item.fist',1,1,0,100,'None', "ITEM_APPEARANCE_NONE");
+INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_HUMANOID_FIST', 'MainHand');
+INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_HUMANOID_FIST', 'MainHand');
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_HUMANOID_FIST', 'Melee', 1, 1, 'BLUDGEONING', 'attacks.humanoid.1',1,1,'Line', '', "");
+
+INSERT INTO "Items"                         VALUES ('ITEM_DOG_MAW','item.dog.maw',1,1,0,100,'None', "ITEM_APPEARANCE_NONE");
+INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_DOG_MAW', 'MainHand');
+INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_DOG_MAW', 'MainHand');
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_DOG_MAW', 'Melee', 4, 2, 'PIERCING', 'attacks.dog.1',1,1,'Line', '', "");
+
+INSERT INTO "Items"                         VALUES ('ITEM_BEE_STINGER','item.bee.stinger',1,1,0,100,'None', "ITEM_APPEARANCE_NONE");
+INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_BEE_STINGER', 'MainHand');
+INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_BEE_STINGER', 'MainHand');
+INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_BEE_STINGER', 'Melee', 1, 1, 'PIERCING', 'attacks.stinger.1',1,1,'Line', '', "");
+INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_BEE_STINGER', 'ENCHANTMENT_INNATE_WEAK_POISON');
+
 COMMIT;

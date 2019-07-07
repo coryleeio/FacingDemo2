@@ -95,11 +95,11 @@ namespace Gamepackage
 
             if (entity.AI == AIType.DumbMelee)
             {
-                AIUtil.CommonAIAttackWithWeapon(level, entity, InventoryUtil.GetItemBySlot(entity, ItemSlot.MainHand), MeleeAIRelevantContexts);
+                AIUtil.CommonAIAttackWithWeapon(level, entity, InventoryUtil.GetMainHandOrDefaultWeapon(entity), MeleeAIRelevantContexts);
             }
             else if (entity.AI == AIType.Archer)
             {
-                AIUtil.CommonAIAttackWithWeapon(level, entity, InventoryUtil.GetItemBySlot(entity, ItemSlot.MainHand), RangedAIRelevantContexts);
+                AIUtil.CommonAIAttackWithWeapon(level, entity, InventoryUtil.GetMainHandOrDefaultWeapon(entity), RangedAIRelevantContexts);
             }
         }
 

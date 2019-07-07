@@ -15,7 +15,6 @@ namespace Gamepackage
                 NumberOfItems = Random.Range(itemTemplate.MinStackSize, itemTemplate.MaxStackSize),
             };
 
-
             if (itemTemplate.PossibleEnchantments.Count > 0)
             {
                 var enchantmentTemplateIdentifier = MathUtil.ChooseRandomElement<string>(itemTemplate.PossibleEnchantments);

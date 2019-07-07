@@ -104,10 +104,31 @@ namespace Gamepackage
                 enchantmentTemplate.CombatActionDescriptor = BuildCombatActionDescriptor(sqlConnection, enchantmentTemplate.Identifier, "Enchantments_CombatActionParameters", "Enchantments_ExplosionParameters", "Enchantments_ActionCosts");
 
                 enchantmentTemplate.WornEffects = ParseListOfStrings(sqlConnection, enchantmentTemplate.Identifier, "Enchantments_WornEffects");
-
+                enchantmentTemplate.AppliedEffects = ParseAppliedEffects(sqlConnection, enchantmentTemplate.Identifier, "Enchantments_AppliedEffects");
                 aggregate.Add(enchantmentTemplate.Identifier, enchantmentTemplate);
             }
             return aggregate;
+        }
+
+        private Dictionary<CombatActionType, string> ParseAppliedEffects(SqliteConnection sqlConnection, string templateIdentifier, string table)
+        {
+            var retVal = new Dictionary<CombatActionType, string>();
+            var sqlForData = string.Format("select * from [" + table + "] WHERE [Identifier] = @Identifier");
+            var commandForData = new SqliteCommand(sqlForData, sqlConnection);
+            commandForData.Parameters.AddWithValue("@Identifier", templateIdentifier);
+            var readerForData = commandForData.ExecuteReader();
+            while (readerForData.Read())
+            {
+                var identifier = readerForData[0].ToString();
+                var interactionType = (CombatActionType)Enum.Parse(typeof(CombatActionType), readerForData[1].ToString(), true);
+                var appliedEffect = readerForData[2].ToString();
+                if(retVal.ContainsKey(interactionType))
+                {
+                    Debug.LogWarning("Overwriting applied effects on" + templateIdentifier + " for action type: " + interactionType + "likely a mod has overwritten it.");
+                }
+                retVal[interactionType] = appliedEffect;
+            }
+            return retVal;
         }
 
         private Dictionary<string, CampaignTemplate> LoadCampaignTemplates(SqliteConnection sqlConnection)
@@ -275,33 +296,22 @@ namespace Gamepackage
                 var damageType = (DamageTypes)Enum.Parse(typeof(DamageTypes), readerForData[4].ToString(), true);
                 Assert.AreNotEqual(DamageTypes.NOT_SET, damageType);
                 interactionParameters.DamageType = damageType;
+                interactionParameters.AttackMessagePrefix = readerForData[5].ToString();
 
-                interactionParameters.AppliedEffectTemplate = readerForData[5].ToString();
-                if (interactionParameters.AppliedEffectTemplate == "")
-                {
-                    interactionParameters.AppliedEffectTemplate = null;
-                }
-
-                if (interactionParameters.AppliedEffectTemplate != null && this.Load<EffectTemplate>(interactionParameters.AppliedEffectTemplate) == null)
-                {
-                    Debug.LogError("Item template: " + identifier + " references effectTemplate: " + interactionParameters.AppliedEffectTemplate + " which does not exist.");
-                }
-                interactionParameters.AttackMessagePrefix = readerForData[6].ToString();
-
-                int.TryParse(readerForData[7].ToString(), out int Range);
+                int.TryParse(readerForData[6].ToString(), out int Range);
                 interactionParameters.Range = Range;
 
-                int.TryParse(readerForData[8].ToString(), out int NumberOfTargetsToPierce);
+                int.TryParse(readerForData[7].ToString(), out int NumberOfTargetsToPierce);
                 interactionParameters.NumberOfTargetsToPierce = NumberOfTargetsToPierce;
 
-                var TargetingType = (CombatActionTargetingType)Enum.Parse(typeof(CombatActionTargetingType), readerForData[9].ToString(), true);
+                var TargetingType = (CombatActionTargetingType)Enum.Parse(typeof(CombatActionTargetingType), readerForData[8].ToString(), true);
                 Assert.AreNotEqual(CombatActionTargetingType.NotSet, TargetingType);
 
                 interactionParameters.TargetingType = TargetingType;
 
-                interactionParameters.ProjectileAppearanceIdentifier = readerForData[10].ToString();
+                interactionParameters.ProjectileAppearanceIdentifier = readerForData[9].ToString();
 
-                interactionParameters.InteractionProperties = ParseCommaSeparatedListIntoEnum<InteractionProperties>(readerForData[11].ToString());
+                interactionParameters.InteractionProperties = ParseCommaSeparatedListIntoEnum<InteractionProperties>(readerForData[10].ToString());
                 Assert.IsNotNull(interactionParameters.InteractionProperties);
 
 

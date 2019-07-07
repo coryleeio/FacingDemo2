@@ -228,12 +228,12 @@ item.wand.of.charm.description: "This wand gives you a funny feeling in your sto
 item.wand.of.domination.name: Wand of Domination
 item.wand.of.domination.description: "This wand has the scent of command."
 
-item.antidote.name: "Antidote"
-item.antidote.description: "A bubbling vial of viscous green liquid."
-item.antidote.action: Drink
-item.antidote.use.action.text: Drink
-item.antidote.apply.to.self.player: You quaff a potion
-item.antidote.apply.to.self.other: "{0} quaffs a potion"
+item.potion.name: "Potion"
+item.potion.description: "A bubbling vial of viscous liquid."
+item.potion.action: Drink
+item.potion.use.action.text: Drink
+item.potion.apply.to.self.player: You quaff a potion
+item.potion.apply.to.self.other: "{0} quaffs a potion"
 
 item.lucky.coin.name: Lucky Coin
 item.lucky.coin.description: "This coin is particularly lucky, and is probably deserving of a better description."
@@ -250,3 +250,4 @@ name.modifier.enchantment.lightning: "{0} of Lightning"
 name.modifier.enchantment.madness: "{0} of Madness"
 name.modifier.enchantment.charm: "{0} of Charm"
 name.modifier.enchantment.fireball: "{0} of Fireball"
+name.modifier.enchantment.cure.poison: "{0} of Cure Poison"

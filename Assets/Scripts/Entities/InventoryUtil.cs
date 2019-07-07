@@ -232,6 +232,16 @@ namespace Gamepackage
             throw new NotImplementedException("Must not be equipped after all..");
         }
 
+        public static Item GetMainHandOrDefaultWeapon(Entity entity)
+        {
+            var item = GetItemBySlot(entity, ItemSlot.MainHand);
+            if(item == null)
+            {
+                return entity.DefaultAttackItem;
+            }
+            return item;
+        }
+
         public static Item GetItemBySlot(Entity entity, ItemSlot slot)
         {
             if (entity.Inventory.EquippedItemBySlot.ContainsKey(slot))

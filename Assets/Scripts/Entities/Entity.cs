@@ -23,7 +23,8 @@ namespace Gamepackage
         public Team OriginalTeam;
         public AIType AI;
 
-        public Dictionary<CombatActionType, CombatActionDescriptor> CombatActionDescriptors;
+        // Since you attack with an item - when you attack with your fists, what item should we use?
+        public Item DefaultAttackItem;
 
         public Dictionary<Attributes, int> Attributes = new Dictionary<Attributes, int>();
 

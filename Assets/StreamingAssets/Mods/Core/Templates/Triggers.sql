@@ -16,7 +16,6 @@ CREATE TABLE "Triggers_CombatActionParameters" (
 	"DyeSize"	INTEGER,
 	"DyeNumber"	INTEGER,
 	"DamageType"	TEXT,
-	"AppliedEffectTemplate"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,
 	"NumberOfTargetsToPierce"	INTEGER,
