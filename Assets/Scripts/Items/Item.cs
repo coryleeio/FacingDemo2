@@ -13,7 +13,7 @@ namespace Gamepackage
             get
             {
                 var name = Template.TemplateName.Localize();
-                if(Enchantment != null)
+                if (Enchantment != null)
                 {
                     name = string.Format(Enchantment.Template.NameModifier.Localize(), name);
                 }
@@ -34,6 +34,15 @@ namespace Gamepackage
         public Enchantment Enchantment;
 
         [JsonIgnore]
+        public bool IsEnchanted
+        {
+            get
+            {
+                return Enchantment != null;
+            }
+        }
+
+        [JsonIgnore]
         public bool Stackable
         {
             get
@@ -43,8 +52,6 @@ namespace Gamepackage
         }
 
         public int NumberOfItems;
-        public List<Effect> EffectsGrantedToOwner;
-        public Dictionary<Attributes, int> Attributes;
 
         [JsonIgnore]
         public Dictionary<CombatActionType, CombatActionDescriptor> CombatActionDescriptor
@@ -126,7 +133,7 @@ namespace Gamepackage
             }
             else if (InteractionType == CombatActionType.Zapped)
             {
-                if(Enchantment != null && Enchantment.Template.CombatActionDescriptor.ContainsKey(CombatActionType.Zapped))
+                if (Enchantment != null && Enchantment.Template.CombatActionDescriptor.ContainsKey(CombatActionType.Zapped))
                 {
                     return Enchantment.Template.CombatActionDescriptor.ContainsKey(CombatActionType.Zapped) && HasCharges;
                 }

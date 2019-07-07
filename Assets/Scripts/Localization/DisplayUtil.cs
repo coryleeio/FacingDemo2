@@ -209,13 +209,19 @@ namespace Gamepackage
                 });
             }
 
-            foreach (var pair in item.Attributes)
+            if(item.IsEnchanted)
             {
-                retVal.Add(new Tuple<string, string>()
+                foreach (var effect in item.Enchantment.WornEffects)
                 {
-                    Key = pair.Key.ToString(),
-                    Value = pair.Value.ToString()
-                });
+                    foreach(var pair in effect.Attributes)
+                    {
+                        retVal.Add(new Tuple<string, string>()
+                        {
+                            Key = pair.Key.ToString(),
+                            Value = pair.Value.ToString()
+                        });
+                    }
+                }
             }
             return retVal;
         }
@@ -223,10 +229,14 @@ namespace Gamepackage
         public static List<string> GetDisplayAbilitiesForItem(Item item)
         {
             var retVal = new List<string>();
-            foreach (var effect in item.EffectsGrantedToOwner)
+            if(item.IsEnchanted)
             {
-                retVal.Add(string.Format("{0} - {1}", effect.Name.Localize(), effect.ItemDescription.Localize()));
+                foreach (var effect in item.Enchantment.WornEffects)
+                {
+                    retVal.Add(string.Format("{0} - {1}", effect.Name.Localize(), effect.ItemDescription.Localize()));
+                }
             }
+
             return retVal;
         }
 

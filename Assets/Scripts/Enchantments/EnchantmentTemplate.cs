@@ -9,5 +9,6 @@ namespace Gamepackage
         public int MinCharges;
         public int MaxCharges;
         public Dictionary<CombatActionType, CombatActionDescriptor> CombatActionDescriptor;
+        public List<string> WornEffects;
     }
 }

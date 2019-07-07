@@ -149,19 +149,16 @@ namespace Gamepackage
                 foreach (var pair in Inventory.EquippedItemBySlot)
                 {
                     var item = pair.Value;
-                    foreach (var attribute in item.Attributes)
+                    if(item.IsEnchanted)
                     {
-                        if (attribute.Key == attr)
+                        foreach (var effect in item.Enchantment.WornEffects)
                         {
-                            total += attribute.Value;
+                            int amountToAdd = 0;
+                            effect.Template.TemplateAttributes.TryGetValue(attr, out amountToAdd);
+                            total += amountToAdd;
                         }
                     }
-                    foreach (var effect in item.EffectsGrantedToOwner)
-                    {
-                        int amountToAdd = 0;
-                        effect.Template.TemplateAttributes.TryGetValue(attr, out amountToAdd);
-                        total += amountToAdd;
-                    }
+
                 }
             }
             return total;

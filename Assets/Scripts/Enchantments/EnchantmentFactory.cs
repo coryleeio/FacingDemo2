@@ -8,7 +8,8 @@
             var enchantment = new Enchantment()
             {
                 EnchantmentIdentifier = uniqueIdentifier,
-                NumberOfChargesRemaining = MathUtil.ChooseRandomIntInRange(enchantmentTemplate.MinCharges, enchantmentTemplate.MaxCharges)
+                NumberOfChargesRemaining = MathUtil.ChooseRandomIntInRange(enchantmentTemplate.MinCharges, enchantmentTemplate.MaxCharges),
+                WornEffects = EffectFactory.BuildAll(enchantmentTemplate.WornEffects),
             };
 
             return enchantment;

@@ -171,10 +171,14 @@ namespace Gamepackage
 
             RemoveWholeItemStack(entity, item);
             inventory.EquippedItemBySlot[slot] = item;
-            foreach (var effect in item.EffectsGrantedToOwner)
+            if(item.IsEnchanted)
             {
-                effect.EffectImpl.OnApplySelf(effect, entity);
+                foreach (var effect in item.Enchantment.WornEffects)
+                {
+                    effect.EffectImpl.OnApplySelf(effect, entity);
+                }
             }
+
             if (entity.ViewGameObject != null)
             {
                 ViewFactory.RebuildView(entity);
@@ -188,9 +192,12 @@ namespace Gamepackage
             {
                 entity.Inventory.EquippedItemBySlot.Remove(slot);
                 AddItem(entity, item, IndexToMoveTo);
-                foreach (var effect in item.EffectsGrantedToOwner)
+                if(item.IsEnchanted)
                 {
-                    effect.EffectImpl.OnRemove(effect, entity);
+                    foreach (var effect in item.Enchantment.WornEffects)
+                    {
+                        effect.EffectImpl.OnRemove(effect, entity);
+                    }
                 }
                 if (entity.ViewGameObject != null)
                 {

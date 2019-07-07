@@ -88,22 +88,24 @@ namespace Gamepackage
             var aggregate = new Dictionary<string, EnchantmentTemplate>();
             while (reader.Read())
             {
-                var campaignTemplate = new EnchantmentTemplate();
-                campaignTemplate.Identifier = reader[0].ToString();
-                campaignTemplate.NameModifier = reader[1].ToString();
+                var enchantmentTemplate = new EnchantmentTemplate();
+                enchantmentTemplate.Identifier = reader[0].ToString();
+                enchantmentTemplate.NameModifier = reader[1].ToString();
 
                 var minChargesStr = reader[2].ToString();
                 int.TryParse(minChargesStr, out int minCharges);
-                campaignTemplate.MinCharges = minCharges;
+                enchantmentTemplate.MinCharges = minCharges;
 
                 var maxChargesStr = reader[3].ToString();
                 int.TryParse(maxChargesStr, out int maxCharges);
-                campaignTemplate.MaxCharges = maxCharges;
+                enchantmentTemplate.MaxCharges = maxCharges;
 
-                Assert.IsNotNull(campaignTemplate.NameModifier);
-                campaignTemplate.CombatActionDescriptor = BuildCombatActionDescriptor(sqlConnection, campaignTemplate.Identifier, "Enchantments_CombatActionParameters", "Enchantments_ExplosionParameters", "Enchantments_ActionCosts");
+                Assert.IsNotNull(enchantmentTemplate.NameModifier);
+                enchantmentTemplate.CombatActionDescriptor = BuildCombatActionDescriptor(sqlConnection, enchantmentTemplate.Identifier, "Enchantments_CombatActionParameters", "Enchantments_ExplosionParameters", "Enchantments_ActionCosts");
 
-                aggregate.Add(campaignTemplate.Identifier, campaignTemplate);
+                enchantmentTemplate.WornEffects = ParseListOfStrings(sqlConnection, enchantmentTemplate.Identifier, "Enchantments_WornEffects");
+
+                aggregate.Add(enchantmentTemplate.Identifier, enchantmentTemplate);
             }
             return aggregate;
         }
@@ -164,7 +166,6 @@ namespace Gamepackage
                 {
                     Debug.LogError("Item template: " + itemTemplate.Identifier + " references ItemAppearance: " + itemTemplate.ItemAppearanceIdentifier + " which does not exist.");
                 }
-                itemTemplate.EffectsGrantedToOwner = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_EffectsGrantedToOwner");
                 itemTemplate.CombatActionDescriptor = BuildCombatActionDescriptor(sqlConnection, itemTemplate.Identifier, "Items_CombatActionParameters", "Items_ExplosionParameters", "Items_ActionCosts");
 
                 var slotsAsStrings = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_SlotsOccupiedByWearing");
@@ -175,9 +176,6 @@ namespace Gamepackage
 
                 itemTemplate.TagsAppliedToEntity = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_TagsAppliedToEntity");
                 itemTemplate.TagsThatDescribeThisItem = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_TagsThatDescribeThisItem");
-                itemTemplate.TemplateAttributes = ParseAttributesDictFromTable(sqlConnection, itemTemplate.Identifier, "Items_TemplateAttributes");
-                itemTemplate.EffectsGrantedToOwner = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_EffectsGrantedToOwner");
-
                 itemTemplate.PossibleEnchantments = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_PossibleEnchantments");
 
                 aggregate.Add(itemTemplate.Identifier, itemTemplate);

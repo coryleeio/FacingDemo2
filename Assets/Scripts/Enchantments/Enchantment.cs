@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Gamepackage
 {
@@ -18,6 +19,8 @@ namespace Gamepackage
                 return Context.ResourceManager.Load<EnchantmentTemplate>(EnchantmentIdentifier);
             }
         }
+
+        public List<Effect> WornEffects;
 
         [JsonIgnore]
         public bool HasCharges

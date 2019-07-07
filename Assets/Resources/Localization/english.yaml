@@ -244,6 +244,7 @@ item.arrow.description: "People have been using this to kill each other literall
 item.bow.name: Shortbow
 item.bow.description: A shortbow
 
+name.modifier.enchantment.none: "{0}"
 name.modifier.enchantment.domination: "{0} of Domination"
 name.modifier.enchantment.lightning: "{0} of Lightning"
 name.modifier.enchantment.madness: "{0} of Madness"

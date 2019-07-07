@@ -30,8 +30,6 @@ namespace Gamepackage
         public List<ItemSlot> SlotsOccupiedByWearing;
         public List<string> TagsThatDescribeThisItem;
         public List<string> TagsAppliedToEntity;
-        public List<string> EffectsGrantedToOwner;
-        public Dictionary<Attributes, int> TemplateAttributes;
 
         public Dictionary<CombatActionType, CombatActionDescriptor> CombatActionDescriptor;
 

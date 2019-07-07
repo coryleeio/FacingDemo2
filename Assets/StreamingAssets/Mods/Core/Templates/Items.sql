@@ -36,19 +36,6 @@ CREATE TABLE IF NOT EXISTS "Items_TagsAppliedToEntity" (
 	"Tag"	TEXT
 );
 
-DROP TABLE IF EXISTS "Items_EffectsGrantedToOwner";
-CREATE TABLE IF NOT EXISTS "Items_EffectsGrantedToOwner" (
-	"Identifier"	TEXT NOT NULL,
-	"Tag"	TEXT
-);
-
-DROP TABLE IF EXISTS "Items_TemplateAttributes";
-CREATE TABLE IF NOT EXISTS "Items_TemplateAttributes" (
-	"Identifier"	TEXT NOT NULL,
-	"Attribute"	TEXT,
-	"Value"	INTEGER
-);
-
 DROP TABLE IF EXISTS "Items_PossibleEnchantments";
 CREATE TABLE IF NOT EXISTS "Items_PossibleEnchantments" (
 	"Identifier"	TEXT NOT NULL,
@@ -158,8 +145,8 @@ INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_ANTIDOTE', 'Thrown', 0
 
 INSERT INTO "Items"                         VALUES ('ITEM_LUCKY_COIN','item.lucky.coin',1,1,0,100,'None',"ITEM_APPEARANCE_LUCKY_COIN");
 INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_LUCKY_COIN', 'Thrown', 0, 0, 'BLUDGEONING', '', 'attacks.throw.useless.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_AUTO', "");
-INSERT INTO "Items_EffectsGrantedToOwner"   VALUES ('ITEM_LUCKY_COIN', 'EFFECT_LUCKY_COIN_LIFE_SAVE');
 INSERT INTO "Items_TagsThatDescribeThisItem"VALUES ('ITEM_LUCKY_COIN', 'ItemEffectsApplyFromInventory');
+INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_LUCKY_COIN', 'ENCHANTMENT_LUCKY_COIN_LIFE_SAVE');
 
 INSERT INTO "Items"                         VALUES ('ITEM_ROBE_OF_WONDERS','item.robe.of.wonders',1,1,0,100,'None', "ITEM_APPEARANCE_ROBE_OF_WONDERS");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_ROBE_OF_WONDERS', 'Chest');
@@ -171,9 +158,9 @@ INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_SANDALS', 'Shoes');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_SANDALS', 'Shoes');
 
 INSERT INTO "Items"                         VALUES ('ITEM_SHIELD_OF_AMALURE','item.shield.of.amalure',1,1,0,100,'None', "ITEM_APPEARANCE_SHIELD_OF_AMALURE");
-INSERT INTO "Items_EffectsGrantedToOwner"   VALUES ('ITEM_SHIELD_OF_AMALURE', 'EFFECT_STRENGTH_OF_GIANTS');
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_SHIELD_OF_AMALURE', 'OffHand');
 INSERT INTO "Items_SlotsOccupiedByWearing"  VALUES ('ITEM_SHIELD_OF_AMALURE', 'OffHand');
+INSERT INTO "Items_PossibleEnchantments"    VALUES ('ITEM_SHIELD_OF_AMALURE', 'ENCHANTMENT_STRENGTH_OF_GIANTS');
 
 INSERT INTO "Items"                         VALUES ('ITEM_ARROW','item.arrow',1,60,0,50,'Arrow', "ITEM_APPEARANCE_ARROW");
 INSERT INTO "Items_CombatActionParameters"  VALUES ('ITEM_ARROW', 'Thrown', 1, 1, 'PIERCING', '', 'attacks.piercing.1', 5, 1, 'Line', 'PROJECTILE_APPEARANCE_ARROW_SPIN', "");

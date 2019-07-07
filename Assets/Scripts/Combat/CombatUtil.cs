@@ -446,17 +446,17 @@ namespace Gamepackage
             var hasAmmoOrDoesntNeedIt = InteractionType != CombatActionType.Ranged || ammo != null;
             if (InteractionType == CombatActionType.Melee && (item == null || !item.CanBeUsedInInteractionType(CombatActionType.Melee) && CanAttackInMeleeWithoutWeapon(source)))
             {
-               Flatten(resolved, source.CombatActionDescriptors[CombatActionType.Melee]);
+                Flatten(resolved, source.CombatActionDescriptors[CombatActionType.Melee]);
             }
             else if (item != null && item.CanBeUsedInInteractionType(InteractionType) && hasAmmoOrDoesntNeedIt)
             {
-                if(item.CombatActionDescriptor.ContainsKey(InteractionType))
+                if (item.CombatActionDescriptor.ContainsKey(InteractionType))
                 {
                     Flatten(resolved, item.CombatActionDescriptor[InteractionType]);
                 }
-                if (item.Enchantment != null &&  item.Enchantment.Template.CombatActionDescriptor.ContainsKey(InteractionType))
+                if (item.IsEnchanted && item.Enchantment.Template.CombatActionDescriptor.ContainsKey(InteractionType))
                 {
-                    if(InteractionType == CombatActionType.Melee || InteractionType == CombatActionType.Ranged)
+                    if (InteractionType == CombatActionType.Melee || InteractionType == CombatActionType.Ranged)
                     {
                         // for melee and ranged we want the weapon damage, but the effects from the enchantment.
                         // we got the weapon damage above, then we get the explosion and ability costs if-any from the enchantment
@@ -667,9 +667,12 @@ namespace Gamepackage
                     foreach (var pair in target.Inventory.EquippedItemBySlot)
                     {
                         var item = pair.Value;
-                        foreach (var effect in item.EffectsGrantedToOwner)
+                        if (item.IsEnchanted)
                         {
-                            effect.EffectImpl.RemovePersistantVisualEffects(target);
+                            foreach (var effect in item.Enchantment.WornEffects)
+                            {
+                                effect.EffectImpl.RemovePersistantVisualEffects(target);
+                            }
                         }
                     }
 
@@ -721,7 +724,10 @@ namespace Gamepackage
                 foreach (var pair in entity.Inventory.EquippedItemBySlot)
                 {
                     var item = pair.Value;
-                    effectsAggregate.AddRange(item.EffectsGrantedToOwner);
+                    if (item.IsEnchanted)
+                    {
+                        effectsAggregate.AddRange(item.Enchantment.WornEffects);
+                    }
                 }
 
                 foreach (var item in entity.Inventory.Items)
@@ -730,7 +736,10 @@ namespace Gamepackage
                     {
                         if (item.Template.TagsThatDescribeThisItem.Contains("ItemEffectsApplyFromInventory"))
                         {
-                            effectsAggregate.AddRange(item.EffectsGrantedToOwner);
+                            if (item.IsEnchanted)
+                            {
+                                effectsAggregate.AddRange(item.Enchantment.WornEffects);
+                            }
                         }
                     }
                 }
@@ -781,31 +790,6 @@ namespace Gamepackage
         public static void RemoveEntityEffects(Entity entity, List<Effect> effectsThatShouldExpire)
         {
             Predicate<Effect> IsAnAffectThatShouldExpire = (eff) => { return effectsThatShouldExpire.Contains(eff); };
-
-            foreach (var pair in entity.Inventory.EquippedItemBySlot)
-            {
-                var item = pair.Value;
-                var expiring = item.EffectsGrantedToOwner.FindAll(IsAnAffectThatShouldExpire);
-                foreach (var expire in expiring)
-                {
-                    expire.EffectImpl.OnRemove(expire, entity);
-                }
-                item.EffectsGrantedToOwner.RemoveAll(IsAnAffectThatShouldExpire);
-            }
-
-            foreach (var item in entity.Inventory.Items)
-            {
-                if (item != null)
-                {
-                    var expiring = item.EffectsGrantedToOwner.FindAll(IsAnAffectThatShouldExpire);
-                    foreach (var expire in expiring)
-                    {
-                        expire.EffectImpl.OnRemove(expire, entity);
-                    }
-                    item.EffectsGrantedToOwner.RemoveAll(IsAnAffectThatShouldExpire);
-                }
-            }
-
             if (entity.IsCombatant)
             {
                 var expiring = entity.Effects.FindAll(IsAnAffectThatShouldExpire);

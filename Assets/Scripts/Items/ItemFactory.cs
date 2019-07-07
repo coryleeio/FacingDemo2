@@ -13,13 +13,8 @@ namespace Gamepackage
             {
                 TemplateIdentifier = uniqueIdentifier,
                 NumberOfItems = Random.Range(itemTemplate.MinStackSize, itemTemplate.MaxStackSize),
-                Attributes = new Dictionary<Attributes, int>(),
-                EffectsGrantedToOwner = EffectFactory.BuildAll(itemTemplate.EffectsGrantedToOwner),
             };
-            foreach (var pair in itemTemplate.TemplateAttributes)
-            {
-                item.Attributes.Add(pair.Key, pair.Value);
-            }
+
 
             if (itemTemplate.PossibleEnchantments.Count > 0)
             {

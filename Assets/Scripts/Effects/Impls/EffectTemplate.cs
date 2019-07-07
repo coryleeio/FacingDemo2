@@ -15,6 +15,5 @@ namespace Gamepackage
         public List<string> TagsAppliedToEntity;
         public Dictionary<string, string> TemplateData;
         public Dictionary<Attributes, int> TemplateAttributes;
-
     }
 }
