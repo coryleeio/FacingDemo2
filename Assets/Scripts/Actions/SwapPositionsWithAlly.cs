@@ -56,7 +56,7 @@ namespace Gamepackage
                 var skeletonAnimation = Source.SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
-                skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Walk, sourceDirection), true);
+                skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Walk, sourceDirection), false);
                 Source.Direction = sourceDirection;
             }
 
@@ -66,7 +66,7 @@ namespace Gamepackage
                 var skeletonAnimation = Targets[0].SkeletonAnimation;
                 skeletonAnimation.AnimationState.ClearTracks();
                 skeletonAnimation.Skeleton.SetToSetupPose();
-                skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Walk, targetDirection), true);
+                skeletonAnimation.AnimationState.SetAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Walk, targetDirection), false);
                 Targets[0].Direction = targetDirection;
             }
         }
