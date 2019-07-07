@@ -16,6 +16,16 @@ namespace Gamepackage
             return _prototypesByUniqueIdentifier.ContainsKey(input);
         }
 
+        public bool Contains<T>(string input)
+        {
+
+            if (_prototypesByUniqueIdentifier.ContainsKey(input))
+            {
+                return (_prototypesByUniqueIdentifier[input]) is T;
+            }
+            return false;
+        }
+
         public void Clear()
         {
 
@@ -75,8 +85,72 @@ namespace Gamepackage
             CacheResources(LoadEffectTemplates(sqlConnection));
             CacheResources(ProjectileAppearances.LoadAll());
             CacheResources(LoadEnchantmentTemplates(sqlConnection));
+            CacheResources(LoadProbabilityTables(sqlConnection, "Items_EnchantmentTables", "Items_EnchantmentTables_Parcels", "Items_EnchantmentTables_ParcelEntries"));
             CacheResources(LoadItemTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
+        }
+
+        private Dictionary<string, NewProbabilityTable> LoadProbabilityTables(SqliteConnection sqlConnection, string tableTableName, string parcelTableName, string parcelEntriesTableName)
+        {
+            var sql = string.Format("select * from [" + tableTableName + "]");
+            var sqlCommand = new SqliteCommand(sql, sqlConnection);
+            var reader = sqlCommand.ExecuteReader();
+
+            var aggregate = new Dictionary<string, NewProbabilityTable>();
+            while (reader.Read())
+            {
+                var probabilityTable = new NewProbabilityTable();
+                var identifier = reader[0].ToString();
+                probabilityTable.AddRange(LoadProbabilityTableParcels(sqlConnection, identifier, parcelTableName, parcelEntriesTableName));
+                aggregate.Add(identifier, probabilityTable);
+            }
+            return aggregate;
+        }
+
+        private List<NewProbabilityTableParcel> LoadProbabilityTableParcels(SqliteConnection sqlConnection, string tableIdentifier, string parcelTableName, string parcelEntriesTableName)
+        {
+            var retVal = new List<NewProbabilityTableParcel>();
+            var sqlForData = string.Format("select * from [" + parcelTableName + "] WHERE [Identifier] = @Identifier");
+            var commandForData = new SqliteCommand(sqlForData, sqlConnection);
+            commandForData.Parameters.AddWithValue("@Identifier", tableIdentifier);
+            var readerForData = commandForData.ExecuteReader();
+            while (readerForData.Read())
+            {
+                var identifier = readerForData[0].ToString();
+                var parcelIdStr = readerForData[1].ToString();
+                var weightStr = readerForData[2].ToString();
+
+                int.TryParse(parcelIdStr, out int parcelId);
+                int.TryParse(weightStr, out int weight);
+
+                var entry = new NewProbabilityTableParcel()
+                {
+                    Weight = weight
+                };
+                entry.Values.AddRange(LoadProbabilityTableParcelEntries(sqlConnection, parcelEntriesTableName, tableIdentifier, parcelId));
+                retVal.Add(entry);
+
+            }
+            return retVal;
+        }
+
+        private List<string> LoadProbabilityTableParcelEntries(SqliteConnection sqlConnection, string parcelEntriesTableName, string tableIdentifier, int parcelId)
+        {
+            var retVal = new List<string>();
+            var sqlForData = string.Format("select * from [" + parcelEntriesTableName + "] WHERE [Identifier] = @Identifier AND [ParcelId] = @ParcelId");
+            var commandForData = new SqliteCommand(sqlForData, sqlConnection);
+            commandForData.Parameters.AddWithValue("@Identifier", tableIdentifier);
+            commandForData.Parameters.AddWithValue("@ParcelId", parcelId);
+            var readerForData = commandForData.ExecuteReader();
+            while (readerForData.Read())
+            {
+                var identifier = readerForData[0].ToString();
+                var parcelIdStr = readerForData[1].ToString();
+                var value = readerForData[2].ToString();
+                retVal.Add(value);
+
+            }
+            return retVal;
         }
 
         private Dictionary<string, EnchantmentTemplate> LoadEnchantmentTemplates(SqliteConnection sqlConnection)
@@ -122,7 +196,7 @@ namespace Gamepackage
                 var identifier = readerForData[0].ToString();
                 var interactionType = (CombatActionType)Enum.Parse(typeof(CombatActionType), readerForData[1].ToString(), true);
                 var appliedEffect = readerForData[2].ToString();
-                if(retVal.ContainsKey(interactionType))
+                if (retVal.ContainsKey(interactionType))
                 {
                     Debug.LogWarning("Overwriting applied effects on" + templateIdentifier + " for action type: " + interactionType + "likely a mod has overwritten it.");
                 }
@@ -182,7 +256,32 @@ namespace Gamepackage
                 itemTemplate.AmmoType = ammoType;
 
 
-                itemTemplate.ItemAppearanceIdentifier = reader[7].ToString();
+                var probabilityTableResource = reader[7].ToString();
+                if(probabilityTableResource != null && probabilityTableResource != "")
+                {
+                    if (Contains<EnchantmentTemplate>(probabilityTableResource))
+                    {
+                        itemTemplate.PossibleEnchantments = new NewProbabilityTable();
+                        itemTemplate.PossibleEnchantments.Add(new NewProbabilityTableParcel()
+                        {
+                            Values = new List<string>()
+                        {
+                            probabilityTableResource,
+                        },
+                            Weight = 1,
+                        });
+                    }
+                    else if (Contains<NewProbabilityTable>(probabilityTableResource))
+                    {
+                        itemTemplate.PossibleEnchantments = Load<NewProbabilityTable>(probabilityTableResource);
+                    }
+                    else
+                    {
+                        Debug.LogError("Item template: " + itemTemplate.Identifier + " references Enchantment or probability table: " + probabilityTableResource + " neither of which exists.");
+                    }
+                }
+
+                itemTemplate.ItemAppearanceIdentifier = reader[8].ToString();
                 if (this.Load<ItemAppearance>(itemTemplate.ItemAppearanceIdentifier) == null)
                 {
                     Debug.LogError("Item template: " + itemTemplate.Identifier + " references ItemAppearance: " + itemTemplate.ItemAppearanceIdentifier + " which does not exist.");
@@ -197,7 +296,6 @@ namespace Gamepackage
 
                 itemTemplate.TagsAppliedToEntity = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_TagsAppliedToEntity");
                 itemTemplate.TagsThatDescribeThisItem = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_TagsThatDescribeThisItem");
-                itemTemplate.PossibleEnchantments = ParseListOfStrings(sqlConnection, itemTemplate.Identifier, "Items_PossibleEnchantments");
 
                 aggregate.Add(itemTemplate.Identifier, itemTemplate);
             }
@@ -211,9 +309,9 @@ namespace Gamepackage
             var explosionParams = ParseCombatActionParameters(con, identifier, explosionTable);
             var costParams = ParseCombatActionCost(con, identifier, costTable);
 
-            foreach(var pair in combatParams)
+            foreach (var pair in combatParams)
             {
-                if(!ret.ContainsKey(pair.Key))
+                if (!ret.ContainsKey(pair.Key))
                 {
                     ret[pair.Key] = new CombatActionDescriptor();
                 }
@@ -251,7 +349,7 @@ namespace Gamepackage
             while (reader.Read())
             {
                 var cost = new ActionCost();
-                var identifier  = reader[0].ToString();
+                var identifier = reader[0].ToString();
                 var interactionType = (CombatActionType)Enum.Parse(typeof(CombatActionType), reader[1].ToString(), true);
 
                 var healthStr = reader[2].ToString();

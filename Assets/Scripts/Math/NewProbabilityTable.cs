@@ -14,13 +14,21 @@ namespace Gamepackage
             WeightTotal += entry.Weight;
         }
 
+        public void AddRange(List<NewProbabilityTableParcel> entries)
+        {
+            foreach (var entry in entries)
+            {
+                Add(entry);
+            }
+        }
+
         public void Remove(NewProbabilityTableParcel entry)
         {
             Entries.Remove(entry);
             WeightTotal -= entry.Weight;
         }
 
-        public List<string> Resolve()
+        public List<string> Roll()
         {
             var weightTotalTraversed = 0;
             var possibleReturns = new List<string>();
@@ -28,20 +36,19 @@ namespace Gamepackage
             foreach (var entry in Entries)
             {
                 weightTotalTraversed += entry.Weight;
-                if(roll <= weightTotalTraversed)
+                if (roll <= weightTotalTraversed)
                 {
                     possibleReturns.AddRange(entry.Values);
                     break;
                 }
             }
             var returnVals = new List<string>();
-            foreach(var possibleReturn in possibleReturns)
+            foreach (var possibleReturn in possibleReturns)
             {
-                if(possibleReturn.StartsWith("TABLE_"))
+                if (Context.ResourceManager.Contains<NewProbabilityTable>(possibleReturn))
                 {
-                    // Support recursive tables.
                     var returnTable = Context.ResourceManager.Load<NewProbabilityTable>(possibleReturn);
-                    returnVals.AddRange(returnTable.Resolve());
+                    returnVals.AddRange(returnTable.Roll());
                 }
                 else
                 {

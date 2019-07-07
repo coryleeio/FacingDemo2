@@ -15,11 +15,22 @@ namespace Gamepackage
                 NumberOfItems = Random.Range(itemTemplate.MinStackSize, itemTemplate.MaxStackSize),
             };
 
-            if (itemTemplate.PossibleEnchantments.Count > 0)
+            if (itemTemplate.PossibleEnchantments != null)
             {
-                var enchantmentTemplateIdentifier = MathUtil.ChooseRandomElement<string>(itemTemplate.PossibleEnchantments);
-                item.Enchantment = EnchantmentFactory.Build(enchantmentTemplateIdentifier);
-                Assert.IsNotNull(item.Enchantment, "Could not resolve enchantment: " + enchantmentTemplateIdentifier);
+                var enchantmentTemplateIdentifiers = itemTemplate.PossibleEnchantments.Roll();
+                if(enchantmentTemplateIdentifiers.Count > 1)
+                {
+                    throw new NotImplementedException("Items can only have one enchantment");
+                }
+                else if(enchantmentTemplateIdentifiers.Count == 1)
+                {
+                    var enchantmentTemplateIdentifier = enchantmentTemplateIdentifiers[0];
+                    if(enchantmentTemplateIdentifier != null && enchantmentTemplateIdentifier != "")
+                    {
+                        item.Enchantment = EnchantmentFactory.Build(enchantmentTemplateIdentifier);
+                        Assert.IsNotNull(item.Enchantment, "Could not resolve enchantment: " + enchantmentTemplateIdentifier);
+                    }
+                }
             }
             return item;
         }
