@@ -5,6 +5,24 @@ namespace Gamepackage
 {
     public static class InventoryUtil
     {
+
+        public static void TryEquipItems(Entity entity, List<Item> items)
+        {
+            if(items == null)
+            {
+                return;
+            }
+
+            foreach(var item in items)
+            {
+                if(item !=null)
+                {
+                    EquipItem(entity, item);
+                }
+            }
+        }
+
+
         public static void EquipItem(Entity entity, Item item)
         {
             Assert.IsNotNull(item);
@@ -33,6 +51,14 @@ namespace Gamepackage
         public static void AddItem(Entity entity, Item item)
         {
             AddItem(entity, item, -1);
+        }
+
+        public static void AddItems(Entity entity, List<Item> items)
+        {
+            foreach(var item in items)
+            {
+                AddItem(entity, item, -1);
+            }
         }
 
         public static void AddItem(Entity entity, Item item, int position)

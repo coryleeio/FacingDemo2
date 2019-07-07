@@ -43,10 +43,13 @@ namespace Gamepackage
                 InventoryUtil.EquipItem(entity, ItemFactory.Build("ITEM_SHORTBOW"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_WAND_OF_LIGHTNING"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_STAFF_OF_FIREBALLS"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<string>(Tables.HumanoidWeapons)));
-                InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<string>(Tables.HumanoidWeapons)));
-                InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<string>(Tables.HumanoidWeapons)));
-                InventoryUtil.AddItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<string>(Tables.HumanoidWeapons)));
+
+                var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_LUCKY_COIN"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_ARROW"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_PURPLE_POTION"));
@@ -108,8 +111,12 @@ namespace Gamepackage
                 entity.OriginalTeam = Team.Enemy;
                 entity.AI = AIType.Archer;
                 var itemIds = new List<string>();
-                itemIds.AddRange(Tables.HumanoidClothing.Next());
-                itemIds.Add(MathUtil.ChooseRandomElement<string>(Tables.HumanoidWeapons));
+
+                var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+
+                var HumanoidClothing = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidClothing.Roll()));
                 foreach (var itemId in itemIds)
                 {
                     InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
@@ -133,8 +140,10 @@ namespace Gamepackage
                 entity.OriginalTeam = Team.Enemy;
                 entity.AI = AIType.Archer;
                 var itemIds = new List<string>();
-                itemIds.AddRange(Tables.HumanoidClothing.Next());
-                itemIds.Add(MathUtil.ChooseRandomElement<string>(Tables.HumanoidWeapons));
+                var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
+                var HumanoidClothing = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidClothing.Roll()));
                 foreach (var itemId in itemIds)
                 {
                     InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
@@ -159,7 +168,8 @@ namespace Gamepackage
                 entity.OriginalTeam = Team.Enemy;
                 entity.AI = AIType.Archer;
                 var itemIds = new List<string>();
-                itemIds.Add(MathUtil.ChooseRandomElement<string>(Tables.HumanoidWeapons));
+                var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
                 foreach (var itemId in itemIds)
                 {
                     InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
@@ -224,22 +234,6 @@ namespace Gamepackage
             }
 
             entity.Direction = MathUtil.ChooseRandomElement<Direction>(new List<Direction>() { Direction.SouthEast, Direction.SouthWest, Direction.NorthEast, Direction.NorthWest });
-
-            if (entity.Inventory != null)
-            {
-                var mainHand = InventoryUtil.GetItemBySlot(entity, ItemSlot.MainHand);
-                var ammo = InventoryUtil.GetItemBySlot(entity, ItemSlot.Ammo);
-                if (mainHand != null)
-                {
-                    if (mainHand.CanBeUsedInInteractionType(CombatActionType.Ranged) && mainHand.Template.AmmoType == AmmoType.Arrow && ammo == null)
-                    {
-                        // If we've got a ranged weapon equipped that is a bow, 
-                        // but no arrows equipped, go ahead and spawn some default arrows
-                        // and equip them
-                        InventoryUtil.EquipItem(entity, ItemFactory.Build(MathUtil.ChooseRandomElement<string>(Tables.RandomArrows)));
-                    }
-                }
-            }
             entity.Position = new Point(0, 0);
             return entity;
         }

@@ -155,6 +155,10 @@ namespace Gamepackage
 
         public bool CanStack(Item other)
         {
+            if(other == null)
+            {
+                return false;
+            }
             return TemplateIdentifier == other.TemplateIdentifier && (NumberOfItems + other.NumberOfItems < this.Template.MaxStackSize);
         }
 

@@ -32,7 +32,7 @@ namespace Gamepackage
         {
             var weightTotalTraversed = 0;
             var possibleReturns = new List<string>();
-            var roll = Random.Range(0, WeightTotal);
+            var roll = Random.Range(0, WeightTotal + 1); // +1 is to make it inclusive of the weight total value
             foreach (var entry in Entries)
             {
                 weightTotalTraversed += entry.Weight;

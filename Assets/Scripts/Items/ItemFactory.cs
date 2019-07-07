@@ -6,8 +6,22 @@ namespace Gamepackage
 {
     public static class ItemFactory
     {
+        public static List<Item> BuildAll(List<string> uniqueIdentifiers)
+        {
+            var agg = new List<Item>();
+            foreach(var uniqueIdentifier in uniqueIdentifiers)
+            {
+                agg.Add(Build(uniqueIdentifier));
+            }
+            return agg;
+        }
+
         public static Item Build(string uniqueIdentifier)
         {
+            if(uniqueIdentifier == null || uniqueIdentifier == "")
+            {
+                return null;
+            }
             var itemTemplate = Context.ResourceManager.Load<ItemTemplate>(uniqueIdentifier);
             var item = new Item()
             {

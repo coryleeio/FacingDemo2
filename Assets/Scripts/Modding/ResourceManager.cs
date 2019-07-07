@@ -86,6 +86,7 @@ namespace Gamepackage
             CacheResources(ProjectileAppearances.LoadAll());
             CacheResources(LoadEnchantmentTemplates(sqlConnection));
             CacheResources(LoadProbabilityTables(sqlConnection, "Items_EnchantmentTables", "Items_EnchantmentTables_Parcels", "Items_EnchantmentTables_ParcelEntries"));
+            CacheResources(LoadProbabilityTables(sqlConnection, "ItemDropTable", "ItemDropTable_Parcels", "ItemDropTable_ParcelEntries"));
             CacheResources(LoadItemTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
         }
