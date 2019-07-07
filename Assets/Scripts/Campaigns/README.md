@@ -1,0 +1,1 @@
+Campaign is global settings for the campaign, what ruleset to use, what level gens to use etc.

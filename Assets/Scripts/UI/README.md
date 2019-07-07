@@ -1,0 +1,1 @@
+Code relating to the UI. There is a UI Root object that owns everything else. Typically one driving 'UIComponent' per window what utilizes lots of smaller components. Events are sent to the root and propogate to the other components.

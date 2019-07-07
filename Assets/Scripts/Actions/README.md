@@ -1,0 +1,1 @@
+Actions are things an entity can do.  Some are animated, some are not. Many animated ones will be resolved instantaneously if the user cant see the entity in question.

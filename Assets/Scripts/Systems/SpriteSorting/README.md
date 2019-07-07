@@ -1,0 +1,1 @@
+Stuff in this folder has to do with draw order of sprites. (So that you can walk behind things, and things can walk behind you even though the game is 2D).

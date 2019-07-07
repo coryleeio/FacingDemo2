@@ -1,0 +1,1 @@
+Projectiles contains classes that are needed to show what it looks like when you shoot, either by ranged attack, zap attack, throwing etc, any given item.

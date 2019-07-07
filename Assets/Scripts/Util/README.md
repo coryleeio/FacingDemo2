@@ -1,0 +1,1 @@
+Utilities contains useful things that dont really fit anywhere else, but that are useful in multiple parts of the code, extensions, pools, math classes etc.
