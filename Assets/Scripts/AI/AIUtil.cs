@@ -37,8 +37,6 @@ namespace Gamepackage
             }
         }
 
-        public static List<CombatActionType> RangedAIRelevantContexts1 => RangedAIRelevantContexts;
-
         public static void CommonAIAttackWithWeapon(Level level, Entity entity, Item item, List<CombatActionType> contexts)
         {
             var hostileTarget = FindVisibleTargets(entity);
