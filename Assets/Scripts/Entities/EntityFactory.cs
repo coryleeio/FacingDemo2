@@ -36,7 +36,8 @@ namespace Gamepackage
             if (entity.TemplateIdentifier == "ENTITY_PONCY")
             {
                 entity.Name = "entity.player.name.default".Localize();
-                DefaultHumanoidBodyAttacks(entity);
+                entity.IsCombatant = true;
+                entity.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
                 entity.Attributes = new Dictionary<Attributes, int>
                 {
                     {Attributes.MAX_HEALTH, 10 },
@@ -48,7 +49,7 @@ namespace Gamepackage
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.PLAYER;
                 entity.OriginalTeam = Team.PLAYER;
-                entity.AI = AIType.None;
+                entity.AIClassName = null;
                 InventoryUtil.EquipItem(entity, ItemFactory.Build("ITEM_ROBE_OF_WONDERS"));
                 InventoryUtil.EquipItem(entity, ItemFactory.Build("ITEM_SANDALS"));
                 InventoryUtil.EquipItem(entity, ItemFactory.Build("ITEM_SHORTBOW"));
@@ -72,7 +73,8 @@ namespace Gamepackage
             else if (entity.TemplateIdentifier == "ENTITY_MASLOW")
             {
                 entity.Name = "entity.dog.name.default".Localize();
-                DefaultDogBodyAttacks(entity);
+                entity.IsCombatant = true;
+                entity.DefaultAttackItem = ItemFactory.Build("ITEM_DOG_MAW");
                 entity.Attributes = new Dictionary<Attributes, int>
                 {
                     {Attributes.MAX_HEALTH, 45 },
@@ -84,12 +86,13 @@ namespace Gamepackage
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.PLAYER;
                 entity.OriginalTeam = Team.PLAYER;
-                entity.AI = AIType.DumbMelee;
+                entity.AIClassName = "Gamepackage.DumbMelee";
             }
             else if (entity.TemplateIdentifier == "ENTITY_GIANT_BEE")
             {
                 entity.Name = "entity.bee.name".Localize();
-                DefaultBeeBodyAttacks(entity);
+                entity.IsCombatant = true;
+                entity.DefaultAttackItem = ItemFactory.Build("ITEM_BEE_STINGER");
                 entity.Floating = true;
                 entity.Attributes = new Dictionary<Attributes, int>
                 {
@@ -102,13 +105,14 @@ namespace Gamepackage
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
-                entity.AI = AIType.DumbMelee;
+                entity.AIClassName = "Gamepackage.DumbMelee";
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_ARROW"));
             }
             else if (entity.TemplateIdentifier == "ENTITY_SKELETON")
             {
                 entity.Name = "entity.skeleton.name".Localize();
-                DefaultHumanoidBodyAttacks(entity);
+                entity.IsCombatant = true;
+                entity.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
                 entity.Attributes = new Dictionary<Attributes, int>
                 {
                     {Attributes.MAX_HEALTH, 10 },
@@ -120,7 +124,7 @@ namespace Gamepackage
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
-                entity.AI = AIType.Archer;
+                entity.AIClassName = "Gamepackage.Archer";
                 var itemIds = new List<string>();
 
                 var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
@@ -136,7 +140,8 @@ namespace Gamepackage
             else if (entity.TemplateIdentifier == "ENTITY_GHOST")
             {
                 entity.Name = "entity.ghost.name".Localize();
-                DefaultHumanoidBodyAttacks(entity);
+                entity.IsCombatant = true;
+                entity.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
                 entity.Floating = true;
                 entity.Attributes = new Dictionary<Attributes, int>
                 {
@@ -149,22 +154,18 @@ namespace Gamepackage
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
-                entity.AI = AIType.Archer;
-                var itemIds = new List<string>();
+                entity.AIClassName = "Gamepackage.Archer";
                 var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
                 var HumanoidClothing = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidClothing.Roll()));
-                foreach (var itemId in itemIds)
-                {
-                    InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
-                }
             }
 
             else if (entity.TemplateIdentifier == "ENTITY_ANIMATED_WEAPON")
             {
                 entity.Name = "entity.animated.weapon.name".Localize();
-                DefaultHumanoidBodyAttacks(entity);
+                entity.IsCombatant = true;
+                entity.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
                 entity.Floating = true;
                 entity.Attributes = new Dictionary<Attributes, int>
                 {
@@ -177,21 +178,17 @@ namespace Gamepackage
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
-                entity.AI = AIType.Archer;
-                var itemIds = new List<string>();
+                entity.AIClassName = "Gamepackage.Archer";
                 var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-                foreach (var itemId in itemIds)
-                {
-                    InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
-                }
             }
 
             else if (entity.TemplateIdentifier == "ENTITY_QUEEN_BEE")
             {
                 var nameTable = Context.ResourceManager.Load<ProbabilityTable>("NAMETABLE_BEES");
                 entity.Name = nameTable.RollAndChooseOne().Localize();
-                DefaultBeeBodyAttacks(entity);
+                entity.IsCombatant = true;
+                entity.DefaultAttackItem = ItemFactory.Build("ITEM_BEE_STINGER");
                 entity.Floating = true;
                 entity.Attributes = new Dictionary<Attributes, int>
                 {
@@ -204,7 +201,7 @@ namespace Gamepackage
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
-                entity.AI = AIType.DumbMelee;
+                entity.AIClassName = "Gamepackage.DumbMelee";
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_LONGSWORD"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_PURPLE_POTION"));
             }
@@ -248,24 +245,6 @@ namespace Gamepackage
             entity.Direction = MathUtil.ChooseRandomElement<Direction>(new List<Direction>() { Direction.SouthEast, Direction.SouthWest, Direction.NorthEast, Direction.NorthWest });
             entity.Position = new Point(0, 0);
             return entity;
-        }
-
-        private static void DefaultHumanoidBodyAttacks(Entity ent)
-        {
-            ent.IsCombatant = true;
-            ent.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
-        }
-
-        private static void DefaultDogBodyAttacks(Entity ent)
-        {
-            ent.IsCombatant = true;
-            ent.DefaultAttackItem = ItemFactory.Build("ITEM_DOG_MAW");
-        }
-
-        private static void DefaultBeeBodyAttacks(Entity ent)
-        {
-            ent.IsCombatant = true;
-            ent.DefaultAttackItem = ItemFactory.Build("ITEM_BEE_STINGER");
         }
     }
 }

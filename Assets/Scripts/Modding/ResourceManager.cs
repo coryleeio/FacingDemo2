@@ -83,6 +83,7 @@ namespace Gamepackage
             CacheResources(LoadViewTemplates(sqlConnection));
             CacheResources(LoadEffectImpls());
             CacheResources(LoadTriggerableActionImpls());
+            CacheResources(LoadAI());
             CacheResources(LoadRulesEngines());
             CacheResources(LoadTriggerTemplates(sqlConnection));
             CacheResources(LoadEffectTemplates(sqlConnection));
@@ -95,6 +96,11 @@ namespace Gamepackage
 
             CacheResources(LoadItemTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
+        }
+
+        private Dictionary<string, Dictionary<string, Type>> LoadAI()
+        {
+            return BuildTypeDictFromInterface(typeof(IAI));
         }
 
         private Dictionary<string, MultitileViewTemplate> LoadMultitileViews(SqliteConnection sqlConnection)

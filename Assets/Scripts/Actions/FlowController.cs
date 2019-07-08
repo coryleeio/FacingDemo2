@@ -39,7 +39,7 @@ namespace Gamepackage
                 {
                     if (entity.HasBehaviour)
                     {
-                        if (entity.IsPlayer && entity.AI == AIType.None)
+                        if (entity.IsPlayer && entity.AI == null)
                         {
                             entity.IsThinking = true;
                         }
@@ -47,7 +47,7 @@ namespace Gamepackage
                         {
                             entity.NextAction = null;
                             entity.IsThinking = true;
-                            AIUtil.FigureOutNextAction(entity);
+                            entity.AI.FigureOutNextAction(entity);
                         }
                         if (!entity.IsDoneThisTurn)
                         {

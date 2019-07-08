@@ -14,7 +14,8 @@ namespace Gamepackage
                 outcome.Target.LastKnownTargetPosition = null;
                 if (outcome.Target.IsPlayer)
                 {
-                    outcome.Target.AI = AIType.Archer;
+                    outcome.Target.AIClassName = "Gamepackage.Archer";
+                    outcome.Target.AI = null;
                 }
             }
         }
@@ -28,7 +29,8 @@ namespace Gamepackage
                 ViewUtils.UpdateHealthBarColor(entity);
                 if (entity.IsPlayer)
                 {
-                    entity.AI = AIType.None;
+                    entity.AIClassName = null;
+                    entity.AI = null;
                 }
             }
         }

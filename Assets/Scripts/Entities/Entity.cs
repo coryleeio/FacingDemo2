@@ -21,7 +21,26 @@ namespace Gamepackage
 
         public bool HasBehaviour;
         public Team OriginalTeam;
-        public AIType AI;
+
+        public string AIClassName;
+        [JsonIgnore]
+        private IAI _aiImpl;
+        [JsonIgnore]
+        public IAI AI
+        {
+            get
+            {
+                if (_aiImpl == null && AIClassName != null && AIClassName != "")
+                {
+                    _aiImpl = Context.ResourceManager.CreateInstanceFromAbstractOrInterfaceTypeAndName(typeof(IAI), AIClassName) as IAI;
+                }
+                return _aiImpl;
+            }
+            set
+            {
+                _aiImpl = value;
+            }
+        }
 
         // Since you attack with an item - when you attack with your fists, what item should we use?
         public Item DefaultAttackItem;

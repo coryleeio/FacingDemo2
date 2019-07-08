@@ -79,30 +79,6 @@ namespace Gamepackage
             return isAbleToPerform && isWillingToPerform;
         }
 
-        public static void FigureOutNextAction(Entity entity)
-        {
-            entity.PathsReturned = 0;
-            if (entity.AI == AIType.None)
-            {
-                throw new NotImplementedException("AI with undefined behaviour: " + entity.TemplateIdentifier.ToString());
-            }
-
-            var level = Context.Game.CurrentLevel;
-
-            var relevantContexts = entity.AI == AIType.DumbMelee ? MeleeAIRelevantContexts : RangedAIRelevantContexts;
-
-            entity.NextAction = null;
-
-            if (entity.AI == AIType.DumbMelee)
-            {
-                AIUtil.CommonAIAttackWithWeapon(level, entity, InventoryUtil.GetMainHandOrDefaultWeapon(entity), MeleeAIRelevantContexts);
-            }
-            else if (entity.AI == AIType.Archer)
-            {
-                AIUtil.CommonAIAttackWithWeapon(level, entity, InventoryUtil.GetMainHandOrDefaultWeapon(entity), RangedAIRelevantContexts);
-            }
-        }
-
         private static void EnqueueInteractionType(Entity entity, CombatActionType InteractionType, Item item, Entity target)
         {
             var grid = Context.Game.CurrentLevel.Grid;
