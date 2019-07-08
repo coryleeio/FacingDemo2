@@ -18,7 +18,7 @@ namespace Gamepackage
         public bool CastsShadow = true;
         public bool BlocksPathing = false;
         public bool AlwaysVisible = false;
-        public string ViewPrototypeUniqueIdentifier;
+
         public bool HasBehaviour;
         public Team OriginalTeam;
         public AIType AI;
@@ -40,7 +40,7 @@ namespace Gamepackage
         // factory / derived
         public Inventory Inventory;
 
-        public List<Effect> Effects = new List<Effect>();
+        public List<Effect> TemporaryEffects = new List<Effect>();
         public Point Position;
         public Direction Direction;
         public int CurrentHealth;
@@ -53,6 +53,16 @@ namespace Gamepackage
         public bool IsThinking = false;
         public bool IsPlayer;
         public Point LastKnownTargetPosition = null;
+
+        public string ViewTemplateIdentifier;
+        [JsonIgnore]
+        public ViewTemplate ViewTemplate
+        {
+            get
+            {
+                return Context.ResourceManager.Load<ViewTemplate>(ViewTemplateIdentifier);
+            }
+        }
 
         [JsonIgnore]
         public GameObject ViewGameObject;
@@ -125,14 +135,14 @@ namespace Gamepackage
             }
         }
 
-        public List<Effect> GetEffects()
+        public List<Effect> GetAllTypesOfEffects()
         {
-            return GetEffects(null);
+            return GetAllTypesOfEffects(null);
         }
 
-        public List<Effect> GetEffects(Predicate<Effect> predicate)
+        public List<Effect> GetAllTypesOfEffects(Predicate<Effect> predicate)
         {
-            return CombatUtil.GetEntityEffectsByType(this, predicate);
+            return CombatUtil.GetEntityAllTypesOfEffects(this, predicate);
         }
 
         public bool CanSee(Point p)
@@ -161,6 +171,12 @@ namespace Gamepackage
                     }
 
                 }
+            }
+            foreach(var effect in TemporaryEffects)
+            {
+                int amountToAdd = 0;
+                effect.Template.TemplateAttributes.TryGetValue(attr, out amountToAdd);
+                total += amountToAdd;
             }
             return total;
         }

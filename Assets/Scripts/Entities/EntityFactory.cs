@@ -6,6 +6,17 @@ namespace Gamepackage
 {
     public static class EntityFactory
     {
+
+        public static List<Entity> BuildAll(List<string> identifiers)
+        {
+            var agg = new List<Entity>();
+            foreach(var identifier in identifiers)
+            {
+                agg.Add(Build(identifier));
+            }
+            return agg;
+        }
+
         public static Entity Build(string uniqueIdentifier)
         {
             var entity = new Entity();
@@ -33,7 +44,7 @@ namespace Gamepackage
                     {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_HUMAN_WHITE";
+                entity.ViewTemplateIdentifier = "VIEW_HUMAN_WHITE";
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.PLAYER;
                 entity.OriginalTeam = Team.PLAYER;
@@ -44,7 +55,7 @@ namespace Gamepackage
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_WAND_OF_LIGHTNING"));
                 InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_STAFF_OF_FIREBALLS"));
 
-                var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
+                var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
@@ -69,7 +80,7 @@ namespace Gamepackage
                     {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_MARKER_BLUE";
+                entity.ViewTemplateIdentifier = "VIEW_MARKER_BLUE";
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.PLAYER;
                 entity.OriginalTeam = Team.PLAYER;
@@ -87,7 +98,7 @@ namespace Gamepackage
                     {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_BEE";
+                entity.ViewTemplateIdentifier = "VIEW_BEE";
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
@@ -105,17 +116,17 @@ namespace Gamepackage
                     {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_SKELETON_WHITE";
+                entity.ViewTemplateIdentifier = "VIEW_SKELETON_WHITE";
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
                 entity.AI = AIType.Archer;
                 var itemIds = new List<string>();
 
-                var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
+                var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
 
-                var HumanoidClothing = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
+                var HumanoidClothing = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidClothing.Roll()));
                 foreach (var itemId in itemIds)
                 {
@@ -134,14 +145,14 @@ namespace Gamepackage
                     {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_GHOST";
+                entity.ViewTemplateIdentifier = "VIEW_GHOST";
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
                 entity.AI = AIType.Archer;
                 var itemIds = new List<string>();
-                var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
-                var HumanoidClothing = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
+                var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
+                var HumanoidClothing = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidClothing.Roll()));
                 foreach (var itemId in itemIds)
@@ -162,13 +173,13 @@ namespace Gamepackage
                    {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_GHOST";
+                entity.ViewTemplateIdentifier = "VIEW_GHOST";
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
                 entity.AI = AIType.Archer;
                 var itemIds = new List<string>();
-                var HumanoidWeapons = Context.ResourceManager.Load<NewProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
+                var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
                 foreach (var itemId in itemIds)
                 {
@@ -178,7 +189,8 @@ namespace Gamepackage
 
             else if (entity.TemplateIdentifier == "ENTITY_QUEEN_BEE")
             {
-                entity.Name = (MathUtil.PercentageChanceEventOccurs(10) ? "entity.queen.bee.special.name" : "entity.queen.bee.name").Localize();
+                var nameTable = Context.ResourceManager.Load<ProbabilityTable>("NAMETABLE_BEES");
+                entity.Name = nameTable.RollAndChooseOne().Localize();
                 DefaultBeeBodyAttacks(entity);
                 entity.Floating = true;
                 entity.Attributes = new Dictionary<Attributes, int>
@@ -188,7 +200,7 @@ namespace Gamepackage
                     {Attributes.SHOUT_RADIUS, 4 },
                 };
                 entity.BlocksPathing = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_LARGE_BEE";
+                entity.ViewTemplateIdentifier = "VIEW_LARGE_BEE";
                 entity.HasBehaviour = true;
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
@@ -201,7 +213,7 @@ namespace Gamepackage
                 entity.Name = "entity.stairs.up.name".Localize();
                 entity.BlocksPathing = false;
                 entity.AlwaysVisible = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_STAIRCASE_UP";
+                entity.ViewTemplateIdentifier = "VIEW_STAIRCASE_UP";
                 entity.Trigger = TriggerFactory.Build("TRIGGER_CHANGE_LEVEL_ON_PRESS");
             }
             else if (entity.TemplateIdentifier == "ENTITY_STAIRS_DOWN")
@@ -209,14 +221,14 @@ namespace Gamepackage
                 entity.Name = "entity.stairs.down.name".Localize();
                 entity.BlocksPathing = false;
                 entity.AlwaysVisible = true;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_STAIRCASE_DOWN";
+                entity.ViewTemplateIdentifier = "VIEW_STAIRCASE_DOWN";
                 entity.Trigger = TriggerFactory.Build("TRIGGER_CHANGE_LEVEL_ON_PRESS");
             }
             else if (entity.TemplateIdentifier == "ENTITY_GROUND_DROP")
             {
                 entity.Name = "";
                 entity.BlocksPathing = false;
-                entity.ViewPrototypeUniqueIdentifier = "VIEW_CORPSE";
+                entity.ViewTemplateIdentifier = "VIEW_CORPSE";
                 entity.Trigger = TriggerFactory.Build("TRIGGER_LOOTABLE");
             }
 

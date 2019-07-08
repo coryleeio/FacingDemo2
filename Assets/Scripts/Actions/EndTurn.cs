@@ -28,7 +28,7 @@ namespace Gamepackage
                 Source.IsDoneThisTurn = true;
             }
 
-            foreach(var effect in Source.GetEffects())
+            foreach(var effect in Source.TemporaryEffects)
             {
                 var tickingEffect = effect;
                 tickingEffect.EffectImpl.Tick(tickingEffect, Source);

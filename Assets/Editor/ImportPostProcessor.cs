@@ -13,6 +13,11 @@ namespace Gamepackage
                 {
                     assetImporter.assetBundleName = "Core";
                 }
+
+                if (assetPath.Contains("Spine/Export"))
+                {
+                    assetImporter.assetBundleName = "Core";
+                }
             }
         }
 
@@ -41,11 +46,6 @@ namespace Gamepackage
                 {
                     // Spine needs this
                     textureImporter.isReadable = true;
-
-                    TextureImporterSettings textureSettings = new TextureImporterSettings();
-                    textureImporter.ReadTextureSettings(textureSettings);
-                    textureImporter.assetBundleName = "Core";
-                    textureImporter.SetTextureSettings(textureSettings);
                 }
             }
 

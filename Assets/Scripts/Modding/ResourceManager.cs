@@ -77,7 +77,10 @@ namespace Gamepackage
             CacheResources(LoadUnityResource<GameObject>());
 
             CacheResources(LoadTilesets(sqlConnection));
+
+            CacheResources(LoadMultitileViews(sqlConnection));
             CacheResources(LoadItemAppearances(sqlConnection));
+            CacheResources(LoadViewTemplates(sqlConnection));
             CacheResources(LoadEffectImpls());
             CacheResources(LoadTriggerableActionImpls());
             CacheResources(LoadRulesEngines());
@@ -87,20 +90,117 @@ namespace Gamepackage
             CacheResources(LoadEnchantmentTemplates(sqlConnection));
             CacheResources(LoadProbabilityTables(sqlConnection, "Items_EnchantmentTables", "Items_EnchantmentTables_Parcels", "Items_EnchantmentTables_ParcelEntries"));
             CacheResources(LoadProbabilityTables(sqlConnection, "ItemDropTable", "ItemDropTable_Parcels", "ItemDropTable_ParcelEntries"));
+            CacheResources(LoadProbabilityTables(sqlConnection, "EncounterTable", "EncounterTable_Parcels", "EncounterTable_ParcelEntries"));
+            CacheResources(LoadProbabilityTables(sqlConnection, "NameTable", "NameTable_Parcels", "NameTable_ParcelEntries"));
+
             CacheResources(LoadItemTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
         }
 
-        private Dictionary<string, NewProbabilityTable> LoadProbabilityTables(SqliteConnection sqlConnection, string tableTableName, string parcelTableName, string parcelEntriesTableName)
+        private Dictionary<string, MultitileViewTemplate> LoadMultitileViews(SqliteConnection sqlConnection)
+        {
+            var sql = "select * from MultitileViews";
+            var sqlCommand = new SqliteCommand(sql, sqlConnection);
+            var reader = sqlCommand.ExecuteReader();
+
+            var aggregate = new Dictionary<string, MultitileViewTemplate>();
+            while (reader.Read())
+            {
+                var viewTemplate = new MultitileViewTemplate();
+                viewTemplate.Identifier = reader[0].ToString();
+
+                viewTemplate.MultitileViewTemplateComponent.AddRange(LoadMultitileViewComponents(sqlConnection, viewTemplate.Identifier));
+                aggregate.Add(viewTemplate.Identifier, viewTemplate);
+            }
+            return aggregate;
+        }
+
+        private IEnumerable<MultitileViewTemplateComponent> LoadMultitileViewComponents(SqliteConnection sqlConnection, string templateIdentifier)
+        {
+            var retVal = new List<MultitileViewTemplateComponent>();
+            var sqlForData = string.Format("select * from [MultitileViews_Component] WHERE [Identifier] = @Identifier");
+            var commandForData = new SqliteCommand(sqlForData, sqlConnection);
+            commandForData.Parameters.AddWithValue("@Identifier", templateIdentifier);
+            var readerForData = commandForData.ExecuteReader();
+            while (readerForData.Read())
+            {
+                var identifier = readerForData[0].ToString();
+                var entry = new MultitileViewTemplateComponent();
+                entry.Identifier = readerForData[0].ToString();
+                entry.Sprite = Context.ResourceManager.Load<Sprite>(readerForData[1].ToString());
+
+                var engineOffsetXStr = readerForData[2].ToString();
+                float.TryParse(engineOffsetXStr, out float engineOffsetX);
+                entry.EngineOffsetX = engineOffsetX;
+
+                var engineOffsetYStr = readerForData[3].ToString();
+                float.TryParse(engineOffsetYStr, out float engineOffsetY);
+                entry.EngineOffsetY = engineOffsetY;
+
+                entry.SortingLayer = (SortingLayer)Enum.Parse(typeof(SortingLayer), readerForData[4].ToString(), true);
+
+                var gridOffsetXStr = readerForData[5].ToString();
+                int.TryParse(gridOffsetXStr, out int gridOffsetX);
+                entry.GridOffsetX = gridOffsetX;
+
+                var gridOffsetYStr = readerForData[6].ToString();
+                int.TryParse(gridOffsetYStr, out int gridOffsetY);
+                entry.GridOffsetY = gridOffsetY;
+
+                var weightStr = readerForData[7].ToString();
+                int.TryParse(weightStr, out int weight);
+                entry.Weight = weight;
+
+                var heightStr = readerForData[8].ToString();
+                int.TryParse(heightStr, out int height);
+                entry.Height = height;
+
+                retVal.Add(entry);
+            }
+            return retVal;
+        }
+
+        private Dictionary<string, ViewTemplate> LoadViewTemplates(SqliteConnection sqlConnection)
+        {
+            var sql = "select * from Views";
+            var sqlCommand = new SqliteCommand(sql, sqlConnection);
+            var reader = sqlCommand.ExecuteReader();
+
+            var aggregate = new Dictionary<string, ViewTemplate>();
+            while (reader.Read())
+            {
+                var viewTemplate = new ViewTemplate();
+                viewTemplate.Identifier = reader[0].ToString();
+                viewTemplate.ResourceIdentifier = reader[1].ToString();
+                viewTemplate.SpineSkinName = reader[2].ToString();
+
+                var scaleStr = reader[3].ToString();
+                float.TryParse(scaleStr, out float scale);
+                viewTemplate.Scale = scale;
+
+                var shadowScaleStr = reader[4].ToString();
+                float.TryParse(shadowScaleStr, out float shadowScale);
+                viewTemplate.ShadowScale = shadowScale;
+
+                var sortableWeightStr = reader[5].ToString();
+                int.TryParse(sortableWeightStr, out int sortableWeight);
+                viewTemplate.SortableWeight = sortableWeight;
+
+                aggregate.Add(viewTemplate.Identifier, viewTemplate);
+            }
+            return aggregate;
+        }
+
+        private Dictionary<string, ProbabilityTable> LoadProbabilityTables(SqliteConnection sqlConnection, string tableTableName, string parcelTableName, string parcelEntriesTableName)
         {
             var sql = string.Format("select * from [" + tableTableName + "]");
             var sqlCommand = new SqliteCommand(sql, sqlConnection);
             var reader = sqlCommand.ExecuteReader();
 
-            var aggregate = new Dictionary<string, NewProbabilityTable>();
+            var aggregate = new Dictionary<string, ProbabilityTable>();
             while (reader.Read())
             {
-                var probabilityTable = new NewProbabilityTable();
+                var probabilityTable = new ProbabilityTable();
                 var identifier = reader[0].ToString();
                 probabilityTable.AddRange(LoadProbabilityTableParcels(sqlConnection, identifier, parcelTableName, parcelEntriesTableName));
                 aggregate.Add(identifier, probabilityTable);
@@ -108,9 +208,9 @@ namespace Gamepackage
             return aggregate;
         }
 
-        private List<NewProbabilityTableParcel> LoadProbabilityTableParcels(SqliteConnection sqlConnection, string tableIdentifier, string parcelTableName, string parcelEntriesTableName)
+        private List<ProbabilityTableParcel> LoadProbabilityTableParcels(SqliteConnection sqlConnection, string tableIdentifier, string parcelTableName, string parcelEntriesTableName)
         {
-            var retVal = new List<NewProbabilityTableParcel>();
+            var retVal = new List<ProbabilityTableParcel>();
             var sqlForData = string.Format("select * from [" + parcelTableName + "] WHERE [Identifier] = @Identifier");
             var commandForData = new SqliteCommand(sqlForData, sqlConnection);
             commandForData.Parameters.AddWithValue("@Identifier", tableIdentifier);
@@ -124,7 +224,7 @@ namespace Gamepackage
                 int.TryParse(parcelIdStr, out int parcelId);
                 int.TryParse(weightStr, out int weight);
 
-                var entry = new NewProbabilityTableParcel()
+                var entry = new ProbabilityTableParcel()
                 {
                     Weight = weight
                 };
@@ -258,12 +358,12 @@ namespace Gamepackage
 
 
                 var probabilityTableResource = reader[7].ToString();
-                if(probabilityTableResource != null && probabilityTableResource != "")
+                if (probabilityTableResource != null && probabilityTableResource != "")
                 {
                     if (Contains<EnchantmentTemplate>(probabilityTableResource))
                     {
-                        itemTemplate.PossibleEnchantments = new NewProbabilityTable();
-                        itemTemplate.PossibleEnchantments.Add(new NewProbabilityTableParcel()
+                        itemTemplate.PossibleEnchantments = new ProbabilityTable();
+                        itemTemplate.PossibleEnchantments.Add(new ProbabilityTableParcel()
                         {
                             Values = new List<string>()
                         {
@@ -272,9 +372,9 @@ namespace Gamepackage
                             Weight = 1,
                         });
                     }
-                    else if (Contains<NewProbabilityTable>(probabilityTableResource))
+                    else if (Contains<ProbabilityTable>(probabilityTableResource))
                     {
-                        itemTemplate.PossibleEnchantments = Load<NewProbabilityTable>(probabilityTableResource);
+                        itemTemplate.PossibleEnchantments = Load<ProbabilityTable>(probabilityTableResource);
                     }
                     else
                     {

@@ -1,83 +1,70 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
-    // Weights are interpreted to be out of 100 in all cases
-    public enum TableResolutionStrategy
+    public class ProbabilityTable
     {
-        OneOf, // Guarantee exactly one thing from the list roll weight/100 1 time for each item.  
-               // The sum of the weights must == 100
+        private List<ProbabilityTableParcel> Entries = new List<ProbabilityTableParcel>();
+        private int WeightTotal = 0;
 
-        AnyOf, // Iterate each Tuple, roll weight/100 NumberOfRolls times and return 0-N results.
-    }
-
-    public class ProbabilityTable<TProb>
-    {
-        public List<ProbabilityTableTuple<TProb>> Values = new List<ProbabilityTableTuple<TProb>>(0);
-        public TableResolutionStrategy Resolution;
-
-        public TProb NextSingleItem()
+        public void Add(ProbabilityTableParcel entry)
         {
-            var nextRet = Next();
-            Assert.IsTrue(nextRet.Count == 1);
-            return nextRet[0];
+            Entries.Add(entry);
+            WeightTotal += entry.Weight;
         }
 
-        public List<TProb> Next()
+        public void AddRange(List<ProbabilityTableParcel> entries)
         {
-            if (Values.Count == 0)
+            foreach (var entry in entries)
             {
-                return new List<TProb>();
-            }
-
-            var aggregate = new List<TProb>();
-            if (Resolution == TableResolutionStrategy.AnyOf)
-            {
-                foreach (var tuple in Values)
-                {
-                    for (var numberOfRolls = 0; numberOfRolls < tuple.NumberOfRolls; numberOfRolls++)
-                    {
-                        if (Random.Range(0.0f, 1.0f) <= (tuple.Weight / 100.0f))
-                        {
-                            aggregate.Add(tuple.Value);
-                        }
-                    }
-                }
-                return aggregate;
-            }
-            else if (Resolution == TableResolutionStrategy.OneOf)
-            {
-                var probabilitySum = 0.0f;
-                var randomValue = Random.Range(0.0f, 1.0f);
-                foreach (var tuple in Values)
-                {
-                    Assert.IsTrue(tuple.NumberOfRolls == 1);
-                    probabilitySum += (tuple.Weight / 100.0f);
-                    if (randomValue < probabilitySum)
-                    {
-                        aggregate.Add(tuple.Value);
-                        Assert.IsTrue(aggregate.Count == 1);
-                        return aggregate;
-                    }
-                }
-                throw new InvariantBrokenException("Sum of probabilities must not have been correct.  " +
-                    "Table should not be able to return 0 results after rolling all tuples." + 
-                    "You should add logic to check as table build time that the sum of the tuples == 100");
-            }
-            else
-            {
-                throw new NotImplementedException("Not implemented");
+                Add(entry);
             }
         }
-    }
 
-    public class ProbabilityTableTuple<TTuple>
-    {
-        public int NumberOfRolls = 1;
-        public int Weight;
-        public TTuple Value;
+        public void Remove(ProbabilityTableParcel entry)
+        {
+            Entries.Remove(entry);
+            WeightTotal -= entry.Weight;
+        }
+
+        public string RollAndChooseOne()
+        {
+            var outputOfRoll = Roll();
+            Assert.IsTrue(outputOfRoll.Count > 0);
+            return MathUtil.ChooseRandomElement<string>(outputOfRoll);
+        }
+
+        public List<string> Roll()
+        {
+            var weightTotalTraversed = 0;
+            var possibleReturns = new List<string>();
+            var roll = Random.Range(0, WeightTotal + 1); // +1 is to make it inclusive of the weight total value
+            foreach (var entry in Entries)
+            {
+                weightTotalTraversed += entry.Weight;
+                if (roll <= weightTotalTraversed)
+                {
+                    possibleReturns.AddRange(entry.Values);
+                    break;
+                }
+            }
+            var returnVals = new List<string>();
+            foreach (var possibleReturn in possibleReturns)
+            {
+                if (Context.ResourceManager.Contains<ProbabilityTable>(possibleReturn))
+                {
+                    var returnTable = Context.ResourceManager.Load<ProbabilityTable>(possibleReturn);
+                    returnVals.AddRange(returnTable.Roll());
+                }
+                else
+                {
+                    returnVals.Add(possibleReturn);
+                }
+
+            }
+            return returnVals;
+        }
     }
 }
-

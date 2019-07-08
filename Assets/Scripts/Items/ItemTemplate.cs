@@ -33,7 +33,7 @@ namespace Gamepackage
 
         public Dictionary<CombatActionType, CombatActionDescriptor> CombatActionDescriptor;
 
-        public NewProbabilityTable PossibleEnchantments;
+        public ProbabilityTable PossibleEnchantments;
 
 
         public string TemplateName

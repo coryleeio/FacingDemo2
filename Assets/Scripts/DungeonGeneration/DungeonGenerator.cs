@@ -50,7 +50,9 @@ namespace Gamepackage
                     var numberOfSpawnTablesToSpawn = MathUtil.ChooseRandomIntInRange(4, 8);
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        var entitiesInEncounter = EncounterFactory.Build("ENCOUNTER_BEE_SWARM");
+
+                        var table = Context.ResourceManager.Load<ProbabilityTable>("ENCOUNTER_BEE_SWARM");
+                        var entitiesInEncounter = EntityFactory.BuildAll(table.Roll());
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
@@ -60,7 +62,8 @@ namespace Gamepackage
                     var numberOfSpawnTablesToSpawn = MathUtil.ChooseRandomIntInRange(4, 8);
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
-                        var entitiesInEncounter = EncounterFactory.Build("ENCOUNTER_SKELETONS");
+                        var table = Context.ResourceManager.Load<ProbabilityTable>("ENCOUNTER_SKELETONS");
+                        var entitiesInEncounter = EntityFactory.BuildAll(table.Roll());
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }

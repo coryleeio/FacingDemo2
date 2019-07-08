@@ -17,7 +17,7 @@ namespace Gamepackage
         {
             if (state.Template.StackingStrategy == StackingStrategy.AddDuration)
             {
-                var matchingEffects = outcome.Target.Effects.FindAll((x) => { return x.TemplateIdentifier == state.TemplateIdentifier; });
+                var matchingEffects = outcome.Target.TemporaryEffects.FindAll((x) => { return x.TemplateIdentifier == state.TemplateIdentifier; });
                 if (matchingEffects.Count > 1)
                 {
                     throw new NotImplementedException("If these effects add to the duration of a matching effect, how the hell did you get two of them?");
@@ -25,7 +25,7 @@ namespace Gamepackage
 
                 if (matchingEffects.Count == 0)
                 {
-                    outcome.Target.Effects.Add(state);
+                    outcome.Target.TemporaryEffects.Add(state);
                     OnApplyOther(state, outcome);
                     return;
                 }
@@ -37,15 +37,15 @@ namespace Gamepackage
             }
             else if (state.Template.StackingStrategy == StackingStrategy.AddDuplicate)
             {
-                outcome.Target.Effects.Add(state);
+                outcome.Target.TemporaryEffects.Add(state);
                 OnApplyOther(state, outcome);
             }
             else if(state.Template.StackingStrategy == StackingStrategy.IgnoreDuplicates)
             {
-                var matchingEffects = outcome.Target.Effects.FindAll((x) => { return x.TemplateIdentifier == state.TemplateIdentifier; });
+                var matchingEffects = outcome.Target.TemporaryEffects.FindAll((x) => { return x.TemplateIdentifier == state.TemplateIdentifier; });
                 if(matchingEffects.Count == 0)
                 {
-                    outcome.Target.Effects.Add(state);
+                    outcome.Target.TemporaryEffects.Add(state);
                     OnApplyOther(state, outcome);
                 }
             }
@@ -158,7 +158,7 @@ namespace Gamepackage
             var stateChanges = new List<EntityStateChange>();
             foreach (var entityTag in entity.Tags)
             {
-                foreach (var effectOnEntity in entity.GetEffects())
+                foreach (var effectOnEntity in entity.TemporaryEffects)
                 {
                     foreach (var tagThatBlocksThisEffect in effectOnEntity.Template.TagsThatBlockThisEffect)
                     {

@@ -687,7 +687,7 @@ namespace Gamepackage
 
                     if (InventoryUtil.HasAnyItems(target))
                     {
-                        target.ViewPrototypeUniqueIdentifier = "VIEW_CORPSE";
+                        target.ViewTemplateIdentifier = "VIEW_CORPSE";
                         ViewFactory.RebuildView(target, false);
                         var sortable = target.ViewGameObject.GetComponent<Sortable>();
                         sortable.Position = target.Position;
@@ -709,7 +709,7 @@ namespace Gamepackage
             ShowMessages(result);
         }
 
-        public static List<Effect> GetEffectsFromInventory(Entity entity)
+        public static List<Effect> GetWornEffectsFromInventory(Entity entity)
         {
             var effectsAggregate = new List<Effect>();
             if (entity.Inventory != null)
@@ -740,14 +740,14 @@ namespace Gamepackage
             return effectsAggregate;
         }
 
-        public static List<Effect> GetEntityEffectsByType(Entity entity, Predicate<Effect> filter = null)
+        public static List<Effect> GetEntityAllTypesOfEffects(Entity entity, Predicate<Effect> filter = null)
         {
             var effectsAggregate = new List<Effect>();
-            effectsAggregate.AddRange(GetEffectsFromInventory(entity));
+            effectsAggregate.AddRange(GetWornEffectsFromInventory(entity));
 
             if (entity.IsCombatant)
             {
-                effectsAggregate.AddRange(entity.Effects);
+                effectsAggregate.AddRange(entity.TemporaryEffects);
             }
             if (filter == null)
             {
@@ -772,7 +772,7 @@ namespace Gamepackage
             {
                 aggregate.AddRange(item.Template.TagsAppliedToEntity);
             }
-            var effects = entity.GetEffects();
+            var effects = entity.GetAllTypesOfEffects();
             foreach (var effect in effects)
             {
                 aggregate.AddRange(effect.Template.TagsAppliedToEntity);
@@ -785,12 +785,12 @@ namespace Gamepackage
             Predicate<Effect> IsAnAffectThatShouldExpire = (eff) => { return effectsThatShouldExpire.Contains(eff); };
             if (entity.IsCombatant)
             {
-                var expiring = entity.Effects.FindAll(IsAnAffectThatShouldExpire);
+                var expiring = entity.TemporaryEffects.FindAll(IsAnAffectThatShouldExpire);
                 foreach (var expire in expiring)
                 {
                     expire.EffectImpl.OnRemove(expire, entity);
                 }
-                entity.Effects.RemoveAll(IsAnAffectThatShouldExpire);
+                entity.TemporaryEffects.RemoveAll(IsAnAffectThatShouldExpire);
             }
         }
 
@@ -972,7 +972,7 @@ namespace Gamepackage
         {
             if (change.Source != null)
             {
-                var sourceEffects = change.Source.GetEffects();
+                var sourceEffects = change.Source.GetAllTypesOfEffects();
                 foreach (var effect in sourceEffects)
                 {
                     effect.EffectImpl.CalculateAffectOutgoingAttack(effect, calculatedAttack, change);
@@ -982,7 +982,7 @@ namespace Gamepackage
 
         public static void CalculateAffectIncomingAttackEffects(CalculatedCombatAction calculatedAttack, EntityStateChange change)
         {
-            var targetEffects = change.Target.GetEffects();
+            var targetEffects = change.Target.GetAllTypesOfEffects();
             foreach (var effect in targetEffects)
             {
                 effect.EffectImpl.CalculateAffectIncomingAttackEffects(effect, calculatedAttack, change);

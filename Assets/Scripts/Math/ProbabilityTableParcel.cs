@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public class NewProbabilityTableParcel
+    public class ProbabilityTableParcel
     {
         public int Weight;
         public List<string> Values = new List<string>();

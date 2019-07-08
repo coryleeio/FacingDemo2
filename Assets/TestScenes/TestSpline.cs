@@ -17,6 +17,7 @@ public class TestSpline : MonoBehaviour
             }
         };
 
-        ViewFactory.BuildSplineView("Spine/Export/Humanoid_SkeletonData", spritesToEquip, "Template");
+        var skeletonDataAsset = Resources.Load<Spine.Unity.SkeletonDataAsset>("Spine/Export/Humanoid_SkeletonData");
+        ViewFactory.BuildSplineView(skeletonDataAsset, spritesToEquip, "Template");
     }
 }

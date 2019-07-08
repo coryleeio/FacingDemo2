@@ -24,7 +24,7 @@ namespace Gamepackage
         {
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
             var spriteRenderer = go.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = Resources.Load<Sprite>(sprite);
+            spriteRenderer.sprite = Context.ResourceManager.Load<Sprite>(sprite);
             spriteRenderer.material = defaultMaterial;
             go.AddComponent<EntityView>();
         }
@@ -80,89 +80,56 @@ namespace Gamepackage
             SetDefaultShadowValues(entity);
 
             var defaultMaterial = Resources.Load<Material>("Materials/DefaultSpriteMaterial");
-
             var go = BuildDefaultGameObject(entity);
             var sortable = BuildDefaultSortable(entity);
+            var template = entity.ViewTemplate;
 
-            if (entity.IsCombatant && entity.ViewPrototypeUniqueIdentifier != "VIEW_CORPSE")
+            if (template != null && Context.ResourceManager.Contains<Sprite>(template.ResourceIdentifier))
             {
-                BuildHealthbar(entity);
+                BuildSprite(go, template.ResourceIdentifier);
+                SetShadowScale(entity, template.ShadowScale);
+                sortable.Weight = template.SortableWeight;
             }
 
-            if (entity.ViewPrototypeUniqueIdentifier == "VIEW_MARKER_RED")
+            else if (template != null && Context.ResourceManager.Contains<SkeletonDataAsset>(template.ResourceIdentifier))
             {
-                BuildSprite(go, "SpritesManual/RedMarker");
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_MARKER_GREEN")
-            {
-                BuildSprite(go, "SpritesManual/GreenMarker");
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_MARKER_YELLOW")
-            {
-                BuildSprite(go, "SpritesManual/YellowMarker");
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_MARKER_BLUE")
-            {
-                BuildSprite(go, "SpritesManual/BlueMarker");
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_CHESS_PIECE")
-            {
-                SetShadowScale(entity, 1.5f);
-                BuildPrefab(go, "Prefabs/ChessPiecePrefab");
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_RUG")
-            {
-                BuildPrefab(go, "Prefabs/RugPrefab");
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_STAIRCASE_UP")
-            {
-                BuildSprite(go, "Sprites/StaircaseUp");
-                sortable.Weight = 0; // Behind walking combating entities, but still in the entity layer bc it rises up in front of walls behind it.
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_STAIRCASE_DOWN")
-            {
-                BuildSprite(go, "Sprites/StaircaseDown");
-                sortable.Weight = 0;  // Behind walking combating entities, but still in the entity layer bc it rises up in front of walls behind it.
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_HUMAN_ASIAN")
-            {
-                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "HumanAsian", Animations.Idle, entity.Direction);
+                var skeletonDataAsset = Context.ResourceManager.Load<SkeletonDataAsset>(template.ResourceIdentifier);
+                var newGo = BuildSplineView(skeletonDataAsset, itemsToEquip, template.SpineSkinName, Animations.Idle, entity.Direction);
                 SetSpineDefaults(go, newGo);
+                SetShadowScale(entity, template.ShadowScale);
+                newGo.transform.localScale = new Vector3(template.Scale, template.Scale, template.Scale);
             }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_HUMAN_WHITE")
+
+            else if (template != null && Context.ResourceManager.Contains<MultitileViewTemplate>(template.ResourceIdentifier))
             {
-                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "HumanWhite", Animations.Idle, entity.Direction);
-                SetSpineDefaults(go, newGo);
+                var multitileViewTemplate = Context.ResourceManager.Load<MultitileViewTemplate>(template.ResourceIdentifier);
+                SetShadowScale(entity, template.ShadowScale);
+
+                var newGameObject = new GameObject();
+                newGameObject.name = "Constructed Multisprite View " + template.ResourceIdentifier;
+                newGameObject.transform.SetParent(go.transform, false);
+                newGameObject.transform.localPosition = Vector3.zero;
+                newGameObject.AddComponent<EntityView>();
+
+                foreach (var comp in multitileViewTemplate.MultitileViewTemplateComponent)
+                {
+                    var componentGameObject = new GameObject();
+                    componentGameObject.name = "Component for " + template.ResourceIdentifier;
+                    componentGameObject.transform.SetParent(newGameObject.transform, false);
+                    componentGameObject.transform.localPosition = Vector3.zero;
+                    componentGameObject.transform.localPosition = new Vector3(comp.EngineOffsetX, comp.EngineOffsetY, 0.0f);
+                    var sr = componentGameObject.AddComponent<SpriteRenderer>();
+                    sr.material = defaultMaterial;
+                    sr.sprite = comp.Sprite;
+                    var componentSortable = componentGameObject.AddComponent<Sortable>();
+                    componentSortable._positionRelativeToParent = new Point(comp.GridOffsetX, comp.GridOffsetY);
+                    componentSortable.Weight = comp.Weight;
+                    componentSortable.Height = comp.Height;
+                    componentSortable.Layer = comp.SortingLayer;
+                }
             }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_GHOST")
-            {
-                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "Ghost", Animations.Idle, entity.Direction);
-                SetSpineDefaults(go, newGo);
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_HUMAN_BLACK")
-            {
-                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "HumanBlack", Animations.Idle, entity.Direction);
-                SetSpineDefaults(go, newGo);
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_SKELETON_WHITE")
-            {
-                var newGo = BuildSplineView("Spine/Export/Humanoid_SkeletonData", itemsToEquip, "SkeletonWhite", Animations.Idle, entity.Direction);
-                SetSpineDefaults(go, newGo);
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_BEE")
-            {
-                var newGo = BuildSplineView("Spine/Export/Bee_SkeletonData", itemsToEquip, "Template", Animations.Idle, entity.Direction);
-                SetSpineDefaults(go, newGo);
-                SetShadowScale(entity, 0.7f);
-                newGo.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_LARGE_BEE")
-            {
-                var newGo = BuildSplineView("Spine/Export/Bee_SkeletonData", itemsToEquip, "Template", Animations.Idle, entity.Direction);
-                SetSpineDefaults(go, newGo);
-                newGo.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-            }
-            else if (entity.ViewPrototypeUniqueIdentifier == "VIEW_CORPSE")
+
+            else if (entity.ViewTemplateIdentifier == "VIEW_CORPSE")
             {
                 var relevantItems = InventoryUtil.ChooseRandomItemsFromInventory(entity, 3);
                 foreach (var item in relevantItems)
@@ -183,34 +150,43 @@ namespace Gamepackage
                 sortable.Weight = 0;
             }
 
-            if (entity.IsCombatant)
+            if (entity.IsCombatant && entity.ViewTemplateIdentifier != "VIEW_CORPSE")
             {
-                if (entity.ViewPrototypeUniqueIdentifier != "VIEW_CORPSE")
-                {
-                    if (entity.Floating)
-                    {
-                        var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
-                        var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
-                        target.AddComponent<Floating>();
-                    }
-                    if (entity.CastsShadow)
-                    {
-                        var shadowPrefab = Resources.Load<GameObject>("Prefabs/Shadow");
-                        var shadowGameObject = GameObject.Instantiate<GameObject>(shadowPrefab);
-                        shadowGameObject.transform.SetParent(go.transform, false);
-                        shadowGameObject.transform.localScale = new Vector3(entity.ShadowScaleX, entity.ShadowScaleY, entity.ShadowScaleZ);
-                        shadowGameObject.transform.localPosition = new Vector3(0f, entity.ShadowTransformY, 0f);
-                    }
-                }
+                BuildHealthbar(entity);
+                BuildCastShadow(entity, go);
+                BuildFloating(entity, go);
             }
+
             var shouldShowEffects = entity.IsCombatant && (!entity.IsCombatant || (entity.IsCombatant && !entity.IsDead));
             if (shouldShowEffects)
             {
-                var effects = entity.GetEffects();
+                var effects = entity.GetAllTypesOfEffects();
                 foreach (var effect in effects)
                 {
                     effect.EffectImpl.ApplyPersistentVisualEffects(entity);
                 }
+            }
+        }
+
+        private static void BuildCastShadow(Entity entity, GameObject go)
+        {
+            if (entity.CastsShadow)
+            {
+                var shadowPrefab = Resources.Load<GameObject>("Prefabs/Shadow");
+                var shadowGameObject = GameObject.Instantiate<GameObject>(shadowPrefab);
+                shadowGameObject.transform.SetParent(go.transform, false);
+                shadowGameObject.transform.localScale = new Vector3(entity.ShadowScaleX, entity.ShadowScaleY, entity.ShadowScaleZ);
+                shadowGameObject.transform.localPosition = new Vector3(0f, entity.ShadowTransformY, 0f);
+            }
+        }
+
+        private static void BuildFloating(Entity entity, GameObject go)
+        {
+            if (entity.Floating)
+            {
+                var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
+                var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;
+                target.AddComponent<Floating>();
             }
         }
 
@@ -320,7 +296,6 @@ namespace Gamepackage
         private static void SetSpineDefaults(GameObject go, GameObject newGo)
         {
             newGo.transform.SetParent(go.transform, false);
-            newGo.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             newGo.transform.localPosition = new Vector3(0, -0.30f, 0);
             newGo.AddComponent<EntityView>();
         }
@@ -514,7 +489,7 @@ namespace Gamepackage
             }
         }
 
-        public static GameObject BuildSplineView(string SkeletonDataPath, Dictionary<SpriteAttachment, Sprite> spritesBySlot, string SkinName = null, Animations beginningAnimation = Animations.Idle, Direction beginningDirection = Direction.SouthEast)
+        public static GameObject BuildSplineView(SkeletonDataAsset skeletonDataAsset, Dictionary<SpriteAttachment, Sprite> spritesBySlot, string SkinName = null, Animations beginningAnimation = Animations.Idle, Direction beginningDirection = Direction.SouthEast)
         {
             if (spritesBySlot == null)
             {
@@ -522,7 +497,6 @@ namespace Gamepackage
             }
             Texture2D runtimeAtlas;
             Material runtimeMaterial;
-            var skeletonDataAsset = Resources.Load<SkeletonDataAsset>(SkeletonDataPath);
             var skeletonData = skeletonDataAsset.GetSkeletonData(false);
             var idleAnimation = skeletonData.FindAnimation(DisplayUtil.GetAnimationNameForDirection(beginningAnimation, beginningDirection));
             var templateSkin = skeletonData.FindSkin("Template");
