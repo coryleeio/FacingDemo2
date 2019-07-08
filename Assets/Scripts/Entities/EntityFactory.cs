@@ -10,7 +10,7 @@ namespace Gamepackage
         public static List<Entity> BuildAll(List<string> identifiers)
         {
             var agg = new List<Entity>();
-            foreach(var identifier in identifiers)
+            foreach (var identifier in identifiers)
             {
                 agg.Add(Build(identifier));
             }
@@ -50,25 +50,8 @@ namespace Gamepackage
                 entity.ActingTeam = Team.PLAYER;
                 entity.OriginalTeam = Team.PLAYER;
                 entity.AIClassName = null;
-                InventoryUtil.EquipItem(entity, ItemFactory.Build("ITEM_ROBE_OF_WONDERS"));
-                InventoryUtil.EquipItem(entity, ItemFactory.Build("ITEM_SANDALS"));
-                InventoryUtil.EquipItem(entity, ItemFactory.Build("ITEM_SHORTBOW"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_WAND_OF_LIGHTNING"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_STAFF_OF_FIREBALLS"));
-
-                var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_LUCKY_COIN"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_ARROW"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_PURPLE_POTION"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_MIND_WAND"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_MIND_WAND"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_MIND_WAND"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_SHIELD_OF_AMALURE"));
+                var items = ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("PONCY_KIT").Roll());
+                InventoryUtil.TryEquipItems(entity, items);
             }
             else if (entity.TemplateIdentifier == "ENTITY_MASLOW")
             {
