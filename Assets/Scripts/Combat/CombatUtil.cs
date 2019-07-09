@@ -248,7 +248,7 @@ namespace Gamepackage
         {
             foreach (var groundDropStateChange in calculatedAttack.GroundDropsToSpawn)
             {
-                var groundDrop = EntityFactory.Build("ENTITY_GROUND_DROP");
+                var groundDrop = EntityFactory.Build("ENTITY_GROUND_DROP", Team.Neutral);
                 groundDrop.Position = new Point(groundDropStateChange.SpawnPosition);
                 groundDrop.Name = groundDropStateChange.Name;
 
@@ -550,7 +550,7 @@ namespace Gamepackage
 
             if (!target.IsCombatant)
             {
-                throw new NotImplementedException("Cannot deal damage to non combatants");
+                return;
             }
 
             if (target.CurrentHealth <= 0)
@@ -624,7 +624,7 @@ namespace Gamepackage
 
                 if (target.IsNPC)
                 {
-                    if ((result.AppliedEffects.Count > 0 || result.HealthChange > 0) && result.Target.HasBehaviour && result.Source != null)
+                    if ((result.AppliedEffects.Count > 0 || result.HealthChange > 0) && result.Target.IsCombatant && result.Source != null)
                     {
                         var level = Context.Game.CurrentLevel;
                         AIUtil.ShoutAboutHostileTarget(result.Target, level, result.Source, result.Target.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS));
@@ -656,7 +656,7 @@ namespace Gamepackage
                     target.Name = string.Format("( Corpse ) {0}", target.Name);
                     target.IsDead = true;
                     // Is not deregistered because the corpse should still be available
-                    target.HasBehaviour = false;
+                    target.IsCombatant = false;
                     var game = Context.Game;
                     var level = game.CurrentLevel;
 
@@ -946,7 +946,7 @@ namespace Gamepackage
                     var entitiesInPosition = level.Grid[point].EntitiesInPosition;
                     foreach (var entityInPosition in entitiesInPosition)
                     {
-                        if (entityInPosition.IsCombatant && entityInPosition.HasBehaviour && source.HasBehaviour && entityInPosition.ActingTeam == source.ActingTeam)
+                        if (entityInPosition.IsCombatant && entityInPosition.IsCombatant && source.IsCombatant && entityInPosition.ActingTeam == source.ActingTeam)
                         {
                             return false;
                         }

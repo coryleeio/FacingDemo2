@@ -1,23 +1,23 @@
 ﻿
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
 {
     public static class EntityFactory
     {
-
-        public static List<Entity> BuildAll(List<string> identifiers)
+        public static List<Entity> BuildAll(List<string> identifiers, Team team)
         {
             var agg = new List<Entity>();
             foreach (var identifier in identifiers)
             {
-                agg.Add(Build(identifier));
+                agg.Add(Build(identifier, team));
             }
             return agg;
         }
 
-        public static Entity Build(string uniqueIdentifier)
+        public static Entity Build(string uniqueIdentifier, Team team)
         {
             var entity = new Entity();
             entity.TemplateIdentifier = uniqueIdentifier;
@@ -33,184 +33,54 @@ namespace Gamepackage
             entity.EntityAcquiredTags = new List<string>();
             entity.EntityInnateTags = new List<string>();
 
-            if (entity.TemplateIdentifier == "ENTITY_PONCY")
-            {
-                entity.Name = "entity.player.name.default".Localize();
-                entity.IsCombatant = true;
-                entity.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
-                entity.Attributes = new Dictionary<Attributes, int>
-                {
-                    {Attributes.MAX_HEALTH, 10 },
-                    {Attributes.VISION_RADIUS, 4 },
-                    {Attributes.SHOUT_RADIUS, 4 },
-                };
-                entity.BlocksPathing = true;
-                entity.ViewTemplateIdentifier = "VIEW_HUMAN_WHITE";
-                entity.HasBehaviour = true;
-                entity.ActingTeam = Team.PLAYER;
-                entity.OriginalTeam = Team.PLAYER;
-                entity.AIClassName = null;
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("PONCY_KIT").Roll()));
-            }
-            else if (entity.TemplateIdentifier == "ENTITY_MASLOW")
-            {
-                entity.Name = "entity.dog.name.default".Localize();
-                entity.IsCombatant = true;
-                entity.DefaultAttackItem = ItemFactory.Build("ITEM_DOG_MAW");
-                entity.Attributes = new Dictionary<Attributes, int>
-                {
-                    {Attributes.MAX_HEALTH, 45 },
-                    {Attributes.VISION_RADIUS, 4 },
-                    {Attributes.SHOUT_RADIUS, 4 },
-                };
-                entity.BlocksPathing = true;
-                entity.ViewTemplateIdentifier = "VIEW_MARKER_BLUE";
-                entity.HasBehaviour = true;
-                entity.ActingTeam = Team.PLAYER;
-                entity.OriginalTeam = Team.PLAYER;
-                entity.AIClassName = "Gamepackage.DumbMelee";
-            }
-            else if (entity.TemplateIdentifier == "ENTITY_GIANT_BEE")
-            {
-                entity.Name = "entity.bee.name".Localize();
-                entity.IsCombatant = true;
-                entity.DefaultAttackItem = ItemFactory.Build("ITEM_BEE_STINGER");
-                entity.Floating = true;
-                entity.Attributes = new Dictionary<Attributes, int>
-                {
-                    {Attributes.MAX_HEALTH, 10 },
-                    {Attributes.VISION_RADIUS, 4 },
-                    {Attributes.SHOUT_RADIUS, 4 },
-                };
-                entity.BlocksPathing = true;
-                entity.ViewTemplateIdentifier = "VIEW_BEE";
-                entity.HasBehaviour = true;
-                entity.ActingTeam = Team.Enemy;
-                entity.OriginalTeam = Team.Enemy;
-                entity.AIClassName = "Gamepackage.DumbMelee";
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
-            }
-            else if (entity.TemplateIdentifier == "ENTITY_SKELETON")
-            {
-                entity.Name = "entity.skeleton.name".Localize();
-                entity.IsCombatant = true;
-                entity.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
-                entity.Attributes = new Dictionary<Attributes, int>
-                {
-                    {Attributes.MAX_HEALTH, 10 },
-                    {Attributes.VISION_RADIUS, 4 },
-                    {Attributes.SHOUT_RADIUS, 4 },
-                };
-                entity.BlocksPathing = true;
-                entity.ViewTemplateIdentifier = "VIEW_SKELETON_WHITE";
-                entity.HasBehaviour = true;
-                entity.ActingTeam = Team.Enemy;
-                entity.OriginalTeam = Team.Enemy;
-                entity.AIClassName = "Gamepackage.Archer";
-                var itemIds = new List<string>();
 
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS").Roll()));
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING").Roll()));
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
+            Assert.IsTrue(entity.Template != null, "Could not find template: " + entity.TemplateIdentifier);
 
-                foreach (var itemId in itemIds)
-                {
-                    InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
-                }
-            }
-            else if (entity.TemplateIdentifier == "ENTITY_GHOST")
-            {
-                entity.Name = "entity.ghost.name".Localize();
-                entity.IsCombatant = true;
-                entity.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
-                entity.Floating = true;
-                entity.Attributes = new Dictionary<Attributes, int>
-                {
-                   {Attributes.MAX_HEALTH, 10 },
-                   {Attributes.VISION_RADIUS, 4 },
-                    {Attributes.SHOUT_RADIUS, 4 },
-                };
-                entity.BlocksPathing = true;
-                entity.ViewTemplateIdentifier = "VIEW_GHOST";
-                entity.HasBehaviour = true;
-                entity.ActingTeam = Team.Enemy;
-                entity.OriginalTeam = Team.Enemy;
-                entity.AIClassName = "Gamepackage.Archer";
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS").Roll()));
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING").Roll()));
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
-            }
+            entity.Name = entity.Template.NameList.RollAndChooseOne().Localize();
+            entity.IsCombatant = entity.Template.IsCombatant;
+            entity.DefaultAttackItem = ItemFactory.Build(entity.Template.DefaultWeaponIdentifier);
+            entity.Attributes = new Dictionary<Attributes, int>();
 
-            else if (entity.TemplateIdentifier == "ENTITY_ANIMATED_WEAPON")
+            foreach(var pair in entity.Template.TemplateAttributes)
             {
-                entity.Name = "entity.animated.weapon.name".Localize();
-                entity.IsCombatant = true;
-                entity.DefaultAttackItem = ItemFactory.Build("ITEM_HUMANOID_FIST");
-                entity.Floating = true;
-                entity.Attributes = new Dictionary<Attributes, int>
-                {
-                   {Attributes.MAX_HEALTH, 10 },
-                   {Attributes.VISION_RADIUS, 4 },
-                   {Attributes.SHOUT_RADIUS, 4 },
-                };
-                entity.BlocksPathing = true;
-                entity.ViewTemplateIdentifier = "VIEW_GHOST";
-                entity.HasBehaviour = true;
-                entity.ActingTeam = Team.Enemy;
-                entity.OriginalTeam = Team.Enemy;
-                entity.AIClassName = "Gamepackage.Archer";
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS").Roll()));
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
+                entity.Attributes.Add(pair.Key, pair.Value);
             }
+            entity.BlocksPathing = entity.Template.BlocksPathing;
 
-            else if (entity.TemplateIdentifier == "ENTITY_QUEEN_BEE")
-            {
-                var nameTable = Context.ResourceManager.Load<ProbabilityTable>("NAMETABLE_BEES");
-                entity.Name = nameTable.RollAndChooseOne().Localize();
-                entity.IsCombatant = true;
-                entity.DefaultAttackItem = ItemFactory.Build("ITEM_BEE_STINGER");
-                entity.Floating = true;
-                entity.Attributes = new Dictionary<Attributes, int>
-                {
-                    {Attributes.MAX_HEALTH, 15 },
-                    {Attributes.VISION_RADIUS, 4 },
-                    {Attributes.SHOUT_RADIUS, 4 },
-                };
-                entity.BlocksPathing = true;
-                entity.ViewTemplateIdentifier = "VIEW_LARGE_BEE";
-                entity.HasBehaviour = true;
-                entity.ActingTeam = Team.Enemy;
-                entity.OriginalTeam = Team.Enemy;
-                entity.AIClassName = "Gamepackage.DumbMelee";
-                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
-            }
-            else if (entity.TemplateIdentifier == "ENTITY_STAIRS_UP")
-            {
-                entity.Name = "entity.stairs.up.name".Localize();
-                entity.BlocksPathing = false;
-                entity.AlwaysVisible = true;
-                entity.ViewTemplateIdentifier = "VIEW_STAIRCASE_UP";
-                entity.Trigger = TriggerFactory.Build("TRIGGER_CHANGE_LEVEL_ON_PRESS");
-            }
-            else if (entity.TemplateIdentifier == "ENTITY_STAIRS_DOWN")
-            {
-                entity.Name = "entity.stairs.down.name".Localize();
-                entity.BlocksPathing = false;
-                entity.AlwaysVisible = true;
-                entity.ViewTemplateIdentifier = "VIEW_STAIRCASE_DOWN";
-                entity.Trigger = TriggerFactory.Build("TRIGGER_CHANGE_LEVEL_ON_PRESS");
-            }
-            else if (entity.TemplateIdentifier == "ENTITY_GROUND_DROP")
-            {
-                entity.Name = "";
-                entity.BlocksPathing = false;
-                entity.ViewTemplateIdentifier = "VIEW_CORPSE";
-                entity.Trigger = TriggerFactory.Build("TRIGGER_LOOTABLE");
-            }
+            var viewIdentifier = entity.Template.ViewTemplateIdentifier;
 
+            if(Context.ResourceManager.Contains<ProbabilityTable>(viewIdentifier))
+            {
+                var table = Context.ResourceManager.Load<ProbabilityTable>(viewIdentifier);
+                entity.ViewTemplateIdentifier = table.RollAndChooseOne();
+            }
             else
             {
-                throw new NotImplementedException();
+                entity.ViewTemplateIdentifier = viewIdentifier;
+            }
+
+            entity.AIClassName = entity.Template.AIClassName;
+            entity.Floating = entity.Template.isFloating == FloatingState.IsFloating;
+            entity.CastsShadow = entity.Template.CastsShadow == ShadowCastState.CastsShadow;
+            entity.AlwaysVisible = entity.Template.IsAlwaysVisible;
+
+            if(entity.AlwaysVisible)
+            {
+                Debug.Log("Hit");
+            }
+
+            if(entity.Template.Trigger != null && entity.Template.Trigger != "")
+            {
+                entity.Trigger = TriggerFactory.Build(entity.Template.Trigger);
+            }
+            foreach (var table in entity.Template.EquipmentTables)
+            {
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>(table).Roll()));
+            }
+
+            foreach (var table in entity.Template.InventoryTables)
+            {
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>(table).Roll()));
             }
 
             if (entity.IsCombatant)
@@ -223,6 +93,8 @@ namespace Gamepackage
 
             entity.Direction = MathUtil.ChooseRandomElement<Direction>(new List<Direction>() { Direction.SouthEast, Direction.SouthWest, Direction.NorthEast, Direction.NorthWest });
             entity.Position = new Point(0, 0);
+            entity.ActingTeam = team;
+            entity.OriginalTeam = team;
             return entity;
         }
     }

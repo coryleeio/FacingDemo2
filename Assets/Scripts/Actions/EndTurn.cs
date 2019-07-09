@@ -23,7 +23,7 @@ namespace Gamepackage
         {
             base.Enter();
             var effectsThatShouldExpire = new List<Effect>(0);
-            if(Source.HasBehaviour)
+            if(Source.IsCombatant)
             {
                 Source.IsDoneThisTurn = true;
             }

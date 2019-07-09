@@ -12,6 +12,16 @@ namespace Gamepackage
     {
         // Template part
         public string TemplateIdentifier { get; set; }
+        [JsonIgnore]
+        public EntityTemplate Template
+        {
+            get
+            {
+                return Context.ResourceManager.Load<EntityTemplate>(TemplateIdentifier);
+            }
+        }
+
+
         public string Name;
         public bool IsCombatant = false;
         public bool Floating = false;
@@ -19,7 +29,6 @@ namespace Gamepackage
         public bool BlocksPathing = false;
         public bool AlwaysVisible = false;
 
-        public bool HasBehaviour;
         public Team OriginalTeam;
 
         public string AIClassName;

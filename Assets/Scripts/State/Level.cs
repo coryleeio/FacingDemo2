@@ -55,7 +55,7 @@ namespace Gamepackage
         public void UpdatePathfindingForEntity(Entity entity)
         {
             Grid[entity.Position].Walkable = !entity.BlocksPathing;
-            if(!entity.HasBehaviour || entity.ActingTeam != Team.PLAYER)
+            if(!entity.IsCombatant || entity.ActingTeam != Team.PLAYER)
             {
                 GridWithoutPlayerUnits[entity.Position].Walkable = !entity.BlocksPathing;
             }

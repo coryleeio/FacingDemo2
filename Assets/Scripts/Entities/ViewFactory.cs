@@ -446,7 +446,7 @@ namespace Gamepackage
                          )
                         {
                             BuildWallTile(folder, tileSet.NorthCornerSprite, point);
-                            if (northEastPointTileType == TileType.Empty || southEastPointTileType == TileType.Empty)
+                            if (northEastPointTileType == TileType.Empty || northWestPointTileType == TileType.Empty)
                             {
                                 BuildFloorTile(folder, tileSet.FloorSprite, point);
                             }

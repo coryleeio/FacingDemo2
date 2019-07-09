@@ -52,7 +52,7 @@ namespace Gamepackage
                     {
 
                         var table = Context.ResourceManager.Load<ProbabilityTable>("ENCOUNTER_BEE_SWARM");
-                        var entitiesInEncounter = EntityFactory.BuildAll(table.Roll());
+                        var entitiesInEncounter = EntityFactory.BuildAll(table.Roll(), Team.Enemy);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
@@ -63,7 +63,7 @@ namespace Gamepackage
                     for (var spawnNumber = 0; spawnNumber < numberOfSpawnTablesToSpawn; spawnNumber++)
                     {
                         var table = Context.ResourceManager.Load<ProbabilityTable>("ENCOUNTER_SKELETONS");
-                        var entitiesInEncounter = EntityFactory.BuildAll(table.Roll());
+                        var entitiesInEncounter = EntityFactory.BuildAll(table.Roll(), Team.Enemy);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
                 }
@@ -74,16 +74,16 @@ namespace Gamepackage
             }
 
             ConnectLevelsByStairway(levels[0], levels[1]);
-            var playerSpawn = SpawnOnLevel("ENTITY_PONCY", levels[0]);
+            var playerSpawn = SpawnOnLevel("ENTITY_PONCY", levels[0], Team.PLAYER);
             playerSpawn.IsPlayer = true;
             playerSpawn.AlwaysVisible = true;
             var playerPos = playerSpawn.Position;
-            SpawnInBounds("ENTITY_MASLOW", levels[0], new Rectangle()
+            var maslow = SpawnInBounds("ENTITY_MASLOW", levels[0], new Rectangle()
             {
                 Position = new Point(playerPos.X - 2, playerPos.Y - 2),
                 Height = 4,
                 Width = 4,
-            });
+            }, Team.PLAYER);
             BuildPathfindingGrid(Context.Game);
         }
 
@@ -179,8 +179,8 @@ namespace Gamepackage
             var lowerLevel = level1.LevelIndex < level2.LevelIndex ? level1 : level2;
             var higherLevel = lowerLevel == level1 ? level2 : level1;
 
-            var downStair = SpawnOnLevel("ENTITY_STAIRS_DOWN", Context.Game.Dungeon.Levels[lowerLevel.LevelIndex]);
-            var upStair = SpawnOnLevel("ENTITY_STAIRS_UP", Context.Game.Dungeon.Levels[higherLevel.LevelIndex]);
+            var downStair = SpawnOnLevel("ENTITY_STAIRS_DOWN", Context.Game.Dungeon.Levels[lowerLevel.LevelIndex], Team.Neutral);
+            var upStair = SpawnOnLevel("ENTITY_STAIRS_UP", Context.Game.Dungeon.Levels[higherLevel.LevelIndex], Team.Neutral);
 
             var downStairTraverseAction = downStair.Trigger;
             downStairTraverseAction.Data.Add(ChangeLevel.Params.TARGET_LEVEL_ID.ToString(), higherLevel.LevelIndex.ToString());
@@ -193,7 +193,7 @@ namespace Gamepackage
             upStairTraverseAction.Data.Add(ChangeLevel.Params.TARGET_POSY.ToString(), downStair.Position.Y.ToString());
         }
 
-        private static Entity SpawnInBounds(string identifier, Level level, Rectangle boundingBox)
+        private static Entity SpawnInBounds(string identifier, Level level, Rectangle boundingBox, Team team)
         {
             var possiblePlayerSpawnPoints = FloorTilesInRect(level, boundingBox);
             foreach (var alreadyExistingEntity in level.Entitys)
@@ -201,15 +201,15 @@ namespace Gamepackage
                 possiblePlayerSpawnPoints.RemoveAll((poi) => alreadyExistingEntity.Position == poi);
             }
             var spawnPoint = MathUtil.ChooseRandomElement<Point>(possiblePlayerSpawnPoints);
-            var thing = EntityFactory.Build(identifier);
+            var thing = EntityFactory.Build(identifier, team);
             thing.Position = spawnPoint;
             level.Entitys.Add(thing);
             return thing;
         }
 
-        private static Entity SpawnOnLevel(string identifier, Level level)
+        private static Entity SpawnOnLevel(string identifier, Level level, Team team)
         {
-            return SpawnInBounds(identifier, level, level.BoundingBox);
+            return SpawnInBounds(identifier, level, level.BoundingBox, team);
         }
 
         private static void BuildPathfindingGrid(Game game)
@@ -234,7 +234,7 @@ namespace Gamepackage
 
                 level.GridWithoutPlayerUnits.Each((x, y, v) =>
                 {
-                    var occupiedByNonFriendly = level.Grid[x, y].EntitiesInPosition.FindAll((entity) => { return entity.BlocksPathing && entity.HasBehaviour && entity.ActingTeam != Team.PLAYER; }).Count > 0;
+                    var occupiedByNonFriendly = level.Grid[x, y].EntitiesInPosition.FindAll((entity) => { return entity.BlocksPathing && entity.IsCombatant && entity.ActingTeam != Team.PLAYER; }).Count > 0;
                     v.Walkable = level.Grid[x, y].TileType == TileType.Floor && !occupiedByNonFriendly;
                     v.Weight = 1;
                 });

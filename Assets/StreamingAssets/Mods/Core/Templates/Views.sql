@@ -27,6 +27,25 @@ CREATE TABLE "MultitileViews_Component" (
     "Height"               INTEGER
 );
 
+
+
+DROP TABLE IF EXISTS "ViewTables";
+CREATE TABLE "ViewTables" (
+	"Identifier"   TEXT
+);
+DROP TABLE IF EXISTS "ViewTables_Parcels";
+CREATE TABLE "ViewTables_Parcels" (
+	"Identifier"   TEXT,
+	"ParcelId"     INTEGER,
+	"Weight"       INTEGER
+);
+DROP TABLE IF EXISTS "ViewTables_ParcelEntries";
+CREATE TABLE "ViewTables_ParcelEntries" (
+	"Identifier"   TEXT,
+	"ParcelId"     INTEGER,
+	"Value"        TEXT
+);
+
 INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_RED", "RedMarker", "", "1.0", "1.0", 1);
 INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_GREEN", "GreenMarker", "", "1.0", "1.0", 1);
 INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_YELLOW", "YellowMarker", "", "1.0", "1.0", 1);
@@ -52,5 +71,14 @@ INSERT INTO "MultitileViews_Component" VALUES("MULTITILE_RUG", "Rug2_3", "0.0", 
 INSERT INTO "MultitileViews_Component" VALUES("MULTITILE_RUG", "Rug2_2", "0.0", "-0.5", "Ground", 1,0,1,1);
 INSERT INTO "MultitileViews_Component" VALUES("MULTITILE_RUG", "Rug2_1", "0.0", "-0.5", "Ground", 0,1,1,0);
 INSERT INTO "MultitileViews_Component" VALUES("MULTITILE_RUG", "Rug2_0", "0.0", "-0.5", "Ground", 1,1,1,1);
+
+
+
+
+INSERT INTO "ViewTables"               VALUES('VIEW_HUMAN_ANY');
+INSERT INTO "ViewTables_Parcels"       VALUES('VIEW_HUMAN_ANY', 1,1);
+INSERT INTO "ViewTables_ParcelEntries" VALUES('VIEW_HUMAN_ANY', 1,'VIEW_HUMAN_ASIAN');
+INSERT INTO "ViewTables_ParcelEntries" VALUES('VIEW_HUMAN_ANY', 1,'VIEW_HUMAN_WHITE');
+INSERT INTO "ViewTables_ParcelEntries" VALUES('VIEW_HUMAN_ANY', 1,'VIEW_HUMAN_BLACK');
 
 COMMIT;

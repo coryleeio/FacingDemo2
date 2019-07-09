@@ -7,7 +7,7 @@ namespace Gamepackage
         public override void OnApplyOther(Effect state, EntityStateChange outcome)
         {
             base.OnApplyOther(state, outcome);
-            if (outcome.Target.HasBehaviour)
+            if (outcome.Target.IsCombatant)
             {
                 outcome.Target.ActingTeam = outcome.Source.ActingTeam;
                 ViewUtils.UpdateHealthBarColor(outcome.Target);
@@ -23,7 +23,7 @@ namespace Gamepackage
         public override void OnRemove(Effect state, Entity entity)
         {
             base.OnRemove(state, entity);
-            if (entity.HasBehaviour)
+            if (entity.IsCombatant)
             {
                 entity.ActingTeam = entity.OriginalTeam;
                 ViewUtils.UpdateHealthBarColor(entity);

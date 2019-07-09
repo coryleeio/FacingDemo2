@@ -66,5 +66,19 @@ namespace Gamepackage
             }
             return returnVals;
         }
+
+        public static ProbabilityTable ForSingleValue(string val)
+        {
+            var ret = new ProbabilityTable();
+            ret.Add(new ProbabilityTableParcel()
+            {
+                Values = new List<string>()
+                        {
+                            val,
+                        },
+                Weight = 1,
+            });
+            return ret;
+        }
     }
 }

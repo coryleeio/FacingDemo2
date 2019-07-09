@@ -11,6 +11,7 @@ namespace Gamepackage
 
         public void Start()
         {
+
             var floating = GetComponentInChildren<Floating>();
 
             if (floating != null)

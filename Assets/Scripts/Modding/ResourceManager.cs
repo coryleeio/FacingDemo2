@@ -89,13 +89,59 @@ namespace Gamepackage
             CacheResources(LoadEffectTemplates(sqlConnection));
             CacheResources(ProjectileAppearances.LoadAll());
             CacheResources(LoadEnchantmentTemplates(sqlConnection));
+
             CacheResources(LoadProbabilityTables(sqlConnection, "Items_EnchantmentTables", "Items_EnchantmentTables_Parcels", "Items_EnchantmentTables_ParcelEntries"));
             CacheResources(LoadProbabilityTables(sqlConnection, "ItemDropTable", "ItemDropTable_Parcels", "ItemDropTable_ParcelEntries"));
             CacheResources(LoadProbabilityTables(sqlConnection, "EncounterTable", "EncounterTable_Parcels", "EncounterTable_ParcelEntries"));
             CacheResources(LoadProbabilityTables(sqlConnection, "NameTable", "NameTable_Parcels", "NameTable_ParcelEntries"));
+            CacheResources(LoadProbabilityTables(sqlConnection, "ViewTables", "ViewTables_Parcels", "ViewTables_ParcelEntries"));
 
             CacheResources(LoadItemTemplates(sqlConnection));
+            CacheResources(LoadEntityTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
+        }
+
+        private Dictionary<string, EntityTemplate> LoadEntityTemplates(SqliteConnection sqlConnection)
+        {
+            var sql = "select * from Entities";
+            var sqlCommand = new SqliteCommand(sql, sqlConnection);
+            var reader = sqlCommand.ExecuteReader();
+
+            var aggregate = new Dictionary<string, EntityTemplate>();
+            while (reader.Read())
+            {
+                var entityTemplate = new EntityTemplate();
+                entityTemplate.Identifier = reader[0].ToString();
+
+                var nameListStr = reader[1].ToString();
+
+                if (Context.ResourceManager.Contains<ProbabilityTable>(nameListStr))
+                {
+                    entityTemplate.NameList = Context.ResourceManager.Load<ProbabilityTable >(nameListStr);
+                }
+                else
+                {
+                    entityTemplate.NameList = ProbabilityTable.ForSingleValue(nameListStr);
+                }
+
+                entityTemplate.IsCombatant = ParseBoolFromIntString(reader[2].ToString());
+                entityTemplate.DefaultWeaponIdentifier = reader[3].ToString();
+                entityTemplate.BlocksPathing = ParseBoolFromIntString(reader[4].ToString());
+                entityTemplate.ViewTemplateIdentifier = reader[5].ToString();
+                entityTemplate.AIClassName = reader[6].ToString();
+                entityTemplate.IsAlwaysVisible = ParseBoolFromIntString(reader[7].ToString());
+                entityTemplate.Trigger = reader[8].ToString();
+
+                entityTemplate.isFloating = (FloatingState) Enum.Parse(typeof(FloatingState), reader[9].ToString(), true);
+                entityTemplate.CastsShadow = (ShadowCastState) Enum.Parse(typeof(ShadowCastState), reader[10].ToString(), true);
+
+                entityTemplate.TemplateAttributes = ParseAttributesDictFromTable(sqlConnection, entityTemplate.Identifier, "Entities_Attributes");
+                entityTemplate.EquipmentTables = ParseListOfStrings(sqlConnection, entityTemplate.Identifier, "Entities_EquipmentTables");
+                entityTemplate.InventoryTables = ParseListOfStrings(sqlConnection, entityTemplate.Identifier, "Entities_InventoryTables");
+
+                aggregate.Add(entityTemplate.Identifier, entityTemplate);
+            }
+            return aggregate;
         }
 
         private Dictionary<string, Dictionary<string, Type>> LoadAI()
@@ -368,15 +414,7 @@ namespace Gamepackage
                 {
                     if (Contains<EnchantmentTemplate>(probabilityTableResource))
                     {
-                        itemTemplate.PossibleEnchantments = new ProbabilityTable();
-                        itemTemplate.PossibleEnchantments.Add(new ProbabilityTableParcel()
-                        {
-                            Values = new List<string>()
-                        {
-                            probabilityTableResource,
-                        },
-                            Weight = 1,
-                        });
+                        itemTemplate.PossibleEnchantments = ProbabilityTable.ForSingleValue(probabilityTableResource);
                     }
                     else if (Contains<ProbabilityTable>(probabilityTableResource))
                     {

@@ -37,7 +37,7 @@ namespace Gamepackage
                 var entitesThatStillNeedToACtBeforePhaseEnds = 0;
                 foreach (var entity in entities)
                 {
-                    if (entity.HasBehaviour)
+                    if (entity.IsCombatant)
                     {
                         if (entity.IsPlayer && entity.AI == null)
                         {
@@ -99,7 +99,7 @@ namespace Gamepackage
 
                     foreach (var entity in entities)
                     {
-                        if (entity.HasBehaviour && !entity.IsDoneThisTurn)
+                        if (entity.IsCombatant && !entity.IsDoneThisTurn)
                         {
                             if(entity.NextAction == null)
                             {
@@ -253,7 +253,7 @@ namespace Gamepackage
         {
             foreach (var entity in entities)
             {
-                if (entity.HasBehaviour)
+                if (entity.IsCombatant)
                 {
                     if (!entity.IsPlayer)
                     {
@@ -270,7 +270,7 @@ namespace Gamepackage
             var entities = Context.Game.CurrentLevel.Entitys;
             foreach (var entity in entities)
             {
-                if (entity.HasBehaviour)
+                if (entity.IsCombatant)
                 {
                     entity.IsDoneThisTurn = !ActsInPhase(entity);
                     entity.IsThinking = false;
@@ -281,7 +281,7 @@ namespace Gamepackage
 
         public bool ActsInPhase(Entity entity)
         {
-            var canAct = entity.IsCombatant && !entity.IsDead && entity.HasBehaviour;
+            var canAct = entity.IsCombatant && !entity.IsDead && entity.IsCombatant;
             return canAct && (entity.ActingTeam == CurrentlyActingTeam);
         }
     }

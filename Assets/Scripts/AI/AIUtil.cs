@@ -106,7 +106,7 @@ namespace Gamepackage
 
         public static void ShoutAboutHostileTarget(Entity source, Level level, Entity hostileTarget, int shoutRadius)
         {
-            MakeNoiseIndicatingLocation(level, source.Position, hostileTarget.Position, shoutRadius, (possibleEntity) => { return possibleEntity.HasBehaviour && possibleEntity.ActingTeam == source.ActingTeam; });
+            MakeNoiseIndicatingLocation(level, source.Position, hostileTarget.Position, shoutRadius, (possibleEntity) => { return possibleEntity.IsCombatant && possibleEntity.ActingTeam == source.ActingTeam; });
         }
 
         // Make a noise at a location, hearable by all entities that are within the radius and match the predicate.
@@ -122,7 +122,7 @@ namespace Gamepackage
                     {
                         if (predicate == null || predicate(entityInLocation))
                         {
-                            if (entityInLocation.HasBehaviour && entityInLocation.LastKnownTargetPosition == null)
+                            if (entityInLocation.IsCombatant && entityInLocation.LastKnownTargetPosition == null)
                             {
                                 entityInLocation.LastKnownTargetPosition = targetLocation;
                             }
@@ -157,7 +157,7 @@ namespace Gamepackage
                     if (entity.ActingTeam == Team.PLAYER)
                     {
                         // If I am a member of the player's team - search for enemies.
-                        if (entityInPos.HasBehaviour && (entityInPos.ActingTeam == Team.Enemy || entityInPos.ActingTeam == Team.EnemyOfAll))
+                        if (entityInPos.IsCombatant && (entityInPos.ActingTeam == Team.Enemy || entityInPos.ActingTeam == Team.EnemyOfAll))
                         {
                             targets.Add(entityInPos);
                         }
@@ -165,7 +165,7 @@ namespace Gamepackage
                     else if (entity.ActingTeam == Team.Enemy)
                     {
                         // If I am a member of the enemy's team - search for enemies
-                        if (entityInPos.HasBehaviour && (entityInPos.ActingTeam == Team.PLAYER || entityInPos.ActingTeam == Team.EnemyOfAll))
+                        if (entityInPos.IsCombatant && (entityInPos.ActingTeam == Team.PLAYER || entityInPos.ActingTeam == Team.EnemyOfAll))
                         {
                             targets.Add(entityInPos);
                         }
@@ -173,7 +173,7 @@ namespace Gamepackage
                     else if (entity.ActingTeam == Team.EnemyOfAll)
                     {
                         // If I am a member of the ENEMY_OF_ALL team - everyone is an enemy, except neutrals
-                        if (entityInPos.HasBehaviour && entityInPos.ActingTeam != Team.Neutral)
+                        if (entityInPos.IsCombatant && entityInPos.ActingTeam != Team.Neutral)
                         {
                             targets.Add(entityInPos);
                         }

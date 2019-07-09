@@ -193,11 +193,11 @@ namespace Gamepackage
                     {
                         hoverContainsCombatant = true;
                     }
-                    if (entity.HasBehaviour && (entity.ActingTeam == Team.Enemy || entity.ActingTeam == Team.EnemyOfAll))
+                    if (entity.IsCombatant && (entity.ActingTeam == Team.Enemy || entity.ActingTeam == Team.EnemyOfAll))
                     {
                         tileContainsEnemy = true;
                     }
-                    if (entity.IsCombatant && entity.HasBehaviour && entity.ActingTeam == Team.PLAYER && !entity.IsPlayer)
+                    if (entity.IsCombatant && entity.ActingTeam == Team.PLAYER && !entity.IsPlayer)
                     {
                         hoverContainsAlly = true;
                     }
@@ -266,7 +266,7 @@ namespace Gamepackage
                         Entity adjacentFriendlyBlocker = null;
                         foreach (var occupant in occupants)
                         {
-                            if (occupant.HasBehaviour && occupant.ActingTeam == Team.PLAYER && !occupant.IsPlayer && occupant.BlocksPathing)
+                            if (occupant.IsCombatant && occupant.ActingTeam == Team.PLAYER && !occupant.IsPlayer && occupant.BlocksPathing)
                             {
                                 adjacentFriendlyBlocker = occupant;
                                 break;
@@ -524,7 +524,7 @@ namespace Gamepackage
             {
                 Source = player
             };
-            swapPositions.Targets.Add(level.Grid[mousePos].EntitiesInPosition.Find((x) => { return x.HasBehaviour; }));
+            swapPositions.Targets.Add(level.Grid[mousePos].EntitiesInPosition.Find((x) => { return x.IsCombatant; }));
             player.NextAction = swapPositions;
         }
 
