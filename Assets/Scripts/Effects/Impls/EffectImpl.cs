@@ -96,14 +96,17 @@ namespace Gamepackage
 
         public virtual void ShowApplySelfMessages(Effect state, Entity entity)
         {
-            CombatUtil.ShowFloatingMessage(entity.Position, new FloatingTextMessage()
+            if(Context.UIController != null && Context.UIController.TextLog != null)
             {
-                Message = string.Format("+{0}", state.Name.Localize()),
-                Color = DisplayUtil.EffectDisplayColor(),
-                target = entity,
-                AllowLeftRightDrift = true,
-            });
-            Context.UIController.TextLog.AddText(string.Format((state.ApplyMessage).Localize(), entity.Name));
+                CombatUtil.ShowFloatingMessage(entity.Position, new FloatingTextMessage()
+                {
+                    Message = string.Format("+{0}", state.Name.Localize()),
+                    Color = DisplayUtil.EffectDisplayColor(),
+                    target = entity,
+                    AllowLeftRightDrift = true,
+                });
+                Context.UIController.TextLog.AddText(string.Format((state.ApplyMessage).Localize(), entity.Name));
+            }
         }
 
         public virtual void ShowApplyOtherMessages(Effect state, EntityStateChange outcome)

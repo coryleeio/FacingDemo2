@@ -50,8 +50,7 @@ namespace Gamepackage
                 entity.ActingTeam = Team.PLAYER;
                 entity.OriginalTeam = Team.PLAYER;
                 entity.AIClassName = null;
-                var items = ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("PONCY_KIT").Roll());
-                InventoryUtil.TryEquipItems(entity, items);
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("PONCY_KIT").Roll()));
             }
             else if (entity.TemplateIdentifier == "ENTITY_MASLOW")
             {
@@ -89,7 +88,7 @@ namespace Gamepackage
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
                 entity.AIClassName = "Gamepackage.DumbMelee";
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_ARROW"));
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
             }
             else if (entity.TemplateIdentifier == "ENTITY_SKELETON")
             {
@@ -110,11 +109,10 @@ namespace Gamepackage
                 entity.AIClassName = "Gamepackage.Archer";
                 var itemIds = new List<string>();
 
-                var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS").Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING").Roll()));
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
 
-                var HumanoidClothing = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidClothing.Roll()));
                 foreach (var itemId in itemIds)
                 {
                     InventoryUtil.EquipItem(entity, ItemFactory.Build(itemId));
@@ -138,10 +136,9 @@ namespace Gamepackage
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
                 entity.AIClassName = "Gamepackage.Archer";
-                var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
-                var HumanoidClothing = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING");
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidClothing.Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS").Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_CLOTHING").Roll()));
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
             }
 
             else if (entity.TemplateIdentifier == "ENTITY_ANIMATED_WEAPON")
@@ -162,8 +159,8 @@ namespace Gamepackage
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
                 entity.AIClassName = "Gamepackage.Archer";
-                var HumanoidWeapons = Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS");
-                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(HumanoidWeapons.Roll()));
+                InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_HUMANOID_WEAPONS").Roll()));
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
             }
 
             else if (entity.TemplateIdentifier == "ENTITY_QUEEN_BEE")
@@ -185,8 +182,7 @@ namespace Gamepackage
                 entity.ActingTeam = Team.Enemy;
                 entity.OriginalTeam = Team.Enemy;
                 entity.AIClassName = "Gamepackage.DumbMelee";
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_LONGSWORD"));
-                InventoryUtil.AddItem(entity, ItemFactory.Build("ITEM_PURPLE_POTION"));
+                InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>("LOOT_TABLE_TRASH").Roll()));
             }
             else if (entity.TemplateIdentifier == "ENTITY_STAIRS_UP")
             {

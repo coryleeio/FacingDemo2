@@ -66,4 +66,14 @@ INSERT INTO "ItemDropTable_ParcelEntries" VALUES('PONCY_KIT', 1,'ITEM_MIND_WAND'
 INSERT INTO "ItemDropTable_ParcelEntries" VALUES('PONCY_KIT', 1,'ITEM_MIND_WAND');
 INSERT INTO "ItemDropTable_ParcelEntries" VALUES('PONCY_KIT', 1,'ITEM_SHIELD_OF_AMALURE');
 
+INSERT INTO "ItemDropTable"               VALUES('LOOT_TABLE_TRASH');
+INSERT INTO "ItemDropTable_Parcels"       VALUES('LOOT_TABLE_TRASH', 1, 1);
+INSERT INTO "ItemDropTable_ParcelEntries" VALUES('LOOT_TABLE_TRASH', 1,'ITEM_LONGSWORD');
+
+INSERT INTO "ItemDropTable_Parcels"       VALUES('LOOT_TABLE_TRASH', 2, 1);
+INSERT INTO "ItemDropTable_ParcelEntries" VALUES('LOOT_TABLE_TRASH', 2,'ITEM_ARROW');
+
+INSERT INTO "ItemDropTable_Parcels"       VALUES('LOOT_TABLE_TRASH', 3, 1);
+INSERT INTO "ItemDropTable_ParcelEntries" VALUES('LOOT_TABLE_TRASH', 3,'ITEM_PURPLE_POTION');
+
 COMMIT;

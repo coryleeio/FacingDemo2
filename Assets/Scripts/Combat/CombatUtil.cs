@@ -517,7 +517,7 @@ namespace Gamepackage
 
         public static void ShowFloatingMessage(Point pos, FloatingTextMessage msg)
         {
-            if(Context.UIController != null && Context.UIController.FloatingCombatTextManager != null)
+            if(pos != null && msg != null && Context.UIController != null && Context.UIController.FloatingCombatTextManager != null)
             {
                 Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(pos), msg.AllowLeftRightDrift);
             }
