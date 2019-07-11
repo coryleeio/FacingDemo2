@@ -64,11 +64,6 @@ namespace Gamepackage
             entity.CastsShadow = entity.Template.CastsShadow == ShadowCastState.CastsShadow;
             entity.AlwaysVisible = entity.Template.IsAlwaysVisible;
 
-            if(entity.AlwaysVisible)
-            {
-                Debug.Log("Hit");
-            }
-
             if(entity.Template.Trigger != null && entity.Template.Trigger != "")
             {
                 entity.Trigger = TriggerFactory.Build(entity.Template.Trigger);
