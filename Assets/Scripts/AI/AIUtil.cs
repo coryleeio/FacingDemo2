@@ -181,7 +181,7 @@ namespace Gamepackage
 
                     else
                     {
-                        throw new NotImplementedException("Cant find targets for entity with team: " + entity.TemplateIdentifier.ToString() + " " + entity.ActingTeam.ToString());
+                        throw new NotImplementedException("Cant find targets for entity with team: " + entity.Id.ToString() + " " + entity.ActingTeam.ToString());
                     }
                 }
             }

@@ -77,6 +77,8 @@ namespace Gamepackage
             var playerSpawn = SpawnOnLevel("ENTITY_PONCY", levels[0], Team.PLAYER);
             playerSpawn.IsPlayer = true;
             playerSpawn.AlwaysVisible = true;
+            playerSpawn.AI = null;
+            playerSpawn.AIClassName = null;
             var playerPos = playerSpawn.Position;
             var maslow = SpawnInBounds("ENTITY_MASLOW", levels[0], new Rectangle()
             {

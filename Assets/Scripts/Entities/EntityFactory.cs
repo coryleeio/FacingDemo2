@@ -20,9 +20,17 @@ namespace Gamepackage
         public static Entity Build(string uniqueIdentifier, Team team)
         {
             var entity = new Entity();
-            entity.TemplateIdentifier = uniqueIdentifier;
-            entity.Inventory = new Inventory();
+            var template = Context.ResourceManager.Load<EntityTemplate>(uniqueIdentifier);
+            Assert.IsTrue(template != null, "Could not find template: " + uniqueIdentifier);
+            return Build(template, team);
+        }
 
+        public static Entity Build(EntityTemplate template, Team team)
+        {
+            var entity = new Entity();
+            Assert.IsTrue(template != null, "Could not find template: " + template);
+            entity.RaceTemplateIdentifier = template.RaceIdentifier;
+            entity.Inventory = new Inventory();
             // Ensure correct default size - doing this in Inventory causes
             // serialization issues
             for (var i = 0; i < 68; i++)
@@ -32,24 +40,24 @@ namespace Gamepackage
 
             entity.EntityAcquiredTags = new List<string>();
             entity.EntityInnateTags = new List<string>();
-
-
-            Assert.IsTrue(entity.Template != null, "Could not find template: " + entity.TemplateIdentifier);
-
-            entity.Name = entity.Template.NameList.RollAndChooseOne().Localize();
-            entity.IsCombatant = entity.Template.IsCombatant;
-            entity.DefaultAttackItem = ItemFactory.Build(entity.Template.DefaultWeaponIdentifier);
+            entity.Name = template.NameList.RollAndChooseOne().Localize();
+            entity.IsCombatant = entity.Race.IsCombatant;
+            entity.DefaultAttackItem = ItemFactory.Build(entity.Race.DefaultWeaponIdentifier);
             entity.Attributes = new Dictionary<Attributes, int>();
 
-            foreach(var pair in entity.Template.TemplateAttributes)
+            foreach (var pair in entity.Race.TemplateAttributes)
             {
                 entity.Attributes.Add(pair.Key, pair.Value);
             }
-            entity.BlocksPathing = entity.Template.BlocksPathing;
+            entity.BlocksPathing = entity.Race.BlocksPathing;
 
-            var viewIdentifier = entity.Template.ViewTemplateIdentifier;
+            var viewIdentifier = entity.Race.DefaultViewTemplateIdentifier;
+            if (template.ViewTemplateIdentifierOverride != null && template.ViewTemplateIdentifierOverride != "")
+            {
+                viewIdentifier = template.ViewTemplateIdentifierOverride;
+            }
 
-            if(Context.ResourceManager.Contains<ProbabilityTable>(viewIdentifier))
+            if (Context.ResourceManager.Contains<ProbabilityTable>(viewIdentifier))
             {
                 var table = Context.ResourceManager.Load<ProbabilityTable>(viewIdentifier);
                 entity.ViewTemplateIdentifier = table.RollAndChooseOne();
@@ -59,21 +67,21 @@ namespace Gamepackage
                 entity.ViewTemplateIdentifier = viewIdentifier;
             }
 
-            entity.AIClassName = entity.Template.AIClassName;
-            entity.Floating = entity.Template.isFloating == FloatingState.IsFloating;
-            entity.CastsShadow = entity.Template.CastsShadow == ShadowCastState.CastsShadow;
-            entity.AlwaysVisible = entity.Template.IsAlwaysVisible;
+            entity.AIClassName = entity.Race.DefaultAIClassName;
+            entity.Floating = entity.Race.isFloating == FloatingState.IsFloating;
+            entity.CastsShadow = entity.Race.CastsShadow == ShadowCastState.CastsShadow;
+            entity.AlwaysVisible = entity.Race.IsAlwaysVisible;
 
-            if(entity.Template.Trigger != null && entity.Template.Trigger != "")
+            if (entity.Race.Trigger != null && entity.Race.Trigger != "")
             {
-                entity.Trigger = TriggerFactory.Build(entity.Template.Trigger);
+                entity.Trigger = TriggerFactory.Build(entity.Race.Trigger);
             }
-            foreach (var table in entity.Template.EquipmentTables)
+            foreach (var table in template.EquipmentTables)
             {
                 InventoryUtil.TryEquipItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>(table).Roll()));
             }
 
-            foreach (var table in entity.Template.InventoryTables)
+            foreach (var table in template.InventoryTables)
             {
                 InventoryUtil.AddItems(entity, ItemFactory.BuildAll(Context.ResourceManager.Load<ProbabilityTable>(table).Roll()));
             }

@@ -17,7 +17,6 @@ CREATE TABLE "ItemDropTable_ParcelEntries" (
 	"Value"        TEXT
 );
 
-
 INSERT INTO "ItemDropTable"               VALUES('LOOT_TABLE_HUMANOID_WEAPONS');
 
 INSERT INTO "ItemDropTable_Parcels"       VALUES('LOOT_TABLE_HUMANOID_WEAPONS', 1,1);
@@ -44,8 +43,6 @@ INSERT INTO "ItemDropTable_ParcelEntries" VALUES('LOOT_TABLE_HUMANOID_CLOTHING',
 
 INSERT INTO "ItemDropTable_Parcels"       VALUES('LOOT_TABLE_HUMANOID_CLOTHING', 2, 1);
 INSERT INTO "ItemDropTable_ParcelEntries" VALUES('LOOT_TABLE_HUMANOID_CLOTHING', 2, 'ITEM_ROBE_OF_WONDERS');
-
-
 
 INSERT INTO "ItemDropTable"               VALUES('PONCY_KIT');
 INSERT INTO "ItemDropTable_Parcels"       VALUES('PONCY_KIT', 1, 1);

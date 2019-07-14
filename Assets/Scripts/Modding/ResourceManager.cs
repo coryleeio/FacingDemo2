@@ -97,8 +97,39 @@ namespace Gamepackage
             CacheResources(LoadProbabilityTables(sqlConnection, "ViewTables", "ViewTables_Parcels", "ViewTables_ParcelEntries"));
 
             CacheResources(LoadItemTemplates(sqlConnection));
+            CacheResources(LoadRaceTemplates(sqlConnection));
             CacheResources(LoadEntityTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
+        }
+
+        private Dictionary<string, RaceTemplate> LoadRaceTemplates(SqliteConnection sqlConnection)
+        {
+            var sql = "select * from Races";
+            var sqlCommand = new SqliteCommand(sql, sqlConnection);
+            var reader = sqlCommand.ExecuteReader();
+
+            var aggregate = new Dictionary<string, RaceTemplate>();
+            while (reader.Read())
+            {
+                var raceTemplate = new RaceTemplate();
+                raceTemplate.Identifier = reader[0].ToString();
+
+                raceTemplate.Name = reader[1].ToString();
+                raceTemplate.IsCombatant = ParseBoolFromIntString(reader[2].ToString());
+                raceTemplate.DefaultWeaponIdentifier = reader[3].ToString();
+                raceTemplate.BlocksPathing = ParseBoolFromIntString(reader[4].ToString());
+                raceTemplate.DefaultViewTemplateIdentifier = reader[5].ToString();
+                raceTemplate.DefaultAIClassName = reader[6].ToString();
+                raceTemplate.IsAlwaysVisible = ParseBoolFromIntString(reader[7].ToString());
+                raceTemplate.Trigger = reader[8].ToString();
+
+                raceTemplate.isFloating = (FloatingState)Enum.Parse(typeof(FloatingState), reader[9].ToString(), true);
+                raceTemplate.CastsShadow = (ShadowCastState)Enum.Parse(typeof(ShadowCastState), reader[10].ToString(), true);
+
+                raceTemplate.TemplateAttributes = ParseAttributesDictFromTable(sqlConnection, raceTemplate.Identifier, "Races_Attributes");
+                aggregate.Add(raceTemplate.Identifier, raceTemplate);
+            }
+            return aggregate;
         }
 
         private Dictionary<string, EntityTemplate> LoadEntityTemplates(SqliteConnection sqlConnection)
@@ -124,18 +155,10 @@ namespace Gamepackage
                     entityTemplate.NameList = ProbabilityTable.ForSingleValue(nameListStr);
                 }
 
-                entityTemplate.IsCombatant = ParseBoolFromIntString(reader[2].ToString());
-                entityTemplate.DefaultWeaponIdentifier = reader[3].ToString();
-                entityTemplate.BlocksPathing = ParseBoolFromIntString(reader[4].ToString());
-                entityTemplate.ViewTemplateIdentifier = reader[5].ToString();
-                entityTemplate.AIClassName = reader[6].ToString();
-                entityTemplate.IsAlwaysVisible = ParseBoolFromIntString(reader[7].ToString());
-                entityTemplate.Trigger = reader[8].ToString();
+                entityTemplate.RaceIdentifier = reader[2].ToString();
+                Assert.IsTrue(this.Contains<RaceTemplate>(entityTemplate.RaceIdentifier), "Could not find race: " + entityTemplate.RaceIdentifier);
 
-                entityTemplate.isFloating = (FloatingState) Enum.Parse(typeof(FloatingState), reader[9].ToString(), true);
-                entityTemplate.CastsShadow = (ShadowCastState) Enum.Parse(typeof(ShadowCastState), reader[10].ToString(), true);
-
-                entityTemplate.TemplateAttributes = ParseAttributesDictFromTable(sqlConnection, entityTemplate.Identifier, "Entities_Attributes");
+                entityTemplate.ViewTemplateIdentifierOverride = reader[3].ToString();
                 entityTemplate.EquipmentTables = ParseListOfStrings(sqlConnection, entityTemplate.Identifier, "Entities_EquipmentTables");
                 entityTemplate.InventoryTables = ParseListOfStrings(sqlConnection, entityTemplate.Identifier, "Entities_InventoryTables");
 

@@ -1,3 +1,7 @@
+
+race.name.human: "Human"
+race.name.giant.bee: "Giant Bee"
+
 show.loot.message: "Press <color=yellow>F</color> to loot..."
 loot.action: "Loot"
 loot.notification: You have looted {0}{1}

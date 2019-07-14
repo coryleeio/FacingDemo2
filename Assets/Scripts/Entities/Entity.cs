@@ -10,17 +10,15 @@ namespace Gamepackage
     [Serializable]
     public class Entity
     {
-        // Template part
-        public string TemplateIdentifier { get; set; }
+        public string RaceTemplateIdentifier { get; set; }
         [JsonIgnore]
-        public EntityTemplate Template
+        public RaceTemplate Race
         {
             get
             {
-                return Context.ResourceManager.Load<EntityTemplate>(TemplateIdentifier);
+                return Context.ResourceManager.Load<RaceTemplate>(RaceTemplateIdentifier);
             }
         }
-
 
         public string Name;
         public bool IsCombatant = false;

@@ -101,22 +101,11 @@ namespace Gamepackage
                     {
                         if (entity.IsCombatant && !entity.IsDoneThisTurn)
                         {
-                            if(entity.NextAction == null)
-                            {
-                                Debug.Log("it");
-                            }
-                            Assert.IsNotNull(entity.NextAction, "Any entity that is not done at this point should know what they would like to do, somehow an action was not chosen for: " + entity.TemplateIdentifier.ToString());
                             if (!entity.NextAction.IsValid())
                             {
                                 if(entity.NextAction.GetType() == typeof(Move))
                                 {
                                     var castMove = (Move)entity.NextAction;
-                                    Debug.Log(string.Format("Entity {0} of type {1} discarded its next action of {2}", entity.Id.ToString(), entity.TemplateIdentifier.ToString(), entity.NextAction.ToString()));
-                                    Debug.Log(string.Format("It was in position {0} trying to move to: {1}", entity.Position, castMove.TargetPosition));
-                                }
-                                else
-                                {
-                                    Debug.Log(string.Format("Entity {0} of type {1} discarded its next action of {2}", entity.Id.ToString(), entity.TemplateIdentifier.ToString(), entity.NextAction.ToString()));
                                 }
                                 if(entity.IsPlayer)
                                 {

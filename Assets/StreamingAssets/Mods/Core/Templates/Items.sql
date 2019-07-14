@@ -91,7 +91,6 @@ CREATE TABLE "Items_EnchantmentTables_ParcelEntries" (
 	"Value"        TEXT
 );
 
-
 INSERT INTO "Items_EnchantmentTables"               VALUES('ENCHANTMENT_TABLE_MIND_EFFECTS');
 INSERT INTO "Items_EnchantmentTables_Parcels"       VALUES('ENCHANTMENT_TABLE_MIND_EFFECTS', 1,1);
 INSERT INTO "Items_EnchantmentTables_ParcelEntries" VALUES('ENCHANTMENT_TABLE_MIND_EFFECTS', 1,'ENCHANTMENT_MADNESS');
@@ -101,8 +100,6 @@ INSERT INTO "Items_EnchantmentTables_ParcelEntries" VALUES('ENCHANTMENT_TABLE_MI
 
 INSERT INTO "Items_EnchantmentTables_Parcels"       VALUES('ENCHANTMENT_TABLE_MIND_EFFECTS', 3,1);
 INSERT INTO "Items_EnchantmentTables_ParcelEntries" VALUES('ENCHANTMENT_TABLE_MIND_EFFECTS', 3,'ENCHANTMENT_DOMINATION');
-
-
 
 INSERT INTO "Items"                         VALUES ('ITEM_LONGSWORD','item.longsword',1,1,0,100,'None', "", "ITEM_APPEARANCE_LONGSWORD");
 INSERT INTO "Items_SlotsWearable"           VALUES ('ITEM_LONGSWORD', 'MainHand');

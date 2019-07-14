@@ -265,7 +265,7 @@ namespace Gamepackage
         private static GameObject BuildDefaultGameObject(Entity entity)
         {
             var go = new GameObject();
-            go.name = entity.TemplateIdentifier.ToString();
+            go.name = entity.Name.Localize().ToString();
             go.transform.position = MathUtil.MapToWorld(entity.Position);
             entity.ViewGameObject = go;
             return go;
