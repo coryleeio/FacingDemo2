@@ -1,4 +1,7 @@
-﻿namespace Gamepackage
+﻿using System;
+using UnityEngine;
+
+namespace Gamepackage
 {
     public class CoreRulesEngine : IRulesEngine
     {
@@ -32,6 +35,14 @@
             var accuracyPercentage = CalculateAccuracyPercent(action);
             var toHit = accuracyPercentage * ((100.0f - dodgePercent) * .01f);
             return toHit;
+        }
+
+        public int CalculateXpForKill(EntityStateChange result, Entity target)
+        {
+            var campaignTemplate = Context.Game.CampaignTemplate;
+            float.TryParse(campaignTemplate.Settings[Settings.GlobalXpModifier.ToString()], out float xpMod);
+            var xpAwardedForKillOfLevel = campaignTemplate.XpAwardedForKillingEntityOfLevel[target.Level];
+            return (int)(xpAwardedForKillOfLevel * xpMod); ;
         }
     }
 }

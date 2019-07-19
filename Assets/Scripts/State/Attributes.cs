@@ -2,8 +2,8 @@
 {
     public enum Attributes
     {
-        MAX_HEALTH,
-        VISION_RADIUS,
-        SHOUT_RADIUS,
+        MaxHealth,
+        VisionRadius,
+        ShoutRadius,
     }
 }

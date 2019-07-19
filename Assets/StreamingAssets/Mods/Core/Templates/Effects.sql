@@ -63,6 +63,6 @@ INSERT INTO "Effects_Data"                    VALUES ('EFFECT_TEMPORARY_REGENERA
 
 
 INSERT INTO "Effects"                         VALUES ('EFFECT_STRENGTH_OF_GIANTS','effect.strength.of.giants','Gamepackage.SimpleEffect',1,0,'IgnoreDuplicates');
-INSERT INTO "Effects_Attributes"              VALUES ('EFFECT_STRENGTH_OF_GIANTS', 'MAX_HEALTH', 100);
+INSERT INTO "Effects_Attributes"              VALUES ('EFFECT_STRENGTH_OF_GIANTS', 'MaxHealth', 100);
 
 COMMIT;

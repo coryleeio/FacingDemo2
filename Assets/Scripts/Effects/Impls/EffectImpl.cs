@@ -61,9 +61,9 @@ namespace Gamepackage
             if (target.IsCombatant)
             {
                 var aliveBeforeRemoval = target.CurrentHealth > 0;
-                if (state.Template.TemplateAttributes.ContainsKey(Gamepackage.Attributes.MAX_HEALTH))
+                if (state.Template.TemplateAttributes.ContainsKey(Gamepackage.Attributes.MaxHealth))
                 {
-                    target.CurrentHealth -= state.Template.TemplateAttributes[Gamepackage.Attributes.MAX_HEALTH];
+                    target.CurrentHealth -= state.Template.TemplateAttributes[Gamepackage.Attributes.MaxHealth];
                 }
                 if (aliveBeforeRemoval && target.CurrentHealth < 0)
                 {

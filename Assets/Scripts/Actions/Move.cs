@@ -62,7 +62,7 @@ namespace Gamepackage
                 Context.UIController.LootWindow.Hide();
             }
             var player = Context.Game.CurrentLevel.Player;
-            var playerVision = player == null ? 10 : player.CalculateValueOfAttribute(Attributes.VISION_RADIUS);
+            var playerVision = player == null ? 10 : player.CalculateValueOfAttribute(Attributes.VisionRadius);
             if(player != null && Source.Position.Distance(player.Position) > playerVision && TargetPosition.Distance(player.Position) > playerVision)
             {
                 isDoneInternal = true;

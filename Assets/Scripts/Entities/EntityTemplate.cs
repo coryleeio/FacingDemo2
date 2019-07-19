@@ -10,5 +10,6 @@ namespace Gamepackage
         public List<string> EquipmentTables;
         public List<string> InventoryTables;
         public string RaceIdentifier;
+        public int Level;
     }
 }

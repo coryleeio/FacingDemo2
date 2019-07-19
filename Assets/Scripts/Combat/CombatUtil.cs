@@ -26,7 +26,7 @@ namespace Gamepackage
         public static List<Effect> AppliedEffectsResolve(CombatActionType InteractionType, Item item)
         {
             List<Effect> appliedEffects = new List<Effect>();
-            if(item == null)
+            if (item == null)
             {
                 // Simple damage will cause this.
                 return appliedEffects;
@@ -300,7 +300,7 @@ namespace Gamepackage
                 {
                     itemStateChange.NumberOfItemsConsumed = 1;
                 }
-                if(item.IsEnchanted && !item.Enchantment.HasUnlimitedCharges)
+                if (item.IsEnchanted && !item.Enchantment.HasUnlimitedCharges)
                 {
                     itemStateChange.NumberOfChargesConsumed = 1;
                 }
@@ -400,7 +400,7 @@ namespace Gamepackage
                                     Target = entityInPosition,
                                 };
                                 CalculateDamageForCombatActionParameters(explosionParams, entityStateChange);
-                                if(calculatedAttack.Item != null)
+                                if (calculatedAttack.Item != null)
                                 {
                                     var item = calculatedAttack.Item;
                                     entityStateChange.AppliedEffects.AddRange(CombatUtil.AppliedEffectsResolve(CombatActionType.Explosion, item));
@@ -517,7 +517,7 @@ namespace Gamepackage
 
         public static void ShowFloatingMessage(Point pos, FloatingTextMessage msg)
         {
-            if(pos != null && msg != null && Context.UIController != null && Context.UIController.FloatingCombatTextManager != null)
+            if (pos != null && msg != null && Context.UIController != null && Context.UIController.FloatingCombatTextManager != null)
             {
                 Context.UIController.FloatingCombatTextManager.ShowCombatText(msg.Message, msg.Color, msg.FontSize, MathUtil.MapToWorld(pos), msg.AllowLeftRightDrift);
             }
@@ -627,7 +627,7 @@ namespace Gamepackage
                     if ((result.AppliedEffects.Count > 0 || result.HealthChange > 0) && result.Target.IsCombatant && result.Source != null)
                     {
                         var level = Context.Game.CurrentLevel;
-                        AIUtil.ShoutAboutHostileTarget(result.Target, level, result.Source, result.Target.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS));
+                        AIUtil.ShoutAboutHostileTarget(result.Target, level, result.Source, result.Target.CalculateValueOfAttribute(Attributes.ShoutRadius));
                         if (result.Target.LastKnownTargetPosition == null)
                         {
                             result.Target.LastKnownTargetPosition = new Point(result.Source.Position);
@@ -638,6 +638,48 @@ namespace Gamepackage
 
                 if (target.CurrentHealth <= 0)
                 {
+                    var player = Context.Game.CurrentLevel.Player;
+                    if (player != null && !target.IsPlayer)
+                    {
+                        var xp = Context.RulesEngine.CalculateXpForKill(result, target);
+                        player.Xp += xp;
+
+                        var campaignTemplate = Context.Game.CampaignTemplate;
+                        int.TryParse(campaignTemplate.Settings[Settings.MaxLevel.ToString()], out int maxLevel);
+
+                        if (player.Level < maxLevel)
+                        {
+                            var nextLevel = player.Level + 1;
+                            var xpNeededForNextLevel = campaignTemplate.XpForLevel[nextLevel];
+
+                            if(player.Xp >= xpNeededForNextLevel)
+                            {
+                                // We are over the threshold for atleast the next level
+                                // figure out what level to stop at
+                                for (var curItrLevel = nextLevel; curItrLevel <= maxLevel; curItrLevel++)
+                                {
+                                    var xpNeededForItrLevel = campaignTemplate.XpForLevel[curItrLevel];
+                                    if (player.Xp >= xpNeededForItrLevel)
+                                    {
+                                        player.Level += 1;
+                                        result.LogMessages.AddLast(string.Format("level.up".Localize(), player.Level));
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+
+                            if (player.Xp > xpNeededForNextLevel)
+                            {
+                                player.Level += 1;
+                            }
+                        }
+                        result.LogMessages.AddLast("xp.gain".Localize());
+                    }
+
                     if (target.SkeletonAnimation != null)
                     {
                         var skeletonAnimation = target.SkeletonAnimation;
@@ -812,9 +854,9 @@ namespace Gamepackage
         {
             if (entity.IsCombatant)
             {
-                if (entity.CurrentHealth > entity.CalculateValueOfAttribute(Gamepackage.Attributes.MAX_HEALTH))
+                if (entity.CurrentHealth > entity.CalculateValueOfAttribute(Gamepackage.Attributes.MaxHealth))
                 {
-                    entity.CurrentHealth = entity.CalculateValueOfAttribute(Gamepackage.Attributes.MAX_HEALTH);
+                    entity.CurrentHealth = entity.CalculateValueOfAttribute(Gamepackage.Attributes.MaxHealth);
                 }
             }
         }

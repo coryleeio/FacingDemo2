@@ -28,6 +28,8 @@ namespace Gamepackage
         public bool AlwaysVisible = false;
 
         public Team OriginalTeam;
+        public int Level;
+        public int Xp;
 
         public string AIClassName;
         [JsonIgnore]

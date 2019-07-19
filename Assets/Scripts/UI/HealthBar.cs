@@ -27,7 +27,7 @@ namespace Gamepackage
                 if (Entity.IsCombatant && Entity.CurrentHealth != LastHealth)
                 {
                     LastHealth = Entity.CurrentHealth;
-                    Entity.HealthBar.UpdateHealth(Entity.CurrentHealth, Entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH));
+                    Entity.HealthBar.UpdateHealth(Entity.CurrentHealth, Entity.CalculateValueOfAttribute(Attributes.MaxHealth));
                 }
             }
         }

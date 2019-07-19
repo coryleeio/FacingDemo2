@@ -6,7 +6,8 @@ show.loot.message: "Press <color=yellow>F</color> to loot..."
 loot.action: "Loot"
 loot.notification: You have looted {0}{1}
 cost.health.damage: "Using {0} drains {1} health from {2}."
-
+xp.gain: "You gain experience."
+level.up: "You have achieved level: {0}"
 
 death.notification.you.have.died: You have died!
 death.notification.admit.defeat: Admit defeat

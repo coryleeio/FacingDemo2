@@ -148,7 +148,7 @@ namespace Gamepackage
 
                 if (Context.ResourceManager.Contains<ProbabilityTable>(nameListStr))
                 {
-                    entityTemplate.NameList = Context.ResourceManager.Load<ProbabilityTable >(nameListStr);
+                    entityTemplate.NameList = Context.ResourceManager.Load<ProbabilityTable>(nameListStr);
                 }
                 else
                 {
@@ -157,11 +157,11 @@ namespace Gamepackage
 
                 entityTemplate.RaceIdentifier = reader[2].ToString();
                 Assert.IsTrue(this.Contains<RaceTemplate>(entityTemplate.RaceIdentifier), "Could not find race: " + entityTemplate.RaceIdentifier);
-
-                entityTemplate.ViewTemplateIdentifierOverride = reader[3].ToString();
+                int.TryParse(reader[3].ToString(), out int level);
+                entityTemplate.Level = level;
+                entityTemplate.ViewTemplateIdentifierOverride = reader[4].ToString();
                 entityTemplate.EquipmentTables = ParseListOfStrings(sqlConnection, entityTemplate.Identifier, "Entities_EquipmentTables");
                 entityTemplate.InventoryTables = ParseListOfStrings(sqlConnection, entityTemplate.Identifier, "Entities_InventoryTables");
-
                 aggregate.Add(entityTemplate.Identifier, entityTemplate);
             }
             return aggregate;
@@ -393,6 +393,9 @@ namespace Gamepackage
                 var campaignTemplate = new CampaignTemplate();
                 campaignTemplate.Identifier = reader[0].ToString();
                 campaignTemplate.RulesEngineClassName = reader[1].ToString();
+                campaignTemplate.XpForLevel = ParseIntToIntDict(sqlConnection, campaignTemplate.Identifier, "Campaigns_XpForLevel");
+                campaignTemplate.Settings = ParseStringToStringDict(sqlConnection, campaignTemplate.Identifier, "Campaigns_Settings");
+                campaignTemplate.XpAwardedForKillingEntityOfLevel = ParseIntToIntDict(sqlConnection, campaignTemplate.Identifier, "Campaigns_XpAwardedForKillingEntityOfLevel");
                 aggregate.Add(campaignTemplate.Identifier, campaignTemplate);
             }
             return aggregate;
@@ -739,6 +742,23 @@ namespace Gamepackage
                 var identifier = readerForData[0];
                 var key = readerForData[1].ToString();
                 var value = readerForData[2].ToString();
+                retVal.Add(key, value);
+            }
+            return retVal;
+        }
+
+        private Dictionary<int, int> ParseIntToIntDict(SqliteConnection sqlConnection, string templateIdentifier, string table)
+        {
+            var retVal = new Dictionary<int, int>();
+            var sqlForData = string.Format("select * from [" + table + "] WHERE [Identifier] = @Identifier");
+            var commandForData = new SqliteCommand(sqlForData, sqlConnection);
+            commandForData.Parameters.AddWithValue("@Identifier", templateIdentifier);
+            var readerForData = commandForData.ExecuteReader();
+            while (readerForData.Read())
+            {
+                var identifier = readerForData[0];
+                int.TryParse(readerForData[1].ToString(), out int key);
+                int.TryParse(readerForData[2].ToString(), out int value);
                 retVal.Add(key, value);
             }
             return retVal;

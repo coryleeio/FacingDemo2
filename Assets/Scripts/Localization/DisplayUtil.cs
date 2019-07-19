@@ -139,7 +139,7 @@ namespace Gamepackage
 
         public static string DisplayValueForAttribute(Attributes attr)
         {
-            if (attr == Attributes.MAX_HEALTH)
+            if (attr == Attributes.MaxHealth)
             {
                 return "attribute.max.health".Localize();
             }
@@ -172,13 +172,13 @@ namespace Gamepackage
 
             retVal.Add(new Tuple<string, string>()
             {
-                Key = DisplayValueForAttribute(Attributes.MAX_HEALTH),
-                Value = string.Format("{0}/{1}", player.CurrentHealth, player.CalculateValueOfAttribute(Attributes.MAX_HEALTH)),
+                Key = DisplayValueForAttribute(Attributes.MaxHealth),
+                Value = string.Format("{0}/{1}", player.CurrentHealth, player.CalculateValueOfAttribute(Attributes.MaxHealth)),
             });
             foreach (var enumVal in Enum.GetValues(typeof(Attributes)))
             {
                 var castVal = (Attributes)enumVal;
-                if (castVal == Attributes.MAX_HEALTH)
+                if (castVal == Attributes.MaxHealth)
                 {
                     continue;
                 }

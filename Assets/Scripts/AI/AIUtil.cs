@@ -48,7 +48,7 @@ namespace Gamepackage
             else
             {
                 entity.LastKnownTargetPosition = new Point(hostileTarget.Position);
-                var shoutRadius = entity.CalculateValueOfAttribute(Attributes.SHOUT_RADIUS);
+                var shoutRadius = entity.CalculateValueOfAttribute(Attributes.ShoutRadius);
                 AIUtil.ShoutAboutHostileTarget(entity, level, hostileTarget, shoutRadius);
             }
             EnqueueBasicAttackOrApproach(entity, item, contexts, hostileTarget);
@@ -137,7 +137,7 @@ namespace Gamepackage
             var entitySystem = Context.EntitySystem;
             var level = Context.Game.CurrentLevel;
             var grid = level.Grid;
-            var points = Context.VisibilitySystem.PlacesVisibleFromLocation(level, entity.Position, entity.CalculateValueOfAttribute(Attributes.VISION_RADIUS));
+            var points = Context.VisibilitySystem.PlacesVisibleFromLocation(level, entity.Position, entity.CalculateValueOfAttribute(Attributes.VisionRadius));
             var targets = new List<Entity>();
             var player = level.Player;
 

@@ -263,7 +263,7 @@ namespace Gamepackage
 
         public bool CanSee(Entity start, Point end)
         {
-            return PlacesVisibleFromLocation(Context.Game.CurrentLevel, start.Position, start.CalculateValueOfAttribute(Attributes.VISION_RADIUS)).Contains(end);
+            return PlacesVisibleFromLocation(Context.Game.CurrentLevel, start.Position, start.CalculateValueOfAttribute(Attributes.VisionRadius)).Contains(end);
         }
 
         public void UpdateVisibility()
@@ -278,7 +278,7 @@ namespace Gamepackage
                 }
             }
 
-            var visiblePoints = PlacesVisibleFromLocation(level, player.Position, player.CalculateValueOfAttribute(Attributes.VISION_RADIUS));
+            var visiblePoints = PlacesVisibleFromLocation(level, player.Position, player.CalculateValueOfAttribute(Attributes.VisionRadius));
             foreach (var tile in visiblePoints)
             {
                 _updatedVisibilityGrid[tile.X, tile.Y] = true;

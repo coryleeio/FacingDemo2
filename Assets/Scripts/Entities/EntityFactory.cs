@@ -38,6 +38,7 @@ namespace Gamepackage
                 entity.Inventory.Items.Add(null);
             }
 
+            entity.Level = template.Level;
             entity.EntityAcquiredTags = new List<string>();
             entity.EntityInnateTags = new List<string>();
             entity.Name = template.NameList.RollAndChooseOne().Localize();
@@ -88,16 +89,17 @@ namespace Gamepackage
 
             if (entity.IsCombatant)
             {
-                Assert.IsTrue(entity.Attributes.ContainsKey(Attributes.SHOUT_RADIUS), "Entities must have a value for SHOUT_RADIUS.");
-                Assert.IsTrue(entity.Attributes.ContainsKey(Attributes.SHOUT_RADIUS), "Entities must have a value for SHOUT_RADIUS.");
-                Assert.IsTrue(entity.Attributes.ContainsKey(Attributes.VISION_RADIUS), "Entities must have a value for VISION_RADIUS.");
-                entity.CurrentHealth = entity.CalculateValueOfAttribute(Attributes.MAX_HEALTH);
+                Assert.IsTrue(entity.Attributes.ContainsKey(Attributes.ShoutRadius), "Entities must have a value for SHOUT_RADIUS.");
+                Assert.IsTrue(entity.Attributes.ContainsKey(Attributes.ShoutRadius), "Entities must have a value for SHOUT_RADIUS.");
+                Assert.IsTrue(entity.Attributes.ContainsKey(Attributes.VisionRadius), "Entities must have a value for VISION_RADIUS.");
+                entity.CurrentHealth = entity.CalculateValueOfAttribute(Attributes.MaxHealth);
             }
 
             entity.Direction = MathUtil.ChooseRandomElement<Direction>(new List<Direction>() { Direction.SouthEast, Direction.SouthWest, Direction.NorthEast, Direction.NorthWest });
             entity.Position = new Point(0, 0);
             entity.ActingTeam = team;
             entity.OriginalTeam = team;
+            entity.Xp = Context.Game.CampaignTemplate.XpForLevel[entity.Level];
             return entity;
         }
     }
