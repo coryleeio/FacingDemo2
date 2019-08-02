@@ -459,11 +459,8 @@ namespace Gamepackage
             // We always use the level.GridWithoutPlayerUnits in the player controller for finding paths
             // because we want to path through our friendly units and automatically swap places with them instead of having to get directly adjacent
             // and click on them
-            Context.PathFinder.StartPath(from, to, level.GridWithoutPlayerUnits, (path) =>
-            {
-                CurrentPath = path;
-                waitingForPath = false;
-            });
+            CurrentPath = Context.PathFinder.FindPath(from, to, level.GridWithoutPlayerUnits);
+            waitingForPath = false;
         }
 
         public void StartAiming(CombatActionType InteractionType, Item item)

@@ -13,10 +13,5 @@ namespace Gamepackage
             Context.UIController.Init();
             Context.UIController.MainMenu.Show();
         }
-
-        public void OnDisable()
-        {
-            Context.PathFinder.Cleanup();
-        }
     }
 }

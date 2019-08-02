@@ -227,12 +227,12 @@ namespace Gamepackage
 
             foreach (var pointAroundTarget in PointsAroundTarget)
             {
-                Context.PathFinder.StartPath(entity.Position, pointAroundTarget, Context.Game.CurrentLevel.Grid, (returnedPath) => { ReceivePath(entity, returnedPath); });
+                ReceivePath(entity, Context.PathFinder.FindPath(entity.Position, pointAroundTarget, Context.Game.CurrentLevel.Grid));
             }
 
             foreach (var pointAroundMe in PointsAroundMe)
             {
-                Context.PathFinder.StartPath(entity.Position, pointAroundMe, Context.Game.CurrentLevel.Grid, (returnedPath) => { ReceivePath(entity, returnedPath); });
+                ReceivePath(entity, Context.PathFinder.FindPath(entity.Position, pointAroundMe, Context.Game.CurrentLevel.Grid));
             }
 
             while (entity.NextAction == null)

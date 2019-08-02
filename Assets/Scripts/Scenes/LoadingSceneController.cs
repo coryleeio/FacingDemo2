@@ -35,10 +35,5 @@ namespace Gamepackage
         {
 
         }
-
-        public void OnDisable()
-        {
-            Context.PathFinder.Cleanup();
-        }
     }
 }

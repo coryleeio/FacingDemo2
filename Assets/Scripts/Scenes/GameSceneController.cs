@@ -41,7 +41,7 @@ namespace Gamepackage
             Context.SpriteSortingSystem.Init();
             Context.VisibilitySystem.Init();
             Context.OverlaySystem.Init(Context.Game.CurrentLevel.Grid.Width, Context.Game.CurrentLevel.Grid.Height);
-            Context.PathFinder.Init(DiagonalOptions.NoDiagonals, 5);
+            Context.PathFinder.Init(DiagonalOptions.NoDiagonals);
             Context.FlowSystem.Init();
             Context.PlayerController.Init();
             CameraDriver = GetCamera();
@@ -69,10 +69,6 @@ namespace Gamepackage
                     Context.OverlaySystem.Process();
                     Profiler.EndSample();
 
-                    Profiler.BeginSample("PathFinder");
-                    Context.PathFinder.Process();
-                    Profiler.EndSample();
-
                     Profiler.BeginSample("FlowSystem");
                     Context.FlowSystem.Process();
                     Profiler.EndSample();
@@ -87,8 +83,6 @@ namespace Gamepackage
         {
             Context.OverlaySystem.Clear();
             Context.VisibilitySystem.Clear();
-            Context.PathFinder.Cleanup();
-            Context.PathFinder.Cleanup();
             Context.UIController = null;
         }
 
