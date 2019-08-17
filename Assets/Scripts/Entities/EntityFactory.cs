@@ -29,7 +29,7 @@ namespace Gamepackage
         {
             var entity = new Entity();
             Assert.IsTrue(template != null, "Could not find template: " + template);
-            entity.RaceTemplateIdentifier = template.RaceIdentifier;
+            entity.EntityTypeTemplateIdentifier = template.EntityTypeIdentifier;
             entity.Inventory = new Inventory();
             // Ensure correct default size - doing this in Inventory causes
             // serialization issues
@@ -42,17 +42,17 @@ namespace Gamepackage
             entity.EntityAcquiredTags = new List<string>();
             entity.EntityInnateTags = new List<string>();
             entity.Name = template.NameList.RollAndChooseOne().Localize();
-            entity.IsCombatant = entity.Race.IsCombatant;
-            entity.DefaultAttackItem = ItemFactory.Build(entity.Race.DefaultWeaponIdentifier);
+            entity.IsCombatant = entity.EntityType.IsCombatant;
+            entity.DefaultAttackItem = ItemFactory.Build(entity.EntityType.DefaultWeaponIdentifier);
             entity.Attributes = new Dictionary<Attributes, int>();
 
-            foreach (var pair in entity.Race.TemplateAttributes)
+            foreach (var pair in entity.EntityType.TemplateAttributes)
             {
                 entity.Attributes.Add(pair.Key, pair.Value);
             }
-            entity.BlocksPathing = entity.Race.BlocksPathing;
+            entity.BlocksPathing = entity.EntityType.BlocksPathing;
 
-            var viewIdentifier = entity.Race.DefaultViewTemplateIdentifier;
+            var viewIdentifier = entity.EntityType.DefaultViewTemplateIdentifier;
             if (template.ViewTemplateIdentifierOverride != null && template.ViewTemplateIdentifierOverride != "")
             {
                 viewIdentifier = template.ViewTemplateIdentifierOverride;
@@ -68,14 +68,14 @@ namespace Gamepackage
                 entity.ViewTemplateIdentifier = viewIdentifier;
             }
 
-            entity.AIClassName = entity.Race.DefaultAIClassName;
-            entity.Floating = entity.Race.isFloating == FloatingState.IsFloating;
-            entity.CastsShadow = entity.Race.CastsShadow == ShadowCastState.CastsShadow;
-            entity.AlwaysVisible = entity.Race.IsAlwaysVisible;
+            entity.AIClassName = entity.EntityType.DefaultAIClassName;
+            entity.Floating = entity.EntityType.isFloating == FloatingState.IsFloating;
+            entity.CastsShadow = entity.EntityType.CastsShadow == ShadowCastState.CastsShadow;
+            entity.AlwaysVisible = entity.EntityType.IsAlwaysVisible;
 
-            if (entity.Race.Trigger != null && entity.Race.Trigger != "")
+            if (entity.EntityType.Trigger != null && entity.EntityType.Trigger != "")
             {
-                entity.Trigger = TriggerFactory.Build(entity.Race.Trigger);
+                entity.Trigger = TriggerFactory.Build(entity.EntityType.Trigger);
             }
             foreach (var table in template.EquipmentTables)
             {

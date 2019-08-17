@@ -24,6 +24,6 @@ CREATE TABLE "Triggers_CombatActionParameters" (
 	"InteractionProperties"	TEXT
 );
 
-INSERT INTO "Triggers"                                 VALUES ( "TRIGGER_CHANGE_LEVEL_ON_PRESS", "SingleSquare", "Press", "traverse.staircase", "Gamepackage.ChangeLevel");
+INSERT INTO "Triggers"                         VALUES ( "TRIGGER_CHANGE_LEVEL_ON_PRESS", "SingleSquare", "Press", "traverse.staircase", "Gamepackage.ChangeLevel");
 INSERT INTO "Triggers"                         VALUES ( "TRIGGER_LOOTABLE", "SingleSquare", "Press", "show.loot.message", "Gamepackage.LootEntitiesInPosition");
 COMMIT;

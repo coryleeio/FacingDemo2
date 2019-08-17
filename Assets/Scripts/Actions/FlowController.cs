@@ -270,7 +270,7 @@ namespace Gamepackage
 
         public bool ActsInPhase(Entity entity)
         {
-            var canAct = entity.IsCombatant && !entity.IsDead && entity.IsCombatant;
+            var canAct = entity.IsCombatant && !entity.IsDead;
             return canAct && (entity.ActingTeam == CurrentlyActingTeam);
         }
     }

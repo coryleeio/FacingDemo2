@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public class RaceTemplate
+    public class EntityTypeTemplate
     {
         public string Identifier;
         public string Name;

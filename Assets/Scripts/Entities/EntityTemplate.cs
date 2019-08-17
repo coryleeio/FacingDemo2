@@ -9,7 +9,7 @@ namespace Gamepackage
         public string ViewTemplateIdentifierOverride;
         public List<string> EquipmentTables;
         public List<string> InventoryTables;
-        public string RaceIdentifier;
+        public string EntityTypeIdentifier;
         public int Level;
     }
 }

@@ -10,13 +10,13 @@ namespace Gamepackage
     [Serializable]
     public class Entity
     {
-        public string RaceTemplateIdentifier { get; set; }
+        public string EntityTypeTemplateIdentifier { get; set; }
         [JsonIgnore]
-        public RaceTemplate Race
+        public EntityTypeTemplate EntityType
         {
             get
             {
-                return Context.ResourceManager.Load<RaceTemplate>(RaceTemplateIdentifier);
+                return Context.ResourceManager.Load<EntityTypeTemplate>(EntityTypeTemplateIdentifier);
             }
         }
 

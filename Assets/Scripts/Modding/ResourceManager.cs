@@ -97,37 +97,37 @@ namespace Gamepackage
             CacheResources(LoadProbabilityTables(sqlConnection, "ViewTables", "ViewTables_Parcels", "ViewTables_ParcelEntries"));
 
             CacheResources(LoadItemTemplates(sqlConnection));
-            CacheResources(LoadRaceTemplates(sqlConnection));
+            CacheResources(LoadEntityTypes(sqlConnection));
             CacheResources(LoadEntityTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
         }
 
-        private Dictionary<string, RaceTemplate> LoadRaceTemplates(SqliteConnection sqlConnection)
+        private Dictionary<string, EntityTypeTemplate> LoadEntityTypes(SqliteConnection sqlConnection)
         {
-            var sql = "select * from Races";
+            var sql = "select * from EntityTypes";
             var sqlCommand = new SqliteCommand(sql, sqlConnection);
             var reader = sqlCommand.ExecuteReader();
 
-            var aggregate = new Dictionary<string, RaceTemplate>();
+            var aggregate = new Dictionary<string, EntityTypeTemplate>();
             while (reader.Read())
             {
-                var raceTemplate = new RaceTemplate();
-                raceTemplate.Identifier = reader[0].ToString();
+                var entityTypeTemplate = new EntityTypeTemplate();
+                entityTypeTemplate.Identifier = reader[0].ToString();
 
-                raceTemplate.Name = reader[1].ToString();
-                raceTemplate.IsCombatant = ParseBoolFromIntString(reader[2].ToString());
-                raceTemplate.DefaultWeaponIdentifier = reader[3].ToString();
-                raceTemplate.BlocksPathing = ParseBoolFromIntString(reader[4].ToString());
-                raceTemplate.DefaultViewTemplateIdentifier = reader[5].ToString();
-                raceTemplate.DefaultAIClassName = reader[6].ToString();
-                raceTemplate.IsAlwaysVisible = ParseBoolFromIntString(reader[7].ToString());
-                raceTemplate.Trigger = reader[8].ToString();
+                entityTypeTemplate.Name = reader[1].ToString();
+                entityTypeTemplate.IsCombatant = ParseBoolFromIntString(reader[2].ToString());
+                entityTypeTemplate.DefaultWeaponIdentifier = reader[3].ToString();
+                entityTypeTemplate.BlocksPathing = ParseBoolFromIntString(reader[4].ToString());
+                entityTypeTemplate.DefaultViewTemplateIdentifier = reader[5].ToString();
+                entityTypeTemplate.DefaultAIClassName = reader[6].ToString();
+                entityTypeTemplate.IsAlwaysVisible = ParseBoolFromIntString(reader[7].ToString());
+                entityTypeTemplate.Trigger = reader[8].ToString();
 
-                raceTemplate.isFloating = (FloatingState)Enum.Parse(typeof(FloatingState), reader[9].ToString(), true);
-                raceTemplate.CastsShadow = (ShadowCastState)Enum.Parse(typeof(ShadowCastState), reader[10].ToString(), true);
+                entityTypeTemplate.isFloating = (FloatingState)Enum.Parse(typeof(FloatingState), reader[9].ToString(), true);
+                entityTypeTemplate.CastsShadow = (ShadowCastState)Enum.Parse(typeof(ShadowCastState), reader[10].ToString(), true);
 
-                raceTemplate.TemplateAttributes = ParseAttributesDictFromTable(sqlConnection, raceTemplate.Identifier, "Races_Attributes");
-                aggregate.Add(raceTemplate.Identifier, raceTemplate);
+                entityTypeTemplate.TemplateAttributes = ParseAttributesDictFromTable(sqlConnection, entityTypeTemplate.Identifier, "EntityTypes_Attributes");
+                aggregate.Add(entityTypeTemplate.Identifier, entityTypeTemplate);
             }
             return aggregate;
         }
@@ -155,8 +155,8 @@ namespace Gamepackage
                     entityTemplate.NameList = ProbabilityTable.ForSingleValue(nameListStr);
                 }
 
-                entityTemplate.RaceIdentifier = reader[2].ToString();
-                Assert.IsTrue(this.Contains<RaceTemplate>(entityTemplate.RaceIdentifier), "Could not find race: " + entityTemplate.RaceIdentifier);
+                entityTemplate.EntityTypeIdentifier = reader[2].ToString();
+                Assert.IsTrue(this.Contains<EntityTypeTemplate>(entityTemplate.EntityTypeIdentifier), "Could not find entityTypeTemplate: " + entityTemplate.EntityTypeIdentifier);
                 int.TryParse(reader[3].ToString(), out int level);
                 entityTemplate.Level = level;
                 entityTemplate.ViewTemplateIdentifierOverride = reader[4].ToString();
