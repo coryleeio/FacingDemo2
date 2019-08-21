@@ -5,6 +5,10 @@ namespace Gamepackage
     public class Skill
     {
         public string SkillIdentifier;
+        public int Rank;
+        public int Xp;
+        public bool Exercised;
+        public int ExercisedUntilTurn;
 
         [JsonIgnore]
         public SkillTemplate Template

@@ -12,6 +12,13 @@ CREATE TABLE IF NOT EXISTS "Campaigns_XpForLevel" (
     "XpNeeded"    INTEGER
 );
 
+DROP TABLE IF EXISTS "Campaigns_XpForSkillRank";
+CREATE TABLE IF NOT EXISTS "Campaigns_XpForSkillRank" (
+    "Identifier"    TEXT,
+    "Level"    INTEGER,
+    "XpNeeded"    INTEGER
+);
+
 DROP TABLE IF EXISTS "Campaigns_XpAwardedForKillingEntityOfLevel";
 CREATE TABLE IF NOT EXISTS "Campaigns_XpAwardedForKillingEntityOfLevel" (
     "Identifier"    TEXT,
@@ -40,6 +47,18 @@ INSERT INTO "Campaigns_XpForLevel" VALUES ('CAMPAIGN_CORE',8, 12600);
 INSERT INTO "Campaigns_XpForLevel" VALUES ('CAMPAIGN_CORE',9, 25200);
 INSERT INTO "Campaigns_XpForLevel" VALUES ('CAMPAIGN_CORE',10, 50400);
 
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',0, 0);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',1, 0);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',2, 200);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',3, 400);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',4, 800);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',5, 1600);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',6, 3200);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',7, 6400);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',8, 12600);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',9, 25200);
+INSERT INTO "Campaigns_XpForSkillRank" VALUES ('CAMPAIGN_CORE',10, 50400);
+
 INSERT INTO "Campaigns_XpAwardedForKillingEntityOfLevel" VALUES ('CAMPAIGN_CORE',0, 0);
 INSERT INTO "Campaigns_XpAwardedForKillingEntityOfLevel" VALUES ('CAMPAIGN_CORE',1, 10);
 INSERT INTO "Campaigns_XpAwardedForKillingEntityOfLevel" VALUES ('CAMPAIGN_CORE',2, 20);
@@ -53,6 +72,7 @@ INSERT INTO "Campaigns_XpAwardedForKillingEntityOfLevel" VALUES ('CAMPAIGN_CORE'
 INSERT INTO "Campaigns_XpAwardedForKillingEntityOfLevel" VALUES ('CAMPAIGN_CORE',10, 5040);
 
 INSERT INTO "Campaigns_Settings" VALUES ('CAMPAIGN_CORE','MaxLevel', 10);
+INSERT INTO "Campaigns_Settings" VALUES ('CAMPAIGN_CORE','MaxSkillRank', 10);
 INSERT INTO "Campaigns_Settings" VALUES ('CAMPAIGN_CORE','GlobalXpModifier', "1.0");
 
 COMMIT;

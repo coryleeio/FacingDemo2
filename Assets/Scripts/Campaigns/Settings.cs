@@ -4,5 +4,6 @@
     {
         MaxLevel,
         GlobalXpModifier,
+        MaxSkillRank,
     }
 }

@@ -24,6 +24,10 @@ namespace Gamepackage
             var skill = new Skill()
             {
                 SkillIdentifier = uniqueIdentifier,
+                Exercised = false,
+                ExercisedUntilTurn = 0,
+                Rank = 1,
+                Xp = 0,
             };
             return skill;
         }

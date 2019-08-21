@@ -411,6 +411,7 @@ namespace Gamepackage
                 campaignTemplate.Identifier = reader[0].ToString();
                 campaignTemplate.RulesEngineClassName = reader[1].ToString();
                 campaignTemplate.XpForLevel = ParseIntToIntDict(sqlConnection, campaignTemplate.Identifier, "Campaigns_XpForLevel");
+                campaignTemplate.XpForSkillRank = ParseIntToIntDict(sqlConnection, campaignTemplate.Identifier, "Campaigns_XpForSkillRank");
                 campaignTemplate.Settings = ParseStringToStringDict(sqlConnection, campaignTemplate.Identifier, "Campaigns_Settings");
                 campaignTemplate.XpAwardedForKillingEntityOfLevel = ParseIntToIntDict(sqlConnection, campaignTemplate.Identifier, "Campaigns_XpAwardedForKillingEntityOfLevel");
                 aggregate.Add(campaignTemplate.Identifier, campaignTemplate);

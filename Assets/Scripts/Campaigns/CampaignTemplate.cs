@@ -8,6 +8,7 @@ namespace Gamepackage
         public string RulesEngineClassName;
         public Dictionary<string, string> Settings;
         public Dictionary<int, int> XpForLevel;
+        public Dictionary<int, int> XpForSkillRank;
         public Dictionary<int, int> XpAwardedForKillingEntityOfLevel;
     }
 }
