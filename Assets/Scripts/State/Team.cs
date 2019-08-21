@@ -5,6 +5,6 @@
         EnemyOfAll,
         Enemy,
         Neutral,
-        PLAYER,
+        Player,
     }
 }

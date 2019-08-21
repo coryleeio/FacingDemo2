@@ -9,11 +9,11 @@ namespace Gamepackage
     public class FlowController
     {
         public LinkedList<FlowStep> Steps = new LinkedList<FlowStep>();
-        public Team CurrentlyActingTeam = Team.PLAYER; // always start on player when changing scenes
+        public Team CurrentlyActingTeam = Team.Player; // always start on player when changing scenes
 
         public void Init()
         {
-            ChangeCurrentlyActingTeam(Team.PLAYER); // always start on player when changing scenes
+            ChangeCurrentlyActingTeam(Team.Player); // always start on player when changing scenes
         }
 
         public void Process()

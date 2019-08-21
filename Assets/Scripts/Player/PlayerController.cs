@@ -197,7 +197,7 @@ namespace Gamepackage
                     {
                         tileContainsEnemy = true;
                     }
-                    if (entity.IsCombatant && entity.ActingTeam == Team.PLAYER && !entity.IsPlayer)
+                    if (entity.IsCombatant && entity.ActingTeam == Team.Player && !entity.IsPlayer)
                     {
                         hoverContainsAlly = true;
                     }
@@ -252,7 +252,7 @@ namespace Gamepackage
                 return;
             }
 
-            if (ActionList.Count > 0 && player.NextAction == null && Context.FlowSystem.CurrentlyActingTeam == Team.PLAYER)
+            if (ActionList.Count > 0 && player.NextAction == null && Context.FlowSystem.CurrentlyActingTeam == Team.Player)
             {
                 var nextAction = ActionList.Dequeue();
 
@@ -266,7 +266,7 @@ namespace Gamepackage
                         Entity adjacentFriendlyBlocker = null;
                         foreach (var occupant in occupants)
                         {
-                            if (occupant.IsCombatant && occupant.ActingTeam == Team.PLAYER && !occupant.IsPlayer && occupant.BlocksPathing)
+                            if (occupant.IsCombatant && occupant.ActingTeam == Team.Player && !occupant.IsPlayer && occupant.BlocksPathing)
                             {
                                 adjacentFriendlyBlocker = occupant;
                                 break;

@@ -23,7 +23,7 @@ namespace Gamepackage
             {
                 return Color.red;
             }
-            else if (team == Team.Neutral || (team == Team.PLAYER && !isPlayer))
+            else if (team == Team.Neutral || (team == Team.Player && !isPlayer))
             {
                 return Color.blue;
             }

@@ -48,10 +48,18 @@ namespace Gamepackage
         public int CalculateDamage(CombatActionParameters attackParameters)
         {
             var ret = 0;
+
+            if (attackParameters.BaseDamage == 0 || attackParameters.ClusteringFactor == 0)
+            {
+                return 0;
+            }
+
             for (var numDyeRolled = 0; numDyeRolled < attackParameters.ClusteringFactor; numDyeRolled++)
             {
-                ret = UnityEngine.Random.Range(1, attackParameters.BaseDamage + 1);
+                ret = UnityEngine.Random.Range(1, attackParameters.BaseDamage);
             }
+
+            ret /= attackParameters.ClusteringFactor;
 
             if (attackParameters.DamageType == DamageTypes.HEALING)
             {

@@ -74,7 +74,7 @@ namespace Gamepackage
             }
 
             ConnectLevelsByStairway(levels[0], levels[1]);
-            var playerSpawn = SpawnOnLevel("ENTITY_PONCY", levels[0], Team.PLAYER);
+            var playerSpawn = SpawnOnLevel("ENTITY_PONCY", levels[0], Team.Player);
             playerSpawn.IsPlayer = true;
             playerSpawn.AlwaysVisible = true;
             playerSpawn.AI = null;
@@ -85,7 +85,7 @@ namespace Gamepackage
                 Position = new Point(playerPos.X - 2, playerPos.Y - 2),
                 Height = 4,
                 Width = 4,
-            }, Team.PLAYER);
+            }, Team.Player);
             BuildPathfindingGrid(Context.Game);
         }
 
@@ -236,7 +236,7 @@ namespace Gamepackage
 
                 level.GridWithoutPlayerUnits.Each((x, y, v) =>
                 {
-                    var occupiedByNonFriendly = level.Grid[x, y].EntitiesInPosition.FindAll((entity) => { return entity.BlocksPathing && entity.IsCombatant && entity.ActingTeam != Team.PLAYER; }).Count > 0;
+                    var occupiedByNonFriendly = level.Grid[x, y].EntitiesInPosition.FindAll((entity) => { return entity.BlocksPathing && entity.IsCombatant && entity.ActingTeam != Team.Player; }).Count > 0;
                     v.Walkable = level.Grid[x, y].TileType == TileType.Floor && !occupiedByNonFriendly;
                     v.Weight = 1;
                 });

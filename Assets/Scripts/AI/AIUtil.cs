@@ -154,7 +154,7 @@ namespace Gamepackage
                     {
                         continue;
                     }
-                    if (entity.ActingTeam == Team.PLAYER)
+                    if (entity.ActingTeam == Team.Player)
                     {
                         // If I am a member of the player's team - search for enemies.
                         if (entityInPos.IsCombatant && (entityInPos.ActingTeam == Team.Enemy || entityInPos.ActingTeam == Team.EnemyOfAll))
@@ -165,7 +165,7 @@ namespace Gamepackage
                     else if (entity.ActingTeam == Team.Enemy)
                     {
                         // If I am a member of the enemy's team - search for enemies
-                        if (entityInPos.IsCombatant && (entityInPos.ActingTeam == Team.PLAYER || entityInPos.ActingTeam == Team.EnemyOfAll))
+                        if (entityInPos.IsCombatant && (entityInPos.ActingTeam == Team.Player || entityInPos.ActingTeam == Team.EnemyOfAll))
                         {
                             targets.Add(entityInPos);
                         }
@@ -252,7 +252,7 @@ namespace Gamepackage
 
         public static void EnqueueDefaultBehaviour(Entity entity)
         {
-            if (entity.ActingTeam == Team.PLAYER)
+            if (entity.ActingTeam == Team.Player)
             {
                 // Default for allies is follow player
                 var player = Context.Game.CurrentLevel.Player;
