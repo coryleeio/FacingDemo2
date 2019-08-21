@@ -103,7 +103,7 @@ namespace Gamepackage
             }
         }
 
-        public static CalculatedCombatAction CalculateSimpleDamage(Entity target, string i18nString, int damage, DamageTypes damageType)
+        public static CalculatedCombatAction CalculateSimpleDamage(Entity target, string i18nString, int baseDamage, DamageTypes damageType)
         {
             var resolved = new ResolvedCombatActionDescriptor()
             {
@@ -112,7 +112,7 @@ namespace Gamepackage
                     Range = 1,
                     AttackMessagePrefix = i18nString,
                     ClusteringFactor = 1,
-                    Damage = damage,
+                    BaseDamage = baseDamage,
                     DamageType = damageType,
                     ProjectileAppearanceIdentifier = "PROJECTILE_APPEARANCE_NONE",
                     NumberOfTargetsToPierce = 1,

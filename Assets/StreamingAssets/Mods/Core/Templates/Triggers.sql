@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS "Triggers_CombatActionParameters";
 CREATE TABLE "Triggers_CombatActionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"Damage"	INTEGER,
+	"BaseDamage"	INTEGER,
 	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,

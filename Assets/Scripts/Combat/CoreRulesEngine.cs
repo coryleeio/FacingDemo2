@@ -50,7 +50,7 @@ namespace Gamepackage
             var ret = 0;
             for (var numDyeRolled = 0; numDyeRolled < attackParameters.ClusteringFactor; numDyeRolled++)
             {
-                ret = UnityEngine.Random.Range(1, attackParameters.Damage + 1);
+                ret = UnityEngine.Random.Range(1, attackParameters.BaseDamage + 1);
             }
 
             if (attackParameters.DamageType == DamageTypes.HEALING)

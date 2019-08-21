@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS "Enchantments_CombatActionParameters";
 CREATE TABLE "Enchantments_CombatActionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"Damage"	INTEGER,
+	"BaseDamage"	INTEGER,
 	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS "Enchantments_ExplosionParameters";
 CREATE TABLE "Enchantments_ExplosionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"Damage"	INTEGER,
+	"BaseDamage"	INTEGER,
 	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,

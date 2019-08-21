@@ -6,7 +6,7 @@ namespace Gamepackage
     // Describes what happens when you use an item, or your body with a certain interaction type.
     public class CombatActionParameters
     {
-        public int Damage;
+        public int BaseDamage;
         public int ClusteringFactor;
         public DamageTypes DamageType;
         public string AttackMessagePrefix;
@@ -24,7 +24,7 @@ namespace Gamepackage
 
         public CombatActionParameters(CombatActionParameters inp)
         {
-            Damage = inp.Damage;
+            BaseDamage = inp.BaseDamage;
             ClusteringFactor = inp.ClusteringFactor;
             DamageType = inp.DamageType;
             AttackMessagePrefix = inp.AttackMessagePrefix;

@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS "Items_CombatActionParameters";
 CREATE TABLE "Items_CombatActionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"Damage"	INTEGER,
+	"BaseDamage"	INTEGER,
 	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
@@ -56,7 +56,7 @@ DROP TABLE IF EXISTS "Items_ExplosionParameters";
 CREATE TABLE "Items_ExplosionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"Damage"	INTEGER,
+	"BaseDamage"	INTEGER,
 	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
