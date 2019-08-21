@@ -88,6 +88,7 @@ namespace Gamepackage
             CacheResources(LoadTriggerTemplates(sqlConnection));
             CacheResources(LoadEffectTemplates(sqlConnection));
             CacheResources(ProjectileAppearances.LoadAll());
+            CacheResources(LoadSkillTemplates(sqlConnection));
             CacheResources(LoadEnchantmentTemplates(sqlConnection));
 
             CacheResources(LoadProbabilityTables(sqlConnection, "Items_EnchantmentTables", "Items_EnchantmentTables_Parcels", "Items_EnchantmentTables_ParcelEntries"));
@@ -327,6 +328,22 @@ namespace Gamepackage
 
             }
             return retVal;
+        }
+
+        private Dictionary<string, SkillTemplate> LoadSkillTemplates(SqliteConnection sqlConnection)
+        {
+            var sql = "select * from Skills";
+            var sqlCommand = new SqliteCommand(sql, sqlConnection);
+            var reader = sqlCommand.ExecuteReader();
+
+            var aggregate = new Dictionary<string, SkillTemplate>();
+            while (reader.Read())
+            {
+                var skillTemplate = new SkillTemplate();
+                skillTemplate.Identifier = reader[0].ToString();
+                aggregate.Add(skillTemplate.Identifier, skillTemplate);
+            }
+            return aggregate;
         }
 
         private Dictionary<string, EnchantmentTemplate> LoadEnchantmentTemplates(SqliteConnection sqlConnection)
