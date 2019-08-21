@@ -6,5 +6,6 @@
         float CalculateToHitPercentage(CalculatedCombatAction action, Entity Target);
         float CalculateDodgePercentageForDodgeableAttacks(Entity Target);
         int CalculateXpForKill(EntityStateChange action, Entity target);
+        int CalculateDamage(CombatActionParameters attackParameters);
     }
 }

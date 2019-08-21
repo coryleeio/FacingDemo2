@@ -193,7 +193,7 @@ namespace Gamepackage
                 calculatedAttack.AttackStateChanges.Add(attackStateChange);
                 if (calculatedAttack.ResolvedCombatActionParameters.CombatActionParameters != null)
                 {
-                    CalculateDamageForCombatActionParameters(attackStateChange.CombatActionParameters, attackStateChange);
+                    attackStateChange.HealthChange = Context.RulesEngine.CalculateDamage(attackStateChange.CombatActionParameters);
                 }
                 CombatUtil.CalculateAffectOutgoingAttack(calculatedAttack, attackStateChange);
                 CombatUtil.CalculateAffectIncomingAttackEffects(calculatedAttack, attackStateChange);
@@ -399,7 +399,7 @@ namespace Gamepackage
                                     CombatActionParameters = explosionParams,
                                     Target = entityInPosition,
                                 };
-                                CalculateDamageForCombatActionParameters(explosionParams, entityStateChange);
+                                entityStateChange.HealthChange = Context.RulesEngine.CalculateDamage(explosionParams);
                                 if (calculatedAttack.Item != null)
                                 {
                                     var item = calculatedAttack.Item;
@@ -413,19 +413,6 @@ namespace Gamepackage
                     }
 
                 }
-            }
-        }
-
-        private static void CalculateDamageForCombatActionParameters(CombatActionParameters attackParameters, EntityStateChange attackStateChange)
-        {
-            for (var numDyeRolled = 0; numDyeRolled < attackParameters.ClusteringFactor; numDyeRolled++)
-            {
-                attackStateChange.HealthChange += UnityEngine.Random.Range(1, attackParameters.Damage + 1);
-            }
-
-            if (attackParameters.DamageType == DamageTypes.HEALING)
-            {
-                attackStateChange.HealthChange *= -1;
             }
         }
 
