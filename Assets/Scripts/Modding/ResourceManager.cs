@@ -556,11 +556,11 @@ namespace Gamepackage
                 var identifier = readerForData[0].ToString();
                 var interactionType = (CombatActionType)Enum.Parse(typeof(CombatActionType), readerForData[1].ToString(), true);
                 Assert.AreNotEqual(CombatActionType.NotSet, interactionType);
-                int.TryParse(readerForData[2].ToString(), out int DyeSize);
-                interactionParameters.DyeSize = DyeSize;
+                int.TryParse(readerForData[2].ToString(), out int Damage);
+                interactionParameters.Damage = Damage;
 
-                int.TryParse(readerForData[3].ToString(), out int DyeNumber);
-                interactionParameters.DyeNumber = DyeNumber;
+                int.TryParse(readerForData[3].ToString(), out int ClusteringFactor);
+                interactionParameters.ClusteringFactor = ClusteringFactor;
 
                 var damageType = (DamageTypes)Enum.Parse(typeof(DamageTypes), readerForData[4].ToString(), true);
                 Assert.AreNotEqual(DamageTypes.NOT_SET, damageType);

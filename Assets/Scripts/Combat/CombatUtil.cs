@@ -111,8 +111,8 @@ namespace Gamepackage
                 {
                     Range = 1,
                     AttackMessagePrefix = i18nString,
-                    DyeNumber = 1,
-                    DyeSize = damage,
+                    ClusteringFactor = 1,
+                    Damage = damage,
                     DamageType = damageType,
                     ProjectileAppearanceIdentifier = "PROJECTILE_APPEARANCE_NONE",
                     NumberOfTargetsToPierce = 1,
@@ -418,9 +418,9 @@ namespace Gamepackage
 
         private static void CalculateDamageForCombatActionParameters(CombatActionParameters attackParameters, EntityStateChange attackStateChange)
         {
-            for (var numDyeRolled = 0; numDyeRolled < attackParameters.DyeNumber; numDyeRolled++)
+            for (var numDyeRolled = 0; numDyeRolled < attackParameters.ClusteringFactor; numDyeRolled++)
             {
-                attackStateChange.HealthChange += UnityEngine.Random.Range(1, attackParameters.DyeSize + 1);
+                attackStateChange.HealthChange += UnityEngine.Random.Range(1, attackParameters.Damage + 1);
             }
 
             if (attackParameters.DamageType == DamageTypes.HEALING)

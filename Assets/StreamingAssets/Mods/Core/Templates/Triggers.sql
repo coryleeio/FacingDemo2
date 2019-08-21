@@ -13,8 +13,8 @@ DROP TABLE IF EXISTS "Triggers_CombatActionParameters";
 CREATE TABLE "Triggers_CombatActionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"DyeSize"	INTEGER,
-	"DyeNumber"	INTEGER,
+	"Damage"	INTEGER,
+	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,

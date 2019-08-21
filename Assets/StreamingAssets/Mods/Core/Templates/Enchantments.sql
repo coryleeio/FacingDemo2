@@ -12,8 +12,8 @@ DROP TABLE IF EXISTS "Enchantments_CombatActionParameters";
 CREATE TABLE "Enchantments_CombatActionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"DyeSize"	INTEGER,
-	"DyeNumber"	INTEGER,
+	"Damage"	INTEGER,
+	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,
@@ -27,8 +27,8 @@ DROP TABLE IF EXISTS "Enchantments_ExplosionParameters";
 CREATE TABLE "Enchantments_ExplosionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"DyeSize"	INTEGER,
-	"DyeNumber"	INTEGER,
+	"Damage"	INTEGER,
+	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,

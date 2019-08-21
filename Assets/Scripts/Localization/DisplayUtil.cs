@@ -134,7 +134,7 @@ namespace Gamepackage
 
         public static string DisplayValueForCombatActionParameters(CombatActionParameters param)
         {
-            return string.Format("{0}-{1}", param.DyeNumber, param.DyeNumber);
+            return string.Format("{0}-{1}", param.ClusteringFactor, param.ClusteringFactor);
         }
 
         public static string DisplayValueForAttribute(Attributes attr)

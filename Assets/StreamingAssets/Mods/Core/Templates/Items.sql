@@ -41,8 +41,8 @@ DROP TABLE IF EXISTS "Items_CombatActionParameters";
 CREATE TABLE "Items_CombatActionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"DyeSize"	INTEGER,
-	"DyeNumber"	INTEGER,
+	"Damage"	INTEGER,
+	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,
@@ -56,8 +56,8 @@ DROP TABLE IF EXISTS "Items_ExplosionParameters";
 CREATE TABLE "Items_ExplosionParameters" (
 	"Identifier"	TEXT,
 	"InteractionType"	TEXT,
-	"DyeSize"	INTEGER,
-	"DyeNumber"	INTEGER,
+	"Damage"	INTEGER,
+	"ClusteringFactor"	INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,

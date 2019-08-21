@@ -6,8 +6,8 @@ namespace Gamepackage
     // Describes what happens when you use an item, or your body with a certain interaction type.
     public class CombatActionParameters
     {
-        public int DyeSize;
-        public int DyeNumber;
+        public int Damage;
+        public int ClusteringFactor;
         public DamageTypes DamageType;
         public string AttackMessagePrefix;
         public int Range;
@@ -24,8 +24,8 @@ namespace Gamepackage
 
         public CombatActionParameters(CombatActionParameters inp)
         {
-            DyeSize = inp.DyeSize;
-            DyeNumber = inp.DyeNumber;
+            Damage = inp.Damage;
+            ClusteringFactor = inp.ClusteringFactor;
             DamageType = inp.DamageType;
             AttackMessagePrefix = inp.AttackMessagePrefix;
             Range = inp.Range;
