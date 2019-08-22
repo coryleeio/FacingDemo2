@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS "Entities_EquipmentTables" (
     "Identifier"    TEXT,
     "Table"   TEXT
 );
+
 DROP TABLE IF EXISTS "Entities_InventoryTables";
 CREATE TABLE IF NOT EXISTS "Entities_InventoryTables" (
     "Identifier"    TEXT,

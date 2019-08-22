@@ -341,6 +341,16 @@ namespace Gamepackage
             {
                 var skillTemplate = new SkillTemplate();
                 skillTemplate.Identifier = reader[0].ToString();
+                skillTemplate.Name = reader[1].ToString();
+
+                var spriteStr = reader[2].ToString();
+                var sprite = LoadUnityResource<Sprite>(spriteStr);
+                skillTemplate.Sprite = sprite;
+                if (skillTemplate.Sprite == null)
+                {
+                    Debug.LogWarning("Failed to resolve UISprite for " + spriteStr + " for Skill: " + skillTemplate.Identifier);
+                }
+
                 aggregate.Add(skillTemplate.Identifier, skillTemplate);
             }
             return aggregate;
