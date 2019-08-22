@@ -20,7 +20,11 @@ CREATE TABLE "Enchantments_CombatActionParameters" (
 	"NumberOfTargetsToPierce"	INTEGER,
 	"TargetingType"	TEXT,
 	"ProjectileAppearanceIdentifier"	TEXT,
-	"InteractionProperties"	TEXT
+	"AccuracyFormula" 		TEXT,
+	"BlockChanceFormula" 	TEXT,
+	"DodgeChanceFormula" 	TEXT,
+	"FailureFormula" 		TEXT,
+	"DamageFormula" 		TEXT
 );
 
 DROP TABLE IF EXISTS "Enchantments_ExplosionParameters";
@@ -35,7 +39,11 @@ CREATE TABLE "Enchantments_ExplosionParameters" (
 	"NumberOfTargetsToPierce"	INTEGER,
 	"TargetingType"	TEXT,
 	"ProjectileAppearanceIdentifier"	TEXT,
-	"InteractionProperties"	TEXT
+	"AccuracyFormula" 		TEXT,
+	"BlockChanceFormula" 	TEXT,
+	"DodgeChanceFormula" 	TEXT,
+	"FailureFormula" 		TEXT,
+	"DamageFormula" 		TEXT
 );
 
 DROP TABLE IF EXISTS "Enchantments_ActionCosts";
@@ -59,23 +67,23 @@ CREATE TABLE IF NOT EXISTS "Enchantments_WornEffects" (
 );
 
 INSERT INTO "Enchantments"           				VALUES ('ENCHANTMENT_DOMINATION', 'name.modifier.enchantment.domination', 200, 200);
-INSERT INTO "Enchantments_CombatActionParameters"   VALUES ('ENCHANTMENT_DOMINATION', 'Zapped', 0, 0, 'NEGATIVE', '', 5, 1, 'SelectTarget', 'PROJECTILE_APPEARANCE_PURPLE_BALL', "");
+INSERT INTO "Enchantments_CombatActionParameters"   VALUES ('ENCHANTMENT_DOMINATION', 'Zapped', 0, 0, 'NEGATIVE', '', 5, 1, 'SelectTarget', 'PROJECTILE_APPEARANCE_PURPLE_BALL', "ACCURACY_STANDARD", "BLOCK_STANDARD", "DODGE_STANDARD", "FAILURE_STANDARD", "DAMAGE_STANDARD");
 INSERT INTO "Enchantments_AppliedEffects"           VALUES ('ENCHANTMENT_DOMINATION', 'Zapped', 'EFFECT_DOMINATION');
 
 INSERT INTO "Enchantments"           				VALUES ('ENCHANTMENT_LIGHTNING', 'name.modifier.enchantment.lightning', 200, 200);
-INSERT INTO "Enchantments_CombatActionParameters"  	VALUES ('ENCHANTMENT_LIGHTNING', 'Zapped', 14, 1, 'LIGHTNING', 'attacks.lightning.1', 5, 999, 'Line', 'PROJECTILE_APPEARANCE_LIGHTNING_JET', "");
+INSERT INTO "Enchantments_CombatActionParameters"  	VALUES ('ENCHANTMENT_LIGHTNING', 'Zapped', 14, 1, 'LIGHTNING', 'attacks.lightning.1', 5, 999, 'Line', 'PROJECTILE_APPEARANCE_LIGHTNING_JET', "ACCURACY_STANDARD", "BLOCK_STANDARD", "DODGE_STANDARD", "FAILURE_STANDARD", "DAMAGE_STANDARD");
 
 INSERT INTO "Enchantments"           				VALUES ('ENCHANTMENT_MADNESS', 'name.modifier.enchantment.madness', 200, 200);
-INSERT INTO "Enchantments_CombatActionParameters"   VALUES ('ENCHANTMENT_MADNESS', 'Zapped', 0, 0, 'NEGATIVE', '', 5, 1, 'SelectTarget', 'PROJECTILE_APPEARANCE_PURPLE_BALL', "");
+INSERT INTO "Enchantments_CombatActionParameters"   VALUES ('ENCHANTMENT_MADNESS', 'Zapped', 0, 0, 'NEGATIVE', '', 5, 1, 'SelectTarget', 'PROJECTILE_APPEARANCE_PURPLE_BALL', "ACCURACY_STANDARD", "BLOCK_STANDARD", "DODGE_STANDARD", "FAILURE_STANDARD", "DAMAGE_STANDARD");
 INSERT INTO "Enchantments_AppliedEffects"           VALUES ('ENCHANTMENT_MADNESS', 'Zapped', 'EFFECT_MADNESS');
 
 INSERT INTO "Enchantments"           				VALUES ('ENCHANTMENT_CHARM', 'name.modifier.enchantment.charm', 200, 200);
-INSERT INTO "Enchantments_CombatActionParameters"   VALUES ('ENCHANTMENT_CHARM', 'Zapped', 0, 0, 'NEGATIVE', '', 5, 1, 'SelectTarget', 'PROJECTILE_APPEARANCE_PURPLE_BALL', "");
+INSERT INTO "Enchantments_CombatActionParameters"   VALUES ('ENCHANTMENT_CHARM', 'Zapped', 0, 0, 'NEGATIVE', '', 5, 1, 'SelectTarget', 'PROJECTILE_APPEARANCE_PURPLE_BALL', "ACCURACY_STANDARD", "BLOCK_STANDARD", "DODGE_STANDARD", "FAILURE_STANDARD", "DAMAGE_STANDARD");
 INSERT INTO "Enchantments_AppliedEffects"           VALUES ('ENCHANTMENT_CHARM', 'Zapped', 'EFFECT_CHARM');
 
 INSERT INTO "Enchantments"           				VALUES ('ENCHANTMENT_FIREBALL', 'name.modifier.enchantment.fireball', 200, 200);
-INSERT INTO "Enchantments_CombatActionParameters"   VALUES ('ENCHANTMENT_FIREBALL', 'Zapped', 0, 0, 'FIRE', 'attacks.fire.1', 5, 999, 'Line', 'PROJECTILE_APPEARANCE_FIREBALL', "Unavoidable");
-INSERT INTO "Enchantments_ExplosionParameters"      VALUES ('ENCHANTMENT_FIREBALL', 'Zapped', 14, 1, 'FIRE', 'attacks.fire.1', 4, 1, 'Line', 'PROJECTILE_APPEARANCE_FIRE_EXPLOSION', 'IgnoresBlock');
+INSERT INTO "Enchantments_CombatActionParameters"   VALUES ('ENCHANTMENT_FIREBALL', 'Zapped', 0, 0, 'FIRE', 'attacks.fire.1', 5, 999, 'Line', 'PROJECTILE_APPEARANCE_FIREBALL', "ACCURACY_STANDARD", "BLOCK_IGNORE", "DODGE_IGNORE", "FAILURE_STANDARD", "DAMAGE_STANDARD");
+INSERT INTO "Enchantments_ExplosionParameters"      VALUES ('ENCHANTMENT_FIREBALL', 'Zapped', 14, 1, 'FIRE', 'attacks.fire.1', 4, 1, 'Line', 'PROJECTILE_APPEARANCE_FIRE_EXPLOSION', "ACCURACY_STANDARD", "BLOCK_IGNORE", "DODGE_STANDARD", "FAILURE_STANDARD", "DAMAGE_STANDARD");
 
 INSERT INTO "Enchantments"           				VALUES ('ENCHANTMENT_LUCKY_COIN_LIFE_SAVE', 'name.modifier.enchantment.none', -1, -1);
 INSERT INTO "Enchantments_WornEffects"   			VALUES ('ENCHANTMENT_LUCKY_COIN_LIFE_SAVE', 'EFFECT_LUCKY_COIN_LIFE_SAVE');

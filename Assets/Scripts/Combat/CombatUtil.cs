@@ -103,37 +103,6 @@ namespace Gamepackage
             }
         }
 
-        public static CalculatedCombatAction CalculateSimpleDamage(Entity target, string i18nString, int baseDamage, DamageTypes damageType)
-        {
-            var resolved = new ResolvedCombatActionDescriptor()
-            {
-                CombatActionParameters = new DerivedCombatActionParameters()
-                {
-                    Range = 1,
-                    AttackMessagePrefix = i18nString,
-                    ClusteringFactor = 1,
-                    BaseDamage = baseDamage,
-                    DamageType = damageType,
-                    ProjectileAppearanceIdentifier = "PROJECTILE_APPEARANCE_NONE",
-                    NumberOfTargetsToPierce = 1,
-                    TargetingType = CombatActionTargetingType.SelectTarget,
-                    InteractionProperties = new List<InteractionProperties>()
-                    {
-                        InteractionProperties.Unavoidable,
-                    },
-                },
-                ExplosionParameters = null
-            };
-            var calculated = CombatUtil.CalculateAttack(Context.Game.CurrentLevel.Grid,
-                    null,
-                    CombatActionType.ApplyToOther,
-                    null,
-                    target.Position,
-                    resolved
-            );
-            return calculated;
-        }
-
         public static CalculatedCombatAction CalculateAttack(Grid<Tile> grid,
             Entity source, CombatActionType InteractionType, Item item, Point targetPosition,
             ResolvedCombatActionDescriptor InteractionTypeParameters)

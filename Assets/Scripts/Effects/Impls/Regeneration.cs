@@ -6,7 +6,7 @@
         {
             base.Tick(state, entity);
             int.TryParse(state.Data["HealAmount"], out int HealAmount);
-            var calculated = CombatUtil.CalculateSimpleDamage(
+            var calculated = Context.RulesEngine.CalculateSimpleDamage(
                 entity,
                 state.Template.LocalizationPrefix,
                 HealAmount,

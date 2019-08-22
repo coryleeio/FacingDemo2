@@ -74,5 +74,6 @@ INSERT INTO "Campaigns_XpAwardedForKillingEntityOfLevel" VALUES ('CAMPAIGN_CORE'
 INSERT INTO "Campaigns_Settings" VALUES ('CAMPAIGN_CORE','MaxLevel', 10);
 INSERT INTO "Campaigns_Settings" VALUES ('CAMPAIGN_CORE','MaxSkillRank', 10);
 INSERT INTO "Campaigns_Settings" VALUES ('CAMPAIGN_CORE','GlobalXpModifier', "1.0");
+INSERT INTO "Campaigns_Settings" VALUES ('CAMPAIGN_CORE','GlobalSkillXpModifier', "1.0");
 
 COMMIT;

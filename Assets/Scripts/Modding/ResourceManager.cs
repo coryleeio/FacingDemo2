@@ -351,6 +351,10 @@ namespace Gamepackage
                     Debug.LogWarning("Failed to resolve UISprite for " + spriteStr + " for Skill: " + skillTemplate.Identifier);
                 }
 
+                var xpModifierStr = reader[3].ToString();
+                float.TryParse(xpModifierStr, out float xpModifier);
+                skillTemplate.SkillXpModifier = xpModifier;
+
                 aggregate.Add(skillTemplate.Identifier, skillTemplate);
             }
             return aggregate;
@@ -608,9 +612,20 @@ namespace Gamepackage
 
                 interactionParameters.ProjectileAppearanceIdentifier = readerForData[9].ToString();
 
-                interactionParameters.InteractionProperties = ParseCommaSeparatedListIntoEnum<InteractionProperties>(readerForData[10].ToString());
-                Assert.IsNotNull(interactionParameters.InteractionProperties);
+                interactionParameters.AccuracyFormula = readerForData[10].ToString();
+                Assert.IsNotNull(interactionParameters.AccuracyFormula);
 
+                interactionParameters.BlockChanceFormula = readerForData[11].ToString();
+                Assert.IsNotNull(interactionParameters.BlockChanceFormula);
+
+                interactionParameters.DodgeChanceFormula = readerForData[12].ToString();
+                Assert.IsNotNull(interactionParameters.DodgeChanceFormula);
+
+                interactionParameters.FailureFormula = readerForData[13].ToString();
+                Assert.IsNotNull(interactionParameters.FailureFormula);
+
+                interactionParameters.DamageFormula = readerForData[14].ToString();
+                Assert.IsNotNull(interactionParameters.DamageFormula);
 
                 if (interactionParameters.ProjectileAppearanceIdentifier == "")
                 {

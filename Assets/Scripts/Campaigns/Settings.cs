@@ -5,5 +5,6 @@
         MaxLevel,
         GlobalXpModifier,
         MaxSkillRank,
+        GlobalSkillXpModifier,
     }
 }

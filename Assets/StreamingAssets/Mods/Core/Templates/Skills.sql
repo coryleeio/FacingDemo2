@@ -4,7 +4,11 @@ DROP TABLE IF EXISTS "Skills";
 CREATE TABLE IF NOT EXISTS "Skills" (
 	"Identifier"      TEXT,
 	"Name"            TEXT,
-	"UISprite"          TEXT
+	"UISprite"        TEXT,
+	"SkillXpModifier" TEXT
 );
+
+INSERT INTO "Skills" VALUES('SKILL_LONG_BLADES', 'skill.long.blades', 'Longsword', "1.0");
+
 
 COMMIT;

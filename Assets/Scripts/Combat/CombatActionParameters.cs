@@ -14,7 +14,11 @@ namespace Gamepackage
         public int NumberOfTargetsToPierce;
         public CombatActionTargetingType TargetingType;
         public string ProjectileAppearanceIdentifier;
-        public List<InteractionProperties> InteractionProperties;
+        public string AccuracyFormula;
+        public string BlockChanceFormula;
+        public string DodgeChanceFormula;
+        public string FailureFormula;
+        public string DamageFormula;
         // IF YOU ARE ADDING STUFF ADD IT TO THE COPY CONSTRUCTOR BELOW
 
         public CombatActionParameters()
@@ -32,9 +36,12 @@ namespace Gamepackage
             NumberOfTargetsToPierce = inp.NumberOfTargetsToPierce;
             TargetingType = inp.TargetingType;
             ProjectileAppearanceIdentifier = inp.ProjectileAppearanceIdentifier;
-            InteractionProperties = new List<InteractionProperties>();
-            InteractionProperties.AddRange(inp.InteractionProperties);
-        }
+            AccuracyFormula = inp.AccuracyFormula;
+            BlockChanceFormula = inp.BlockChanceFormula;
+            DodgeChanceFormula = inp.DodgeChanceFormula;
+            FailureFormula = inp.FailureFormula;
+            DamageFormula = inp.DamageFormula;
+    }
 
         [JsonIgnore]
         public string AttackHitMessage
@@ -64,29 +71,11 @@ namespace Gamepackage
         }
 
         [JsonIgnore]
-        public bool Unavoidable
+        public string AttackFailedMessage
         {
             get
             {
-                return InteractionProperties.Contains(Gamepackage.InteractionProperties.Unavoidable);
-            }
-        }
-
-        [JsonIgnore]
-        public bool Blockable
-        {
-            get
-            {
-                return !InteractionProperties.Contains(Gamepackage.InteractionProperties.IgnoresBlock) && !Unavoidable;
-            }
-        }
-
-        [JsonIgnore]
-        public bool Dodgeable
-        {
-            get
-            {
-                return !InteractionProperties.Contains(Gamepackage.InteractionProperties.IgnoresDodge) && !Unavoidable;
+                return AttackMessagePrefix + ".fail";
             }
         }
 

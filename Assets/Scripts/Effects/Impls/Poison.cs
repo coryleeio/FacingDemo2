@@ -8,12 +8,14 @@ namespace Gamepackage
         {
             base.Tick(state, entity);
             int.TryParse(state.Data["PoisonAmount"], out int PoisonAmount);
-            var calculated = CombatUtil.CalculateSimpleDamage(
+
+            var calculated = Context.RulesEngine.CalculateSimpleDamage(
                 entity,
                 state.Template.LocalizationPrefix,
                 PoisonAmount,
                 DamageTypes.POISON
             );
+
             CombatUtil.ApplyAttackInstantly(calculated);
         }
 

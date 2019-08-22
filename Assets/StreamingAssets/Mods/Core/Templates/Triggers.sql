@@ -21,7 +21,11 @@ CREATE TABLE "Triggers_CombatActionParameters" (
 	"NumberOfTargetsToPierce"	INTEGER,
 	"TargetingType"	TEXT,
 	"ProjectileAppearanceIdentifier"	TEXT,
-	"InteractionProperties"	TEXT
+	"AccuracyFormula" 		TEXT,
+	"BlockChanceFormula" 	TEXT,
+	"DodgeChanceFormula" 	TEXT,
+	"FailureFormula" 		TEXT,
+	"DamageFormula" 		TEXT
 );
 
 INSERT INTO "Triggers"                         VALUES ( "TRIGGER_CHANGE_LEVEL_ON_PRESS", "SingleSquare", "Press", "traverse.staircase", "Gamepackage.ChangeLevel");

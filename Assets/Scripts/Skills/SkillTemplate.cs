@@ -7,5 +7,6 @@ namespace Gamepackage
         public string Identifier;
         public string Name;
         public Sprite Sprite;
+        public float SkillXpModifier;
     }
 }

@@ -1,38 +1,89 @@
-﻿using System;
-using UnityEngine;
-
-namespace Gamepackage
+﻿namespace Gamepackage
 {
     public class CoreRulesEngine : IRulesEngine
     {
+        // These are just the strings that the standard rules engine uses added to an enum for strong typing.
+        // Strings are used for comparisons even though it is slower so that modders can add
+        // a new rules engine and new formulas
+        enum SupportedFormulas
+        {
+            BLOCK_STANDARD,
+            BLOCK_IGNORE,
+            ACCURACY_GUARANTEED,
+            ACCURACY_STANDARD,
+            DODGE_IGNORE,
+            DODGE_STANDARD,
+            DAMAGE_STANDARD,
+            NO_FAILURE,
+        }
+
         public float CalculateBlockPercentage(CalculatedCombatAction action, Entity Target)
         {
-            if (!action.ResolvedCombatActionParameters.CombatActionParameters.Blockable)
+            var formula = action.ResolvedCombatActionParameters.CombatActionParameters.BlockChanceFormula;
+            if (formula == SupportedFormulas.BLOCK_IGNORE.ToString())
             {
                 return 0.0f;
             }
-            return 10.0f;
+            else if (formula == SupportedFormulas.BLOCK_STANDARD.ToString())
+            {
+                return 10.0f;
+            }
+            else
+            {
+                throw new NotImplementedException("Could not find formula: " + formula);
+            }
         }
 
-        public float CalculateDodgePercentageForDodgeableAttacks(Entity entity)
+        public float CalculateDodgePercentage(CalculatedCombatAction action, Entity Target)
         {
-            return 5.0f;
+            string formula = action.ResolvedCombatActionParameters.CombatActionParameters.DodgeChanceFormula;
+            if (formula == SupportedFormulas.DODGE_IGNORE.ToString())
+            {
+                return 0.0f;
+            }
+            else if (formula == SupportedFormulas.DODGE_STANDARD.ToString())
+            {
+                return 5.0f;
+            }
+            else
+            {
+                throw new NotImplementedException("Could not find formula: " + formula);
+            }
         }
 
+        // This exists separately from to hit because the player might want to know their
+        // base accuracy percentage without the enemies defenses factored in.
         public float CalculateAccuracyPercent(CalculatedCombatAction action)
         {
-            return 95f;
+            string formula = action.ResolvedCombatActionParameters.CombatActionParameters.AccuracyFormula;
+            if (formula == SupportedFormulas.ACCURACY_GUARANTEED.ToString())
+            {
+                return 100.0f;
+            }
+            else if (formula == SupportedFormulas.ACCURACY_STANDARD.ToString())
+            {
+                return 95f;
+            }
+            else
+            {
+                throw new NotImplementedException("Could not find formula: " + formula);
+            }
         }
 
         public float CalculateToHitPercentage(CalculatedCombatAction action, Entity Target)
         {
-            if (action.ResolvedCombatActionParameters.CombatActionParameters.Unavoidable)
+            string formula = action.ResolvedCombatActionParameters.CombatActionParameters.AccuracyFormula;
+
+            // When we are guaranteed a hit by accuracy ignore this calculation.
+            // accuracy also does this, but this is necessary because a 100% accuracy is not
+            // necessarily a guaranteed hit after you factor in enemy defenses, but an attack
+            // with guaranteed accuracy should just always hit and ignore all defenses.
+            if (formula == SupportedFormulas.ACCURACY_GUARANTEED.ToString())
             {
                 return 100.0f;
             }
-            var dodgeable = action.ResolvedCombatActionParameters.CombatActionParameters.Dodgeable;
-            var dodgePercent = dodgeable ? CalculateDodgePercentageForDodgeableAttacks(Target) : 0.0f;
             var accuracyPercentage = CalculateAccuracyPercent(action);
+            var dodgePercent = CalculateDodgePercentage(action, Target);
             var toHit = accuracyPercentage * ((100.0f - dodgePercent) * .01f);
             return toHit;
         }
@@ -66,6 +117,40 @@ namespace Gamepackage
                 ret = ret *= -1;
             }
             return ret;
+        }
+
+        // Sometimes the game needs to calculate undodgeable damage for things like fire poison etc.
+        // since you need to know what formulas to use in that calculation you need to define that in the rules engine.
+        public CalculatedCombatAction CalculateSimpleDamage(Entity target, string i18nString, int baseDamage, DamageTypes damageType)
+        {
+            var resolved = new ResolvedCombatActionDescriptor()
+            {
+                CombatActionParameters = new DerivedCombatActionParameters()
+                {
+                    Range = 1,
+                    AttackMessagePrefix = i18nString,
+                    ClusteringFactor = 1,
+                    BaseDamage = baseDamage,
+                    DamageType = damageType,
+                    ProjectileAppearanceIdentifier = "PROJECTILE_APPEARANCE_NONE",
+                    NumberOfTargetsToPierce = 1,
+                    TargetingType = CombatActionTargetingType.SelectTarget,
+                    AccuracyFormula = SupportedFormulas.ACCURACY_GUARANTEED.ToString(),
+                    BlockChanceFormula = SupportedFormulas.BLOCK_IGNORE.ToString(),
+                    DamageFormula = SupportedFormulas.DAMAGE_STANDARD.ToString(),
+                    DodgeChanceFormula = SupportedFormulas.DODGE_STANDARD.ToString(),
+                    FailureFormula = SupportedFormulas.NO_FAILURE.ToString(),
+                },
+                ExplosionParameters = null
+            };
+            var calculated = CombatUtil.CalculateAttack(Context.Game.CurrentLevel.Grid,
+                    null,
+                    CombatActionType.ApplyToOther,
+                    null,
+                    target.Position,
+                    resolved
+            );
+            return calculated;
         }
     }
 }
