@@ -594,47 +594,7 @@ namespace Gamepackage
 
                 if (target.CurrentHealth <= 0)
                 {
-                    var player = Context.Game.CurrentLevel.Player;
-                    if (player != null && !target.IsPlayer)
-                    {
-                        var xp = Context.RulesEngine.CalculateXpForKill(result, target);
-                        player.Xp += xp;
-
-                        var campaignTemplate = Context.Game.CampaignTemplate;
-                        int.TryParse(campaignTemplate.Settings[Settings.MaxLevel.ToString()], out int maxLevel);
-
-                        if (player.Level < maxLevel)
-                        {
-                            var nextLevel = player.Level + 1;
-                            var xpNeededForNextLevel = campaignTemplate.XpForLevel[nextLevel];
-
-                            if(player.Xp >= xpNeededForNextLevel)
-                            {
-                                // We are over the threshold for atleast the next level
-                                // figure out what level to stop at
-                                for (var curItrLevel = nextLevel; curItrLevel <= maxLevel; curItrLevel++)
-                                {
-                                    var xpNeededForItrLevel = campaignTemplate.XpForLevel[curItrLevel];
-                                    if (player.Xp >= xpNeededForItrLevel)
-                                    {
-                                        player.Level += 1;
-                                        result.LogMessages.AddLast(string.Format("level.up".Localize(), player.Level));
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
-
-
-                            if (player.Xp > xpNeededForNextLevel)
-                            {
-                                player.Level += 1;
-                            }
-                        }
-                        result.LogMessages.AddLast("xp.gain".Localize());
-                    }
+                    HandleXpGain(result, target);
 
                     if (target.SkeletonAnimation != null)
                     {
@@ -708,6 +668,50 @@ namespace Gamepackage
                 }
             }
             ShowMessages(result);
+        }
+
+        private static void HandleXpGain(EntityStateChange result, Entity target)
+        {
+            var player = Context.Game.CurrentLevel.Player;
+            if (player != null && !target.IsPlayer)
+            {
+                var xp = Context.RulesEngine.CalculateXpForKill(result, target);
+                player.Xp += xp;
+
+                var campaignTemplate = Context.Game.CampaignTemplate;
+                int.TryParse(campaignTemplate.Settings[Settings.MaxLevel.ToString()], out int maxLevel);
+
+                if (player.Level < maxLevel)
+                {
+                    var nextLevel = player.Level + 1;
+                    var xpNeededForNextLevel = campaignTemplate.XpForLevel[nextLevel];
+
+                    if (player.Xp >= xpNeededForNextLevel)
+                    {
+                        // We are over the threshold for atleast the next level
+                        // figure out what level to stop at
+                        for (var curItrLevel = nextLevel; curItrLevel <= maxLevel; curItrLevel++)
+                        {
+                            var xpNeededForItrLevel = campaignTemplate.XpForLevel[curItrLevel];
+                            if (player.Xp >= xpNeededForItrLevel)
+                            {
+                                player.Level += 1;
+                                result.LogMessages.AddLast(string.Format("level.up".Localize(), player.Level));
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (player.Xp > xpNeededForNextLevel)
+                    {
+                        player.Level += 1;
+                    }
+                }
+                result.LogMessages.AddLast("xp.gain".Localize());
+            }
         }
 
         public static List<Effect> GetWornEffectsFromInventory(Entity entity)
