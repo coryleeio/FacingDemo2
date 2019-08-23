@@ -69,6 +69,9 @@ namespace Gamepackage
         public Inventory Inventory;
 
         public List<Effect> TemporaryEffects = new List<Effect>();
+
+
+        public Dictionary<string, Skill> SkillsByIdentifier = new Dictionary<string, Skill>();
         public Point Position;
         public Direction Direction;
         public int CurrentHealth;

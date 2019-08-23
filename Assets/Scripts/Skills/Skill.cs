@@ -1,15 +1,16 @@
 ﻿using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Gamepackage
 {
     public class Skill
     {
-        public string SkillIdentifier;
         public int Rank;
         public int Xp;
         public bool Exercised;
         public int ExercisedUntilTurn;
 
+        public string SkillIdentifier;
         [JsonIgnore]
         public SkillTemplate Template
         {
@@ -20,6 +21,33 @@ namespace Gamepackage
                     return null;
                 }
                 return Context.ResourceManager.Load<SkillTemplate>(SkillIdentifier);
+            }
+        }
+
+        [JsonIgnore]
+        public string Name
+        {
+            get
+            {
+                return Template.Name.Localize();
+            }
+        }
+
+        [JsonIgnore]
+        public Sprite Sprite
+        {
+            get
+            {
+                return Template.Sprite;
+            }
+        }
+
+        [JsonIgnore]
+        public float SkillXpModifier
+        {
+            get
+            {
+                return SkillXpModifier;
             }
         }
     }

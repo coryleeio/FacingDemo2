@@ -10,6 +10,7 @@ namespace Gamepackage
     public class ResourceManager
     {
         private Dictionary<string, object> _prototypesByUniqueIdentifier = new Dictionary<string, object>();
+        private Dictionary<Type, List<object>> _prototypesByType = new Dictionary<Type, List<object>>();
 
         public bool Contains(string input)
         {
@@ -64,11 +65,28 @@ namespace Gamepackage
             }
         }
 
+        public List<TPrototype> LoadAll<TPrototype>()
+        {
+            var agg = new List<TPrototype>();
+            if(!_prototypesByType.ContainsKey(typeof(TPrototype)) || _prototypesByType[typeof(TPrototype)].Count == 0)
+            {
+                return agg;
+            }
+            var resources = _prototypesByType[typeof(TPrototype)];
+            foreach(var resource in resources)
+            {
+                var castedResource = (TPrototype) resource;
+                agg.Add(castedResource);
+            }
+            return agg;
+        }
+
         // Called by mod manager once all mods are loaded to resolve all the resources from all the mods
         public void ResolveAllResources(Mono.Data.Sqlite.SqliteConnection sqlConnection)
         {
             Debug.Log("Resolving all resources...");
             _prototypesByUniqueIdentifier.Clear();
+            _prototypesByType.Clear();
 
             // LoadAll is called when we load the mod, but we specifically
             // cache references to these unity types in the asset bundle
@@ -963,7 +981,13 @@ namespace Gamepackage
             if (_prototypesByUniqueIdentifier.ContainsKey(key))
             {
                 Debug.Log(string.Format("Replaced existing definition for: {0}.", key));
+                _prototypesByType[typeof(TResource)].Remove(_prototypesByUniqueIdentifier[key]);
             }
+            if(!_prototypesByType.ContainsKey(typeof(TResource)))
+            {
+                _prototypesByType[typeof(TResource)] = new List<object>();
+            }
+            _prototypesByType[typeof(TResource)].Add(value);
             _prototypesByUniqueIdentifier[key] = value;
         }
     }

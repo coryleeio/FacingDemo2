@@ -17,6 +17,10 @@ namespace Gamepackage
             if (!EntityMap.ContainsKey(entity.Id))
             {
                 EntityMap.Add(entity.Id, entity);
+
+                // Ensures that if we are loading and have added a mod with new skills 
+                // that they get properly populated.
+                SkillUtil.PopulateSkills(entity);
             }
             if (!level.Entitys.Contains(entity))
             {

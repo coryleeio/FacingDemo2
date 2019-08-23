@@ -14,7 +14,6 @@
         public static PathFinder PathFinder = new PathFinder();
         public static FlowController FlowSystem = new FlowController();
         public static PlayerController PlayerController = new PlayerController();
-
         public static UIController UIController;
         public static GameSceneController GameSceneRoot;
     }
