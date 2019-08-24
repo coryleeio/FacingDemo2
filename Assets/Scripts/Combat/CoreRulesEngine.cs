@@ -1,4 +1,6 @@
-﻿namespace Gamepackage
+﻿using System.Collections.Generic;
+
+namespace Gamepackage
 {
     public class CoreRulesEngine : IRulesEngine
     {
@@ -88,12 +90,20 @@
             return toHit;
         }
 
+        public int CalculateSkillXpForKill(EntityStateChange result, Entity target, int xpForKill, List<Skill> exercisedSkills)
+        {
+            var campaignTemplate = Context.Game.CampaignTemplate;
+            float.TryParse(campaignTemplate.Settings[Settings.GlobalSkillXpModifier.ToString()], out float xpMod);
+            var xpPerSkill = xpForKill / exercisedSkills.Count;
+            return (int)(xpPerSkill * xpMod);
+        }
+
         public int CalculateXpForKill(EntityStateChange result, Entity target)
         {
             var campaignTemplate = Context.Game.CampaignTemplate;
             float.TryParse(campaignTemplate.Settings[Settings.GlobalXpModifier.ToString()], out float xpMod);
             var xpAwardedForKillOfLevel = campaignTemplate.XpAwardedForKillingEntityOfLevel[target.Level];
-            return (int)(xpAwardedForKillOfLevel * xpMod); ;
+            return (int)(xpAwardedForKillOfLevel * xpMod);
         }
 
         public int CalculateDamage(CombatActionParameters attackParameters)

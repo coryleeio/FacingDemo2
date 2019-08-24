@@ -612,37 +612,44 @@ namespace Gamepackage
                 int.TryParse(readerForData[3].ToString(), out int ClusteringFactor);
                 interactionParameters.ClusteringFactor = ClusteringFactor;
 
-                var damageType = (DamageTypes)Enum.Parse(typeof(DamageTypes), readerForData[4].ToString(), true);
+                var skillIdentifier = readerForData[4].ToString();
+                interactionParameters.SkillIdentifier = skillIdentifier;
+
+                int.TryParse(readerForData[5].ToString(), out int NumberOfTurnsToExerciseSkill);
+                interactionParameters.NumberOfTurnsToExerciseSkill = NumberOfTurnsToExerciseSkill;
+
+                var damageType = (DamageTypes)Enum.Parse(typeof(DamageTypes), readerForData[6].ToString(), true);
                 Assert.AreNotEqual(DamageTypes.NOT_SET, damageType);
                 interactionParameters.DamageType = damageType;
-                interactionParameters.AttackMessagePrefix = readerForData[5].ToString();
 
-                int.TryParse(readerForData[6].ToString(), out int Range);
+                interactionParameters.AttackMessagePrefix = readerForData[7].ToString();
+
+                int.TryParse(readerForData[8].ToString(), out int Range);
                 interactionParameters.Range = Range;
 
-                int.TryParse(readerForData[7].ToString(), out int NumberOfTargetsToPierce);
+                int.TryParse(readerForData[9].ToString(), out int NumberOfTargetsToPierce);
                 interactionParameters.NumberOfTargetsToPierce = NumberOfTargetsToPierce;
 
-                var TargetingType = (CombatActionTargetingType)Enum.Parse(typeof(CombatActionTargetingType), readerForData[8].ToString(), true);
+                var TargetingType = (CombatActionTargetingType)Enum.Parse(typeof(CombatActionTargetingType), readerForData[10].ToString(), true);
                 Assert.AreNotEqual(CombatActionTargetingType.NotSet, TargetingType);
 
                 interactionParameters.TargetingType = TargetingType;
 
-                interactionParameters.ProjectileAppearanceIdentifier = readerForData[9].ToString();
+                interactionParameters.ProjectileAppearanceIdentifier = readerForData[11].ToString();
 
-                interactionParameters.AccuracyFormula = readerForData[10].ToString();
+                interactionParameters.AccuracyFormula = readerForData[12].ToString();
                 Assert.IsNotNull(interactionParameters.AccuracyFormula);
 
-                interactionParameters.BlockChanceFormula = readerForData[11].ToString();
+                interactionParameters.BlockChanceFormula = readerForData[13].ToString();
                 Assert.IsNotNull(interactionParameters.BlockChanceFormula);
 
-                interactionParameters.DodgeChanceFormula = readerForData[12].ToString();
+                interactionParameters.DodgeChanceFormula = readerForData[14].ToString();
                 Assert.IsNotNull(interactionParameters.DodgeChanceFormula);
 
-                interactionParameters.FailureFormula = readerForData[13].ToString();
+                interactionParameters.FailureFormula = readerForData[15].ToString();
                 Assert.IsNotNull(interactionParameters.FailureFormula);
 
-                interactionParameters.DamageFormula = readerForData[14].ToString();
+                interactionParameters.DamageFormula = readerForData[16].ToString();
                 Assert.IsNotNull(interactionParameters.DamageFormula);
 
                 if (interactionParameters.ProjectileAppearanceIdentifier == "")

@@ -6,9 +6,12 @@ namespace Gamepackage
     // Describes what happens when you use an item, or your body with a certain interaction type.
     public class CombatActionParameters
     {
+        // IF YOU ARE ADDING STUFF ADD IT TO THE COPY CONSTRUCTOR BELOW
         public int BaseDamage;
         public int ClusteringFactor;
         public DamageTypes DamageType;
+        public string SkillIdentifier;
+        public int NumberOfTurnsToExerciseSkill;
         public string AttackMessagePrefix;
         public int Range;
         public int NumberOfTargetsToPierce;
@@ -31,6 +34,8 @@ namespace Gamepackage
             BaseDamage = inp.BaseDamage;
             ClusteringFactor = inp.ClusteringFactor;
             DamageType = inp.DamageType;
+            SkillIdentifier = inp.SkillIdentifier;
+            NumberOfTurnsToExerciseSkill = inp.NumberOfTurnsToExerciseSkill;
             AttackMessagePrefix = inp.AttackMessagePrefix;
             Range = inp.Range;
             NumberOfTargetsToPierce = inp.NumberOfTargetsToPierce;

@@ -488,6 +488,11 @@ namespace Gamepackage
             Assert.IsNotNull(target);
             if (result.Source != null)
             {
+                if (result.Source.IsPlayer && result.CombatActionParameters != null)
+                {
+                    SkillUtil.ExerciseSkill(result.Source, result.CombatActionParameters.SkillIdentifier, result.CombatActionParameters.NumberOfTurnsToExerciseSkill);
+                }
+
                 var newTargetingDirection = MathUtil.RelativeDirection(target.Position, result.Source.Position);
                 target.Direction = newTargetingDirection;
                 if (target.SkeletonAnimation != null)
@@ -514,7 +519,6 @@ namespace Gamepackage
                 // if you keep hitting him he doesn't get dead-er..
                 return;
             }
-
 
             var sourceName = "";
             if (result.Source != null)
@@ -595,6 +599,7 @@ namespace Gamepackage
                 if (target.CurrentHealth <= 0)
                 {
                     HandleXpGain(result, target);
+                    HandleSkillXpGain(result, target);
 
                     if (target.SkeletonAnimation != null)
                     {
@@ -611,6 +616,10 @@ namespace Gamepackage
                         AllowLeftRightDrift = false,
                     });
                     result.LogMessages.AddLast(string.Format("{0} has been slain!", targetName));
+                    if (!target.IsPlayer)
+                    {
+                        result.LogMessages.AddLast("xp.gain".Localize());
+                    }
                     target.Name = string.Format("( Corpse ) {0}", target.Name);
                     target.IsDead = true;
                     // Is not deregistered because the corpse should still be available
@@ -670,6 +679,55 @@ namespace Gamepackage
             ShowMessages(result);
         }
 
+        private static void HandleSkillXpGain(EntityStateChange result, Entity target)
+        {
+            var player = Context.Game.CurrentLevel.Player;
+            if (player != null && !target.IsPlayer)
+            {
+
+                var campaignTemplate = Context.Game.CampaignTemplate;
+                int.TryParse(campaignTemplate.Settings[Settings.MaxSkillRank.ToString()], out int maxSkillRank);
+
+                var exercisedSkills = SkillUtil.ExercisedSkills(player);
+                if (exercisedSkills.Count == 0)
+                {
+                    return;
+                }
+
+                var xpForKill = Context.RulesEngine.CalculateXpForKill(result, target);
+                var xpPerSkill = Context.RulesEngine.CalculateSkillXpForKill(result, target, xpForKill, exercisedSkills);
+
+                foreach (var exercisedSkill in exercisedSkills)
+                {
+                    if (exercisedSkill.Rank < maxSkillRank)
+                    {
+                        exercisedSkill.Xp += xpPerSkill;
+                        var nextRank = exercisedSkill.Rank + 1;
+                        var xpNeededForNextRank = campaignTemplate.XpForSkillRank[nextRank];
+
+                        if (exercisedSkill.Xp >= xpNeededForNextRank)
+                        {
+                            // We are over the threshold for atleast the next rank
+                            // figure out what rank to stop at
+                            for (var curItrRank = nextRank; curItrRank <= maxSkillRank; curItrRank++)
+                            {
+                                var xpNeededForItrRank = campaignTemplate.XpForSkillRank[curItrRank];
+                                if (exercisedSkill.Xp >= xpNeededForItrRank)
+                                {
+                                    exercisedSkill.Rank += 1;
+                                    result.LogMessages.AddLast(string.Format("skill.up".Localize(), exercisedSkill.Name, exercisedSkill.Rank));
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private static void HandleXpGain(EntityStateChange result, Entity target)
         {
             var player = Context.Game.CurrentLevel.Player;
@@ -704,13 +762,7 @@ namespace Gamepackage
                             }
                         }
                     }
-
-                    if (player.Xp > xpNeededForNextLevel)
-                    {
-                        player.Level += 1;
-                    }
                 }
-                result.LogMessages.AddLast("xp.gain".Localize());
             }
         }
 

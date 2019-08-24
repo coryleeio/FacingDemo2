@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS "Skills" (
 );
 
 INSERT INTO "Skills" VALUES('SKILL_LONG_BLADES', 'skill.long.blades', 'Longsword', "1.0");
-
+INSERT INTO "Skills" VALUES('SKILL_SPELLCASTING', 'skill.spellcasting', 'Longsword', "1.0");
 
 COMMIT;

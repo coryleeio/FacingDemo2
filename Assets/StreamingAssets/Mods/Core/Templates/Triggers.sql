@@ -15,6 +15,8 @@ CREATE TABLE "Triggers_CombatActionParameters" (
 	"InteractionType"	TEXT,
 	"BaseDamage"	INTEGER,
 	"ClusteringFactor"	INTEGER,
+	"SkillIdentifier" TEXT,
+	"NumberOfTurnsToExerciseSkill"    INTEGER,
 	"DamageType"	TEXT,
 	"AttackMessage"	TEXT,
 	"Range"	INTEGER,

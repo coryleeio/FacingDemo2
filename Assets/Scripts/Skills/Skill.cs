@@ -7,8 +7,17 @@ namespace Gamepackage
     {
         public int Rank;
         public int Xp;
-        public bool Exercised;
+
         public int ExercisedUntilTurn;
+
+        [JsonIgnore]
+        public bool Exercised
+        {
+            get
+            {
+                return Context.Game.CurrentTurn <= ExercisedUntilTurn;
+            }
+        }
 
         public string SkillIdentifier;
         [JsonIgnore]

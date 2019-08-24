@@ -24,8 +24,7 @@ namespace Gamepackage
             var skill = new Skill()
             {
                 SkillIdentifier = uniqueIdentifier,
-                Exercised = false,
-                ExercisedUntilTurn = 0,
+                ExercisedUntilTurn = -1, // So that it is not marked as exercised on the first turn
                 Rank = 1,
                 Xp = 0,
             };

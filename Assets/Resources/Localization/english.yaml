@@ -8,6 +8,7 @@ loot.notification: You have looted {0}{1}
 cost.health.damage: "Using {0} drains {1} health from {2}."
 xp.gain: "You gain experience."
 level.up: "You have achieved level: {0}"
+skill.up: "Your mastery of {0} has improved: {1}"
 
 death.notification.you.have.died: You have died!
 death.notification.admit.defeat: Admit defeat
@@ -258,3 +259,4 @@ name.modifier.enchantment.fireball: "{0} of Fireball"
 name.modifier.enchantment.cure.poison: "{0} of Cure Poison"
 
 skill.long.blades: "Long Blades"
+skill.spellcasting: "Spellcasting"
