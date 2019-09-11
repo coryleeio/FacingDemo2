@@ -1,5 +1,14 @@
 {
-"skeleton": { "hash": "Gu1ca6Pgx7VdHSIqExkeJZ2YNtM", "spine": "3.7.88", "width": 190.37, "height": 193.06, "images": "../Sprites/", "audio": "" },
+"skeleton": {
+	"hash": "Tih9BdD3W0m3upj9bvxGWB0MPOc",
+	"spine": "3.8.72",
+	"x": -93.36,
+	"y": -53.68,
+	"width": 190.37,
+	"height": 193.06,
+	"images": "../Sprites/",
+	"audio": ""
+},
 "bones": [
 	{ "name": "root" },
 	{ "name": "Body", "parent": "root", "x": 1.15, "y": 32.04 },
@@ -35,429 +44,452 @@
 	{ "name": "OffHandBack", "bone": "OffHand", "attachment": "OffHandBack" },
 	{ "name": "OffHandFront", "bone": "OffHand", "attachment": "OffHandFrontSE" }
 ],
-"skins": {
-	"default": {
-		"RightArmFront": {
-			"RobeOfWondersRightArmFront": { "width": 128, "height": 128 }
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"RightArmFront": {
+				"RobeOfWondersRightArmFront": { "width": 128, "height": 128 }
+			}
 		}
 	},
-	"EquipmentTest": {
-		"Body": {
-			"BodyNE": { "name": "HumanWhiteBodyNE", "width": 128, "height": 128 },
-			"BodySE": { "name": "HumanWhiteBodySE", "width": 128, "height": 128 }
-		},
-		"ChestFront": {
-			"ChestFrontNE": { "name": "RobeOfWondersFrontNE", "width": 128, "height": 128 },
-			"ChestFrontSE": { "name": "RobeOfWondersFrontSE", "width": 128, "height": 128 }
-		},
-		"Head": {
-			"HeadNE": { "name": "HumanWhiteHeadNE", "width": 128, "height": 128 },
-			"HeadSE": { "name": "HumanWhiteHeadSE", "width": 128, "height": 128 }
-		},
-		"HelmetBack": {
-			"HelmetBackNE": { "name": "Ghost", "width": 128, "height": 128 },
-			"HelmetBackSE": { "name": "RobeOfWondersHoodBackSE", "width": 128, "height": 128 }
-		},
-		"HelmetFront": {
-			"HelmetFrontNE": { "name": "RobeOfWondersHoodFrontNE", "width": 128, "height": 128 },
-			"HelmetFrontSE": { "name": "RobeOfWondersHoodFrontSE", "width": 128, "height": 128 }
-		},
-		"LeftArm": {
-			"LeftArm": { "name": "HumanWhiteArmLeft", "width": 128, "height": 128 }
-		},
-		"LeftArmBack": {
-			"LeftArmBackSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"LeftArmBackNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"LeftArmFront": {
-			"LeftArmFrontSE": { "name": "RobeOfWondersLeftArmFront", "width": 128, "height": 128 },
-			"LeftArmFrontNE": { "name": "RobeOfWondersLeftArmFront", "width": 128, "height": 128 }
-		},
-		"LeftLeg": {
-			"LeftLeg": { "name": "HumanWhiteLeg", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"LeftLegBack": {
-			"LeftLegBackSE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 },
-			"LeftLegBackNE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"LeftLegFront": {
-			"LeftLegFrontNE": { "name": "ShoeFrontNE", "rotation": -0.13, "width": 128, "height": 128 },
-			"LeftLegFrontSE": { "name": "ShoeFrontSE", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"MainHandBack": {
-			"MainHandBack": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"MainHandFront": {
-			"MainHandFront": { "name": "Longsword", "y": 39.75, "width": 128, "height": 128 }
-		},
-		"OffHandBack": {
-			"OffHandBack": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"OffHandFront": {
-			"OffHandFrontNE": { "name": "ShieldOfAmalureNE", "width": 128, "height": 128 },
-			"OffHandFrontSE": { "name": "ShieldOfAmalureSE", "width": 128, "height": 128 }
-		},
-		"RightArm": {
-			"RightArm": { "name": "HumanWhiteArmRight", "width": 128, "height": 128 }
-		},
-		"RightArmBack": {
-			"RightArmBackSE": { "name": "RobeOfWondersRightArmFront", "width": 128, "height": 128 }
-		},
-		"RightArmFront": {
-			"RightArmFrontNE": { "name": "RobeOfWondersRightArmFront", "width": 128, "height": 128 },
-			"RightArmFrontSE": { "name": "RobeOfWondersRightArmFront", "width": 128, "height": 128 }
-		},
-		"RightLeg": {
-			"RightLeg": { "name": "HumanWhiteLeg", "width": 128, "height": 128 }
-		},
-		"RightLegFront": {
-			"RightLegFrontNE": { "name": "ShoeFrontNE", "y": -0.04, "rotation": 0.13, "width": 128, "height": 128 },
-			"RightLegFrontSE": { "name": "ShoeFrontSE", "width": 128, "height": 128 }
+	{
+		"name": "EquipmentTest",
+		"attachments": {
+			"RightArm": {
+				"RightArm": { "name": "HumanWhiteArmRight", "width": 128, "height": 128 }
+			},
+			"Body": {
+				"BodyNE": { "name": "HumanWhiteBodyNE", "width": 128, "height": 128 },
+				"BodySE": { "name": "HumanWhiteBodySE", "width": 128, "height": 128 }
+			},
+			"RightArmBack": {
+				"RightArmBackSE": { "name": "RobeOfWondersRightArmFront", "width": 128, "height": 128 }
+			},
+			"ChestFront": {
+				"ChestFrontNE": { "name": "RobeOfWondersFrontNE", "width": 128, "height": 128 },
+				"ChestFrontSE": { "name": "RobeOfWondersFrontSE", "width": 128, "height": 128 }
+			},
+			"RightArmFront": {
+				"RightArmFrontNE": { "name": "RobeOfWondersRightArmFront", "width": 128, "height": 128 },
+				"RightArmFrontSE": { "name": "RobeOfWondersRightArmFront", "width": 128, "height": 128 }
+			},
+			"LeftLegFront": {
+				"LeftLegFrontNE": { "name": "ShoeFrontNE", "rotation": -0.13, "width": 128, "height": 128 },
+				"LeftLegFrontSE": { "name": "ShoeFrontSE", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"Head": {
+				"HeadNE": { "name": "HumanWhiteHeadNE", "width": 128, "height": 128 },
+				"HeadSE": { "name": "HumanWhiteHeadSE", "width": 128, "height": 128 }
+			},
+			"HelmetBack": {
+				"HelmetBackNE": { "name": "Ghost", "width": 128, "height": 128 },
+				"HelmetBackSE": { "name": "RobeOfWondersHoodBackSE", "width": 128, "height": 128 }
+			},
+			"RightLegFront": {
+				"RightLegFrontNE": { "name": "ShoeFrontNE", "y": -0.04, "rotation": 0.13, "width": 128, "height": 128 },
+				"RightLegFrontSE": { "name": "ShoeFrontSE", "width": 128, "height": 128 }
+			},
+			"HelmetFront": {
+				"HelmetFrontNE": { "name": "RobeOfWondersHoodFrontNE", "width": 128, "height": 128 },
+				"HelmetFrontSE": { "name": "RobeOfWondersHoodFrontSE", "width": 128, "height": 128 }
+			},
+			"MainHandFront": {
+				"MainHandFront": { "name": "Longsword", "y": 39.75, "width": 128, "height": 128 }
+			},
+			"OffHandBack": {
+				"OffHandBack": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"LeftLeg": {
+				"LeftLeg": { "name": "HumanWhiteLeg", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"OffHandFront": {
+				"OffHandFrontNE": { "name": "ShieldOfAmalureNE", "width": 128, "height": 128 },
+				"OffHandFrontSE": { "name": "ShieldOfAmalureSE", "width": 128, "height": 128 }
+			},
+			"LeftLegBack": {
+				"LeftLegBackSE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 },
+				"LeftLegBackNE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"MainHandBack": {
+				"MainHandBack": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"RightLeg": {
+				"RightLeg": { "name": "HumanWhiteLeg", "width": 128, "height": 128 }
+			},
+			"LeftArmFront": {
+				"LeftArmFrontSE": { "name": "RobeOfWondersLeftArmFront", "width": 128, "height": 128 },
+				"LeftArmFrontNE": { "name": "RobeOfWondersLeftArmFront", "width": 128, "height": 128 }
+			},
+			"LeftArm": {
+				"LeftArm": { "name": "HumanWhiteArmLeft", "width": 128, "height": 128 }
+			},
+			"LeftArmBack": {
+				"LeftArmBackSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"LeftArmBackNE": { "name": "Ghost", "width": 128, "height": 128 }
+			}
 		}
 	},
-	"Ghost": {
-		"Body": {
-			"BodySE": { "name": "Ghost", "width": 128, "height": 128 },
-			"BodyNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"Head": {
-			"HeadSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"HeadNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"LeftArm": {
-			"LeftArm": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"LeftLeg": {
-			"LeftLeg": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"RightArm": {
-			"RightArm": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"RightLeg": {
-			"RightLeg": { "name": "Ghost", "width": 128, "height": 128 }
+	{
+		"name": "Ghost",
+		"attachments": {
+			"RightArm": {
+				"RightArm": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"Body": {
+				"BodySE": { "name": "Ghost", "width": 128, "height": 128 },
+				"BodyNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"Head": {
+				"HeadSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"HeadNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"LeftLeg": {
+				"LeftLeg": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"RightLeg": {
+				"RightLeg": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"LeftArm": {
+				"LeftArm": { "name": "Ghost", "width": 128, "height": 128 }
+			}
 		}
 	},
-	"HumanAsian": {
-		"Body": {
-			"BodyNE": { "name": "HumanAsianBodyNE", "width": 128, "height": 128 },
-			"BodySE": { "name": "HumanAsianBodySE", "width": 128, "height": 128 }
-		},
-		"Head": {
-			"HeadNE": { "name": "HumanAsianHeadNE", "width": 128, "height": 128 },
-			"HeadSE": { "name": "HumanAsianHeadSE", "width": 128, "height": 128 }
-		},
-		"LeftArm": {
-			"LeftArm": { "name": "HumanAsianArmLeft", "width": 128, "height": 128 }
-		},
-		"LeftLeg": {
-			"LeftLeg": { "name": "HumanAsianLeg", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"RightArm": {
-			"RightArm": { "name": "HumanAsianArmRight", "width": 128, "height": 128 }
-		},
-		"RightLeg": {
-			"RightLeg": { "name": "HumanAsianLeg", "width": 128, "height": 128 }
+	{
+		"name": "HumanAsian",
+		"attachments": {
+			"RightArm": {
+				"RightArm": { "name": "HumanAsianArmRight", "width": 128, "height": 128 }
+			},
+			"Body": {
+				"BodyNE": { "name": "HumanAsianBodyNE", "width": 128, "height": 128 },
+				"BodySE": { "name": "HumanAsianBodySE", "width": 128, "height": 128 }
+			},
+			"Head": {
+				"HeadNE": { "name": "HumanAsianHeadNE", "width": 128, "height": 128 },
+				"HeadSE": { "name": "HumanAsianHeadSE", "width": 128, "height": 128 }
+			},
+			"LeftLeg": {
+				"LeftLeg": { "name": "HumanAsianLeg", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"RightLeg": {
+				"RightLeg": { "name": "HumanAsianLeg", "width": 128, "height": 128 }
+			},
+			"LeftArm": {
+				"LeftArm": { "name": "HumanAsianArmLeft", "width": 128, "height": 128 }
+			}
 		}
 	},
-	"HumanBlack": {
-		"Body": {
-			"BodyNE": { "name": "HumanBlackBodyNE", "width": 128, "height": 128 },
-			"BodySE": { "name": "HumanBlackBodySE", "width": 128, "height": 128 }
-		},
-		"Head": {
-			"HeadNE": { "name": "HumanBlackHeadNE", "width": 128, "height": 128 },
-			"HeadSE": { "name": "HumanBlackHeadSE", "width": 128, "height": 128 }
-		},
-		"LeftArm": {
-			"LeftArm": { "name": "HumanBlackArmLeft", "width": 128, "height": 128 }
-		},
-		"LeftLeg": {
-			"LeftLeg": { "name": "HumanBlackLeg", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"RightArm": {
-			"RightArm": { "name": "HumanBlackArmRight", "width": 128, "height": 128 }
-		},
-		"RightLeg": {
-			"RightLeg": { "name": "HumanBlackLeg", "width": 128, "height": 128 }
+	{
+		"name": "HumanBlack",
+		"attachments": {
+			"RightArm": {
+				"RightArm": { "name": "HumanBlackArmRight", "width": 128, "height": 128 }
+			},
+			"Body": {
+				"BodyNE": { "name": "HumanBlackBodyNE", "width": 128, "height": 128 },
+				"BodySE": { "name": "HumanBlackBodySE", "width": 128, "height": 128 }
+			},
+			"Head": {
+				"HeadNE": { "name": "HumanBlackHeadNE", "width": 128, "height": 128 },
+				"HeadSE": { "name": "HumanBlackHeadSE", "width": 128, "height": 128 }
+			},
+			"LeftLeg": {
+				"LeftLeg": { "name": "HumanBlackLeg", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"RightLeg": {
+				"RightLeg": { "name": "HumanBlackLeg", "width": 128, "height": 128 }
+			},
+			"LeftArm": {
+				"LeftArm": { "name": "HumanBlackArmLeft", "width": 128, "height": 128 }
+			}
 		}
 	},
-	"HumanWhite": {
-		"Body": {
-			"BodyNE": { "name": "HumanWhiteBodyNE", "width": 128, "height": 128 },
-			"BodySE": { "name": "HumanWhiteBodySE", "width": 128, "height": 128 }
-		},
-		"Head": {
-			"HeadNE": { "name": "HumanWhiteHeadNE", "width": 128, "height": 128 },
-			"HeadSE": { "name": "HumanWhiteHeadSE", "width": 128, "height": 128 }
-		},
-		"LeftArm": {
-			"LeftArm": { "name": "HumanWhiteArmLeft", "width": 128, "height": 128 }
-		},
-		"LeftLeg": {
-			"LeftLeg": { "name": "HumanWhiteLeg", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"RightArm": {
-			"RightArm": { "name": "HumanWhiteArmRight", "width": 128, "height": 128 }
-		},
-		"RightLeg": {
-			"RightLeg": { "name": "HumanWhiteLeg", "width": 128, "height": 128 }
+	{
+		"name": "HumanWhite",
+		"attachments": {
+			"RightArm": {
+				"RightArm": { "name": "HumanWhiteArmRight", "width": 128, "height": 128 }
+			},
+			"Body": {
+				"BodyNE": { "name": "HumanWhiteBodyNE", "width": 128, "height": 128 },
+				"BodySE": { "name": "HumanWhiteBodySE", "width": 128, "height": 128 }
+			},
+			"Head": {
+				"HeadNE": { "name": "HumanWhiteHeadNE", "width": 128, "height": 128 },
+				"HeadSE": { "name": "HumanWhiteHeadSE", "width": 128, "height": 128 }
+			},
+			"LeftLeg": {
+				"LeftLeg": { "name": "HumanWhiteLeg", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"RightLeg": {
+				"RightLeg": { "name": "HumanWhiteLeg", "width": 128, "height": 128 }
+			},
+			"LeftArm": {
+				"LeftArm": { "name": "HumanWhiteArmLeft", "width": 128, "height": 128 }
+			}
 		}
 	},
-	"SkeletonWhite": {
-		"Body": {
-			"BodyNE": { "name": "SkeletonWhiteBodyNE", "width": 128, "height": 128 },
-			"BodySE": { "name": "SkeletonWhiteBodySE", "width": 128, "height": 128 }
-		},
-		"Head": {
-			"HeadNE": { "name": "SkeletonWhiteHeadNE", "width": 128, "height": 128 },
-			"HeadSE": { "name": "SkeletonWhiteHeadSE", "width": 128, "height": 128 }
-		},
-		"LeftArm": {
-			"LeftArm": { "name": "SkeletonWhiteArmLeft", "rotation": 0.11, "width": 128, "height": 128 }
-		},
-		"LeftLeg": {
-			"LeftLeg": { "name": "SkeletonWhiteLeg", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"RightArm": {
-			"RightArm": { "name": "SkeletonWhiteArmRight", "width": 128, "height": 128 }
-		},
-		"RightLeg": {
-			"RightLeg": { "name": "SkeletonWhiteLeg", "width": 128, "height": 128 }
+	{
+		"name": "SkeletonWhite",
+		"attachments": {
+			"RightArm": {
+				"RightArm": { "name": "SkeletonWhiteArmRight", "width": 128, "height": 128 }
+			},
+			"Body": {
+				"BodyNE": { "name": "SkeletonWhiteBodyNE", "width": 128, "height": 128 },
+				"BodySE": { "name": "SkeletonWhiteBodySE", "width": 128, "height": 128 }
+			},
+			"Head": {
+				"HeadNE": { "name": "SkeletonWhiteHeadNE", "width": 128, "height": 128 },
+				"HeadSE": { "name": "SkeletonWhiteHeadSE", "width": 128, "height": 128 }
+			},
+			"LeftLeg": {
+				"LeftLeg": { "name": "SkeletonWhiteLeg", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"RightLeg": {
+				"RightLeg": { "name": "SkeletonWhiteLeg", "width": 128, "height": 128 }
+			},
+			"LeftArm": {
+				"LeftArm": { "name": "SkeletonWhiteArmLeft", "rotation": 0.11, "width": 128, "height": 128 }
+			}
 		}
 	},
-	"Template": {
-		"Body": {
-			"BodyNE": { "name": "HumanWhiteBodyNE", "width": 128, "height": 128 },
-			"BodySE": { "name": "HumanWhiteBodySE", "width": 128, "height": 128 }
-		},
-		"ChestBack": {
-			"ChestBackNE": { "name": "Ghost", "width": 128, "height": 128 },
-			"ChestBackSE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"ChestFront": {
-			"ChestFrontNE": { "name": "Ghost", "width": 128, "height": 128 },
-			"ChestFrontSE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"Head": {
-			"HeadNE": { "name": "HumanWhiteHeadNE", "width": 128, "height": 128 },
-			"HeadSE": { "name": "HumanWhiteHeadSE", "width": 128, "height": 128 }
-		},
-		"HelmetBack": {
-			"HelmetBackSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"HelmetBackNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"HelmetFront": {
-			"HelmetFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"HelmetFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"LeftArm": {
-			"LeftArm": { "name": "HumanWhiteArmLeft", "width": 128, "height": 128 }
-		},
-		"LeftArmBack": {
-			"LeftArmBackSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"LeftArmBackNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"LeftArmFront": {
-			"LeftArmFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"LeftArmFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"LeftLeg": {
-			"LeftLeg": { "name": "HumanWhiteLeg", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"LeftLegBack": {
-			"LeftLegBackSE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 },
-			"LeftLegBackNE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"LeftLegFront": {
-			"LeftLegFrontSE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 },
-			"LeftLegFrontNE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 }
-		},
-		"MainHandBack": {
-			"MainHandBack": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"MainHandFront": {
-			"MainHandFront": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"OffHandBack": {
-			"OffHandBack": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"OffHandFront": {
-			"OffHandFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"OffHandFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"RightArm": {
-			"RightArm": { "name": "HumanWhiteArmRight", "width": 128, "height": 128 }
-		},
-		"RightArmFront": {
-			"RightArmFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"RightArmFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"RightLeg": {
-			"RightLeg": { "name": "HumanWhiteLeg", "width": 128, "height": 128 }
-		},
-		"RightLegBack": {
-			"RightLegBackSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"RightLegBackNE": { "name": "Ghost", "width": 128, "height": 128 }
-		},
-		"RightLegFront": {
-			"RightLegFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
-			"RightLegFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
+	{
+		"name": "Template",
+		"attachments": {
+			"RightArm": {
+				"RightArm": { "name": "HumanWhiteArmRight", "width": 128, "height": 128 }
+			},
+			"Body": {
+				"BodyNE": { "name": "HumanWhiteBodyNE", "width": 128, "height": 128 },
+				"BodySE": { "name": "HumanWhiteBodySE", "width": 128, "height": 128 }
+			},
+			"ChestFront": {
+				"ChestFrontNE": { "name": "Ghost", "width": 128, "height": 128 },
+				"ChestFrontSE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"RightArmFront": {
+				"RightArmFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"RightArmFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"LeftLegFront": {
+				"LeftLegFrontSE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 },
+				"LeftLegFrontNE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"Head": {
+				"HeadNE": { "name": "HumanWhiteHeadNE", "width": 128, "height": 128 },
+				"HeadSE": { "name": "HumanWhiteHeadSE", "width": 128, "height": 128 }
+			},
+			"HelmetBack": {
+				"HelmetBackSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"HelmetBackNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"RightLegFront": {
+				"RightLegFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"RightLegFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"HelmetFront": {
+				"HelmetFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"HelmetFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"MainHandFront": {
+				"MainHandFront": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"OffHandBack": {
+				"OffHandBack": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"LeftLeg": {
+				"LeftLeg": { "name": "HumanWhiteLeg", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"ChestBack": {
+				"ChestBackNE": { "name": "Ghost", "width": 128, "height": 128 },
+				"ChestBackSE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"OffHandFront": {
+				"OffHandFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"OffHandFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"LeftLegBack": {
+				"LeftLegBackSE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 },
+				"LeftLegBackNE": { "name": "Ghost", "rotation": -0.13, "width": 128, "height": 128 }
+			},
+			"MainHandBack": {
+				"MainHandBack": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"RightLeg": {
+				"RightLeg": { "name": "HumanWhiteLeg", "width": 128, "height": 128 }
+			},
+			"LeftArmFront": {
+				"LeftArmFrontSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"LeftArmFrontNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"LeftArm": {
+				"LeftArm": { "name": "HumanWhiteArmLeft", "width": 128, "height": 128 }
+			},
+			"RightLegBack": {
+				"RightLegBackSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"RightLegBackNE": { "name": "Ghost", "width": 128, "height": 128 }
+			},
+			"LeftArmBack": {
+				"LeftArmBackSE": { "name": "Ghost", "width": 128, "height": 128 },
+				"LeftArmBackNE": { "name": "Ghost", "width": 128, "height": 128 }
+			}
 		}
 	}
-},
+],
 "animations": {
 	"AttackNE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.6667, "name": "BodyNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.6667, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
-					{ "time": 0.6667, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.6667, "name": "HelmetBackNE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
+					{ "name": "HelmetFrontNE" },
 					{ "time": 0.6667, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.5, "name": "LeftArmBackNE" },
-					{ "time": 0.6667, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
-					{ "time": 0.6667, "name": "LeftLegBackNE" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
+					{ "name": "RightArmBackNE" },
 					{ "time": 0.6667, "name": "RightArmBackNE" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.6667, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontNE" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" },
+					{ "time": 0.6667, "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" },
+					{ "time": 0.6667, "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" },
+					{ "time": 0.6667, "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.6667, "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.6667, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.6667, "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.5, "name": "LeftArmBackNE" },
+					{ "time": 0.6667, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.6667, "name": "RightLegBackNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.6667, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "x": 0.04, "y": -5.73 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.6667 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.6667, "x": -180 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -85.31 },
+					{ "angle": -85.31 },
 					{ "time": 0.3333, "angle": -69.84 },
 					{ "time": 0.5, "angle": -64.41 },
 					{ "time": 0.6667, "angle": -85.31 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.71, "y": -0.01, "curve": "stepped" },
+					{ "x": 3.71, "y": -0.01, "curve": "stepped" },
 					{ "time": 0.5, "x": 3.71, "y": -0.01, "curve": "stepped" },
 					{ "time": 0.6667, "x": 3.71, "y": -0.01 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "angle": 43.47 },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333, "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.3333, "angle": -63.2 },
 					{ "time": 0.5, "angle": 104 },
 					{ "time": 0.6667, "angle": 64.91 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.12, "y": -2.12, "curve": "stepped" },
+					{ "x": 0.12, "y": -2.12, "curve": "stepped" },
 					{ "time": 0.3333, "x": 0.12, "y": -2.12, "curve": "stepped" },
 					{ "time": 0.6667, "x": 0.12, "y": -2.12 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "angle": -27.95 },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333, "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 64.46 }
+					{ "angle": 64.46 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 3 },
 					{ "slot": "RightArm", "offset": 17 },
@@ -486,153 +518,152 @@
 	},
 	"AttackNW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.6667, "name": "BodyNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.6667, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
-					{ "time": 0.6667, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.6667, "name": "HelmetBackNE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
+					{ "name": "HelmetFrontNE" },
 					{ "time": 0.6667, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.6667, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
-					{ "time": 0.6667, "name": "LeftLegBackNE" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
+					{ "name": "RightArmBackNE" },
 					{ "time": 0.6667, "name": "RightArmBackNE" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.6667, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontNE" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" },
+					{ "time": 0.6667, "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" },
+					{ "time": 0.6667, "name": "HeadNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" },
+					{ "time": 0.6667, "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.6667, "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.6667, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.6667, "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.6667, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.6667, "name": "RightLegBackNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "x": -0.03, "y": -4.8 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.6667 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -91.17 },
+					{ "angle": -91.17 },
 					{ "time": 0.3333, "angle": -82.09 },
 					{ "time": 0.5, "angle": -56.69 },
 					{ "time": 0.6667, "angle": -91.17 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.57, "y": -2.58, "curve": "stepped" },
+					{ "x": -25.57, "y": -2.58, "curve": "stepped" },
 					{ "time": 0.6667, "x": -25.57, "y": -2.58 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "angle": 16.87 },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "x": 0.02, "y": 3.12 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.6667 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 68.13 },
+					{ "angle": 68.13 },
 					{ "time": 0.3333, "angle": -72.65 },
 					{ "time": 0.5, "angle": 37.97 },
 					{ "time": 0.6667, "angle": 68.13 }
 				],
 				"translate": [
-					{ "time": 0, "x": 28.53, "y": -1.31, "curve": "stepped" },
+					{ "x": 28.53, "y": -1.31, "curve": "stepped" },
 					{ "time": 0.6667, "x": 28.53, "y": -1.31 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "angle": -14.1 },
 					{ "time": 0.6667, "angle": 0.3 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "x": -1.9, "y": 2.41 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.6667 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.5, "angle": 48.38 },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.6667 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 123.67 }
+					{ "angle": 123.67 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 5 },
 					{ "slot": "LeftArm", "offset": 19 },
@@ -660,66 +691,66 @@
 	},
 	"AttackSE": {
 		"slots": {
+			"HelmetFront": {
+				"attachment": [
+					{ "name": "HelmetFrontSE" },
+					{ "time": 0.6667, "name": "HelmetFrontSE" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackSE" },
+					{ "time": 0.6667, "name": "RightArmBackSE" }
+				]
+			},
 			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "BodySE" },
+					{ "name": "BodySE" },
 					{ "time": 0.3333, "name": "BodySE" },
 					{ "time": 0.6667, "name": "BodySE" }
 				]
 			},
 			"Head": {
 				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
+					{ "name": "HeadSE" },
 					{ "time": 0.6667, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" },
-					{ "time": 0.6667, "name": "HelmetBackSE" }
-				]
-			},
-			"HelmetFront": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" },
-					{ "time": 0.6667, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" },
-					{ "time": 0.6667, "name": "LeftArmBackSE" }
 				]
 			},
 			"LeftLegBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" },
+					{ "name": "LeftLegBackSE" },
 					{ "time": 0.6667, "name": "LeftLegBackSE" }
 				]
 			},
-			"RightArmBack": {
+			"HelmetBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" },
-					{ "time": 0.6667, "name": "RightArmBackSE" }
-				]
-			},
-			"RightLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" },
-					{ "time": 0.6667, "name": "RightLegBackSE" }
+					{ "name": "HelmetBackSE" },
+					{ "time": 0.6667, "name": "HelmetBackSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" },
+					{ "name": "RightLegFrontSE" },
 					{ "time": 0.6667, "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" },
+					{ "time": 0.6667, "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" },
+					{ "time": 0.6667, "name": "RightLegBackSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 65.02 },
+					{ "angle": 65.02 },
 					{ "time": 0.1667, "angle": -133.76 },
 					{ "time": 0.3333, "angle": -62.09 },
 					{ "time": 0.4333, "angle": 156.43 },
@@ -727,83 +758,82 @@
 					{ "time": 0.6667, "angle": 65.02 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.33, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -2.33, "y": 0 }
+					{ "x": -2.33, "curve": "stepped" },
+					{ "time": 0.6667, "x": -2.33 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -63.54 },
+					{ "angle": -63.54 },
 					{ "time": 0.3333, "angle": -101.98 },
 					{ "time": 0.5, "angle": -116.12 },
 					{ "time": 0.6667, "angle": -63.54 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.66, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 3.66, "y": 0 }
+					{ "x": 3.66, "curve": "stepped" },
+					{ "time": 0.6667, "x": 3.66 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -54.6 },
+					{ "angle": -54.6 },
 					{ "time": 0.1667, "angle": -169.2 },
 					{ "time": 0.3333, "angle": 156.76 },
 					{ "time": 0.5, "angle": 134.45 },
 					{ "time": 0.6667, "angle": -54.6 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "angle": 35.62 },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "x": 1.23, "y": 3.08 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.6667 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "angle": -27.94 },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "x": -2.72, "y": 2.77 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.6667 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
-					{ "time": 0.5, "x": 0, "y": -5.99 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
+					{ "time": 0.5, "y": -5.99 },
+					{ "time": 0.6667 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 86.02 }
+					{ "angle": 86.02 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "RightArm", "offset": 16 },
 					{ "slot": "MainHandBack", "offset": 15 },
@@ -839,147 +869,146 @@
 	},
 	"AttackSW": {
 		"slots": {
+			"HelmetFront": {
+				"attachment": [
+					{ "name": "HelmetFrontSE" },
+					{ "time": 0.6667, "name": "HelmetFrontSE" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackSE" },
+					{ "time": 0.6667, "name": "RightArmBackSE" }
+				]
+			},
 			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "BodySE" },
+					{ "name": "BodySE" },
 					{ "time": 0.6667, "name": "BodySE" }
 				]
 			},
 			"Head": {
 				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
+					{ "name": "HeadSE" },
 					{ "time": 0.6667, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" },
-					{ "time": 0.6667, "name": "HelmetBackSE" }
-				]
-			},
-			"HelmetFront": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" },
-					{ "time": 0.6667, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" },
-					{ "time": 0.6667, "name": "LeftArmBackSE" }
 				]
 			},
 			"LeftLegBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" },
+					{ "name": "LeftLegBackSE" },
 					{ "time": 0.6667, "name": "LeftLegBackSE" }
 				]
 			},
-			"RightArmBack": {
+			"HelmetBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" },
-					{ "time": 0.6667, "name": "RightArmBackSE" }
-				]
-			},
-			"RightLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" },
-					{ "time": 0.6667, "name": "RightLegBackSE" }
+					{ "name": "HelmetBackSE" },
+					{ "time": 0.6667, "name": "HelmetBackSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" },
+					{ "name": "RightLegFrontSE" },
 					{ "time": 0.6667, "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" },
+					{ "time": 0.6667, "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" },
+					{ "time": 0.6667, "name": "RightLegBackSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 113.77 },
+					{ "angle": 113.77 },
 					{ "time": 0.3333, "angle": -101.53 },
 					{ "time": 0.5, "angle": 121.25 },
 					{ "time": 0.6667, "angle": 113.77 }
 				],
 				"translate": [
-					{ "time": 0, "x": 29.21, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 29.21, "y": 0 }
+					{ "x": 29.21, "curve": "stepped" },
+					{ "time": 0.6667, "x": 29.21 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -105.2 },
+					{ "angle": -105.2 },
 					{ "time": 0.3333, "angle": -119.46 },
 					{ "time": 0.5, "angle": -151.32 },
 					{ "time": 0.6667, "angle": -105.2 }
 				],
 				"translate": [
-					{ "time": 0, "x": -26.74, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -26.74, "y": 0 }
+					{ "x": -26.74, "curve": "stepped" },
+					{ "time": 0.6667, "x": -26.74 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -145.97 },
+					{ "angle": -145.97 },
 					{ "time": 0.3333, "angle": 158.63 },
 					{ "time": 0.5, "angle": 118.41 },
 					{ "time": 0.6667, "angle": -145.97 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.6667, "x": -180 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "angle": 31.79 },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "x": 2.61, "y": 1.63 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.6667 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "angle": -24.45 },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.5, "x": -2.61, "y": 0.98 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.6667 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
-					{ "time": 0.5, "x": 0, "y": -4.89 },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
+					{ "time": 0.5, "y": -4.89 },
+					{ "time": 0.6667 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.6667, "x": -180 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 88.65 }
+					{ "angle": 88.65 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 13 },
 					{ "slot": "LeftLeg", "offset": 11 },
@@ -1016,147 +1045,146 @@
 	},
 	"CastEndNE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.3333, "name": "BodyNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.3333, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
-					{ "time": 0.3333, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.3333, "name": "HelmetBackNE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
+					{ "name": "HelmetFrontNE" },
 					{ "time": 0.3333, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.3333, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
-					{ "time": 0.3333, "name": "LeftLegBackNE" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
+					{ "name": "RightArmBackNE" },
 					{ "time": 0.3333, "name": "RightArmBackNE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" }
+					{ "name": "OffHandFrontNE" }
 				]
 			},
-			"RightLegBack": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.3333, "name": "RightLegBackNE" }
+					{ "name": "BodyNE" },
+					{ "time": 0.3333, "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" },
+					{ "time": 0.3333, "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" },
+					{ "time": 0.3333, "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.3333, "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.3333, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.3333, "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.3333, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.3333, "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				],
 				"translate": [
-					{ "time": 0, "x": -0.04, "y": 5.37 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "x": -0.04, "y": 5.37 },
+					{ "time": 0.3333 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.3333, "x": -180 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -85.31, "curve": "stepped" },
+					{ "angle": -85.31, "curve": "stepped" },
 					{ "time": 0.3333, "angle": -85.31 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.03, "y": -5.01 },
+					{ "x": -2.03, "y": -5.01 },
 					{ "time": 0.3333, "x": 3.71, "y": -0.01 }
 				]
 			},
 			"LeftLeg": {
 				"translate": [
-					{ "time": 0, "x": -0.8, "y": -2.9 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "x": -0.8, "y": -2.9 },
+					{ "time": 0.3333 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": -41.89 },
+					{ "angle": -41.89 },
 					{ "time": 0.3333, "angle": 64.91 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.12, "y": -2.12, "curve": "stepped" },
+					{ "x": 0.12, "y": -2.12, "curve": "stepped" },
 					{ "time": 0.3333, "x": 0.12, "y": -2.12 }
 				]
 			},
 			"RightLeg": {
 				"translate": [
-					{ "time": 0, "x": 2.08, "y": -2.46 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "x": 2.08, "y": -2.46 },
+					{ "time": 0.3333 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 51.87 },
-					{ "time": 0.3333, "angle": 0 }
+					{ "angle": 51.87 },
+					{ "time": 0.3333 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 72.61 }
+					{ "angle": 72.61 }
 				],
 				"translate": [
-					{ "time": 0, "x": -3.77, "y": 5.82 }
+					{ "x": -3.77, "y": 5.82 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
@@ -1187,140 +1215,139 @@
 	},
 	"CastEndNW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.3333, "name": "BodyNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.3333, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
-					{ "time": 0.3333, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.3333, "name": "HelmetBackNE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
+					{ "name": "HelmetFrontNE" },
 					{ "time": 0.3333, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.3333, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
-					{ "time": 0.3333, "name": "LeftLegBackNE" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
-					{ "time": 0.3333, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
+					{ "name": "RightArmBackNE" },
 					{ "time": 0.3333, "name": "RightArmBackNE" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.3333, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontNE" },
+					{ "time": 0.3333, "name": "OffHandFrontNE" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" },
+					{ "time": 0.3333, "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" },
+					{ "time": 0.3333, "name": "HeadNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" },
+					{ "time": 0.3333, "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.3333, "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.3333, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.3333, "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.3333, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.3333, "name": "RightLegBackNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0.03, "y": 4.41 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "x": 0.03, "y": 4.41 },
+					{ "time": 0.3333 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": 137.43 },
+					{ "angle": 137.43 },
 					{ "time": 0.3333, "angle": -91.17 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.59, "y": -6.38 },
+					{ "x": -25.59, "y": -6.38 },
 					{ "time": 0.3333, "x": -25.57, "y": -2.58 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				],
 				"translate": [
-					{ "time": 0, "x": -1.15, "y": -3.36 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "x": -1.15, "y": -3.36 },
+					{ "time": 0.3333 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": -45.38 },
+					{ "angle": -45.38 },
 					{ "time": 0.3333, "angle": 68.13 }
 				],
 				"translate": [
-					{ "time": 0, "x": 28.53, "y": -1.31, "curve": "stepped" },
+					{ "x": 28.53, "y": -1.31, "curve": "stepped" },
 					{ "time": 0.3333, "x": 28.53, "y": -1.31 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				],
 				"translate": [
-					{ "time": 0, "x": 2.23, "y": -2.83 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "x": 2.23, "y": -2.83 },
+					{ "time": 0.3333 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 84.63 },
-					{ "time": 0.3333, "angle": 0 }
+					{ "angle": 84.63 },
+					{ "time": 0.3333 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 118.72, "curve": "stepped" },
+					{ "angle": 118.72, "curve": "stepped" },
 					{ "time": 0.3333, "angle": 118.72 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "LeftArm", "offset": 19 },
@@ -1348,133 +1375,132 @@
 	},
 	"CastEndSE": {
 		"slots": {
+			"HelmetFront": {
+				"attachment": [
+					{ "name": "HelmetFrontSE" },
+					{ "time": 0.3333, "name": "HelmetFrontSE" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackSE" },
+					{ "time": 0.3333, "name": "RightArmBackSE" }
+				]
+			},
 			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "BodySE" },
+					{ "name": "BodySE" },
 					{ "time": 0.3333, "name": "BodySE" }
 				]
 			},
 			"Head": {
 				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
+					{ "name": "HeadSE" },
 					{ "time": 0.3333, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" },
-					{ "time": 0.3333, "name": "HelmetBackSE" }
-				]
-			},
-			"HelmetFront": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" },
-					{ "time": 0.3333, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" },
-					{ "time": 0.3333, "name": "LeftArmBackSE" }
 				]
 			},
 			"LeftLegBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" },
+					{ "name": "LeftLegBackSE" },
 					{ "time": 0.3333, "name": "LeftLegBackSE" }
 				]
 			},
-			"RightArmBack": {
+			"HelmetBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" },
-					{ "time": 0.3333, "name": "RightArmBackSE" }
-				]
-			},
-			"RightLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" },
-					{ "time": 0.3333, "name": "RightLegBackSE" }
+					{ "name": "HelmetBackSE" },
+					{ "time": 0.3333, "name": "HelmetBackSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" },
+					{ "name": "RightLegFrontSE" },
 					{ "time": 0.3333, "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" },
+					{ "time": 0.3333, "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" },
+					{ "time": 0.3333, "name": "RightLegBackSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": -122.34 },
+					{ "angle": -122.34 },
 					{ "time": 0.3333, "angle": 65.02 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.33, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": -2.33, "y": 0 }
+					{ "x": -2.33, "curve": "stepped" },
+					{ "time": 0.3333, "x": -2.33 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": 39.28 },
+					{ "angle": 39.28 },
 					{ "time": 0.3333, "angle": -63.54 }
 				],
 				"translate": [
-					{ "time": 0, "x": -0.11, "y": 0 },
-					{ "time": 0.3333, "x": 3.66, "y": 0 }
+					{ "x": -0.11 },
+					{ "time": 0.3333, "x": 3.66 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 116.17 },
+					{ "angle": 116.17 },
 					{ "time": 0.1333, "angle": 131.85 },
 					{ "time": 0.3333, "angle": -54.6 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.3333, "x": -180 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.17, "y": -2.17 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "x": -2.17, "y": -2.17 },
+					{ "time": 0.3333 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				],
 				"translate": [
-					{ "time": 0, "x": 2.17, "y": -2.53 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "x": 2.17, "y": -2.53 },
+					{ "time": 0.3333 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 5.05 },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "y": 5.05 },
+					{ "time": 0.3333 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 84.27, "curve": "stepped" },
+					{ "angle": 84.27, "curve": "stepped" },
 					{ "time": 0.3333, "angle": 84.27 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "RightArm", "offset": 16 },
 					{ "slot": "MainHandBack", "offset": 15 },
@@ -1497,135 +1523,134 @@
 	},
 	"CastEndSW": {
 		"slots": {
+			"HelmetFront": {
+				"attachment": [
+					{ "name": "HelmetFrontSE" },
+					{ "time": 0.3333, "name": "HelmetFrontSE" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackSE" },
+					{ "time": 0.3333, "name": "RightArmBackSE" }
+				]
+			},
 			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "BodySE" },
+					{ "name": "BodySE" },
 					{ "time": 0.3333, "name": "BodySE" }
 				]
 			},
 			"Head": {
 				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
+					{ "name": "HeadSE" },
 					{ "time": 0.3333, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" },
-					{ "time": 0.3333, "name": "HelmetBackSE" }
-				]
-			},
-			"HelmetFront": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" },
-					{ "time": 0.3333, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" },
-					{ "time": 0.3333, "name": "LeftArmBackSE" }
 				]
 			},
 			"LeftLegBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" },
+					{ "name": "LeftLegBackSE" },
 					{ "time": 0.3333, "name": "LeftLegBackSE" }
 				]
 			},
-			"RightArmBack": {
+			"HelmetBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" },
-					{ "time": 0.3333, "name": "RightArmBackSE" }
-				]
-			},
-			"RightLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" },
-					{ "time": 0.3333, "name": "RightLegBackSE" }
+					{ "name": "HelmetBackSE" },
+					{ "time": 0.3333, "name": "HelmetBackSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" },
+					{ "name": "RightLegFrontSE" },
 					{ "time": 0.3333, "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" },
+					{ "time": 0.3333, "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" },
+					{ "time": 0.3333, "name": "RightLegBackSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": -121.88 },
+					{ "angle": -121.88 },
 					{ "time": 0.2, "angle": 165.94 },
 					{ "time": 0.3333, "angle": 113.77 }
 				],
 				"translate": [
-					{ "time": 0, "x": 29.21, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 29.21, "y": 0 }
+					{ "x": 29.21, "curve": "stepped" },
+					{ "time": 0.3333, "x": 29.21 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": 72.99 },
+					{ "angle": 72.99 },
 					{ "time": 0.2, "angle": -125.09 },
 					{ "time": 0.3333, "angle": -105.2 }
 				],
 				"translate": [
-					{ "time": 0, "x": -26.74, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": -26.74, "y": 0 }
+					{ "x": -26.74, "curve": "stepped" },
+					{ "time": 0.3333, "x": -26.74 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 107.98 },
+					{ "angle": 107.98 },
 					{ "time": 0.2, "angle": 174.68 },
 					{ "time": 0.3333, "angle": -145.97 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.3333, "x": -180 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.3333, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.3333, "x": -180 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 90.62, "curve": "stepped" },
+					{ "angle": 90.62, "curve": "stepped" },
 					{ "time": 0.3333, "angle": 90.62 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 9 },
 					{ "slot": "LeftArm", "offset": 16 },
@@ -1680,137 +1705,136 @@
 	},
 	"CastStartNE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" }
+					{ "name": "HelmetFrontNE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" }
+					{ "name": "RightArmBackNE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" }
+					{ "name": "OffHandFrontNE" }
 				]
 			},
-			"RightLegBack": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" }
+					{ "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" }
+					{ "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.3333, "x": 0, "y": 0.36 },
+					{},
+					{ "time": 0.3333, "y": 0.36 },
 					{ "time": 0.6667, "x": -0.04, "y": 5.37 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.6667, "x": -180 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -85.31 },
+					{ "angle": -85.31 },
 					{ "time": 0.3333, "angle": 121.25 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.71, "y": -0.01 },
+					{ "x": 3.71, "y": -0.01 },
 					{ "time": 0.3333, "x": -2.3, "y": -5.7 },
 					{ "time": 0.6667, "x": -2.03, "y": -5.01 }
 				]
 			},
 			"LeftLeg": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.6667, "x": -0.8, "y": -2.9 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.3333, "angle": 132.04 },
 					{ "time": 0.6667, "angle": -41.89 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.12, "y": -2.12 }
+					{ "x": 0.12, "y": -2.12 }
 				]
 			},
 			"RightLeg": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.6667, "x": 2.08, "y": -2.46 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.6667, "angle": 51.87 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 68.04 }
+					{ "angle": 68.04 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
@@ -1827,130 +1851,129 @@
 	},
 	"CastStartNW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" }
+					{ "name": "HelmetFrontNE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" }
+					{ "name": "RightArmBackNE" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontNE" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" }
+					{ "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.6667, "x": 0.03, "y": 4.41 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -91.17 },
+					{ "angle": -91.17 },
 					{ "time": 0.3333, "angle": -50.63 },
 					{ "time": 0.6667, "angle": 137.43 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.57, "y": -2.58 },
+					{ "x": -25.57, "y": -2.58 },
 					{ "time": 0.6667, "x": -25.59, "y": -6.38 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.6667, "x": -1.15, "y": -3.36 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 68.13 },
+					{ "angle": 68.13 },
 					{ "time": 0.3333, "angle": -10.38 },
 					{ "time": 0.6667, "angle": -45.38 }
 				],
 				"translate": [
-					{ "time": 0, "x": 28.53, "y": -1.31 }
+					{ "x": 28.53, "y": -1.31 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.6667, "x": 2.23, "y": -2.83 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.6667, "angle": 84.63 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 116.59 }
+					{ "angle": 116.59 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "LeftArm", "offset": 19 },
@@ -1965,123 +1988,122 @@
 	},
 	"CastStartSE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" }
+					{ "name": "HelmetFrontSE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" }
+					{ "name": "RightArmBackSE" }
 				]
 			},
-			"RightLegBack": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" }
+					{ "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" }
+					{ "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 65.02 },
+					{ "angle": 65.02 },
 					{ "time": 0.6667, "angle": -122.34 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.33, "y": 0 }
+					{ "x": -2.33 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -63.54 },
+					{ "angle": -63.54 },
 					{ "time": 0.3333, "angle": -106.56 },
 					{ "time": 0.6667, "angle": 39.28 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.66, "y": 0 },
-					{ "time": 0.6667, "x": -0.11, "y": 0 }
+					{ "x": 3.66 },
+					{ "time": 0.6667, "x": -0.11 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -54.6 },
+					{ "angle": -54.6 },
 					{ "time": 0.3333, "angle": 153.21 },
 					{ "time": 0.6667, "angle": 116.17 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.6667, "x": -2.17, "y": -2.17 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
 					{ "time": 0.6667, "x": 2.17, "y": -2.53 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": 0, "y": 0 },
-					{ "time": 0.6667, "x": 0, "y": 5.05 }
+					{ "curve": "stepped" },
+					{ "time": 0.3333 },
+					{ "time": 0.6667, "y": 5.05 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 80.41 }
+					{ "angle": 80.41 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "RightArm", "offset": 16 },
 					{ "slot": "MainHandBack", "offset": 15 },
@@ -2094,118 +2116,117 @@
 	},
 	"CastStartSW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" }
+					{ "name": "HelmetFrontSE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" }
+					{ "name": "RightArmBackSE" }
 				]
 			},
-			"RightLegBack": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": null }
+					{ "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" }
+					{ "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": null }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 113.77 },
+					{ "angle": 113.77 },
 					{ "time": 0.3333, "angle": 165.94 },
 					{ "time": 0.6667, "angle": -121.88 }
 				],
 				"translate": [
-					{ "time": 0, "x": 29.21, "y": 0 }
+					{ "x": 29.21 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -105.2 },
+					{ "angle": -105.2 },
 					{ "time": 0.3333, "angle": -125.09 },
 					{ "time": 0.5333, "angle": 25.91 },
 					{ "time": 0.6667, "angle": 72.99 }
 				],
 				"translate": [
-					{ "time": 0, "x": -26.74, "y": 0 }
+					{ "x": -26.74 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -145.97 },
+					{ "angle": -145.97 },
 					{ "time": 0.3333, "angle": 174.68 },
 					{ "time": 0.6667, "angle": 107.98 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.6667, "x": -180 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 95.44 }
+					{ "angle": 95.44 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 13 },
 					{ "slot": "LeftLeg", "offset": 11 },
@@ -2242,174 +2263,173 @@
 	},
 	"FallDownNE": {
 		"slots": {
-			"Body": {
+			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.5, "name": "BodyNE" }
+					{ "name": "HelmetFrontNE" },
+					{ "time": 0.5, "name": "HelmetFrontNE" }
 				]
 			},
-			"ChestFront": {
+			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.5, "name": "ChestFrontNE" }
+					{ "name": "RightArmBackNE" },
+					{ "time": 0.5, "name": "RightArmBackNE" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "name": "OffHandFrontNE" },
+					{ "time": 0.6667, "name": "OffHandFrontNE" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" },
+					{ "time": 0.5, "name": "BodyNE" }
 				]
 			},
 			"Head": {
 				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
+					{ "name": "HeadNE" },
 					{ "time": 0.5, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.5, "name": "HelmetBackNE" }
-				]
-			},
-			"HelmetFront": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
-					{ "time": 0.5, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.5, "name": "LeftArmBackNE" }
 				]
 			},
 			"LeftArmFront": {
 				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" },
+					{ "name": "LeftArmFrontNE" },
 					{ "time": 0.5, "name": "LeftArmFrontNE" }
 				]
 			},
 			"LeftLegBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
+					{ "name": "LeftLegBackNE" },
 					{ "time": 0.5, "name": "LeftLegBackNE" }
 				]
 			},
-			"OffHandFront": {
+			"HelmetBack": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
-					{ "time": 0.6667, "name": "OffHandFrontNE" }
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.5, "name": "HelmetBackNE" }
 				]
 			},
-			"RightArmBack": {
+			"ChestFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
-					{ "time": 0.5, "name": "RightArmBackNE" }
-				]
-			},
-			"RightLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.5, "name": "RightLegBackNE" }
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.5, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.5, "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.5, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.5, "name": "RightLegBackNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.5, "angle": -91.01 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 8.02, "y": 0.06 },
 					{ "time": 0.5, "x": 0.19, "y": -26.13 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"Head": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -20.12 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 7.68, "y": -0.28 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -85.31 },
+					{ "angle": -85.31 },
 					{ "time": 0.1667, "angle": -102.04 },
 					{ "time": 0.5, "angle": -85.31 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.71, "y": -0.01, "curve": "stepped" },
+					{ "x": 3.71, "y": -0.01, "curve": "stepped" },
 					{ "time": 0.5, "x": 3.71, "y": -0.01 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 17.4 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -0.03, "y": 4.68 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.1667, "angle": 52.24 },
 					{ "time": 0.5, "angle": 174.93 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.12, "y": -2.12 },
+					{ "x": 0.12, "y": -2.12 },
 					{ "time": 0.5, "x": 11.22, "y": -1.85 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -24.68 },
 					{ "time": 0.5, "angle": 14.77 },
 					{ "time": 0.6, "angle": -1.83 },
 					{ "time": 0.6667, "angle": 9.43 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -0.02, "y": 2.67 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"root": {
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 72.04 }
+					{ "angle": 72.04 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
@@ -2454,144 +2474,144 @@
 	},
 	"FallDownNW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
-					{ "time": 0.6667, "name": "OffHandFrontNE" }
+					{ "name": "HelmetFrontNE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" }
+					{ "name": "RightArmBackNE" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontNE" },
+					{ "time": 0.6667, "name": "OffHandFrontNE" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" }
+					{ "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"rotate": [
-					{ "time": 0.1667, "angle": 0 },
+					{ "time": 0.1667 },
 					{ "time": 0.5, "angle": -85.65 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 10.79, "y": -0.08 },
 					{ "time": 0.5, "x": 10.57, "y": -30.95 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"Head": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -22.08 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 9.5, "y": -4.16 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -91.17 },
+					{ "angle": -91.17 },
 					{ "time": 0.1667, "angle": -157.22 },
 					{ "time": 0.5, "angle": -56.84 },
 					{ "time": 0.6, "angle": -67.52 },
 					{ "time": 0.6667, "angle": -56.84 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.57, "y": -2.58 }
+					{ "x": -25.57, "y": -2.58 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 21.69 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 2.27, "y": -0.02 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 68.13 },
+					{ "angle": 68.13 },
 					{ "time": 0.1667, "angle": 49.49 },
 					{ "time": 0.5, "angle": 121.03 }
 				],
 				"translate": [
-					{ "time": 0, "x": 28.53, "y": -1.31 }
+					{ "x": 28.53, "y": -1.31 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -25.36 },
 					{ "time": 0.5, "angle": 23.03 },
 					{ "time": 0.6, "angle": 7.64 },
 					{ "time": 0.6667, "angle": 23.03 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.1667, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.1667 },
 					{ "time": 0.5, "x": 3.17, "y": -0.26, "curve": "stepped" },
 					{ "time": 0.6667, "x": 3.17, "y": -0.26 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.1667, "angle": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.1667 },
 					{ "time": 0.5, "angle": 47.43 }
 				],
 				"translate": [
-					{ "time": 0.1667, "x": 0, "y": 0 },
+					{ "time": 0.1667 },
 					{ "time": 0.5, "x": -6.95, "y": 2.78 },
 					{ "time": 0.6, "x": -6.18, "y": 3.85 },
 					{ "time": 0.6667, "x": -6.95, "y": 2.78 }
@@ -2600,7 +2620,6 @@
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "LeftArm", "offset": 17 },
@@ -2631,101 +2650,101 @@
 	},
 	"FallDownSE": {
 		"slots": {
+			"HelmetFront": {
+				"attachment": [
+					{ "name": "HelmetFrontSE" },
+					{ "time": 0.5, "name": "HelmetFrontSE" },
+					{ "time": 0.6667, "name": "HelmetFrontSE" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackSE" },
+					{ "time": 0.5, "name": "RightArmBackSE" },
+					{ "time": 0.6667, "name": "RightArmBackSE" }
+				]
+			},
 			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "BodySE" },
+					{ "name": "BodySE" },
 					{ "time": 0.5, "name": "BodySE" },
 					{ "time": 0.6667, "name": "BodySE" }
 				]
 			},
 			"Head": {
 				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
+					{ "name": "HeadSE" },
 					{ "time": 0.5, "name": "HeadSE" },
 					{ "time": 0.6667, "name": "HeadSE" }
 				]
 			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" },
-					{ "time": 0.5, "name": "HelmetBackSE" },
-					{ "time": 0.6667, "name": "HelmetBackSE" }
-				]
-			},
-			"HelmetFront": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" },
-					{ "time": 0.5, "name": "HelmetFrontSE" },
-					{ "time": 0.6667, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" },
-					{ "time": 0.5, "name": "LeftArmBackSE" },
-					{ "time": 0.6667, "name": "LeftArmBackSE" }
-				]
-			},
 			"LeftLegBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" },
+					{ "name": "LeftLegBackSE" },
 					{ "time": 0.5, "name": "LeftLegBackSE" },
 					{ "time": 0.6667, "name": "LeftLegBackSE" }
 				]
 			},
-			"RightArmBack": {
+			"HelmetBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" },
-					{ "time": 0.5, "name": "RightArmBackSE" },
-					{ "time": 0.6667, "name": "RightArmBackSE" }
-				]
-			},
-			"RightLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" },
-					{ "time": 0.5, "name": "RightLegBackSE" },
-					{ "time": 0.6667, "name": "RightLegBackSE" }
+					{ "name": "HelmetBackSE" },
+					{ "time": 0.5, "name": "HelmetBackSE" },
+					{ "time": 0.6667, "name": "HelmetBackSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" },
+					{ "name": "RightLegFrontSE" },
 					{ "time": 0.5, "name": "RightLegFrontSE" },
 					{ "time": 0.6667, "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" },
+					{ "time": 0.5, "name": "LeftArmBackSE" },
+					{ "time": 0.6667, "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" },
+					{ "time": 0.5, "name": "RightLegBackSE" },
+					{ "time": 0.6667, "name": "RightLegBackSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.1667, "angle": 42.1 },
 					{ "time": 0.5, "angle": 89.32, "curve": "stepped" },
 					{ "time": 0.6667, "angle": 89.32 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.33, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": -2.33, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -2.33, "y": 0 }
+					{ "x": -2.33, "curve": "stepped" },
+					{ "time": 0.5, "x": -2.33, "curve": "stepped" },
+					{ "time": 0.6667, "x": -2.33 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -63.54 },
+					{ "angle": -63.54 },
 					{ "time": 0.1667, "angle": -45.5 },
 					{ "time": 0.5, "angle": -133.56 },
 					{ "time": 0.6, "angle": -120.94 },
 					{ "time": 0.6667, "angle": -133.56 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.66, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": 3.66, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 3.66, "y": 0 }
+					{ "x": 3.66, "curve": "stepped" },
+					{ "time": 0.5, "x": 3.66, "curve": "stepped" },
+					{ "time": 0.6667, "x": 3.66 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -54.6 },
+					{ "angle": -54.6 },
 					{ "time": 0.5, "angle": -81.06, "curve": "stepped" },
 					{ "time": 0.6, "angle": -81.06, "curve": "stepped" },
 					{ "time": 0.6667, "angle": -81.06 }
@@ -2738,67 +2757,67 @@
 			},
 			"Head": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 20.85 },
-					{ "time": 0.5, "angle": 0, "curve": "stepped" },
-					{ "time": 0.6667, "angle": 0 }
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -5.19, "y": -2.36 },
-					{ "time": 0.5, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 22.31 },
 					{ "time": 0.5, "angle": -29.07 },
 					{ "time": 0.6, "angle": -9.98 },
 					{ "time": 0.6667, "angle": -29.07 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1667, "x": 0, "y": 2.83 },
-					{ "time": 0.5, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{},
+					{ "time": 0.1667, "y": 2.83 },
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -27.15 },
 					{ "time": 0.5, "angle": -3.54, "curve": "stepped" },
 					{ "time": 0.6667, "angle": -3.54 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -1.42, "y": 0.94 },
-					{ "time": 0.5, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "time": 0.5, "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"Body": {
 				"rotate": [
-					{ "time": 0.1667, "angle": 0 },
+					{ "time": 0.1667 },
 					{ "time": 0.5, "angle": 87.15, "curve": "stepped" },
 					{ "time": 0.6667, "angle": 87.15 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -7.08, "y": -2.83 },
-					{ "time": 0.5, "x": 0, "y": -25.02, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": -25.02 }
+					{ "time": 0.5, "y": -25.02, "curve": "stepped" },
+					{ "time": 0.6667, "y": -25.02 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.6667 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 83.61 }
+					{ "angle": 83.61 }
 				]
 			}
 		}
@@ -2807,118 +2826,117 @@
 		"slots": {
 			"Head": {
 				"attachment": [
-					{ "time": 0, "name": "HeadSE" }
+					{ "name": "HeadSE" }
 				]
 			},
 			"LeftArmFront": {
 				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontSE" }
+					{ "name": "LeftArmFrontSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 117.3 },
+					{ "angle": 117.3 },
 					{ "time": 0.1667, "angle": 144.41 },
 					{ "time": 0.5, "angle": 60.52 }
 				],
 				"translate": [
-					{ "time": 0, "x": 26.9, "y": -1.67 }
+					{ "x": 26.9, "y": -1.67 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -109.94 },
+					{ "angle": -109.94 },
 					{ "time": 0.1667, "angle": -55.35 },
 					{ "time": 0.5, "angle": -90.86 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.31, "y": -1.33 }
+					{ "x": -25.31, "y": -1.33 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -142.55, "curve": "stepped" },
+					{ "angle": -142.55, "curve": "stepped" },
 					{ "time": 0.1667, "angle": -142.55 },
 					{ "time": 0.5, "angle": -40.7 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.1667, "x": 0, "y": 0 },
+					{ "curve": "stepped" },
+					{ "time": 0.1667 },
 					{ "time": 0.5, "x": 9.03, "y": -13 },
 					{ "time": 0.5667, "x": 13.75, "y": -17.06 },
 					{ "time": 0.6, "x": 11.62, "y": -15.23 },
 					{ "time": 0.6667, "x": 13.75, "y": -17.06 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.1667, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.1667, "x": -180 }
 				]
 			},
 			"Head": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 12.96 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": -1.7 },
+					{ "y": -1.7 },
 					{ "time": 0.1667, "x": -3.98, "y": -2.27 }
 				]
 			},
 			"Body": {
 				"rotate": [
-					{ "time": 0.1667, "angle": 0 },
+					{ "time": 0.1667 },
 					{ "time": 0.5, "angle": 84.97 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1667, "x": -10.22, "y": 0 },
+					{},
+					{ "time": 0.1667, "x": -10.22 },
 					{ "time": 0.5, "x": -10.22, "y": -24.61 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.6667, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.6667, "x": -180 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -28.82 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -1.24, "y": 0.04 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 10.32 },
 					{ "time": 0.5, "angle": -26.53 },
 					{ "time": 0.5667, "angle": -23.28 },
 					{ "time": 0.6667, "angle": -26.53 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1667, "x": 0, "y": 0.04, "curve": "stepped" },
-					{ "time": 0.5, "x": 0, "y": 0.04 },
+					{},
+					{ "time": 0.1667, "y": 0.04, "curve": "stepped" },
+					{ "time": 0.5, "y": 0.04 },
 					{ "time": 0.5667, "x": -3.81, "y": -0.29 }
 				]
 			},
 			"OffHand": {
 				"translate": [
-					{ "time": 0.1667, "x": 0, "y": -7.44 },
-					{ "time": 0.6, "x": 0, "y": 28.71 }
+					{ "time": 0.1667, "y": -7.44 },
+					{ "time": 0.6, "y": 28.71 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "LeftArm", "offset": 16 },
 					{ "slot": "LeftArmFront", "offset": 8 },
@@ -2940,212 +2958,211 @@
 	},
 	"GetHitNE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.5, "name": "BodyNE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.5, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
-					{ "time": 0.5, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.5, "name": "HelmetBackNE" }
+					{ "name": "ChestBackNE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
+					{ "name": "HelmetFrontNE" },
 					{ "time": 0.5, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArm": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArm" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.5, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" },
-					{ "time": 0.5, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLeg": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLeg" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
-					{ "time": 0.5, "name": "LeftLegBackNE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontNE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
+					{ "name": "MainHandFront" }
 				]
 			},
-			"OffHandBack": {
+			"LeftLeg": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
-					{ "time": 0.5, "name": "OffHandFrontNE" }
-				]
-			},
-			"RightArm": {
-				"attachment": [
-					{ "time": 0, "name": "RightArm" }
+					{ "name": "LeftLeg" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
+					{ "name": "RightArmBackNE" },
 					{ "time": 0.5, "name": "RightArmBackNE" }
 				]
 			},
-			"RightArmFront": {
+			"LeftArm": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" }
+					{ "name": "LeftArm" }
+				]
+			},
+			"OffHandBack": {
+				"attachment": [
+					{ "name": "OffHandBack" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "name": "OffHandFrontNE" },
+					{ "time": 0.5, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightLeg": {
 				"attachment": [
-					{ "time": 0, "name": "RightLeg" }
+					{ "name": "RightLeg" }
 				]
 			},
-			"RightLegBack": {
+			"LeftLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.5, "name": "RightLegBackNE" }
+					{ "name": "LeftLegFrontNE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" },
+					{ "time": 0.5, "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" },
+					{ "time": 0.5, "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" },
+					{ "time": 0.5, "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" },
+					{ "time": 0.5, "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.5, "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.5, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.5, "name": "RightLegFrontNE" }
+				]
+			},
+			"RightArm": {
+				"attachment": [
+					{ "name": "RightArm" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.5, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.5, "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.5, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -12.56, "y": 0.06 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.5, "x": -180 }
 				]
 			},
 			"Head": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -20.12 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 7.68, "y": -0.28 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -85.31 },
+					{ "angle": -85.31 },
 					{ "time": 0.1667, "angle": -102.04 },
 					{ "time": 0.5, "angle": -85.31 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.71, "y": -0.01, "curve": "stepped" },
+					{ "x": 3.71, "y": -0.01, "curve": "stepped" },
 					{ "time": 0.5, "x": 3.71, "y": -0.01 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 17.4 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -0.03, "y": 4.68 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.1667, "angle": 52.24 },
 					{ "time": 0.5, "angle": 64.91 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.12, "y": -2.12, "curve": "stepped" },
+					{ "x": 0.12, "y": -2.12, "curve": "stepped" },
 					{ "time": 0.5, "x": 0.12, "y": -2.12 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -24.68 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -0.02, "y": 2.67 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 64.05 }
+					{ "angle": 64.05 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
@@ -3176,216 +3193,215 @@
 	},
 	"GetHitNW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.5, "name": "BodyNE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.5, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
-					{ "time": 0.5, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.5, "name": "HelmetBackNE" }
+					{ "name": "ChestBackNE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
+					{ "name": "HelmetFrontNE" },
 					{ "time": 0.5, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArm": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArm" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.5, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLeg": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLeg" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
-					{ "time": 0.5, "name": "LeftLegBackNE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontNE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
+					{ "name": "MainHandFront" }
 				]
 			},
-			"OffHandBack": {
+			"LeftLeg": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
-					{ "time": 0.5, "name": "OffHandFrontNE" }
+					{ "name": "LeftLeg" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
+					{ "name": "RightArmBackNE" },
 					{ "time": 0.5, "name": "RightArmBackNE" }
 				]
 			},
-			"RightArmFront": {
+			"LeftArm": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" }
+					{ "name": "LeftArm" }
+				]
+			},
+			"OffHandBack": {
+				"attachment": [
+					{ "name": "OffHandBack" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "name": "OffHandFrontNE" },
+					{ "time": 0.5, "name": "OffHandFrontNE" }
 				]
 			},
 			"RightLeg": {
 				"attachment": [
-					{ "time": 0, "name": "RightLeg" }
+					{ "name": "RightLeg" }
 				]
 			},
-			"RightLegBack": {
+			"LeftLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.5, "name": "RightLegBackNE" }
+					{ "name": "LeftLegFrontNE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" },
+					{ "time": 0.5, "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" },
+					{ "time": 0.5, "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" },
+					{ "time": 0.5, "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.5, "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.5, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.5, "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.5, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.5, "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 10.79, "y": -0.08 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5 }
 				]
 			},
 			"Head": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -22.08 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 9.5, "y": -4.16 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -91.17 },
+					{ "angle": -91.17 },
 					{ "time": 0.1667, "angle": -157.22 },
 					{ "time": 0.5, "angle": -91.17 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.57, "y": -2.58, "curve": "stepped" },
+					{ "x": -25.57, "y": -2.58, "curve": "stepped" },
 					{ "time": 0.5, "x": -25.57, "y": -2.58 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 21.69 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": 2.27, "y": -0.02 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 68.13 },
+					{ "angle": 68.13 },
 					{ "time": 0.1667, "angle": 49.49 },
 					{ "time": 0.5, "angle": 68.13 }
 				],
 				"translate": [
-					{ "time": 0, "x": 28.53, "y": -1.31, "curve": "stepped" },
+					{ "x": 28.53, "y": -1.31, "curve": "stepped" },
 					{ "time": 0.5, "x": 28.53, "y": -1.31 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -25.36 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5 }
 				]
 			},
 			"root": {
 				"rotate": [
-					{ "time": 0, "angle": 0.42, "curve": "stepped" },
+					{ "angle": 0.42, "curve": "stepped" },
 					{ "time": 0.5, "angle": 0.42 }
 				],
 				"shear": [
-					{ "time": 0.5, "x": 0, "y": 2.6 }
+					{ "time": 0.5, "y": 2.6 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": 0, "curve": "stepped" },
-					{ "time": 0.5, "angle": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 107.31 }
+					{ "angle": 107.31 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "LeftArm", "offset": 19 },
@@ -3416,554 +3432,553 @@
 	},
 	"GetHitSE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" },
-					{ "time": 0.5, "name": "BodySE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackSE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontSE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
-					{ "time": 0.5, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" },
-					{ "time": 0.5, "name": "HelmetBackSE" }
+					{ "name": "ChestBackSE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" },
+					{ "name": "HelmetFrontSE" },
 					{ "time": 0.5, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArm": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArm" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" },
-					{ "time": 0.5, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontSE" }
-				]
-			},
-			"LeftLeg": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLeg" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" },
-					{ "time": 0.5, "name": "LeftLegBackSE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontSE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
+					{ "name": "MainHandFront" }
 				]
 			},
-			"OffHandBack": {
+			"LeftLeg": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" }
-				]
-			},
-			"RightArm": {
-				"attachment": [
-					{ "time": 0, "name": "RightArm" }
+					{ "name": "LeftLeg" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" },
+					{ "name": "RightArmBackSE" },
 					{ "time": 0.5, "name": "RightArmBackSE" }
 				]
 			},
-			"RightArmFront": {
+			"LeftArm": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontSE" }
+					{ "name": "LeftArm" }
+				]
+			},
+			"OffHandBack": {
+				"attachment": [
+					{ "name": "OffHandBack" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "name": "OffHandFrontSE" }
 				]
 			},
 			"RightLeg": {
 				"attachment": [
-					{ "time": 0, "name": "RightLeg" }
+					{ "name": "RightLeg" }
 				]
 			},
-			"RightLegBack": {
+			"LeftLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" },
-					{ "time": 0.5, "name": "RightLegBackSE" }
+					{ "name": "LeftLegFrontSE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodySE" },
+					{ "time": 0.5, "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" },
+					{ "time": 0.5, "name": "HeadSE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" },
+					{ "time": 0.5, "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" },
+					{ "time": 0.5, "name": "HelmetBackSE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" },
+					{ "name": "RightLegFrontSE" },
 					{ "time": 0.5, "name": "RightLegFrontSE" }
+				]
+			},
+			"RightArm": {
+				"attachment": [
+					{ "name": "RightArm" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" },
+					{ "time": 0.5, "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" },
+					{ "time": 0.5, "name": "RightLegBackSE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.1667, "angle": 42.1 },
 					{ "time": 0.5, "angle": 64.91 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.33, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": -2.33, "y": 0 }
+					{ "x": -2.33, "curve": "stepped" },
+					{ "time": 0.5, "x": -2.33 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -63.54 },
+					{ "angle": -63.54 },
 					{ "time": 0.1667, "angle": -45.5 },
 					{ "time": 0.5, "angle": -63.54 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.66, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": 3.66, "y": 0 }
+					{ "x": 3.66, "curve": "stepped" },
+					{ "time": 0.5, "x": 3.66 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -54.6, "curve": "stepped" },
+					{ "angle": -54.6, "curve": "stepped" },
 					{ "time": 0.5, "angle": -54.6 }
 				]
 			},
 			"Head": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 20.85 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -5.19, "y": -2.36 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 22.31 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1667, "x": 0, "y": 2.83 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{},
+					{ "time": 0.1667, "y": 2.83 },
+					{ "time": 0.5 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -27.15 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -1.42, "y": 0.94 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -7.08, "y": -2.83 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 84.08 }
+					{ "angle": 84.08 }
 				]
 			}
 		}
 	},
 	"GetHitSW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackSE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontSE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
-					{ "time": 0.5, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" }
+					{ "name": "ChestBackSE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" }
+					{ "name": "HelmetFrontSE" }
+				]
+			},
+			"MainHandFront": {
+				"attachment": [
+					{ "name": "MainHandFront" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackSE" }
 				]
 			},
 			"LeftArm": {
 				"attachment": [
-					{ "time": 0, "name": "LeftArm" }
+					{ "name": "LeftArm" }
 				]
 			},
-			"LeftArmBack": {
+			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" }
+					{ "name": "OffHandBack" }
+				]
+			},
+			"OffHandFront": {
+				"attachment": [
+					{ "name": "OffHandFrontSE" }
+				]
+			},
+			"RightLeg": {
+				"attachment": [
+					{ "name": "RightLeg" }
+				]
+			},
+			"LeftLegFront": {
+				"attachment": [
+					{ "name": "LeftLegFrontSE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" },
+					{ "time": 0.5, "name": "HeadSE" }
 				]
 			},
 			"LeftArmFront": {
 				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontSE" },
+					{ "name": "LeftArmFrontSE" },
 					{ "time": 0.5, "name": "LeftArmFrontSE" }
 				]
 			},
 			"LeftLegBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" }
+					{ "name": "LeftLegBackSE" }
 				]
 			},
-			"LeftLegFront": {
+			"HelmetBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontSE" }
+					{ "name": "HelmetBackSE" }
 				]
 			},
-			"MainHandBack": {
+			"ChestFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
-				]
-			},
-			"MainHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
-				]
-			},
-			"OffHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" }
-				]
-			},
-			"RightArm": {
-				"attachment": [
-					{ "time": 0, "name": "RightArm" }
-				]
-			},
-			"RightArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" }
-				]
-			},
-			"RightArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "RightArmFrontSE" }
-				]
-			},
-			"RightLeg": {
-				"attachment": [
-					{ "time": 0, "name": "RightLeg" }
-				]
-			},
-			"RightLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" }
+					{ "name": "ChestFrontSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" }
+					{ "name": "RightLegFrontSE" }
+				]
+			},
+			"RightArm": {
+				"attachment": [
+					{ "name": "RightArm" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 117.3 },
+					{ "angle": 117.3 },
 					{ "time": 0.1667, "angle": 144.41 },
 					{ "time": 0.5, "angle": 117.3 }
 				],
 				"translate": [
-					{ "time": 0, "x": 26.9, "y": -1.67, "curve": "stepped" },
+					{ "x": 26.9, "y": -1.67, "curve": "stepped" },
 					{ "time": 0.5, "x": 26.9, "y": -1.67 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -109.94 },
+					{ "angle": -109.94 },
 					{ "time": 0.1667, "angle": -55.35 },
 					{ "time": 0.5, "angle": -109.94 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.31, "y": -1.33, "curve": "stepped" },
+					{ "x": -25.31, "y": -1.33, "curve": "stepped" },
 					{ "time": 0.5, "x": -25.31, "y": -1.33 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -142.55 }
+					{ "angle": -142.55 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"Head": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 12.96 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": -1.7 },
+					{ "y": -1.7 },
 					{ "time": 0.1667, "x": -3.98, "y": -2.27 },
-					{ "time": 0.5, "x": 0, "y": -1.7 }
+					{ "time": 0.5, "y": -1.7 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1667, "x": -10.22, "y": 0 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{},
+					{ "time": 0.1667, "x": -10.22 },
+					{ "time": 0.5 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.5, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.5, "x": -180 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": -28.82 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
+					{},
 					{ "time": 0.1667, "x": -1.24, "y": 0.04 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{ "time": 0.5 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 },
+					{},
 					{ "time": 0.1667, "angle": 10.32 },
-					{ "time": 0.5, "angle": 0 }
+					{ "time": 0.5 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1667, "x": 0, "y": 0.04 },
-					{ "time": 0.5, "x": 0, "y": 0 }
+					{},
+					{ "time": 0.1667, "y": 0.04 },
+					{ "time": 0.5 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 94.56 }
+					{ "angle": 94.56 }
 				]
 			}
 		}
 	},
 	"IdleNE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" }
+					{ "name": "ChestBackNE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontNE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
+					{ "name": "HelmetFrontNE" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
-				]
-			},
-			"OffHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
-					{ "time": 1, "name": "OffHandFrontNE" }
+					{ "name": "MainHandFront" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" }
+					{ "name": "RightArmBackNE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" }
+					{ "name": "OffHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontNE" },
+					{ "time": 1, "name": "OffHandFrontNE" }
+				]
+			},
+			"LeftLegFront": {
+				"attachment": [
+					{ "name": "LeftLegFrontNE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" }
+					{ "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 1, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 1, "x": -180 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -85.31 },
+					{ "angle": -85.31 },
 					{ "time": 0.5, "angle": -82.02 },
 					{ "time": 1, "angle": -85.31 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.71, "y": -0.01 }
+					{ "x": 3.71, "y": -0.01 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.5, "angle": 71 },
 					{ "time": 1, "angle": 64.91 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.12, "y": -2.12 }
+					{ "x": 0.12, "y": -2.12 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 71.67 }
+					{ "angle": 71.67 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 4 },
 					{ "slot": "RightArm", "offset": 17 },
@@ -3980,150 +3995,149 @@
 	},
 	"IdleNW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" }
+					{ "name": "ChestBackNE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontNE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
+					{ "name": "HelmetFrontNE" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
-				]
-			},
-			"OffHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
-					{ "time": 1, "name": "OffHandFrontNE" }
+					{ "name": "MainHandFront" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" }
+					{ "name": "RightArmBackNE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" }
+					{ "name": "OffHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontNE" },
+					{ "time": 1, "name": "OffHandFrontNE" }
+				]
+			},
+			"LeftLegFront": {
+				"attachment": [
+					{ "name": "LeftLegFrontNE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" }
+					{ "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 1, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 1 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -91.17 },
+					{ "angle": -91.17 },
 					{ "time": 0.5, "angle": -93.44 },
 					{ "time": 1, "angle": -91.17 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.57, "y": -2.58 }
+					{ "x": -25.57, "y": -2.58 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 68.13 },
+					{ "angle": 68.13 },
 					{ "time": 0.5, "angle": 71 },
 					{ "time": 1, "angle": 68.13 }
 				],
 				"translate": [
-					{ "time": 0, "x": 28.53, "y": -1.31 }
+					{ "x": 28.53, "y": -1.31 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 106.94 }
+					{ "angle": 106.94 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "RightArm", "offset": 0 },
 					{ "slot": "RightArmBack", "offset": -12 },
@@ -4137,451 +4151,450 @@
 	},
 	"IdleSE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackSE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontSE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" }
+					{ "name": "ChestBackSE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontSE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontSE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
+					{ "name": "HelmetFrontSE" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
-				]
-			},
-			"OffHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" }
+					{ "name": "MainHandFront" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" }
+					{ "name": "RightArmBackSE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontSE" }
+					{ "name": "OffHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" }
+					{ "name": "OffHandFrontSE" }
+				]
+			},
+			"LeftLegFront": {
+				"attachment": [
+					{ "name": "LeftLegFrontSE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" }
+					{ "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.5, "angle": 70.91 },
 					{ "time": 1, "angle": 64.91 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.33, "y": 0 }
+					{ "x": -2.33 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -63.54 },
+					{ "angle": -63.54 },
 					{ "time": 0.5, "angle": -69.25 },
 					{ "time": 1, "angle": -63.54 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.66, "y": 0 }
+					{ "x": 3.66 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -54.6, "curve": "stepped" },
+					{ "angle": -54.6, "curve": "stepped" },
 					{ "time": 1, "angle": -54.6 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"Body": {
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 1, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 1 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 75.84 }
+					{ "angle": 75.84 }
 				]
 			}
 		}
 	},
 	"IdleSW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackSE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontSE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" }
+					{ "name": "ChestBackSE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontSE" }
+					{ "name": "HelmetFrontSE" }
 				]
 			},
 			"LeftLeg": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLeg" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontSE" }
-				]
-			},
-			"OffHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" }
+					{ "name": "LeftLeg" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" }
+					{ "name": "RightArmBackSE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontSE" }
+					{ "name": "OffHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" }
+					{ "name": "OffHandFrontSE" }
+				]
+			},
+			"LeftLegFront": {
+				"attachment": [
+					{ "name": "LeftLegFrontSE" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" }
+					{ "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 117.3 },
+					{ "angle": 117.3 },
 					{ "time": 0.5, "angle": 109.4 },
 					{ "time": 1, "angle": 117.3 }
 				],
 				"translate": [
-					{ "time": 0, "x": 26.9, "y": -1.67 }
+					{ "x": 26.9, "y": -1.67 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -109.94 },
+					{ "angle": -109.94 },
 					{ "time": 0.5, "angle": -99.33 },
 					{ "time": 1, "angle": -109.94 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.31, "y": -1.33 }
+					{ "x": -25.31, "y": -1.33 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -142.55, "curve": "stepped" },
+					{ "angle": -142.55, "curve": "stepped" },
 					{ "time": 0.5, "angle": -142.55, "curve": "stepped" },
 					{ "time": 1, "angle": -142.55 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"Body": {
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 1, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 1, "x": -180 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 91.28 }
+					{ "angle": 91.28 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			}
 		}
 	},
 	"ShootNE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" }
+					{ "name": "ChestBackNE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontNE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
+					{ "name": "HelmetFrontNE" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
-				]
-			},
-			"OffHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" }
+					{ "name": "MainHandFront" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" }
+					{ "name": "RightArmBackNE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" }
+					{ "name": "OffHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontSE" }
+				]
+			},
+			"LeftLegFront": {
+				"attachment": [
+					{ "name": "LeftLegFrontNE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" }
+					{ "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": 176.1 }
+					{ "angle": 176.1 }
 				],
 				"translate": [
-					{ "time": 0, "x": -11.53, "y": -6.59 },
+					{ "x": -11.53, "y": -6.59 },
 					{ "time": 0.3333, "x": 8.39, "y": -7.95 },
 					{ "time": 0.5667, "x": -8.92, "y": -6.77 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": -28.17 },
+					{ "angle": -28.17 },
 					{ "time": 0.3333, "angle": -22.22, "curve": "stepped" },
 					{ "time": 0.5, "angle": -22.22 },
 					{ "time": 0.6667, "angle": 35.3 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.12, "y": -2.12 },
+					{ "x": 0.12, "y": -2.12 },
 					{ "time": 0.3333, "x": -2.5, "y": -1.05 },
 					{ "time": 0.5, "x": 3.79, "y": -3.07 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"MainHand": {
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 2 },
 					{ "slot": "RightArm", "offset": 17 },
@@ -4596,130 +4609,130 @@
 	},
 	"ShootNW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" }
+					{ "name": "ChestBackNE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontNE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" }
+					{ "name": "HelmetFrontNE" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" }
-				]
-			},
-			"OffHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" }
+					{ "name": "MainHandFront" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" }
+					{ "name": "RightArmBackNE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" }
+					{ "name": "OffHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" }
+					{ "name": "OffHandFrontSE" }
+				]
+			},
+			"LeftLegFront": {
+				"attachment": [
+					{ "name": "LeftLegFrontNE" }
+				]
+			},
+			"MainHandBack": {
+				"attachment": [
+					{ "name": "MainHandBack" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" }
+					{ "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -91.17 },
+					{ "angle": -91.17 },
 					{ "time": 0.3333, "angle": 178.81 }
 				],
 				"translate": [
-					{ "time": 0, "x": 6.02, "y": -2.54 },
+					{ "x": 6.02, "y": -2.54 },
 					{ "time": 0.5, "x": 18.23, "y": -2.58 },
 					{ "time": 0.6667, "x": -3.02, "y": -2.14 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": -10.31 },
+					{ "angle": -10.31 },
 					{ "time": 0.3333, "angle": -5.04 },
 					{ "time": 0.5, "angle": -9.69 }
 				],
 				"translate": [
-					{ "time": 0, "x": 1.16, "y": -1.31 },
+					{ "x": 1.16, "y": -1.31 },
 					{ "time": 0.3333, "x": 0.52, "y": -0.85 },
 					{ "time": 0.5, "x": -2.48, "y": -1.29 },
 					{ "time": 0.5667, "x": 4.09, "y": -2.42 }
@@ -4727,21 +4740,20 @@
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"MainHand": {
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 7 },
 					{ "slot": "LeftArm", "offset": 4 },
@@ -4756,109 +4768,108 @@
 	},
 	"ShootSE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" }
-				]
-			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" }
+					{ "name": "HelmetFrontSE" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" }
+					{ "name": "RightArmBackSE" }
 				]
 			},
-			"RightLegBack": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" }
+					{ "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" }
+					{ "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 160.58 }
+					{ "angle": 160.58 }
 				],
 				"translate": [
-					{ "time": 0, "x": 29.41, "y": 0 },
-					{ "time": 0.3333, "x": 25.3, "y": 0 },
-					{ "time": 0.4, "x": 29.41, "y": 0 }
+					{ "x": 29.41 },
+					{ "time": 0.3333, "x": 25.3 },
+					{ "time": 0.4, "x": 29.41 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": 2.97 }
+					{ "angle": 2.97 }
 				],
 				"translate": [
-					{ "time": 0, "x": -28.9, "y": 0 },
-					{ "time": 0.3333, "x": -43.52, "y": 0 },
-					{ "time": 0.5, "x": -22.19, "y": 0 }
+					{ "x": -28.9 },
+					{ "time": 0.3333, "x": -43.52 },
+					{ "time": 0.5, "x": -22.19 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -175.06 }
+					{ "angle": -175.06 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "LeftArm", "offset": 14 },
 					{ "slot": "RightArm", "offset": 16 },
@@ -4887,154 +4898,153 @@
 	},
 	"ShootSW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackSE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontSE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" }
+					{ "name": "ChestBackSE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontSE" }
+					{ "name": "HelmetFrontSE" }
 				]
 			},
 			"LeftLeg": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLeg" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontSE" }
-				]
-			},
-			"OffHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandBack" }
-				]
-			},
-			"OffHandFront": {
-				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" }
+					{ "name": "LeftLeg" }
 				]
 			},
 			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" }
+					{ "name": "RightArmBackSE" }
 				]
 			},
-			"RightArmFront": {
+			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontSE" }
+					{ "name": "OffHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" }
+					{ "name": "OffHandFrontSE" }
+				]
+			},
+			"LeftLegFront": {
+				"attachment": [
+					{ "name": "LeftLegFrontSE" }
+				]
+			},
+			"Body": {
+				"attachment": [
+					{ "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" }
+					{ "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 124.83 },
+					{ "angle": 124.83 },
 					{ "time": 0.3333, "angle": 163.83, "curve": "stepped" },
 					{ "time": 0.5667, "angle": 163.83 },
 					{ "time": 0.6667, "angle": 124.83 }
 				],
 				"translate": [
-					{ "time": 0, "x": 26.9, "y": -1.67 },
+					{ "x": 26.9, "y": -1.67 },
 					{ "time": 0.5, "x": 30.93, "y": -2.83 },
 					{ "time": 0.5667, "x": 24.54, "y": -0.98 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -16.47 }
+					{ "angle": -16.47 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.31, "y": 5.8 },
+					{ "x": -25.31, "y": 5.8 },
 					{ "time": 0.5, "x": -40.81, "y": 10.38 },
 					{ "time": 0.6667, "x": -20.29, "y": 4.31 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -177.23, "curve": "stepped" },
+					{ "angle": -177.23, "curve": "stepped" },
 					{ "time": 0.3333, "angle": -177.23 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.3333, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.3333, "x": -180 }
 				]
 			},
 			"Body": {
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0 }
+					{ "x": -180 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 0 }
+					{}
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 }
+					{}
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "LeftArm", "offset": 17 },
 					{ "slot": "RightArm", "offset": 10 },
@@ -5060,188 +5070,187 @@
 	},
 	"WalkNE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.5333, "name": "BodyNE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackNE" },
+					{ "name": "ChestBackNE" },
 					{ "time": 0.5333, "name": "ChestBackNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.5333, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
-					{ "time": 0.5333, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.5333, "name": "HelmetBackNE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
+					{ "name": "HelmetFrontNE" },
 					{ "time": 0.5333, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.5333, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" },
-					{ "time": 0.5333, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
-					{ "time": 0.5333, "name": "LeftLegBackNE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontNE" },
-					{ "time": 0.5333, "name": "LeftLegFrontNE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" },
-					{ "time": 0.5333, "name": "MainHandBack" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" },
+					{ "name": "MainHandFront" },
 					{ "time": 0.5333, "name": "MainHandFront" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackNE" },
+					{ "time": 0.5333, "name": "RightArmBackNE" }
 				]
 			},
 			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandBack" },
+					{ "name": "OffHandBack" },
 					{ "time": 0.5333, "name": "OffHandBack" }
 				]
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "name": "OffHandFrontNE" },
 					{ "time": 0.5333, "name": "OffHandFrontNE" }
 				]
 			},
-			"RightArmBack": {
+			"LeftLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
-					{ "time": 0.5333, "name": "RightArmBackNE" }
+					{ "name": "LeftLegFrontNE" },
+					{ "time": 0.5333, "name": "LeftLegFrontNE" }
 				]
 			},
-			"RightArmFront": {
+			"MainHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" },
-					{ "time": 0.5333, "name": "RightArmFrontNE" }
+					{ "name": "MainHandBack" },
+					{ "time": 0.5333, "name": "MainHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.5333, "name": "RightLegBackNE" }
+					{ "name": "BodyNE" },
+					{ "time": 0.5333, "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" },
+					{ "time": 0.5333, "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" },
+					{ "time": 0.5333, "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" },
+					{ "time": 0.5333, "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.5333, "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.5333, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.5333, "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.5333, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.5333, "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" },
+					{ "time": 0.5333, "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1333, "x": 0, "y": 1.75 },
-					{ "time": 0.2667, "x": 0, "y": 0 },
-					{ "time": 0.4, "x": 0, "y": 1.46 },
-					{ "time": 0.5333, "x": 0, "y": 0 }
+					{},
+					{ "time": 0.1333, "y": 1.75 },
+					{ "time": 0.2667 },
+					{ "time": 0.4, "y": 1.46 },
+					{ "time": 0.5333 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.5333, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.5333, "x": -180 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -85.31 },
+					{ "angle": -85.31 },
 					{ "time": 0.1333, "angle": -77.46 },
 					{ "time": 0.2667, "angle": -85.31 },
 					{ "time": 0.4, "angle": -77.46 },
 					{ "time": 0.5333, "angle": -85.31 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.71, "y": -0.01, "curve": "stepped" },
+					{ "x": 3.71, "y": -0.01, "curve": "stepped" },
 					{ "time": 0.5333, "x": 3.71, "y": -0.01 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 27.99 },
+					{ "angle": 27.99 },
 					{ "time": 0.2667, "angle": -28.67 },
 					{ "time": 0.5333, "angle": 27.99 }
 				],
 				"translate": [
-					{ "time": 0, "x": -0.65, "y": 2.58 },
+					{ "x": -0.65, "y": 2.58 },
 					{ "time": 0.2667, "x": -5.74, "y": 1.13 },
 					{ "time": 0.5333, "x": -0.65, "y": 2.58 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.1333, "angle": 61.9 },
 					{ "time": 0.2667, "angle": 64.91 },
 					{ "time": 0.4, "angle": 61.9 },
 					{ "time": 0.5333, "angle": 64.91 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.12, "y": -2.12, "curve": "stepped" },
+					{ "x": 0.12, "y": -2.12, "curve": "stepped" },
 					{ "time": 0.5333, "x": 0.12, "y": -2.12 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": -23.4 },
+					{ "angle": -23.4 },
 					{ "time": 0.2667, "angle": 37.02 },
 					{ "time": 0.5333, "angle": -23.4 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 3.23 },
+					{ "y": 3.23 },
 					{ "time": 0.2667, "x": 5.42, "y": 2.11 },
-					{ "time": 0.5333, "x": 0, "y": 3.23 }
+					{ "time": 0.5333, "y": 3.23 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 71.12 }
+					{ "angle": 71.12 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "Body", "offset": 3 },
 					{ "slot": "RightArm", "offset": 17 },
@@ -5270,188 +5279,187 @@
 	},
 	"WalkNW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodyNE" },
-					{ "time": 0.5333, "name": "BodyNE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackNE" },
+					{ "name": "ChestBackNE" },
 					{ "time": 0.5333, "name": "ChestBackNE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontNE" },
-					{ "time": 0.5333, "name": "ChestFrontNE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadNE" },
-					{ "time": 0.5333, "name": "HeadNE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackNE" },
-					{ "time": 0.5333, "name": "HelmetBackNE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontNE" },
+					{ "name": "HelmetFrontNE" },
 					{ "time": 0.5333, "name": "HelmetFrontNE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackNE" },
-					{ "time": 0.5333, "name": "LeftArmBackNE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontNE" },
-					{ "time": 0.5333, "name": "LeftArmFrontNE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackNE" },
-					{ "time": 0.5333, "name": "LeftLegBackNE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontNE" },
-					{ "time": 0.5333, "name": "LeftLegFrontNE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" },
-					{ "time": 0.5333, "name": "MainHandBack" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" },
+					{ "name": "MainHandFront" },
 					{ "time": 0.5333, "name": "MainHandFront" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackNE" },
+					{ "time": 0.5333, "name": "RightArmBackNE" }
 				]
 			},
 			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandBack" },
+					{ "name": "OffHandBack" },
 					{ "time": 0.5333, "name": "OffHandBack" }
 				]
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFrontNE" },
+					{ "name": "OffHandFrontNE" },
 					{ "time": 0.5333, "name": "OffHandFrontNE" }
 				]
 			},
-			"RightArmBack": {
+			"LeftLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackNE" },
-					{ "time": 0.5333, "name": "RightArmBackNE" }
+					{ "name": "LeftLegFrontNE" },
+					{ "time": 0.5333, "name": "LeftLegFrontNE" }
 				]
 			},
-			"RightArmFront": {
+			"MainHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontNE" },
-					{ "time": 0.5333, "name": "RightArmFrontNE" }
+					{ "name": "MainHandBack" },
+					{ "time": 0.5333, "name": "MainHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackNE" },
-					{ "time": 0.5333, "name": "RightLegBackNE" }
+					{ "name": "BodyNE" },
+					{ "time": 0.5333, "name": "BodyNE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadNE" },
+					{ "time": 0.5333, "name": "HeadNE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontNE" },
+					{ "time": 0.5333, "name": "LeftArmFrontNE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackNE" },
+					{ "time": 0.5333, "name": "LeftLegBackNE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackNE" },
+					{ "time": 0.5333, "name": "HelmetBackNE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontNE" },
+					{ "time": 0.5333, "name": "ChestFrontNE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontNE" },
+					{ "name": "RightLegFrontNE" },
 					{ "time": 0.5333, "name": "RightLegFrontNE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackNE" },
+					{ "time": 0.5333, "name": "LeftArmBackNE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackNE" },
+					{ "time": 0.5333, "name": "RightLegBackNE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontNE" },
+					{ "time": 0.5333, "name": "RightArmFrontNE" }
 				]
 			}
 		},
 		"bones": {
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1333, "x": 0, "y": 0.96 },
-					{ "time": 0.2667, "x": 0, "y": 0 },
-					{ "time": 0.4, "x": 0, "y": 1.74 },
-					{ "time": 0.5333, "x": 0, "y": 0 }
+					{},
+					{ "time": 0.1333, "y": 0.96 },
+					{ "time": 0.2667 },
+					{ "time": 0.4, "y": 1.74 },
+					{ "time": 0.5333 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.5333, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5333 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -91.17 },
+					{ "angle": -91.17 },
 					{ "time": 0.1333, "angle": -103.71 },
 					{ "time": 0.2667, "angle": -91.17 },
 					{ "time": 0.4, "angle": -103.71 },
 					{ "time": 0.5333, "angle": -91.17 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.57, "y": -2.58, "curve": "stepped" },
+					{ "x": -25.57, "y": -2.58, "curve": "stepped" },
 					{ "time": 0.5333, "x": -25.57, "y": -2.58 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 17.77 },
+					{ "angle": 17.77 },
 					{ "time": 0.2667, "angle": -38.84 },
 					{ "time": 0.5333, "angle": 17.77 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.29, "y": 2.86 },
+					{ "x": 0.29, "y": 2.86 },
 					{ "time": 0.2667, "x": -7.24, "y": 0.35 },
 					{ "time": 0.5333, "x": 0.29, "y": 2.86 }
 				]
 			},
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 68.13 },
+					{ "angle": 68.13 },
 					{ "time": 0.1333, "angle": 79.63 },
 					{ "time": 0.2667, "angle": 68.13 },
 					{ "time": 0.4, "angle": 79.63 },
 					{ "time": 0.5333, "angle": 68.13 }
 				],
 				"translate": [
-					{ "time": 0, "x": 28.53, "y": -1.31, "curve": "stepped" },
+					{ "x": 28.53, "y": -1.31, "curve": "stepped" },
 					{ "time": 0.5333, "x": 28.53, "y": -1.31 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": -25.6 },
+					{ "angle": -25.6 },
 					{ "time": 0.2667, "angle": 27.8 },
 					{ "time": 0.5333, "angle": -25.6 }
 				],
 				"translate": [
-					{ "time": 0, "x": -1.14, "y": 3.43 },
+					{ "x": -1.14, "y": 3.43 },
 					{ "time": 0.2667, "x": 6.19, "y": 0.54 },
 					{ "time": 0.5333, "x": -1.14, "y": 3.43 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 101.39 }
+					{ "angle": 101.39 }
 				]
 			}
 		},
 		"drawOrder": [
 			{
-				"time": 0,
 				"offsets": [
 					{ "slot": "RightArm", "offset": 0 },
 					{ "slot": "RightArmBack", "offset": -12 },
@@ -5474,382 +5482,382 @@
 	},
 	"WalkSE": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" },
-					{ "time": 0.5333, "name": "BodySE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackSE" },
+					{ "name": "ChestBackSE" },
 					{ "time": 0.5333, "name": "ChestBackSE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontSE" },
-					{ "time": 0.5333, "name": "ChestFrontSE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
-					{ "time": 0.5333, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" },
-					{ "time": 0.5333, "name": "HelmetBackSE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" },
+					{ "name": "HelmetFrontSE" },
 					{ "time": 0.5333, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" },
-					{ "time": 0.5333, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontSE" },
-					{ "time": 0.5333, "name": "LeftArmFrontSE" }
-				]
-			},
-			"LeftLegBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" },
-					{ "time": 0.5333, "name": "LeftLegBackSE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontSE" },
-					{ "time": 0.5333, "name": "LeftLegFrontSE" }
-				]
-			},
-			"MainHandBack": {
-				"attachment": [
-					{ "time": 0, "name": "MainHandBack" },
-					{ "time": 0.5333, "name": "MainHandBack" }
 				]
 			},
 			"MainHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "MainHandFront" },
+					{ "name": "MainHandFront" },
 					{ "time": 0.5333, "name": "MainHandFront" }
+				]
+			},
+			"RightArmBack": {
+				"attachment": [
+					{ "name": "RightArmBackSE" },
+					{ "time": 0.5333, "name": "RightArmBackSE" }
 				]
 			},
 			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandBack" },
+					{ "name": "OffHandBack" },
 					{ "time": 0.5333, "name": "OffHandBack" }
 				]
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" },
+					{ "name": "OffHandFrontSE" },
 					{ "time": 0.5333, "name": "OffHandFrontSE" }
 				]
 			},
-			"RightArmBack": {
+			"LeftLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" },
-					{ "time": 0.5333, "name": "RightArmBackSE" }
+					{ "name": "LeftLegFrontSE" },
+					{ "time": 0.5333, "name": "LeftLegFrontSE" }
 				]
 			},
-			"RightArmFront": {
+			"MainHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontSE" },
-					{ "time": 0.5333, "name": "RightArmFrontSE" }
+					{ "name": "MainHandBack" },
+					{ "time": 0.5333, "name": "MainHandBack" }
 				]
 			},
-			"RightLegBack": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" },
-					{ "time": 0.5333, "name": "RightLegBackSE" }
+					{ "name": "BodySE" },
+					{ "time": 0.5333, "name": "BodySE" }
+				]
+			},
+			"Head": {
+				"attachment": [
+					{ "name": "HeadSE" },
+					{ "time": 0.5333, "name": "HeadSE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontSE" },
+					{ "time": 0.5333, "name": "LeftArmFrontSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" },
+					{ "time": 0.5333, "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" },
+					{ "time": 0.5333, "name": "HelmetBackSE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontSE" },
+					{ "time": 0.5333, "name": "ChestFrontSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" },
+					{ "name": "RightLegFrontSE" },
 					{ "time": 0.5333, "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" },
+					{ "time": 0.5333, "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" },
+					{ "time": 0.5333, "name": "RightLegBackSE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontSE" },
+					{ "time": 0.5333, "name": "RightArmFrontSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 64.91 },
+					{ "angle": 64.91 },
 					{ "time": 0.1333, "angle": 52.16 },
 					{ "time": 0.2667, "angle": 64.91 },
 					{ "time": 0.4, "angle": 52.16 },
 					{ "time": 0.5333, "angle": 64.91 }
 				],
 				"translate": [
-					{ "time": 0, "x": -2.33, "y": 0, "curve": "stepped" },
-					{ "time": 0.1333, "x": -2.33, "y": 0, "curve": "stepped" },
-					{ "time": 0.4, "x": -2.33, "y": 0, "curve": "stepped" },
-					{ "time": 0.5333, "x": -2.33, "y": 0 }
+					{ "x": -2.33, "curve": "stepped" },
+					{ "time": 0.1333, "x": -2.33, "curve": "stepped" },
+					{ "time": 0.4, "x": -2.33, "curve": "stepped" },
+					{ "time": 0.5333, "x": -2.33 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -70.52 },
+					{ "angle": -70.52 },
 					{ "time": 0.1333, "angle": -63.54 },
 					{ "time": 0.2667, "angle": -70.52 },
 					{ "time": 0.4, "angle": -63.54 },
 					{ "time": 0.5333, "angle": -70.52 }
 				],
 				"translate": [
-					{ "time": 0, "x": 3.66, "y": 0, "curve": "stepped" },
-					{ "time": 0.1333, "x": 3.66, "y": 0, "curve": "stepped" },
-					{ "time": 0.4, "x": 3.66, "y": 0, "curve": "stepped" },
-					{ "time": 0.5333, "x": 3.66, "y": 0 }
+					{ "x": 3.66, "curve": "stepped" },
+					{ "time": 0.1333, "x": 3.66, "curve": "stepped" },
+					{ "time": 0.4, "x": 3.66, "curve": "stepped" },
+					{ "time": 0.5333, "x": 3.66 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -54.6, "curve": "stepped" },
+					{ "angle": -54.6, "curve": "stepped" },
 					{ "time": 0.5333, "angle": -54.6 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 17.35 },
+					{ "angle": 17.35 },
 					{ "time": 0.2667, "angle": -22.76 },
 					{ "time": 0.5333, "angle": 17.35 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0.66, "y": -0.9 },
+					{ "x": 0.66, "y": -0.9 },
 					{ "time": 0.2667, "x": -6.94, "y": 1.38 },
 					{ "time": 0.5333, "x": 0.66, "y": -0.9 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": -29.26 },
+					{ "angle": -29.26 },
 					{ "time": 0.2667, "angle": 34.09 },
 					{ "time": 0.5333, "angle": -29.26 }
 				],
 				"translate": [
-					{ "time": 0, "x": 0, "y": 2.71 },
+					{ "y": 2.71 },
 					{ "time": 0.2667, "x": 6.38, "y": 0.92 },
-					{ "time": 0.5333, "x": 0, "y": 2.71 }
+					{ "time": 0.5333, "y": 2.71 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1333, "x": 0, "y": 2.71 },
-					{ "time": 0.2667, "x": 0, "y": 0 },
-					{ "time": 0.4, "x": 0, "y": 2.71 },
-					{ "time": 0.5333, "x": 0, "y": 0 }
+					{},
+					{ "time": 0.1333, "y": 2.71 },
+					{ "time": 0.2667 },
+					{ "time": 0.4, "y": 2.71 },
+					{ "time": 0.5333 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.5333, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5333 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 78.33 }
+					{ "angle": 78.33 }
 				]
 			}
 		}
 	},
 	"WalkSW": {
 		"slots": {
-			"Body": {
-				"attachment": [
-					{ "time": 0, "name": "BodySE" },
-					{ "time": 0.5333, "name": "BodySE" }
-				]
-			},
 			"ChestBack": {
 				"attachment": [
-					{ "time": 0, "name": "ChestBackSE" },
+					{ "name": "ChestBackSE" },
 					{ "time": 0.5333, "name": "ChestBackSE" }
-				]
-			},
-			"ChestFront": {
-				"attachment": [
-					{ "time": 0, "name": "ChestFrontSE" },
-					{ "time": 0.5333, "name": "ChestFrontSE" }
-				]
-			},
-			"Head": {
-				"attachment": [
-					{ "time": 0, "name": "HeadSE" },
-					{ "time": 0.5333, "name": "HeadSE" }
-				]
-			},
-			"HelmetBack": {
-				"attachment": [
-					{ "time": 0, "name": "HelmetBackSE" },
-					{ "time": 0.5333, "name": "HelmetBackSE" }
 				]
 			},
 			"HelmetFront": {
 				"attachment": [
-					{ "time": 0, "name": "HelmetFrontSE" },
+					{ "name": "HelmetFrontSE" },
 					{ "time": 0.5333, "name": "HelmetFrontSE" }
-				]
-			},
-			"LeftArmBack": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmBackSE" },
-					{ "time": 0.5333, "name": "LeftArmBackSE" }
-				]
-			},
-			"LeftArmFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftArmFrontSE" },
-					{ "time": 0.5333, "name": "LeftArmFrontSE" }
 				]
 			},
 			"LeftLeg": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLeg" },
+					{ "name": "LeftLeg" },
 					{ "time": 0.5333, "name": "LeftLeg" }
 				]
 			},
-			"LeftLegBack": {
+			"RightArmBack": {
 				"attachment": [
-					{ "time": 0, "name": "LeftLegBackSE" },
-					{ "time": 0.5333, "name": "LeftLegBackSE" }
-				]
-			},
-			"LeftLegFront": {
-				"attachment": [
-					{ "time": 0, "name": "LeftLegFrontSE" },
-					{ "time": 0.5333, "name": "LeftLegFrontSE" }
+					{ "name": "RightArmBackSE" },
+					{ "time": 0.5333, "name": "RightArmBackSE" }
 				]
 			},
 			"OffHandBack": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandBack" },
+					{ "name": "OffHandBack" },
 					{ "time": 0.5333, "name": "OffHandBack" }
 				]
 			},
 			"OffHandFront": {
 				"attachment": [
-					{ "time": 0, "name": "OffHandFrontSE" },
+					{ "name": "OffHandFrontSE" },
 					{ "time": 0.5333, "name": "OffHandFrontSE" }
 				]
 			},
-			"RightArmBack": {
+			"LeftLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmBackSE" },
-					{ "time": 0.5333, "name": "RightArmBackSE" }
+					{ "name": "LeftLegFrontSE" },
+					{ "time": 0.5333, "name": "LeftLegFrontSE" }
 				]
 			},
-			"RightArmFront": {
+			"Body": {
 				"attachment": [
-					{ "time": 0, "name": "RightArmFrontSE" },
-					{ "time": 0.5333, "name": "RightArmFrontSE" }
+					{ "name": "BodySE" },
+					{ "time": 0.5333, "name": "BodySE" }
 				]
 			},
-			"RightLegBack": {
+			"Head": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegBackSE" },
-					{ "time": 0.5333, "name": "RightLegBackSE" }
+					{ "name": "HeadSE" },
+					{ "time": 0.5333, "name": "HeadSE" }
+				]
+			},
+			"LeftArmFront": {
+				"attachment": [
+					{ "name": "LeftArmFrontSE" },
+					{ "time": 0.5333, "name": "LeftArmFrontSE" }
+				]
+			},
+			"LeftLegBack": {
+				"attachment": [
+					{ "name": "LeftLegBackSE" },
+					{ "time": 0.5333, "name": "LeftLegBackSE" }
+				]
+			},
+			"HelmetBack": {
+				"attachment": [
+					{ "name": "HelmetBackSE" },
+					{ "time": 0.5333, "name": "HelmetBackSE" }
+				]
+			},
+			"ChestFront": {
+				"attachment": [
+					{ "name": "ChestFrontSE" },
+					{ "time": 0.5333, "name": "ChestFrontSE" }
 				]
 			},
 			"RightLegFront": {
 				"attachment": [
-					{ "time": 0, "name": "RightLegFrontSE" },
+					{ "name": "RightLegFrontSE" },
 					{ "time": 0.5333, "name": "RightLegFrontSE" }
+				]
+			},
+			"LeftArmBack": {
+				"attachment": [
+					{ "name": "LeftArmBackSE" },
+					{ "time": 0.5333, "name": "LeftArmBackSE" }
+				]
+			},
+			"RightLegBack": {
+				"attachment": [
+					{ "name": "RightLegBackSE" },
+					{ "time": 0.5333, "name": "RightLegBackSE" }
+				]
+			},
+			"RightArmFront": {
+				"attachment": [
+					{ "name": "RightArmFrontSE" },
+					{ "time": 0.5333, "name": "RightArmFrontSE" }
 				]
 			}
 		},
 		"bones": {
 			"RightArm": {
 				"rotate": [
-					{ "time": 0, "angle": 117.3 },
+					{ "angle": 117.3 },
 					{ "time": 0.1333, "angle": 119.5 },
 					{ "time": 0.2667, "angle": 117.3 },
 					{ "time": 0.4, "angle": 119.5 },
 					{ "time": 0.5333, "angle": 117.3 }
 				],
 				"translate": [
-					{ "time": 0, "x": 26.9, "y": -1.67, "curve": "stepped" },
+					{ "x": 26.9, "y": -1.67, "curve": "stepped" },
 					{ "time": 0.5333, "x": 26.9, "y": -1.67 }
 				]
 			},
 			"LeftArm": {
 				"rotate": [
-					{ "time": 0, "angle": -109.94 },
+					{ "angle": -109.94 },
 					{ "time": 0.1333, "angle": -112.77 },
 					{ "time": 0.2667, "angle": -109.94 },
 					{ "time": 0.4, "angle": -112.77 },
 					{ "time": 0.5333, "angle": -109.94 }
 				],
 				"translate": [
-					{ "time": 0, "x": -25.31, "y": -1.33, "curve": "stepped" },
+					{ "x": -25.31, "y": -1.33, "curve": "stepped" },
 					{ "time": 0.1333, "x": -25.31, "y": -1.33, "curve": "stepped" },
 					{ "time": 0.4, "x": -25.31, "y": -1.33, "curve": "stepped" },
 					{ "time": 0.5333, "x": -25.31, "y": -1.33 }
 				],
 				"shear": [
-					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
-					{ "time": 0.5333, "x": 0, "y": 0 }
+					{ "curve": "stepped" },
+					{ "time": 0.5333 }
 				]
 			},
 			"MainHand": {
 				"rotate": [
-					{ "time": 0, "angle": -142.55, "curve": "stepped" },
+					{ "angle": -142.55, "curve": "stepped" },
 					{ "time": 0.5333, "angle": -142.55 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.5333, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.5333, "x": -180 }
 				]
 			},
 			"Body": {
 				"translate": [
-					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.1333, "x": 0, "y": 1.87 },
-					{ "time": 0.2667, "x": 0, "y": 0 },
-					{ "time": 0.4, "x": 0, "y": 2.96 },
-					{ "time": 0.5333, "x": 0, "y": 0 }
+					{},
+					{ "time": 0.1333, "y": 1.87 },
+					{ "time": 0.2667 },
+					{ "time": 0.4, "y": 2.96 },
+					{ "time": 0.5333 }
 				],
 				"shear": [
-					{ "time": 0, "x": -180, "y": 0, "curve": "stepped" },
-					{ "time": 0.5333, "x": -180, "y": 0 }
+					{ "x": -180, "curve": "stepped" },
+					{ "time": 0.5333, "x": -180 }
 				]
 			},
 			"OffHand": {
 				"rotate": [
-					{ "time": 0, "angle": 80.29 }
+					{ "angle": 80.29 }
 				]
 			},
 			"LeftLeg": {
 				"rotate": [
-					{ "time": 0, "angle": 21.6 },
+					{ "angle": 21.6 },
 					{ "time": 0.2667, "angle": -26.31 },
 					{ "time": 0.5333, "angle": 21.6 }
 				],
 				"translate": [
-					{ "time": 0, "x": 1.11, "y": 0.92 },
+					{ "x": 1.11, "y": 0.92 },
 					{ "time": 0.2667, "x": -6.15, "y": 2.96 },
 					{ "time": 0.5333, "x": 1.11, "y": 0.92 }
 				]
 			},
 			"RightLeg": {
 				"rotate": [
-					{ "time": 0, "angle": -37.02 },
+					{ "angle": -37.02 },
 					{ "time": 0.2667, "angle": 40.49 },
 					{ "time": 0.5333, "angle": -37.02 }
 				],
 				"translate": [
-					{ "time": 0, "x": -0.36, "y": 0.36 },
+					{ "x": -0.36, "y": 0.36 },
 					{ "time": 0.2667, "x": 6.54, "y": 2.17 },
 					{ "time": 0.5333, "x": -0.36, "y": 0.36 }
 				]

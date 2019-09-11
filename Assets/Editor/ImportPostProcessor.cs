@@ -34,12 +34,14 @@ namespace Gamepackage
                     textureImporter.textureType = TextureImporterType.Sprite;
                     textureImporter.spriteImportMode = SpriteImportMode.Single;
                     textureImporter.spritePixelsPerUnit = 128;
+                    textureImporter.textureCompression = TextureImporterCompression.Uncompressed;
 
                     TextureImporterSettings textureSettings = new TextureImporterSettings();
                     textureImporter.ReadTextureSettings(textureSettings);
                     textureSettings.spriteMeshType = SpriteMeshType.FullRect;
                     textureImporter.assetBundleName = "Core";
                     textureImporter.SetTextureSettings(textureSettings);
+
                 }
 
                 if (assetPath.Contains("Spine/Export"))

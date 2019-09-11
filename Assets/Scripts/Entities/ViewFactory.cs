@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Spine.Unity;
 using System.Collections.Generic;
-using Spine.Unity.Modules.AttachmentTools;
+using Spine.Unity.AttachmentTools;
 using Spine;
 using UnityEngine.Assertions;
 
