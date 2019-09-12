@@ -7,6 +7,7 @@ namespace Gamepackage
 
         public void Start()
         {
+            Context.ModManager.LoadModsAndResources();
             SceneUtil.FindOrCreateEventSystem();
             SceneUtil.FindOrCreatUIController();
             SceneUtil.FindOrCreateMainMenuCamera();

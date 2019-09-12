@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Assertions;
 using YamlDotNet.Serialization;
+using static Gamepackage.Localizer;
 
 namespace Gamepackage
 {
@@ -89,6 +91,7 @@ namespace Gamepackage
             Debug.Log("Attempting to load: " + mod.Name + " | v" + mod.Version);
             LoadAssemblies(mod);
             LoadAssetBundles(mod);
+            LoadLocalizations(mod);
             LoadTemplates(mod, sqlConnection);
         }
 
@@ -110,6 +113,72 @@ namespace Gamepackage
                     }
                 }
             }
+        }
+
+        private void LoadLocalizations(Mod mod)
+        {
+            if (mod.LocalizationsDirectoryExists)
+            {
+                var localizationFileNames = Directory.GetFiles(mod.LocalizationsDirectoryPath, "*", SearchOption.TopDirectoryOnly);
+                var validLanguages = Enum.GetValues(typeof(LocalizerLanguages));
+                List<string> validFileNames = GetValidLocalizationFileNames(mod.LocalizationsDirectoryPath);
+                foreach (var localizationFileName in localizationFileNames)
+                {
+                    var languages = Enum.GetValues(typeof(LocalizerLanguages));
+                    var found = false;
+
+                    for(int i = 0; i < languages.Length; i++)
+                    {
+                        var language = (LocalizerLanguages) languages.GetValue(i);
+                        if(localizationFileName.EndsWith(language.ToString() + ".yaml"))
+                        {
+                            found = true;
+                            Debug.Log("Attempting to load localization file at: " + localizationFileName);
+                            var localizationFileContents = File.ReadAllText(localizationFileName);
+                            var deserializer = new Deserializer();
+                            var deserializedLocalizationFileContents = deserializer.Deserialize<Dictionary<string, string>>(localizationFileContents);
+                            Context.Localizer.LoadDictForLanguage(language, deserializedLocalizationFileContents);
+                            Debug.Log("Finished running: " + localizationFileName);
+                            break;
+                        }
+                    }
+
+                    if(!found)
+                    {
+                        Debug.Log("Skipping " + localizationFileName + "Invalid localization file name");
+                        foreach (var val in validFileNames)
+                        {
+                            Debug.Log(val);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static LocalizerLanguages GetLocalizationFileLanguageByName(string fileName)
+        {
+            var language = (LocalizerLanguages)Enum.Parse(typeof(LocalizerLanguages), fileName, true);
+
+            if (language == LocalizerLanguages.NotSet)
+            {
+                throw new NotImplementedException();
+            }
+            return language;
+        }
+
+        private static List<string> GetValidLocalizationFileNames(string prefix)
+        {
+            var validLanguages = Enum.GetValues(typeof(LocalizerLanguages));
+            var validFileNames = new List<string>();
+
+            foreach (var validLanguageUncast in validLanguages)
+            {
+                var validLanguage = (LocalizerLanguages)validLanguageUncast;
+                validFileNames.Add(prefix + "/" + validLanguage.ToString() + ".yml");
+                validFileNames.Add(prefix + "/" + validLanguage.ToString() + ".yaml");
+            }
+
+            return validFileNames;
         }
 
         private void LoadTemplates(Mod mod, SqliteConnection sqlConnection)
@@ -144,7 +213,7 @@ namespace Gamepackage
                         {
                             Debug.Log("Attempting to load assembly at: " + assemblyPath);
                             var assembly = Assembly.LoadFile(assemblyPath);
-                            foreach(var thing in assembly.ExportedTypes)
+                            foreach (var thing in assembly.ExportedTypes)
                             {
                                 Debug.Log("Class found: " + thing);
                             }

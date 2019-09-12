@@ -8,34 +8,56 @@ namespace Gamepackage
     {
         public enum LocalizerLanguages
         {
+            NotSet,
             English,
         }
 
         public LocalizerLanguages LanguageSetting;
         private LocalizerLanguages LoadedLanguage;
-        private Dictionary<string, string> Lookup;
+        private Dictionary<LocalizerLanguages, Dictionary<string, string>> Lookup;
 
         public Localizer() { }
 
         public string LookupValueForLanguage(string input)
         {
-            if(Lookup == null || LanguageSetting != LoadedLanguage)
+            if(LanguageSetting == LocalizerLanguages.NotSet)
             {
-                Lookup = new Dictionary<string, string>();
-                var textAsset = Resources.Load<TextAsset>("Localization/" + LanguageSetting);
-                var deserializer = new Deserializer();
-                Lookup = deserializer.Deserialize<Dictionary<string, string>>(textAsset.text);
-                LoadedLanguage = LanguageSetting;
+                LanguageSetting = LocalizerLanguages.English;
             }
-            if(Lookup.ContainsKey(input))
+
+            if(Lookup == null || !Lookup.ContainsKey(LanguageSetting) || LanguageSetting == LocalizerLanguages.NotSet)
             {
-                return Lookup[input];
+                return input;
+            }
+            if (Lookup[LanguageSetting].ContainsKey(input))
+            {
+                return Lookup[LanguageSetting][input];
             }
             else
             {
                 return input;
             }
-            
+        }
+
+        public void LoadDictForLanguage(LocalizerLanguages language, Dictionary<string, string> translations)
+        {
+            if (Lookup == null)
+            {
+                Lookup = new Dictionary<LocalizerLanguages, Dictionary<string, string>>();
+            }
+            if (!Lookup.ContainsKey(language))
+            {
+                Lookup[language] = new Dictionary<string, string>();
+            }
+
+            foreach (var pair in translations)
+            {
+                if (Lookup[language].ContainsKey(pair.Key))
+                {
+                    Debug.Log("Overwrote translation for: " + pair.Key);
+                }
+                Lookup[language][pair.Key] = pair.Value;
+            }
         }
     }
 }
