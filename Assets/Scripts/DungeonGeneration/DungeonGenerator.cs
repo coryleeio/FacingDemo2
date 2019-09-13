@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.Assertions;
 
 namespace Gamepackage
@@ -55,6 +56,9 @@ namespace Gamepackage
                         var entitiesInEncounter = EntityFactory.BuildAll(table.Roll(), Team.Enemy);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
+                    var wellList = new List<string>() { "ENTITY_WELL" };
+                    var wellEnc = EntityFactory.BuildAll(wellList, Team.Neutral);
+                    PlaceEntitiesInLevel(wellEnc, level);
                 }
                 else if (levelIndex == 1)
                 {
@@ -66,6 +70,7 @@ namespace Gamepackage
                         var entitiesInEncounter = EntityFactory.BuildAll(table.Roll(), Team.Enemy);
                         PlaceEntitiesInLevel(entitiesInEncounter, level);
                     }
+                    var well = SpawnOnLevel("ENTITY_WELL", level, Team.Neutral);
                 }
                 else
                 {
@@ -113,9 +118,6 @@ namespace Gamepackage
 
         private static void PlaceEntitiesInLevel(List<Entity> entities, Level level)
         {
-            Predicate<Point> findFloorPoints = (piq) => { return level.Grid[piq.X, piq.Y].TileType == TileType.Floor; };
-
-
             Point floodFillStartPoint;
             var floorTilesInLevel = FloorTilesInRect(level, level.BoundingBox);
             floodFillStartPoint = MathUtil.ChooseRandomElement<Point>(floorTilesInLevel);
@@ -124,7 +126,7 @@ namespace Gamepackage
             for (int i = 2; i < 8; i = i + 2)
             {
                 List<Point> spawnPoints = new List<Point>();
-                MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, findFloorPoints);
+                MathUtil.FloodFill(floodFillStartPoint, i, ref spawnPoints, MathUtil.FloodFillType.Surrounding, Predicates.FloorTiles);
 
                 foreach (var alreadyExistingEntity in level.Entitys)
                 {

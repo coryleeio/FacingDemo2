@@ -18,7 +18,7 @@ namespace Gamepackage
             List<Entity> entities = new List<Entity>();
             foreach (var point in points)
             {
-                entities.AddRange(level.Grid[point].EntitiesInPosition.FindAll(Filters.HittableEntities));
+                entities.AddRange(level.Grid[point].EntitiesInPosition.FindAll(Predicates.HittableEntities));
             }
             return entities;
         }
@@ -127,7 +127,7 @@ namespace Gamepackage
 
             foreach (var point in calculatedAttack.PointsPossiblyAffectedBeforeTargetPiercing)
             {
-                var entitiesInThisPosition = grid[point].EntitiesInPosition.FindAll(Filters.HittableEntities);
+                var entitiesInThisPosition = grid[point].EntitiesInPosition.FindAll(Predicates.HittableEntities);
                 calculatedAttack.PointsAffectedByAttack.Add(point);
                 if (entitiesInThisPosition.Count > 0)
                 {
@@ -886,7 +886,7 @@ namespace Gamepackage
 
         public static void DoStepTriggersForMover(Entity Mover)
         {
-            var stepTriggers = Context.Game.CurrentLevel.Entitys.FindAll(Filters.StepTriggers);
+            var stepTriggers = Context.Game.CurrentLevel.Entitys.FindAll(Predicates.StepTriggers);
             foreach (var trigger in stepTriggers)
             {
                 var points = MathUtil.GetPointsByOffset(trigger.Position, trigger.Trigger.Offsets);
@@ -1110,7 +1110,7 @@ namespace Gamepackage
             var previouslyTraversedPoint = position;
             foreach (var point in pointsInLine)
             {
-                if (grid[point].EntitiesInPosition.FindAll(Filters.HittableEntities).Count > 0)
+                if (grid[point].EntitiesInPosition.FindAll(Predicates.HittableEntities).Count > 0)
                 {
                     numberOfThingsPierced += 1;
                 }

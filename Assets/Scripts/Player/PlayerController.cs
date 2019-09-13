@@ -168,7 +168,8 @@ namespace Gamepackage
             }
             bool isAcceptingClickInput = !Context.UIController.EscapeMenu.isActiveAndEnabled &&
                 !Context.UIController.LootWindow.isActiveAndEnabled &&
-                !Context.UIController.InventoryWindow.isActiveAndEnabled;
+                !Context.UIController.InventoryWindow.isActiveAndEnabled &&
+                !Context.UIController.DialogController.isActiveAndEnabled;
 
             var game = Context.Game;
             var level = game.CurrentLevel;
@@ -411,7 +412,7 @@ namespace Gamepackage
                     var grid = level.Grid;
                     var entities = level.Entitys;
                     var entitiesInPositionOfMove = grid[player.Position];
-                    var pressTriggers = entities.FindAll(Filters.PressTriggers);
+                    var pressTriggers = entities.FindAll(Predicates.PressTriggers);
                     foreach (var trigger in pressTriggers)
                     {
                         if (Trigger.EntityInTrigger(player, trigger))

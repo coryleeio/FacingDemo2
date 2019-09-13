@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Gamepackage
 {
@@ -9,6 +10,8 @@ namespace Gamepackage
         public int MonstersKilled { get; set; }
         public int CurrentTurn { get; set; }
         public bool IsPlayerTurn { get; set; }
+        public Dictionary<int, Dialog> DialogsById;
+        public Dialog CurrentlyOpenDialog;
 
         public string CampaignTemplateIdentifier;
         [JsonIgnore]

@@ -134,7 +134,7 @@ namespace Gamepackage
             var grid = level.Grid;
             var entities = level.Entitys;
             var entitiesInPositionOfMove = grid[source.Position];
-            var pressTriggers = entities.FindAll(Filters.PressTriggers);
+            var pressTriggers = entities.FindAll(Predicates.PressTriggers);
             var anyHits = false;
             foreach(var trigger in pressTriggers)
             {
@@ -156,7 +156,7 @@ namespace Gamepackage
 
         public override bool IsValid()
         {
-            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.Game.CurrentLevel.Grid[TargetPosition].Walkable && Context.Game.CurrentLevel.Grid[TargetPosition].EntitiesInPosition.FindAll(Filters.HittableEntities).Count == 0));
+            return (!Source.BlocksPathing || (Source.BlocksPathing && Context.Game.CurrentLevel.Grid[TargetPosition].Walkable && Context.Game.CurrentLevel.Grid[TargetPosition].EntitiesInPosition.FindAll(Predicates.HittableEntities).Count == 0));
         }
     }
 }

@@ -36,7 +36,6 @@ namespace Gamepackage
             }
             CameraDriver = gameSceneCameraDriver;
 
-            Context.UIController.Init();
             Context.EntitySystem.Init();
             Context.SpriteSortingSystem.Init();
             Context.VisibilitySystem.Init();
@@ -46,11 +45,12 @@ namespace Gamepackage
             Context.PlayerController.Init();
             CameraDriver = GetCamera();
             CameraDriver.JumpToTarget(Context.Game.CurrentLevel.Player.Position);
+            Context.GameSceneRoot = this;
+            Context.VisibilitySystem.UpdateVisibility();
+            Context.UIController.Init();
             Context.UIController.FloatingCombatTextManager.Show();
             Context.UIController.TextLog.ClearText();
             Context.UIController.TextLog.Show();
-            Context.GameSceneRoot = this;
-            Context.VisibilitySystem.UpdateVisibility();
         }
 
         public void Update()

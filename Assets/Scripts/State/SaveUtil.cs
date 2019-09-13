@@ -23,6 +23,9 @@ namespace Gamepackage
                 CurrentTurn = 0,
                 IsPlayerTurn = true,
             };
+
+            Context.Game.CurrentlyOpenDialog = null;
+            Context.Game.DialogsById = new System.Collections.Generic.Dictionary<int, Dialog>();
             Context.Game.Dungeon = new Dungeon();
             Context.Game.CampaignTemplateIdentifier = CampaignTemplateIdentifier != null ? CampaignTemplateIdentifier : "CAMPAIGN_CORE";
             Debug.Log("Starting new campaign: " + Context.Game.CampaignTemplateIdentifier);

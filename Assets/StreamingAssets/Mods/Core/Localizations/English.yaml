@@ -3,7 +3,9 @@ race.name.human: "Human"
 race.name.giant.bee: "Giant Bee"
 
 show.loot.message: "Press <color=yellow>F</color> to loot..."
+show.inspect.message: "Press <color=yellow>F</color> to inspect..."
 loot.action: "Loot"
+inspect.action: "Inspect"
 loot.notification: You have looted {0}{1}
 cost.health.damage: "Using {0} drains {1} health from {2}."
 xp.gain: "You gain experience."
@@ -115,6 +117,7 @@ entity.animated.weapon.name: "Animated Weapon"
 entity.queen.bee.name: "Queen Bee"
 entity.queen.bee.special.name: "Bee-yonce"
 entity.stairs.up.name: "Stairs (Up)"
+entity.well.name: "Well"
 entity.stairs.down.name: "Stairs (Down)"
 
 effect.lucky.coin.lifesave.name: "Feelin' Lucky"
@@ -272,3 +275,10 @@ skill.maces: "Maces"
 skill.staves: "Staves"
 skill.unarmed: "Unarmed"
 skill.shields: "Shields"
+
+
+
+dialog.peer.well: "You peer down into the well, but the only thing you see is your reflection."
+dialog.nothing.to.do: "Nothing to do here..."
+
+dialog.requirement.not.met: "<color=red>Requirement not met:</color> {0}"

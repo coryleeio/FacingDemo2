@@ -10,6 +10,12 @@ namespace Gamepackage
             var state = new Trigger();
             state.TemplateIdentifier = templateIdentifier;
             state.Data = new Dictionary<string, string>();
+
+            foreach (var pair in template.TemplateData)
+            {
+                state.Data.Add(pair.Key, pair.Value);
+            }
+
             return state;
         }
     }

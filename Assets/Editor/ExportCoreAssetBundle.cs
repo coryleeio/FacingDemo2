@@ -3,12 +3,11 @@
     using UnityEditor;
     using System.IO;
 
-    public class CreateAssetBundles
+    public class ExportCoreAssetBundle
     {
-        [MenuItem("Tools/Create Asset Bundle")]
+        [MenuItem("Tools/Export Core Asset Bundle")]
         static void BuildAssetBundles()
         {
-
             string assetBundleDirectory = "Assets/StreamingAssets/Mods/Core/Asset Bundles";
             var coreFile = System.IO.Path.Combine(assetBundleDirectory, "Core");
             if (File.Exists(coreFile))

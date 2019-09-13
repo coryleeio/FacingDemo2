@@ -1,0 +1,85 @@
+{
+  "Identifier": "DIALOG_WELL",
+  "Text": "dialog.peer.well",
+  "Weight": 1,
+  "Children": [
+    {
+      "$type": "Gamepackage.DialogOptionNode, Assembly-CSharp",
+      "ConditionNotMetBehaviour": 2,
+      "Identifier": "1e259d58-9f3e-47d4-a77d-477554972ae7",
+      "Text": "Use magic!",
+      "Weight": 1,
+      "Children": [
+        {
+          "$type": "Gamepackage.DialogNode, Assembly-CSharp",
+          "Identifier": "7a7765ce-df1c-493f-b9b0-4028a295a7f4",
+          "Text": "You use magic!",
+          "Weight": 1,
+          "Children": [],
+          "Conditions": [],
+          "Set": {}
+        }
+      ],
+      "Conditions": [
+        {
+          "conditionalImplClassName": "Gamepackage.NotEquals",
+          "Parameters": {
+            "Key": "OPEN",
+            "Value": "TRUE"
+          }
+        }
+      ],
+      "Set": {}
+    },
+    {
+      "$type": "Gamepackage.DialogOptionNode, Assembly-CSharp",
+      "ConditionNotMetBehaviour": 2,
+      "Identifier": "44731b46-2920-440a-9076-64cd8c7077ff",
+      "Text": "Use might!",
+      "Weight": 1,
+      "Children": [
+        {
+          "$type": "Gamepackage.DialogNode, Assembly-CSharp",
+          "Identifier": "09dd2179-490c-4780-95fa-40af9d03c494",
+          "Text": "You use might!",
+          "Weight": 1,
+          "Children": [],
+          "Conditions": [],
+          "Set": {}
+        }
+      ],
+      "Conditions": [
+        {
+          "conditionalImplClassName": "Gamepackage.NotEquals",
+          "Parameters": {
+            "Key": "OPEN",
+            "Value": "TRUE"
+          }
+        }
+      ],
+      "Set": {}
+    },
+    {
+      "$type": "Gamepackage.DialogOptionNode, Assembly-CSharp",
+      "ConditionNotMetBehaviour": 1,
+      "Identifier": "5eb25010-2f30-4814-8286-84f35fbdf015",
+      "Text": "Do nothing!",
+      "Weight": 1,
+      "Children": [],
+      "Conditions": [
+        {
+          "conditionalImplClassName": "Gamepackage.NotEquals",
+          "Parameters": {
+            "Key": "OPEN",
+            "Value": "TRUE"
+          }
+        }
+      ],
+      "Set": {}
+    }
+  ],
+  "Conditions": [],
+  "Set": {
+    "OPEN": "TRUE"
+  }
+}

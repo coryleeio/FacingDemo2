@@ -104,7 +104,7 @@ namespace Gamepackage
                         }
 
                         List<Point> floorAggregate = level.Grid[x, y].CachedFloorFloodFills[i];
-                        MathUtil.FloodFill(new Point(x, y), i, ref floorAggregate, MathUtil.FloodFillType.Surrounding, Filters.FloorTiles);
+                        MathUtil.FloodFill(new Point(x, y), i, ref floorAggregate, MathUtil.FloodFillType.Surrounding, Predicates.FloorTiles);
                     }
                 }
             }

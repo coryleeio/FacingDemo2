@@ -30,6 +30,17 @@ CREATE TABLE "Triggers_CombatActionParameters" (
 	"DamageFormula" 		TEXT
 );
 
+DROP TABLE IF EXISTS "Triggers_TemplateData";
+CREATE TABLE IF NOT EXISTS "Triggers_TemplateData" (
+    "Identifier"    TEXT,
+    "Key"   TEXT,
+    "Value" TEXT
+);
+
 INSERT INTO "Triggers"                         VALUES ( "TRIGGER_CHANGE_LEVEL_ON_PRESS", "SingleSquare", "Press", "traverse.staircase", "Gamepackage.ChangeLevel");
 INSERT INTO "Triggers"                         VALUES ( "TRIGGER_LOOTABLE", "SingleSquare", "Press", "show.loot.message", "Gamepackage.LootEntitiesInPosition");
+
+INSERT INTO "Triggers"                         VALUES ( "TRIGGER_OPEN_WELL_DIALOG", "OrthogonalOrDiagonal", "Press", "show.inspect.message", "Gamepackage.OpenDialog");
+INSERT INTO "Triggers_TemplateData"            VALUES ( "TRIGGER_OPEN_WELL_DIALOG", "DIALOG_TEMPLATE", "DIALOG_WELL");
+
 COMMIT;

@@ -205,8 +205,8 @@ namespace Gamepackage
         {
             entity.NextAction = null;
             var level = Context.Game.CurrentLevel;
-            var PointsAroundMe = MathUtil.OrthogonalPoints(entity.Position).FindAll(Filters.NonoccupiedTiles);
-            var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll(Filters.NonoccupiedTiles);
+            var PointsAroundMe = MathUtil.OrthogonalPoints(entity.Position).FindAll(Predicates.NonoccupiedTiles);
+            var PointsAroundTarget = MathUtil.OrthogonalPoints(targetPosition).FindAll(Predicates.NonoccupiedTiles);
             if (PointsAroundMe.Count == 0)
             {
                 // If there are no positions around me available, I can just give up now, as I cannot move.

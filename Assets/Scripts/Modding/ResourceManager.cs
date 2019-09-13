@@ -68,21 +68,21 @@ namespace Gamepackage
         public List<TPrototype> LoadAll<TPrototype>()
         {
             var agg = new List<TPrototype>();
-            if(!_prototypesByType.ContainsKey(typeof(TPrototype)) || _prototypesByType[typeof(TPrototype)].Count == 0)
+            if (!_prototypesByType.ContainsKey(typeof(TPrototype)) || _prototypesByType[typeof(TPrototype)].Count == 0)
             {
                 return agg;
             }
             var resources = _prototypesByType[typeof(TPrototype)];
-            foreach(var resource in resources)
+            foreach (var resource in resources)
             {
-                var castedResource = (TPrototype) resource;
+                var castedResource = (TPrototype)resource;
                 agg.Add(castedResource);
             }
             return agg;
         }
 
         // Called by mod manager once all mods are loaded to resolve all the resources from all the mods
-        public void ResolveAllResources(Mono.Data.Sqlite.SqliteConnection sqlConnection)
+        public void ResolveAllResources(Mono.Data.Sqlite.SqliteConnection sqlConnection, Dictionary<string, DialogNode> dialogsByName)
         {
             Debug.Log("Resolving all resources...");
             _prototypesByUniqueIdentifier.Clear();
@@ -101,6 +101,7 @@ namespace Gamepackage
             CacheResources(LoadViewTemplates(sqlConnection));
             CacheResources(LoadEffectImpls());
             CacheResources(LoadTriggerableActionImpls());
+            CacheResources(LoadDialogConditionImpls());
             CacheResources(LoadAI());
             CacheResources(LoadRulesEngines());
             CacheResources(LoadTriggerTemplates(sqlConnection));
@@ -116,6 +117,7 @@ namespace Gamepackage
             CacheResources(LoadProbabilityTables(sqlConnection, "ViewTables", "ViewTables_Parcels", "ViewTables_ParcelEntries"));
 
             CacheResources(LoadItemTemplates(sqlConnection));
+            CacheResources(dialogsByName);
             CacheResources(LoadEntityTypes(sqlConnection));
             CacheResources(LoadEntityTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
@@ -751,6 +753,9 @@ namespace Gamepackage
                 triggerTemplate.PressInputHint = reader[3].ToString();
                 triggerTemplate.TriggerableActionClassName = reader[4].ToString();
                 triggerTemplate.CombatActionParameters = ParseSingularCombatParam(sqlConnection, triggerTemplate, "Triggers_CombatActionParameters");
+
+                triggerTemplate.TemplateData = ParseStringToStringDict(sqlConnection, triggerTemplate.Identifier, "Triggers_TemplateData");
+
                 Assert.AreNotEqual(triggerTemplate.TriggerMode, TriggerMode.NotSet);
                 Assert.AreNotEqual(triggerTemplate.TriggerShape, TriggerShape.NotSet);
                 aggregate.Add(triggerTemplate.Identifier, triggerTemplate);
@@ -851,6 +856,11 @@ namespace Gamepackage
         private Dictionary<string, Dictionary<string, Type>> LoadRulesEngines()
         {
             return BuildTypeDictFromInterface(typeof(IRulesEngine));
+        }
+
+        private Dictionary<string, Dictionary<string, Type>> LoadDialogConditionImpls()
+        {
+            return BuildTypeDictFromInterface(typeof(ConditionalImpl));
         }
 
         private Dictionary<string, Dictionary<string, Type>> LoadTriggerableActionImpls()
@@ -990,7 +1000,7 @@ namespace Gamepackage
                 Debug.Log(string.Format("Replaced existing definition for: {0}.", key));
                 _prototypesByType[typeof(TResource)].Remove(_prototypesByUniqueIdentifier[key]);
             }
-            if(!_prototypesByType.ContainsKey(typeof(TResource)))
+            if (!_prototypesByType.ContainsKey(typeof(TResource)))
             {
                 _prototypesByType[typeof(TResource)] = new List<object>();
             }

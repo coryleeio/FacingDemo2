@@ -18,7 +18,7 @@ namespace Gamepackage
             return lootableEntities.Count > 0;
         }
 
-        private static List<Entity> LootableEntities(Entity TriggerThatWentOff) => Trigger.EntitiesInTrigger(TriggerThatWentOff).FindAll(Filters.LootableEntities);
+        private static List<Entity> LootableEntities(Entity TriggerThatWentOff) => Trigger.EntitiesInTrigger(TriggerThatWentOff).FindAll(Predicates.LootableEntities);
 
         public void Perform(Entity TriggerThatWentOff, Entity CauseOfTrigger, Dictionary<string, string> Data)
         {

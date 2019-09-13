@@ -1,4 +1,5 @@
 ﻿using Mono.Data.Sqlite;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +17,7 @@ namespace Gamepackage
         public List<Mod> Mods = new List<Mod>();
         public Dictionary<string, Assembly> AssembliesByName = new Dictionary<string, Assembly>();
         public Dictionary<string, AssetBundle> AssetBundlesByName = new Dictionary<string, AssetBundle>();
+        public Dictionary<string, DialogNode> DialogsByName = new Dictionary<string, DialogNode>();
         public bool NeedsToReloadResources = true;
 
         public void LoadModsAndResources()
@@ -24,6 +26,7 @@ namespace Gamepackage
             {
                 Mods.Clear();
                 ModsByName.Clear();
+                DialogsByName.Clear();
                 AssetBundle.UnloadAllAssetBundles(true);
                 string cs = "Data Source=:memory:";
                 var sqlConnection = new SqliteConnection(cs);
@@ -67,7 +70,7 @@ namespace Gamepackage
                     {
                         Debug.LogWarning("No mods loaded because " + modsDirectory + " did not exist");
                     }
-                    Context.ResourceManager.ResolveAllResources(sqlConnection);
+                    Context.ResourceManager.ResolveAllResources(sqlConnection, DialogsByName);
                 }
                 finally
                 {
@@ -92,7 +95,30 @@ namespace Gamepackage
             LoadAssemblies(mod);
             LoadAssetBundles(mod);
             LoadLocalizations(mod);
+            LoadDialogs(mod);
             LoadTemplates(mod, sqlConnection);
+        }
+
+        private void LoadDialogs(Mod mod)
+        {
+            if (mod.DialogDirectoryExists)
+            {
+                var dialogFilesNames = Directory.GetFiles(mod.DialogDirectoryPath, "*", SearchOption.TopDirectoryOnly);
+                foreach (var dialogFileName in dialogFilesNames)
+                {
+                    if(!dialogFileName.EndsWith(".meta"))
+                    {
+                        var parameters = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
+                        var dialogTemplate = JsonConvert.DeserializeObject<DialogNode>(File.ReadAllText(dialogFileName), parameters);
+                        Assert.IsTrue(dialogTemplate.Valid);
+                        if (DialogsByName.ContainsKey(dialogTemplate.Identifier))
+                        {
+                            Debug.Log("Replaced definition for " + dialogTemplate.Identifier);
+                        }
+                        DialogsByName[dialogTemplate.Identifier] = dialogTemplate;
+                    }
+                }
+            }
         }
 
         private void LoadAssetBundles(Mod mod)
@@ -127,10 +153,10 @@ namespace Gamepackage
                     var languages = Enum.GetValues(typeof(LocalizerLanguages));
                     var found = false;
 
-                    for(int i = 0; i < languages.Length; i++)
+                    for (int i = 0; i < languages.Length; i++)
                     {
-                        var language = (LocalizerLanguages) languages.GetValue(i);
-                        if(localizationFileName.EndsWith(language.ToString() + ".yaml"))
+                        var language = (LocalizerLanguages)languages.GetValue(i);
+                        if (localizationFileName.EndsWith(language.ToString() + ".yaml"))
                         {
                             found = true;
                             Debug.Log("Attempting to load localization file at: " + localizationFileName);
@@ -143,7 +169,7 @@ namespace Gamepackage
                         }
                     }
 
-                    if(!found)
+                    if (!found)
                     {
                         Debug.Log("Skipping " + localizationFileName + "Invalid localization file name");
                         foreach (var val in validFileNames)

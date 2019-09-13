@@ -59,6 +59,9 @@ INSERT INTO "Views"                                 VALUES ("VIEW_HUMAN_BLACK", 
 INSERT INTO "Views"                                 VALUES ("VIEW_SKELETON_WHITE", "Humanoid_SkeletonData", "SkeletonWhite", "0.5", "1.0", 1);
 INSERT INTO "Views"                                 VALUES ("VIEW_BEE", "Bee_SkeletonData", "Template", "0.4", "0.7", 1);
 INSERT INTO "Views"                                 VALUES ("VIEW_LARGE_BEE", "Bee_SkeletonData", "Template", "0.6", "1.0", 1);
+INSERT INTO "Views"                                 VALUES ("VIEW_WELL", "Well", "", "1.0", "1.0", 0);
+
+
 
 INSERT INTO "MultitileViews"           VALUES("MULTITILE_CHESSPIECE");
 INSERT INTO "MultitileViews_Component" VALUES("MULTITILE_CHESSPIECE", "ChessPieceBottom", "0.0", "0.0", "EntitiesAndProps", 0,0,0,0);

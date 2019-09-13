@@ -10,5 +10,7 @@ namespace Gamepackage
         public TriggerMode TriggerMode;
         public CombatActionParameters CombatActionParameters;
         public string PressInputHint;
+
+        public Dictionary<string, string> TemplateData;
     }
 }

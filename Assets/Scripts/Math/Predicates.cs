@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public static class Filters
+    public static class Predicates
     {
         public static Predicate<Entity> HittableEntities = (t) => t.IsCombatant && t.IsCombatant && !t.IsDead;
         public static Predicate<Point> NonoccupiedTiles = (t) => { return Context.Game.CurrentLevel.Grid[t].Walkable && Context.Game.CurrentLevel.Grid[t].EntitiesInPosition.FindAll(HittableEntities).Count == 0; };

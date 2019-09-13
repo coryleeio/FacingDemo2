@@ -68,6 +68,22 @@ namespace Gamepackage
             }
         }
 
+        public string DialogDirectoryPath
+        {
+            get
+            {
+                return System.IO.Path.Combine(ModFolderPath, "Dialogs");
+            }
+        }
+
+        public bool DialogDirectoryExists
+        {
+            get
+            {
+                return Directory.Exists(DialogDirectoryPath);
+            }
+        }
+
         public string AssembliesDirectoryPath
         {
             get

@@ -2,7 +2,7 @@
 
 namespace Gamepackage
 {
-    public static class TriggerableAction
+    public static class TriggerActionFactory
     {
         public static ITriggerableActionImpl Build(string FullName)
         {

@@ -29,12 +29,11 @@ namespace Gamepackage
             {
                 if (_triggerAction == null && Template.TriggerableActionClassName != null && Template.TriggerableActionClassName != "")
                 {
-                    return TriggerableAction.Build(Template.TriggerableActionClassName);
+                    return TriggerActionFactory.Build(Template.TriggerableActionClassName);
                 }
                 return _triggerAction;
             }
         }
-
 
         public Point[] Offsets
         {

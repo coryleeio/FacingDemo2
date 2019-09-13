@@ -48,6 +48,9 @@ namespace Gamepackage
         [NonSerialized]
         public TileHoverHint TileHoverHint;
 
+        [NonSerialized]
+        public DialogController DialogController;
+
         private LinkedList<UIComponent> OpenWindows = new LinkedList<UIComponent>();
 
         public void Init()
@@ -75,6 +78,8 @@ namespace Gamepackage
             InputHint = GetComponentInChildren<InputHint>(true);
             TileHoverHint = GetComponentInChildren<TileHoverHint>(true);
             MainMenu = GetComponentInChildren<MainMenu>(true);
+            DialogController = GetComponentInChildren<DialogController>(true);
+            DialogController.Init();
         }
 
         public bool HasWindowsOpen
