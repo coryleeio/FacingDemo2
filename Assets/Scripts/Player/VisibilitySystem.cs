@@ -302,6 +302,13 @@ namespace Gamepackage
                     if (entity.ViewGameObject != null)
                     {
                         entity.ViewGameObject.SetActive(entity.IsVisible);
+                        if(entity.ViewGameObject != null)
+                        {
+                            if(entity.SkeletonAnimation != null)
+                            {
+                                entity.SkeletonAnimation.AnimationState.AddAnimation(0, DisplayUtil.GetAnimationNameForDirection(Animations.Idle, entity.Direction), true, 0.0f);
+                            }
+                        }
                     }
                 }
             }
