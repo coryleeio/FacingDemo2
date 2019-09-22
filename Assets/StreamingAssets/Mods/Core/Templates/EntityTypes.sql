@@ -49,6 +49,6 @@ INSERT INTO "EntityTypes_Attributes"      VALUES("ENTITY_TYPE_GHOST", "ShoutRadi
 
 INSERT INTO "EntityTypes"                 VALUES("ENTITY_TYPE_STAIRS", "race.name.stairs", 0, "", 0, "VIEW_STAIRCASE_UP","", 1, "TRIGGER_CHANGE_LEVEL_ON_PRESS", "NotFloating", "NoShadow");
 INSERT INTO "EntityTypes"                 VALUES("ENTITY_TYPE_GROUND_DROP", "race.name.prop", 0, "", 0, "VIEW_CORPSE", "", 0, "TRIGGER_LOOTABLE", "NotFloating", "NoShadow");
-INSERT INTO "EntityTypes"                 VALUES("ENTITY_TYPE_WELL", "race.name.prop", 0, "", 1, "VIEW_WELL", "", 0, "TRIGGER_OPEN_WELL_DIALOG", "NotFloating", "NoShadow");
+INSERT INTO "EntityTypes"                 VALUES("ENTITY_TYPE_WELL", "race.name.prop", 0, "", 1, "VIEW_WELL", "", 1, "TRIGGER_OPEN_WELL_DIALOG", "NotFloating", "NoShadow");
 
 COMMIT;
