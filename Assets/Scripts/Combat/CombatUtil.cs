@@ -682,7 +682,7 @@ namespace Gamepackage
         private static void HandleSkillXpGain(EntityStateChange result, Entity target)
         {
             var player = Context.Game.CurrentLevel.Player;
-            if (player != null && !target.IsPlayer)
+            if (player != null && !target.IsPlayer && !player.IsDead)
             {
 
                 var campaignTemplate = Context.Game.CampaignTemplate;
@@ -731,7 +731,7 @@ namespace Gamepackage
         private static void HandleXpGain(EntityStateChange result, Entity target)
         {
             var player = Context.Game.CurrentLevel.Player;
-            if (player != null && !target.IsPlayer)
+            if (player != null && !target.IsPlayer && !player.IsDead)
             {
                 var xp = Context.RulesEngine.CalculateXpForKill(result, target);
                 player.Xp += xp;

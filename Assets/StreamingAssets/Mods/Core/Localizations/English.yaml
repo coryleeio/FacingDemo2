@@ -8,7 +8,7 @@ loot.action: "Loot"
 inspect.action: "Inspect"
 loot.notification: You have looted {0}{1}
 cost.health.damage: "Using {0} drains {1} health from {2}."
-xp.gain: "You gain experience."
+xp.gain: "<color=yellow>You gain experience.</color>"
 level.up: "You have achieved level: {0}"
 skill.up: "Your mastery of {0} has improved: {1}"
 
