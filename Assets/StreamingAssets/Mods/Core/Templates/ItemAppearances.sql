@@ -21,7 +21,7 @@ INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_LONGSWO
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_LONGSWORD','MainHandFront','Longsword');
 
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_BOW','Bow','Bow');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_BOW','BowIcon','Bow');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_BOW','MainHandFront','Bow');
 
 INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_LUCKY_COIN','LuckyCoin','LuckyCoin');
@@ -31,23 +31,23 @@ INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_RED_POT
 INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_PURPLE_POTION','PurplePotion','PurplePotion');
 INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_BLUE_POTION','BluePotion','BluePotion');
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_ARROW','Arrow','Arrow');
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_ACTION_STAFF','ActionStaff','ActionStaff');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_ARROW','ArrowIcon','Arrow');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_ACTION_STAFF','ActionStaffIcon','ActionStaff');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_ACTION_STAFF','MainHandFront','ActionStaff');
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_ORB_SCEPTER','OrbScepter','OrbScepter');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_ORB_SCEPTER','OrbScepterIcon','OrbScepter');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_ORB_SCEPTER','MainHandFront','OrbScepter');
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_DAGGER','Dagger','Dagger');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_DAGGER','DaggerIcon','Dagger');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_DAGGER','MainHandFront','Dagger');
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_MACE','Mace','Mace');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_MACE','MaceIcon','Mace');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_MACE','MainHandFront','Mace');
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_SWIRL_STAFF','SwirlStaff','SwirlStaff');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_SWIRL_STAFF','SwirlStaffIcon','SwirlStaff');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_SWIRL_STAFF','MainHandFront','SwirlStaff');
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_HOOK_STAFF','HookStaff','HookStaff');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_HOOK_STAFF','HookStaffIcon','HookStaff');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_HOOK_STAFF','MainHandFront','HookStaff');
 
 INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_SANDALS','SandalsIcon','SandalsIcon');
@@ -56,11 +56,11 @@ INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_SANDALS
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_SANDALS','LeftLegFrontNE','ShoeFrontNE');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_SANDALS','RightLegFrontNE','ShoeFrontNE');
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_SHIELD_OF_AMALURE','ShieldOfAmalureSE','ShieldOfAmalureSE');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_SHIELD_OF_AMALURE','ShieldOfAmalureIcon','ShieldOfAmalureSE');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_SHIELD_OF_AMALURE','OffHandFrontSE','ShieldOfAmalureSE');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_SHIELD_OF_AMALURE','OffHandFrontNE','ShieldOfAmalureNE');
 
-INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_ROBE_OF_WONDERS','RobeOfWondersFrontSE','RobeOfWondersFrontSE');
+INSERT INTO "ItemAppearances"                   VALUES ('ITEM_APPEARANCE_ROBE_OF_WONDERS','RobeOfWondersIcon','RobeOfWondersFrontSE');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_ROBE_OF_WONDERS','ChestFrontNE','RobeOfWondersFrontNE');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_ROBE_OF_WONDERS','ChestFrontSE','RobeOfWondersFrontSE');
 INSERT INTO "ItemAppearances_SpriteAttachments" VALUES ('ITEM_APPEARANCE_ROBE_OF_WONDERS','HelmetBackSE','RobeOfWondersHoodBackSE');
