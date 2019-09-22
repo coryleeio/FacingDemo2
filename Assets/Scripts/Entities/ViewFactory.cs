@@ -143,7 +143,7 @@ namespace Gamepackage
                     childGo.transform.SetParent(go.transform, false);
                     var childSortable = childGo.AddComponent<Sortable>();
                     childSortable.Layer = SortingLayer.EntitiesAndProps;
-                    spriteRenderer.sprite = item.Template.ItemAppearance.InventorySprite;
+                    spriteRenderer.sprite = item.Template.ItemAppearance.GroundSprite;
                     spriteRenderer.material = defaultMaterial;
                     childGo.AddComponent<EntityView>();
                 }

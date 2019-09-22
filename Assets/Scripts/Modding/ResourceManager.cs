@@ -907,6 +907,7 @@ namespace Gamepackage
                 var itemAppearance = new ItemAppearance();
                 itemAppearance.Identifier = reader[0].ToString();
                 itemAppearance.InventorySprite = LoadUnityResource<Sprite>(reader[1].ToString());
+                itemAppearance.GroundSprite = LoadUnityResource<Sprite>(reader[2].ToString());
                 itemAppearance.WornItemSpritePerSlot = new Dictionary<SpriteAttachment, Sprite>();
                 aggregate.Add(itemAppearance.Identifier, itemAppearance);
             }

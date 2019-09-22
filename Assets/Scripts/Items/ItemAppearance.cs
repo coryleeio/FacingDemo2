@@ -7,6 +7,7 @@ namespace Gamepackage
     {
         public string Identifier { get; set; }
         public Sprite InventorySprite;
+        public Sprite GroundSprite;
         public Dictionary<SpriteAttachment, Sprite> WornItemSpritePerSlot;
     }
 }

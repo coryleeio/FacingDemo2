@@ -258,7 +258,7 @@ namespace Gamepackage
         {
             if (ProjectileAppearance != null && ProjectileAppearance.ProjectileDefinition != null)
             {
-                ProjectileView = ViewFactory.InstantiateProjectileAppearance(ProjectileAppearance.ProjectileDefinition, CalculatedCombatAction.Source.Position, CalculatedCombatAction.DirectionOfAttack, ProjectileView, CalculatedCombatAction.Item.Template.ItemAppearance.InventorySprite);
+                ProjectileView = ViewFactory.InstantiateProjectileAppearance(ProjectileAppearance.ProjectileDefinition, CalculatedCombatAction.Source.Position, CalculatedCombatAction.DirectionOfAttack, ProjectileView, CalculatedCombatAction.Item.Template.ItemAppearance.GroundSprite);
             }
             if (ProjectileAppearance != null && ProjectileAppearance.OnSwingDefinition != null)
             {

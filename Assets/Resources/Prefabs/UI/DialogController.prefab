@@ -106,8 +106,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6040783673135363306}
-  - {fileID: 4103353047002424387}
+  - {fileID: 2181705975050186804}
+  - {fileID: 87479759514276468}
   m_Father: {fileID: 1643429161832564317}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8dd20170797f26d4e96558e431c744e1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f6c8afe7d1397b545bc06cf109c57d2f, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -720,7 +720,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 706, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1754725279042663109
@@ -775,7 +775,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4103353047002424387}
+    m_TransformParent: {fileID: 87479759514276468}
     m_Modifications:
     - target: {fileID: 8589239728805426395, guid: 55e182878b6d2bb47b4bba3075b6581a,
         type: 3}
@@ -899,7 +899,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4103353047002424387}
+    m_TransformParent: {fileID: 87479759514276468}
     m_Modifications:
     - target: {fileID: 8589239728805426395, guid: 55e182878b6d2bb47b4bba3075b6581a,
         type: 3}
@@ -1093,7 +1093,7 @@ PrefabInstance:
     - target: {fileID: 4042218797629541912, guid: 687c310965f247b46be5173b897e505c,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 361.75
       objectReference: {fileID: 0}
     - target: {fileID: 4042218797629541912, guid: 687c310965f247b46be5173b897e505c,
         type: 3}
@@ -1103,7 +1103,7 @@ PrefabInstance:
     - target: {fileID: 4042218797629541912, guid: 687c310965f247b46be5173b897e505c,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 643.5
       objectReference: {fileID: 0}
     - target: {fileID: 4042218797629541912, guid: 687c310965f247b46be5173b897e505c,
         type: 3}
@@ -1140,6 +1140,12 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5174379586422595277, guid: 687c310965f247b46be5173b897e505c,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f6c8afe7d1397b545bc06cf109c57d2f,
+        type: 3}
     - target: {fileID: 8542939948692730939, guid: 687c310965f247b46be5173b897e505c,
         type: 3}
       propertyPath: m_HorizontalFit
@@ -1152,7 +1158,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 687c310965f247b46be5173b897e505c, type: 3}
---- !u!224 &4103353047002424387 stripped
+--- !u!224 &87479759514276468 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4042218797629541912, guid: 687c310965f247b46be5173b897e505c,
     type: 3}
@@ -1163,7 +1169,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4103353047002424387}
+    m_TransformParent: {fileID: 87479759514276468}
     m_Modifications:
     - target: {fileID: 7084162986679202875, guid: d10c7ad20b233bb47b3e1c61c1ca1290,
         type: 3}
@@ -1417,7 +1423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52, type: 3}
---- !u!224 &6040783673135363306 stripped
+--- !u!224 &2181705975050186804 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9175582655237805693, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52,
     type: 3}
@@ -1428,7 +1434,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4103353047002424387}
+    m_TransformParent: {fileID: 87479759514276468}
     m_Modifications:
     - target: {fileID: 7084162986679202875, guid: d10c7ad20b233bb47b3e1c61c1ca1290,
         type: 3}
