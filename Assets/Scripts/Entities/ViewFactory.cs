@@ -170,7 +170,7 @@ namespace Gamepackage
 
         private static void BuildCastShadow(Entity entity, GameObject go)
         {
-            if (entity.CastsShadow)
+            if (entity.ViewTemplate != null && entity.ViewTemplate.CastsShadow == ShadowCastState.CastsShadow)
             {
                 var shadowPrefab = Resources.Load<GameObject>("Prefabs/Shadow");
                 var shadowGameObject = GameObject.Instantiate<GameObject>(shadowPrefab);
@@ -182,7 +182,7 @@ namespace Gamepackage
 
         private static void BuildFloating(Entity entity, GameObject go)
         {
-            if (entity.Floating)
+            if (entity.ViewTemplate != null && entity.ViewTemplate.isFloating == FloatingState.IsFloating)
             {
                 var skeletonAnimation = go.transform.GetComponentInChildren<SkeletonAnimation>();
                 var target = skeletonAnimation != null ? skeletonAnimation.gameObject : go;

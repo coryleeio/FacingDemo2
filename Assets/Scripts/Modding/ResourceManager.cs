@@ -118,37 +118,29 @@ namespace Gamepackage
 
             CacheResources(LoadItemTemplates(sqlConnection));
             CacheResources(dialogsByName);
-            CacheResources(LoadEntityTypes(sqlConnection));
+            CacheResources(LoadSpecies(sqlConnection));
             CacheResources(LoadEntityTemplates(sqlConnection));
             CacheResources(LoadCampaignTemplates(sqlConnection));
         }
 
-        private Dictionary<string, EntityTypeTemplate> LoadEntityTypes(SqliteConnection sqlConnection)
+        private Dictionary<string, SpeciesTemplate> LoadSpecies(SqliteConnection sqlConnection)
         {
-            var sql = "select * from EntityTypes";
+            var sql = "select * from Species";
             var sqlCommand = new SqliteCommand(sql, sqlConnection);
             var reader = sqlCommand.ExecuteReader();
 
-            var aggregate = new Dictionary<string, EntityTypeTemplate>();
+            var aggregate = new Dictionary<string, SpeciesTemplate>();
             while (reader.Read())
             {
-                var entityTypeTemplate = new EntityTypeTemplate();
-                entityTypeTemplate.Identifier = reader[0].ToString();
+                var speciesTypeTemplate = new SpeciesTemplate();
+                speciesTypeTemplate.Identifier = reader[0].ToString();
 
-                entityTypeTemplate.Name = reader[1].ToString();
-                entityTypeTemplate.IsCombatant = ParseBoolFromIntString(reader[2].ToString());
-                entityTypeTemplate.DefaultWeaponIdentifier = reader[3].ToString();
-                entityTypeTemplate.BlocksPathing = ParseBoolFromIntString(reader[4].ToString());
-                entityTypeTemplate.DefaultViewTemplateIdentifier = reader[5].ToString();
-                entityTypeTemplate.DefaultAIClassName = reader[6].ToString();
-                entityTypeTemplate.IsAlwaysVisible = ParseBoolFromIntString(reader[7].ToString());
-                entityTypeTemplate.Trigger = reader[8].ToString();
+                speciesTypeTemplate.Name = reader[1].ToString();
+                speciesTypeTemplate.DefaultWeaponIdentifier = reader[2].ToString();
+                speciesTypeTemplate.DefaultAIClassName = reader[3].ToString();
 
-                entityTypeTemplate.isFloating = (FloatingState)Enum.Parse(typeof(FloatingState), reader[9].ToString(), true);
-                entityTypeTemplate.CastsShadow = (ShadowCastState)Enum.Parse(typeof(ShadowCastState), reader[10].ToString(), true);
-
-                entityTypeTemplate.TemplateAttributes = ParseAttributesDictFromTable(sqlConnection, entityTypeTemplate.Identifier, "EntityTypes_Attributes");
-                aggregate.Add(entityTypeTemplate.Identifier, entityTypeTemplate);
+                speciesTypeTemplate.TemplateAttributes = ParseAttributesDictFromTable(sqlConnection, speciesTypeTemplate.Identifier, "Species_Attributes");
+                aggregate.Add(speciesTypeTemplate.Identifier, speciesTypeTemplate);
             }
             return aggregate;
         }
@@ -177,10 +169,16 @@ namespace Gamepackage
                 }
 
                 entityTemplate.EntityTypeIdentifier = reader[2].ToString();
-                Assert.IsTrue(this.Contains<EntityTypeTemplate>(entityTemplate.EntityTypeIdentifier), "Could not find entityTypeTemplate: " + entityTemplate.EntityTypeIdentifier);
+                if(entityTemplate.EntityTypeIdentifier != null && entityTemplate.EntityTypeIdentifier != "")
+                {
+                    Assert.IsTrue(this.Contains<SpeciesTemplate>(entityTemplate.EntityTypeIdentifier), "Could not find entityTypeTemplate: " + entityTemplate.EntityTypeIdentifier);
+                }
                 int.TryParse(reader[3].ToString(), out int level);
                 entityTemplate.Level = level;
-                entityTemplate.ViewTemplateIdentifierOverride = reader[4].ToString();
+                entityTemplate.ViewTemplateIdentifier = reader[4].ToString();
+                entityTemplate.TriggerTemplateIdentifier = reader[5].ToString();
+                entityTemplate.BlocksPathing = ParseBoolFromIntString(reader[6].ToString());
+
                 entityTemplate.EquipmentTables = ParseListOfStrings(sqlConnection, entityTemplate.Identifier, "Entities_EquipmentTables");
                 entityTemplate.InventoryTables = ParseListOfStrings(sqlConnection, entityTemplate.Identifier, "Entities_InventoryTables");
                 aggregate.Add(entityTemplate.Identifier, entityTemplate);
@@ -281,6 +279,10 @@ namespace Gamepackage
                 var sortableWeightStr = reader[5].ToString();
                 int.TryParse(sortableWeightStr, out int sortableWeight);
                 viewTemplate.SortableWeight = sortableWeight;
+
+                viewTemplate.IsAlwaysVisible = ParseBoolFromIntString(reader[6].ToString());
+                viewTemplate.isFloating = (FloatingState)Enum.Parse(typeof(FloatingState), reader[7].ToString(), true);
+                viewTemplate.CastsShadow = (ShadowCastState)Enum.Parse(typeof(ShadowCastState), reader[8].ToString(), true);
 
                 aggregate.Add(viewTemplate.Identifier, viewTemplate);
             }

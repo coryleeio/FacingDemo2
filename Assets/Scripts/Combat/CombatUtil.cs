@@ -622,8 +622,6 @@ namespace Gamepackage
                     }
                     target.Name = string.Format("( Corpse ) {0}", target.Name);
                     target.IsDead = true;
-                    // Is not deregistered because the corpse should still be available
-                    target.IsCombatant = false;
                     var game = Context.Game;
                     var level = game.CurrentLevel;
 

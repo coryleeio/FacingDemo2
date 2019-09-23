@@ -80,7 +80,6 @@ namespace Gamepackage
             ConnectLevelsByStairway(levels[0], levels[1]);
             var playerSpawn = SpawnOnLevel("ENTITY_PONCY", levels[0], Team.Player);
             playerSpawn.IsPlayer = true;
-            playerSpawn.AlwaysVisible = true;
             playerSpawn.AI = null;
             playerSpawn.AIClassName = null;
             var playerPos = playerSpawn.Position;

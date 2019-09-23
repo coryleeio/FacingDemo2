@@ -286,10 +286,14 @@ namespace Gamepackage
 
             foreach (var entity in level.Entitys)
             {
-                entity.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
+                if(entity.ViewTemplate == null)
+                {
+                    continue;
+                }
+                entity.IsVisible = entity.ViewTemplate.IsAlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
                 if (entity.ViewGameObject != null)
                 {
-                    entity.IsVisible = entity.AlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
+                    entity.IsVisible = entity.ViewTemplate.IsAlwaysVisible ? true : _updatedVisibilityGrid[entity.Position.X, entity.Position.Y];
                     if (entity.ViewGameObject != null)
                     {
                         entity.ViewGameObject.SetActive(entity.IsVisible);

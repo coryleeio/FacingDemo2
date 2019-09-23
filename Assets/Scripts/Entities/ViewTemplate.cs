@@ -8,5 +8,8 @@
         public float Scale;
         public float ShadowScale;
         public int SortableWeight;
+        public bool IsAlwaysVisible;
+        public FloatingState isFloating;
+        public ShadowCastState CastsShadow;
     }
 }

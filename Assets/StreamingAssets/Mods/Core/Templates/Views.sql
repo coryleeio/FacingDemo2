@@ -6,7 +6,10 @@ CREATE TABLE "Views" (
 	"SpineSkinName"      TEXT,
 	"Scale"              TEXT,
 	"ShadowScale"        TEXT,
-	"SortableWeight"     INTEGER
+	"SortableWeight"     INTEGER,
+	"AlwaysVisible" INTEGER,
+	"isFloating" TEXT,
+	"CastsShadow" TEXT
 );
 
 DROP TABLE IF EXISTS "MultitileViews";
@@ -44,24 +47,24 @@ CREATE TABLE "ViewTables_ParcelEntries" (
 	"Value"        TEXT
 );
 
-INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_RED", "RedMarker", "", "1.0", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_GREEN", "GreenMarker", "", "1.0", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_YELLOW", "YellowMarker", "", "1.0", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_BLUE", "BlueMarker", "", "1.0", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_CHESS_PIECE", "MULTITILE_CHESSPIECE", "", "1.0", "1.5", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_RUG", "MULTITILE_RUG", "", "1.0", "1.5", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_STAIRCASE_UP", "StaircaseUp", "", "1.0", "1.0", 0);
-INSERT INTO "Views"                                 VALUES ("VIEW_STAIRCASE_DOWN", "StaircaseDown", "", "1.0", "1.0", 0);
-INSERT INTO "Views"                                 VALUES ("VIEW_HUMAN_ASIAN", "Humanoid_SkeletonData", "HumanAsian", "0.5", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_HUMAN_WHITE", "Humanoid_SkeletonData", "HumanWhite", "0.5", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_GHOST", "Humanoid_SkeletonData", "Ghost", "0.5", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_HUMAN_BLACK", "Humanoid_SkeletonData", "HumanBlack", "0.5", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_SKELETON_WHITE", "Humanoid_SkeletonData", "SkeletonWhite", "0.5", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_BEE", "Bee_SkeletonData", "Template", "0.4", "0.7", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_LARGE_BEE", "Bee_SkeletonData", "Template", "0.6", "1.0", 1);
-INSERT INTO "Views"                                 VALUES ("VIEW_WELL", "Well", "", "1.0", "1.0", 0);
+INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_RED", "RedMarker", "", "1.0", "1.0", 1, 0, "NotFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_GREEN", "GreenMarker", "", "1.0", "1.0", 1, 0, "NotFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_YELLOW", "YellowMarker", "", "1.0", "1.0", 1, 0, "NotFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_MARKER_BLUE", "BlueMarker", "", "1.0", "1.0", 1, 0, "NotFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_CHESS_PIECE", "MULTITILE_CHESSPIECE", "", "1.0", "1.5", 1, 0, "NotFloating", "CastsShadow");
 
+INSERT INTO "Views"                                 VALUES ("VIEW_HUMAN_ASIAN", "Humanoid_SkeletonData", "HumanAsian", "0.5", "1.0", 1, 0, "NotFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_HUMAN_WHITE", "Humanoid_SkeletonData", "HumanWhite", "0.5", "1.0", 1, 0, "NotFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_GHOST", "Humanoid_SkeletonData", "Ghost", "0.5", "1.0", 1, 0, "IsFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_HUMAN_BLACK", "Humanoid_SkeletonData", "HumanBlack", "0.5", "1.0", 1, 0, "NotFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_SKELETON_WHITE", "Humanoid_SkeletonData", "SkeletonWhite", "0.5", "1.0", 1, 0, "NotFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_BEE", "Bee_SkeletonData", "Template", "0.4", "0.7", 1, 0, "IsFloating", "CastsShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_LARGE_BEE", "Bee_SkeletonData", "Template", "0.6", "1.0", 1, 0, "IsFloating", "CastsShadow");
 
+INSERT INTO "Views"                                 VALUES ("VIEW_WELL", "Well", "", "1.0", "1.0", 0, 1, "NotFloating", "NoShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_STAIRCASE_UP", "StaircaseUp", "", "1.0", "1.0", 0, 1, "NotFloating", "NoShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_STAIRCASE_DOWN", "StaircaseDown", "", "1.0", "1.0", 0, 1, "NotFloating", "NoShadow");
+INSERT INTO "Views"                                 VALUES ("VIEW_RUG", "MULTITILE_RUG", "", "1.0", "1.5", 1, 1, "NotFloating", "NoShadow");
 
 INSERT INTO "MultitileViews"           VALUES("MULTITILE_CHESSPIECE");
 INSERT INTO "MultitileViews_Component" VALUES("MULTITILE_CHESSPIECE", "ChessPieceBottom", "0.0", "0.0", "EntitiesAndProps", 0,0,0,0);

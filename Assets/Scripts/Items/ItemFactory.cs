@@ -23,6 +23,7 @@ namespace Gamepackage
                 return null;
             }
             var itemTemplate = Context.ResourceManager.Load<ItemTemplate>(uniqueIdentifier);
+            Debug.Log("Building: " + uniqueIdentifier);
             var item = new Item()
             {
                 TemplateIdentifier = uniqueIdentifier,

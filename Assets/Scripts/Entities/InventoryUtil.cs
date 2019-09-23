@@ -158,7 +158,7 @@ namespace Gamepackage
                 var ind = inventory.Items.IndexOf(item);
                 inventory.Items[ind] = null;
             }
-            if (entity != null && entity.EntityType.Identifier == "ENTITY_TYPE_GROUND_DROP")
+            if (entity != null && entity.Species.Identifier == "ENTITY_TYPE_GROUND_DROP")
             {
                 // Remove ground drop entities if their last item is looted
                 if (Context.Game != null && Context.Game.CurrentLevel != null)

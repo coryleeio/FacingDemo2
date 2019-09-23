@@ -6,10 +6,12 @@ namespace Gamepackage
     {
         public string Identifier;
         public ProbabilityTable NameList;
-        public string ViewTemplateIdentifierOverride;
+        public string ViewTemplateIdentifier;
         public List<string> EquipmentTables;
         public List<string> InventoryTables;
         public string EntityTypeIdentifier;
         public int Level;
+        public string TriggerTemplateIdentifier;
+        public bool BlocksPathing;
     }
 }

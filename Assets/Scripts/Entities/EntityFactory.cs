@@ -29,7 +29,7 @@ namespace Gamepackage
         {
             var entity = new Entity();
             Assert.IsTrue(template != null, "Could not find template: " + template);
-            entity.EntityTypeTemplateIdentifier = template.EntityTypeIdentifier;
+            entity.SpeciesTemplateIdentifier = template.EntityTypeIdentifier;
             entity.Inventory = new Inventory();
             // Ensure correct default size - doing this in Inventory causes
             // serialization issues
@@ -42,21 +42,21 @@ namespace Gamepackage
             entity.EntityAcquiredTags = new List<string>();
             entity.EntityInnateTags = new List<string>();
             entity.Name = template.NameList.RollAndChooseOne().Localize();
-            entity.IsCombatant = entity.EntityType.IsCombatant;
-            entity.DefaultAttackItem = ItemFactory.Build(entity.EntityType.DefaultWeaponIdentifier);
             entity.Attributes = new Dictionary<Attributes, int>();
 
-            foreach (var pair in entity.EntityType.TemplateAttributes)
+            if (entity.Species != null)
             {
-                entity.Attributes.Add(pair.Key, pair.Value);
+                entity.DefaultAttackItem = ItemFactory.Build(entity.Species.DefaultWeaponIdentifier);
+                foreach (var pair in entity.Species.TemplateAttributes)
+                {
+                    entity.Attributes.Add(pair.Key, pair.Value);
+                }
+                entity.AIClassName = entity.Species.DefaultAIClassName;
             }
-            entity.BlocksPathing = entity.EntityType.BlocksPathing;
 
-            var viewIdentifier = entity.EntityType.DefaultViewTemplateIdentifier;
-            if (template.ViewTemplateIdentifierOverride != null && template.ViewTemplateIdentifierOverride != "")
-            {
-                viewIdentifier = template.ViewTemplateIdentifierOverride;
-            }
+            var viewIdentifier = template.ViewTemplateIdentifier;
+            entity.BlocksPathing = template.BlocksPathing;
+
 
             if (Context.ResourceManager.Contains<ProbabilityTable>(viewIdentifier))
             {
@@ -68,14 +68,9 @@ namespace Gamepackage
                 entity.ViewTemplateIdentifier = viewIdentifier;
             }
 
-            entity.AIClassName = entity.EntityType.DefaultAIClassName;
-            entity.Floating = entity.EntityType.isFloating == FloatingState.IsFloating;
-            entity.CastsShadow = entity.EntityType.CastsShadow == ShadowCastState.CastsShadow;
-            entity.AlwaysVisible = entity.EntityType.IsAlwaysVisible;
-
-            if (entity.EntityType.Trigger != null && entity.EntityType.Trigger != "")
+            if (template.TriggerTemplateIdentifier != null && template.TriggerTemplateIdentifier != "")
             {
-                entity.Trigger = TriggerFactory.Build(entity.EntityType.Trigger);
+                entity.Trigger = TriggerFactory.Build(template.TriggerTemplateIdentifier);
             }
             foreach (var table in template.EquipmentTables)
             {

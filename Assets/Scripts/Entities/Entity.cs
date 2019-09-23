@@ -10,23 +10,26 @@ namespace Gamepackage
     [Serializable]
     public class Entity
     {
-        public string EntityTypeTemplateIdentifier { get; set; }
+        public string SpeciesTemplateIdentifier { get; set; }
         [JsonIgnore]
-        public EntityTypeTemplate EntityType
+        public SpeciesTemplate Species
         {
             get
             {
-                return Context.ResourceManager.Load<EntityTypeTemplate>(EntityTypeTemplateIdentifier);
+                return Context.ResourceManager.Load<SpeciesTemplate>(SpeciesTemplateIdentifier);
             }
         }
 
         public string Name;
-        public bool IsCombatant = false;
-        public bool Floating = false;
-        public bool CastsShadow = true;
-        public bool BlocksPathing = false;
-        public bool AlwaysVisible = false;
+        public bool IsCombatant
+        {
+            get
+            {
+                return Species != null && !IsDead;
+            }
+        }
 
+        public bool BlocksPathing = false;
         public Team OriginalTeam;
         public int Level;
         public int Xp;
