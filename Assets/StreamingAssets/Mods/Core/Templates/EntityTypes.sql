@@ -15,6 +15,7 @@ CREATE TABLE "EntityTypes" (
 	"isFloating" TEXT,
 	"CastsShadow" TEXT
 );
+
 DROP TABLE IF EXISTS "EntityTypes_Attributes";
 CREATE TABLE IF NOT EXISTS "EntityTypes_Attributes" (
     "Identifier"    TEXT,
