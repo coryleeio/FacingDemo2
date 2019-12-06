@@ -6,7 +6,7 @@ namespace Gamepackage
     {
         private const float _cameraZOffset = -30;
         private Vector3 targetPosition;
-        private const float _totalMoveTime = 1.5f;
+        private const float _totalMoveTime = 0.25f;
 
         public void JumpToTarget(Point p)
         {
