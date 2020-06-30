@@ -6,13 +6,13 @@
     {
       "$type": "Gamepackage.DialogOptionNode, Assembly-CSharp",
       "ConditionNotMetBehaviour": 2,
-      "Identifier": "7d77230f-64d9-4146-a7e4-03cfb240d5fa",
+      "Identifier": "9657ea9a-62a7-486e-bc5d-35ccbf506d37",
       "Text": "Use magic!",
       "Weight": 1,
       "Children": [
         {
           "$type": "Gamepackage.DialogNode, Assembly-CSharp",
-          "Identifier": "b06ca67b-86d4-42e4-9181-0383d7f6e24e",
+          "Identifier": "d0372f1f-fadd-4d0f-bd93-b38cce750567",
           "Text": "You use magic!",
           "Weight": 1,
           "Children": [],
@@ -34,13 +34,13 @@
     {
       "$type": "Gamepackage.DialogOptionNode, Assembly-CSharp",
       "ConditionNotMetBehaviour": 2,
-      "Identifier": "e2cee20f-d5e1-4879-b085-bccb354e9d6a",
+      "Identifier": "cacf7922-75cc-4bd4-9062-cc5bfe9443cf",
       "Text": "Use might!",
       "Weight": 1,
       "Children": [
         {
           "$type": "Gamepackage.DialogNode, Assembly-CSharp",
-          "Identifier": "91fc3ea7-4154-4aae-bef4-7e8d28919711",
+          "Identifier": "e341806f-7224-4c64-9efd-8261c94c78cb",
           "Text": "You use might!",
           "Weight": 1,
           "Children": [],
@@ -62,7 +62,7 @@
     {
       "$type": "Gamepackage.DialogOptionNode, Assembly-CSharp",
       "ConditionNotMetBehaviour": 1,
-      "Identifier": "f15a6c1f-98e7-4230-ab42-560242a1ccf5",
+      "Identifier": "f1037925-f296-4e68-8137-2e5e57450c27",
       "Text": "Do nothing!",
       "Weight": 1,
       "Children": [],
