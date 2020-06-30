@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -107,7 +108,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2181705975050186804}
-  - {fileID: 87479759514276468}
+  - {fileID: 3573008407815178199}
   m_Father: {fileID: 1643429161832564317}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -149,6 +150,37 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!1 &4758365726892955819
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 4120251551627287660}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3573008407815178199}
+  m_Layer: 0
+  m_Name: InnerContentPanel (Missing Prefab)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3573008407815178199
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 4120251551627287660}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4758365726892955819}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 87479759514276468}
+  m_Father: {fileID: 7159597607911231240}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4895889835543524038
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +244,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -331,6 +364,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -481,6 +515,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -549,6 +584,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 913738cdd0a8d084ba2e16821e1ded01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6173988792422382662
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 4120251551627287660}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 87479759514276468}
+  m_Layer: 0
+  m_Name: Missing Prefab (Dummy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &87479759514276468
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 4042218797629541912, guid: 687c310965f247b46be5173b897e505c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4120251551627287660}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6173988792422382662}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3573008407815178199}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6932908068074776623
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,9 +789,9 @@ RectTransform:
   m_Father: {fileID: 1643429161832564317}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 706, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 706, y: -17.5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1754725279042663109
@@ -777,11 +848,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 87479759514276468}
     m_Modifications:
-    - target: {fileID: 8589239728805426395, guid: 55e182878b6d2bb47b4bba3075b6581a,
-        type: 3}
-      propertyPath: m_Name
-      value: DialogControllerReward (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 3872537641151905095, guid: 55e182878b6d2bb47b4bba3075b6581a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -892,6 +958,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: 'Item: Longsword x1'
       objectReference: {fileID: 0}
+    - target: {fileID: 8589239728805426395, guid: 55e182878b6d2bb47b4bba3075b6581a,
+        type: 3}
+      propertyPath: m_Name
+      value: DialogControllerReward (1)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55e182878b6d2bb47b4bba3075b6581a, type: 3}
 --- !u!1001 &3496012679233772204
@@ -901,11 +972,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 87479759514276468}
     m_Modifications:
-    - target: {fileID: 8589239728805426395, guid: 55e182878b6d2bb47b4bba3075b6581a,
-        type: 3}
-      propertyPath: m_Name
-      value: DialogControllerReward
-      objectReference: {fileID: 0}
     - target: {fileID: 3872537641151905095, guid: 55e182878b6d2bb47b4bba3075b6581a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1016,6 +1082,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: 'XP: 2400'
       objectReference: {fileID: 0}
+    - target: {fileID: 8589239728805426395, guid: 55e182878b6d2bb47b4bba3075b6581a,
+        type: 3}
+      propertyPath: m_Name
+      value: DialogControllerReward
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55e182878b6d2bb47b4bba3075b6581a, type: 3}
 --- !u!1001 &4120251551627287660
@@ -1025,16 +1096,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7159597607911231240}
     m_Modifications:
-    - target: {fileID: 7599942011030968280, guid: 687c310965f247b46be5173b897e505c,
-        type: 3}
-      propertyPath: m_Name
-      value: InnerContentPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7599942011030968280, guid: 687c310965f247b46be5173b897e505c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4042218797629541912, guid: 687c310965f247b46be5173b897e505c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1146,6 +1207,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: f6c8afe7d1397b545bc06cf109c57d2f,
         type: 3}
+    - target: {fileID: 7599942011030968280, guid: 687c310965f247b46be5173b897e505c,
+        type: 3}
+      propertyPath: m_Name
+      value: InnerContentPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7599942011030968280, guid: 687c310965f247b46be5173b897e505c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8542939948692730939, guid: 687c310965f247b46be5173b897e505c,
         type: 3}
       propertyPath: m_HorizontalFit
@@ -1158,12 +1229,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 687c310965f247b46be5173b897e505c, type: 3}
---- !u!224 &87479759514276468 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4042218797629541912, guid: 687c310965f247b46be5173b897e505c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4120251551627287660}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5552952622963118768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1171,11 +1236,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 87479759514276468}
     m_Modifications:
-    - target: {fileID: 7084162986679202875, guid: d10c7ad20b233bb47b3e1c61c1ca1290,
-        type: 3}
-      propertyPath: m_Name
-      value: DialogControllerButton (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 2368076204626771367, guid: d10c7ad20b233bb47b3e1c61c1ca1290,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1281,6 +1341,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7084162986679202875, guid: d10c7ad20b233bb47b3e1c61c1ca1290,
+        type: 3}
+      propertyPath: m_Name
+      value: DialogControllerButton (1)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d10c7ad20b233bb47b3e1c61c1ca1290, type: 3}
 --- !u!1001 &6994316488431232585
@@ -1290,6 +1355,28 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7159597607911231240}
     m_Modifications:
+    - target: {fileID: 4224697105287190069, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224697105287190069, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52,
+        type: 3}
+      propertyPath: m_Text
+      value: 'You peer down into the well, but the only thing you see is your own
+        reflection.You peer down into the well, but the only thing you see is your
+        own reflection.You peer down into the well, but the only thing you see is
+        your own reflection.You peer down into the well, but the only thing you see
+        is your own reflection.
+
+        You peer down into the well, but the only
+        thing you see is your own reflection.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224697105287190069, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4457208751895732193, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52,
         type: 3}
       propertyPath: m_Name
@@ -1400,27 +1487,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4224697105287190069, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52,
-        type: 3}
-      propertyPath: m_FontData.m_FontSize
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 4224697105287190069, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52,
-        type: 3}
-      propertyPath: m_Text
-      value: 'You peer down into the well, but the only thing you see is your own
-        reflection.You peer down into the well, but the only thing you see is your
-        own reflection.You peer down into the well, but the only thing you see is
-        your own reflection.You peer down into the well, but the only thing you see
-        is your own reflection.
-
-        You peer down into the well, but the only thing you see is your own reflection.'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4224697105287190069, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52,
-        type: 3}
-      propertyPath: m_FontData.m_Alignment
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86f71d98edf1b7c49a1ad1ff7ff65f52, type: 3}
 --- !u!224 &2181705975050186804 stripped
@@ -1436,11 +1502,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 87479759514276468}
     m_Modifications:
-    - target: {fileID: 7084162986679202875, guid: d10c7ad20b233bb47b3e1c61c1ca1290,
-        type: 3}
-      propertyPath: m_Name
-      value: DialogControllerButton
-      objectReference: {fileID: 0}
     - target: {fileID: 2368076204626771367, guid: d10c7ad20b233bb47b3e1c61c1ca1290,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1545,6 +1606,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7084162986679202875, guid: d10c7ad20b233bb47b3e1c61c1ca1290,
+        type: 3}
+      propertyPath: m_Name
+      value: DialogControllerButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d10c7ad20b233bb47b3e1c61c1ca1290, type: 3}
