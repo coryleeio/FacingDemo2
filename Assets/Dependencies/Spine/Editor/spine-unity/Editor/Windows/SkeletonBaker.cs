@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated May 1, 2019. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2019, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -15,16 +15,16 @@
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
- * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
- * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #if UNITY_2018_3 || UNITY_2019 || UNITY_2018_3_OR_NEWER
@@ -185,10 +185,8 @@ namespace Spine.Unity.Editor {
 				return;
 			}
 
-			#if !NEW_PREFAB_SYSTEM
-
 			if (outputPath == "") {
-				outputPath = System.IO.Path.GetDirectoryName(AssetDatabase.GetAssetPath(skeletonDataAsset)) + "/Baked";
+				outputPath = System.IO.Path.GetDirectoryName(AssetDatabase.GetAssetPath(skeletonDataAsset)).Replace('\\', '/') + "/Baked";
 				System.IO.Directory.CreateDirectory(outputPath);
 			}
 
@@ -281,7 +279,13 @@ namespace Spine.Unity.Editor {
 				Object prefab = AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
 
 				if (prefab == null) {
+					#if NEW_PREFAB_SYSTEM
+					GameObject emptyGameObject = new GameObject();
+					prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(emptyGameObject, prefabPath, InteractionMode.AutomatedAction);
+					GameObject.DestroyImmediate(emptyGameObject);
+					#else
 					prefab = PrefabUtility.CreateEmptyPrefab(prefabPath);
+					#endif
 					newPrefab = true;
 				}
 
@@ -295,7 +299,7 @@ namespace Spine.Unity.Editor {
 					}
 				}
 
-				GameObject prefabRoot = EditorInstantiation.NewGameObject("root");
+				GameObject prefabRoot = EditorInstantiation.NewGameObject("root", true);
 
 				Dictionary<string, Transform> slotTable = new Dictionary<string, Transform>();
 				Dictionary<string, Transform> boneTable = new Dictionary<string, Transform>();
@@ -304,7 +308,7 @@ namespace Spine.Unity.Editor {
 				//create bones
 				for (int i = 0; i < skeletonData.Bones.Count; i++) {
 					var boneData = skeletonData.Bones.Items[i];
-					Transform boneTransform = EditorInstantiation.NewGameObject(boneData.Name).transform;
+					Transform boneTransform = EditorInstantiation.NewGameObject(boneData.Name, true).transform;
 					boneTransform.parent = prefabRoot.transform;
 					boneTable.Add(boneTransform.name, boneTransform);
 					boneList.Add(boneTransform);
@@ -335,7 +339,7 @@ namespace Spine.Unity.Editor {
 				//create slots and attachments
 				for (int slotIndex = 0; slotIndex < skeletonData.Slots.Count; slotIndex++) {
 					var slotData = skeletonData.Slots.Items[slotIndex];
-					Transform slotTransform = EditorInstantiation.NewGameObject(slotData.Name).transform;
+					Transform slotTransform = EditorInstantiation.NewGameObject(slotData.Name, true).transform;
 					slotTransform.parent = prefabRoot.transform;
 					slotTable.Add(slotData.Name, slotTransform);
 
@@ -385,7 +389,7 @@ namespace Spine.Unity.Editor {
 						} else
 							continue;
 
-						Transform attachmentTransform = EditorInstantiation.NewGameObject(attachmentName).transform;
+						Transform attachmentTransform = EditorInstantiation.NewGameObject(attachmentName, true).transform;
 
 						attachmentTransform.parent = slotTransform;
 						attachmentTransform.localPosition = offset;
@@ -428,14 +432,22 @@ namespace Spine.Unity.Editor {
 				}
 
 				if (newPrefab) {
+					#if NEW_PREFAB_SYSTEM
+					PrefabUtility.SaveAsPrefabAssetAndConnect(prefabRoot, prefabPath, InteractionMode.AutomatedAction);
+					#else
 					PrefabUtility.ReplacePrefab(prefabRoot, prefab, ReplacePrefabOptions.ConnectToPrefab);
+					#endif
 				} else {
 
 					foreach (string str in unusedMeshNames) {
 						Mesh.DestroyImmediate(meshTable[str], true);
 					}
 
+					#if NEW_PREFAB_SYSTEM
+					PrefabUtility.SaveAsPrefabAssetAndConnect(prefabRoot, prefabPath, InteractionMode.AutomatedAction);
+					#else
 					PrefabUtility.ReplacePrefab(prefabRoot, prefab, ReplacePrefabOptions.ReplaceNameBased);
+					#endif
 				}
 
 
@@ -447,8 +459,6 @@ namespace Spine.Unity.Editor {
 				GameObject.DestroyImmediate(prefabRoot);
 
 			}
-			#endif
-
 		}
 
 		#region Attachment Baking
@@ -1414,7 +1424,7 @@ namespace Spine.Unity.Editor {
 			atlasAsset.GetAtlas(); // Initializes atlasAsset.
 
 			string atlasAssetPath = AssetDatabase.GetAssetPath(atlasAsset);
-			string atlasAssetDirPath = Path.GetDirectoryName(atlasAssetPath);
+			string atlasAssetDirPath = Path.GetDirectoryName(atlasAssetPath).Replace('\\', '/');
 			string bakedDirPath = Path.Combine(atlasAssetDirPath, atlasAsset.name);
 			string bakedPrefabPath = Path.Combine(bakedDirPath, AssetUtility.GetPathSafeName(region.name) + ".prefab").Replace("\\", "/");
 
@@ -1427,7 +1437,7 @@ namespace Spine.Unity.Editor {
 				Directory.CreateDirectory(bakedDirPath);
 
 			if (prefab == null) {
-				root = EditorInstantiation.NewGameObject("temp", typeof(MeshFilter), typeof(MeshRenderer));
+				root = EditorInstantiation.NewGameObject("temp", true, typeof(MeshFilter), typeof(MeshRenderer));
 				#if NEW_PREFAB_SYSTEM
 				prefab = PrefabUtility.SaveAsPrefabAsset(root, bakedPrefabPath);
 				#else

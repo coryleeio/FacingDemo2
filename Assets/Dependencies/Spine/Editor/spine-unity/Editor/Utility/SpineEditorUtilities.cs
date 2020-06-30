@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated May 1, 2019. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2019, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -15,16 +15,16 @@
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
- * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
- * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #pragma warning disable 0219
@@ -46,6 +46,10 @@
 #define NEW_PREFERENCES_SETTINGS_PROVIDER
 #endif
 
+#if UNITY_2017_1_OR_NEWER
+#define BUILT_IN_SPRITE_MASK_COMPONENT
+#endif
+
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
@@ -65,13 +69,30 @@ namespace Spine.Unity.Editor {
 		public static string editorPath = "";
 		public static string editorGUIPath = "";
 		public static bool initialized;
+		private static List<string> texturesWithoutMetaFile = new List<string>();
 
-		// Auto-import entry point
+		// Auto-import entry point for textures
+		void OnPreprocessTexture () {
+		#if UNITY_2018_1_OR_NEWER
+			bool customTextureSettingsExist = !assetImporter.importSettingsMissing;
+		#else
+			bool customTextureSettingsExist = System.IO.File.Exists(assetImporter.assetPath + ".meta");
+		#endif
+			if (!customTextureSettingsExist) {
+				texturesWithoutMetaFile.Add(assetImporter.assetPath);
+			}
+		}
+
+		// Auto-import post process entry point for all assets
 		static void OnPostprocessAllAssets (string[] imported, string[] deleted, string[] moved, string[] movedFromAssetPaths) {
 			if (imported.Length == 0)
 				return;
 
-			AssetUtility.HandleOnPostprocessAllAssets(imported);
+			// we copy the list here to prevent nested calls to OnPostprocessAllAssets() triggering a Clear() of the list
+			// in the middle of execution.
+			var texturesWithoutMetaFileCopy = new List<string>(texturesWithoutMetaFile);
+			AssetUtility.HandleOnPostprocessAllAssets(imported, texturesWithoutMetaFileCopy);
+			texturesWithoutMetaFile.Clear();
 		}
 
 #region Initialization
@@ -80,22 +101,24 @@ namespace Spine.Unity.Editor {
 		}
 
 		static void Initialize () {
-			if (EditorApplication.isPlayingOrWillChangePlaymode) return;
-
+			// Note: Preferences need to be loaded when changing play mode
+			// to initialize handle scale correctly.
 			#if !NEW_PREFERENCES_SETTINGS_PROVIDER
 			Preferences.Load();
 			#else
 			SpinePreferences.Load();
 			#endif
 
+			if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+
 			string[] assets = AssetDatabase.FindAssets("t:script SpineEditorUtilities");
 			string assetPath = AssetDatabase.GUIDToAssetPath(assets[0]);
-			editorPath = Path.GetDirectoryName(assetPath).Replace("\\", "/");
+			editorPath = Path.GetDirectoryName(assetPath).Replace('\\', '/');
 
 			assets = AssetDatabase.FindAssets("t:texture icon-subMeshRenderer");
 			if (assets.Length > 0) {
 				assetPath = AssetDatabase.GUIDToAssetPath(assets[0]);
-				editorGUIPath = Path.GetDirectoryName(assetPath).Replace("\\", "/");
+				editorGUIPath = Path.GetDirectoryName(assetPath).Replace('\\', '/');
 			}
 			else {
 				editorGUIPath = editorPath.Replace("/Utility", "/GUI");
@@ -170,6 +193,62 @@ namespace Spine.Unity.Editor {
 			}
 		}
 
+		public static void ReloadSkeletonDataAssetAndComponent (SkeletonRenderer component) {
+			if (component == null) return;
+			ReloadSkeletonDataAsset(component.skeletonDataAsset);
+			ReinitializeComponent(component);
+		}
+
+		public static void ReloadSkeletonDataAssetAndComponent (SkeletonGraphic component) {
+			if (component == null) return;
+			ReloadSkeletonDataAsset(component.skeletonDataAsset);
+			// Reinitialize.
+			ReinitializeComponent(component);
+		}
+
+		public static void ReloadSkeletonDataAsset (SkeletonDataAsset skeletonDataAsset) {
+			if (skeletonDataAsset != null) {
+				foreach (AtlasAssetBase aa in skeletonDataAsset.atlasAssets) {
+					if (aa != null) aa.Clear();
+				}
+				skeletonDataAsset.Clear();
+			}
+			skeletonDataAsset.GetSkeletonData(true);
+		}
+
+		public static void ReinitializeComponent (SkeletonRenderer component) {
+			if (component == null) return;
+			if (!SkeletonDataAssetIsValid(component.SkeletonDataAsset)) return;
+
+			var stateComponent = component as IAnimationStateComponent;
+			AnimationState oldAnimationState = null;
+			if (stateComponent != null) {
+				oldAnimationState = stateComponent.AnimationState;
+			}
+
+			component.Initialize(true); // implicitly clears any subscribers
+
+			if (oldAnimationState != null) {
+				stateComponent.AnimationState.AssignEventSubscribersFrom(oldAnimationState);
+			}
+
+		#if BUILT_IN_SPRITE_MASK_COMPONENT
+			SpineMaskUtilities.EditorAssignSpriteMaskMaterials(component);
+		#endif
+			component.LateUpdate();
+		}
+
+		public static void ReinitializeComponent (SkeletonGraphic component) {
+			if (component == null) return;
+			if (!SkeletonDataAssetIsValid(component.SkeletonDataAsset)) return;
+			component.Initialize(true);
+			component.LateUpdate();
+		}
+
+		public static bool SkeletonDataAssetIsValid (SkeletonDataAsset asset) {
+			return asset != null && asset.GetSkeletonData(quiet: true) != null;
+		}
+
 		public static bool IssueWarningsForUnrecommendedTextureSettings(string texturePath)
 		{
 			TextureImporter texImporter = (TextureImporter)TextureImporter.GetAtPath(texturePath);
@@ -188,7 +267,7 @@ namespace Spine.Unity.Editor {
 			if (MaterialChecks.IsTextureSetupProblematic(material, PlayerSettings.colorSpace,
 				texImporter. sRGBTexture, texImporter. mipmapEnabled, texImporter. alphaIsTransparency,
 				texturePath, materialPath, ref errorMessage)) {
-				Debug.LogWarning(errorMessage);
+				Debug.LogWarning(errorMessage, material);
 			}
 			return true;
 		}
@@ -283,6 +362,8 @@ namespace Spine.Unity.Editor {
 				var eventType = current.type;
 				bool isDraggingEvent = eventType == EventType.DragUpdated;
 				bool isDropEvent = eventType == EventType.DragPerform;
+				UnityEditor.DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
 				if (isDraggingEvent || isDropEvent) {
 					var mouseOverWindow = EditorWindow.mouseOverWindow;
 					if (mouseOverWindow != null) {
@@ -296,23 +377,44 @@ namespace Spine.Unity.Editor {
 								// Allow drag-and-dropping anywhere in the Hierarchy Window.
 								// HACK: string-compare because we can't get its type via reflection.
 								const string HierarchyWindow = "UnityEditor.SceneHierarchyWindow";
+								const string GenericDataTargetID = "target";
 								if (HierarchyWindow.Equals(mouseOverWindow.GetType().ToString(), System.StringComparison.Ordinal)) {
 									if (isDraggingEvent) {
-										UnityEditor.DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-										current.Use();
+										var mouseOverTarget = UnityEditor.EditorUtility.InstanceIDToObject(instanceId);
+										if (mouseOverTarget)
+											DragAndDrop.SetGenericData(GenericDataTargetID, mouseOverTarget);
+										// Note: do not call current.Use(), otherwise we get the wrong drop-target parent.
 									} else if (isDropEvent) {
-										DragAndDropInstantiation.ShowInstantiateContextMenu(skeletonDataAsset, Vector3.zero);
+										var parentGameObject = DragAndDrop.GetGenericData(GenericDataTargetID) as UnityEngine.GameObject;
+										Transform parent = parentGameObject != null ? parentGameObject.transform : null;
+										// when dragging into empty space in hierarchy below last node, last node would be parent.
+										if (IsLastNodeInHierarchy(parent))
+											parent = null;
+										DragAndDropInstantiation.ShowInstantiateContextMenu(skeletonDataAsset, Vector3.zero, parent);
 										UnityEditor.DragAndDrop.AcceptDrag();
 										current.Use();
 										return;
 									}
 								}
-
 							}
 						}
 					}
 				}
+			}
 
+			internal static bool IsLastNodeInHierarchy (Transform node) {
+				if (node == null)
+					return false;
+
+				while (node.parent != null) {
+					if (node.GetSiblingIndex() != node.parent.childCount - 1)
+						return false;
+					node = node.parent;
+				}
+
+				var rootNodes = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+				bool isLastNode = (rootNodes.Length > 0 && rootNodes[rootNodes.Length - 1].transform == node);
+				return isLastNode;
 			}
 		}
 	}
@@ -323,8 +425,9 @@ namespace Spine.Unity.Editor {
 		{
 			if (SpineEditorUtilities.Preferences.textureImporterWarning) {
 				foreach (string path in paths) {
-					if (path.EndsWith(".png.meta", System.StringComparison.Ordinal) ||
-						path.EndsWith(".jpg.meta", System.StringComparison.Ordinal)) {
+					if ((path != null) &&
+						(path.EndsWith(".png.meta", System.StringComparison.Ordinal) ||
+						 path.EndsWith(".jpg.meta", System.StringComparison.Ordinal))) {
 
 						string texturePath = System.IO.Path.ChangeExtension(path, null); // .meta removed
 						string atlasPath = System.IO.Path.ChangeExtension(texturePath, "atlas.txt");
