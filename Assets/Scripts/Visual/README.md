@@ -1,1 +1,0 @@
-These are as much as possible dumb Unity Monobehaviour classes that dont know anything about the game logic. They implement visual things that happen in the game.  These could be injected via Asset bundles and Assemblies, but i've not tested it. (See Modding.)

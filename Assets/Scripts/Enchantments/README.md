@@ -1,1 +1,0 @@
-Enchantments refers to granting an item magical abilities. Stat bonuses, charges, zap abilities.

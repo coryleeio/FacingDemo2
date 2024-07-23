@@ -1,1 +1,0 @@
-Pathfinding is how Entities get from point A to point B.

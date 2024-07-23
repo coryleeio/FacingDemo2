@@ -1,1 +1,0 @@
-Scenes refers to unity scenes, In this game each scene comes with a single mono beheaviour which builds everything else in code. This reduces the amount of things that are configured by clicking and that are difficult to introspect, if you want to see what happens when a scene is opened simply start at the driver.

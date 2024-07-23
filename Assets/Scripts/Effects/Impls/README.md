@@ -1,1 +1,0 @@
-This contains the code that executes for various hooks that get called on effects, such as ticking every turn, outbound attacks, inbound attacks etc. Modders can inject via assemblies these to add additional behaviour.
