@@ -5,6 +5,7 @@
 Isometric roguelike game prototype with the following features:
 - Procedrally generated dungeons
 - Animated character and monster 2d sprites that can face 4 directions with visible equippable items
+- Ranged / Melee / Magic / Throwing combat
 - Fog of war
 - Equippable items mountable on character sprites which is used to compose a few monsters
 - Enchantable items with on hit, on wear effects and others
